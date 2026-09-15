@@ -195,7 +195,7 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
-        const initialZ = 7.5; // Zoomed out slightly from 5
+        const initialZ = 10.0; // Zoomed out slightly from original 7.5
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.5; // Tapestry lowered by 6 inches
@@ -948,7 +948,7 @@
             
             data.forEach(t => {
                 const el = document.createElement('div');
-                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default;";
+                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity;";
                 el.innerText = t.english;
                 // Highlight red if it hasn't been placed yet and we are authoring
                 if (isAuthoringMode && t.x === undefined) {
@@ -1008,6 +1008,10 @@
                     ann.el.style.left = x + 'px';
                     ann.el.style.top = y + 'px';
                     ann.el.style.opacity = opacity.toFixed(3);
+                    
+                    // Scale the font relative to a base zoom distance of 7.5
+                    const scaleFactor = 7.5 / Math.max(0.1, camera.position.z);
+                    ann.el.style.transform = `scale(${scaleFactor})`;
                 }
             });
         };
