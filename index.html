@@ -162,7 +162,7 @@
         }
 
         // Scene background and fog for depth (dark earthy tone)
-        const fogColor = new THREE.Color(0x0a0806);
+        const fogColor = new THREE.Color(0x161310);
         scene.background = fogColor;
         scene.fog = new THREE.Fog(fogColor, 10, 40);
 
@@ -178,17 +178,17 @@
             canvas.height = 256;
             const ctx = canvas.getContext('2d');
             
-            ctx.fillStyle = '#0a0806'; // Base color matches fog
+            ctx.fillStyle = '#1c1814'; // Brighter base color
             ctx.fillRect(0, 0, 256, 256);
             
             // Faint, widely spaced vertical joints for motion reference
-            ctx.fillStyle = '#050403';
+            ctx.fillStyle = '#0a0806';
             ctx.fillRect(252, 0, 4, 256); 
             
             // Subtly grainy noise for an ancient/tactile feel
-            for (let i = 0; i < 6000; i++) {
+            for (let i = 0; i < 8000; i++) {
                 const isLight = Math.random() > 0.5;
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.012)' : 'rgba(0, 0, 0, 0.3)';
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.6)';
                 ctx.fillRect(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 2, 1 + Math.random() * 2);
             }
             
