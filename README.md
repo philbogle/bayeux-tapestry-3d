@@ -9,4 +9,7 @@ This project builds on and is complementary to the high-resolution Bayeux Tapest
 * **Up/Down Arrows or W/S**: Move closer to or further away from the tapestry.
 
 ### Acknowledgements
-Special thanks to the British Museum, the City of Bayeux, and their partners for digitizing this incredible piece of history and making the image tiles accessible.
+Thanks to the British Museum, the City of Bayeux, and their partners for digitizing the tapestry and making it available for fair use.
+
+### License
+This project's source code is freely available under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) license.
