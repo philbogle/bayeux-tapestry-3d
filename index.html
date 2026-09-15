@@ -105,14 +105,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isIOSChrome = isIOS && /CriOS/.test(navigator.userAgent);
-        
-        if (isIOSChrome) {
-            document.getElementById('ui').style.display = 'none';
-            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use <b>Safari</b> on iPad/iPhone.<br><br><span style="font-size: 16px; color: #a49176;">Chrome on iOS has strict memory limits that prevent this high-resolution 3D experience from loading.</span></div>';
-            throw new Error("iOS Chrome is not supported due to WKWebView WebGL memory limits.");
-        }
-
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/.test(navigator.userAgent) || isIOS;
         if (isMobile) {
             document.getElementById('ui').innerHTML = `
@@ -143,7 +135,8 @@
         // Start near the beginning of the tapestry
         camera.position.set(initialVisibleWidth / 2, -H / 2 / SCALE, initialZ);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        // Disable antialiasing on mobile to save VRAM and prevent context loss
+        const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -156,7 +149,10 @@
         let activeRequests = 0;
         const MAX_CONCURRENT_REQUESTS = isMobile ? 4 : 32;
 
-        // Create the geometry for all tiles, but don't load textures yet
+        // Share a single base geometry across ALL tiles to massively reduce WebGL memory overhead (prevents mobile Chrome crashes)
+        const baseGeometry = new THREE.PlaneGeometry(1, 1);
+
+        // Create the meshes for all tiles, but don't load textures yet
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const x_topLeft = c === 0 ? 0 : c * T - 1;
@@ -174,14 +170,9 @@
                 // Alternate Z slightly to prevent Z-fighting from the 1px overlap
                 const zOffset = (c % 2) * 0.001 + (r % 2) * 0.002;
 
-                const geometry = new THREE.PlaneGeometry(widthUnits, heightUnits);
-                // Start with a transparent/placeholder material
-                const material = new THREE.MeshBasicMaterial({ 
-                    color: 0x333333,
-                    wireframe: false
-                });
-
-                const mesh = new THREE.Mesh(geometry, material);
+                // Use the shared empty material and scale the 1x1 geometry
+                const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                mesh.scale.set(widthUnits, heightUnits, 1);
                 mesh.position.set(xCenter, yCenter, zOffset);
                 scene.add(mesh);
 
