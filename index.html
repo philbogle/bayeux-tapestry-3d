@@ -511,7 +511,9 @@
                         }, undefined, (err) => {
                             activeRequests--;
                             tile.loading = false;
-                            console.error("Failed to load tile: " + url);
+                            let errMsg = err.message || err.type || "Unknown network/CORS error";
+                            if (err instanceof Event) errMsg = "Event type: " + err.type;
+                            console.error("Failed: " + url.split('/').pop() + " | " + errMsg);
                         });
                     }
                 } else {
