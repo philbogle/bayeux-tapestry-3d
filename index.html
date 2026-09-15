@@ -14,6 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayeux Tapestry 3D Walkthrough</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -120,9 +121,20 @@
         <label>Torch Color:</label><br>
         <input type="color" id="torch-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
         
-        <div style="text-align: center;">
-            <button id="close-lighting-dialog" style="padding: 8px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+        <div style="text-align: right; margin-top: 20px;">
+            <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
+    </div>
+
+    <!-- Authoring Panel -->
+    <div id="authoring-panel" style="display: none; position: fixed; top: 20px; left: 20px; background: rgba(0,0,0,0.85); color: white; padding: 20px; border: 2px solid #d6a848; z-index: 1000; font-family: monospace; max-width: 400px;">
+        <h3 style="margin-top:0; color: #d6a848;">Text Authoring Mode</h3>
+        <p><strong>Scene:</strong> <span id="auth-scene"></span></p>
+        <p><strong>Latin:</strong> <span id="auth-latin"></span></p>
+        <p><strong>English:</strong> <span id="auth-english"></span></p>
+        <p style="color: #aaa; font-size: 12px; margin-bottom: 20px;"><em>Click directly on the tapestry to drop or move the coordinate pin. Click Next Scene to confirm.</em></p>
+        <button id="auth-next" style="padding: 8px 12px; margin-right: 10px; cursor: pointer;">Next / Skip</button>
+        <button id="auth-export" style="padding: 8px 12px; cursor: pointer;">Export JSON</button>
     </div>
 
     <div id="yt-player" style="position: absolute; width: 0; height: 0; overflow: hidden; left: -9999px;"></div>
@@ -261,52 +273,126 @@
         const ceilingY = (H / SCALE + 0.5) * 2; // Doubled ceiling height
         const length = W / SCALE + 100;
 
-        // Create a procedural organic texture (like dark stone/wood) to avoid modern geometric grids
-        function createOrganicTexture() {
+        // Create a procedural organic texture for walls/ceiling
+        function createOrganicTexture(width = 256, height = 256, baseColor = '#181510', jointColor = '#080605') {
             const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 256;
+            canvas.width = width;
+            canvas.height = height;
             const ctx = canvas.getContext('2d');
             
-            ctx.fillStyle = '#181510'; // Even darker stone base color
-            ctx.fillRect(0, 0, 256, 256);
+            ctx.fillStyle = baseColor;
+            ctx.fillRect(0, 0, width, height);
             
-            // Faint, widely spaced vertical joints for motion reference
-            ctx.fillStyle = '#080605';
-            ctx.fillRect(252, 0, 4, 256); 
+            // Add tonal variations to the blocks
+            ctx.fillStyle = 'rgba(0,0,0,0.15)';
+            ctx.fillRect(0, 0, Math.floor(width / 2), Math.floor(height / 2)); // Top left block
+            ctx.fillStyle = 'rgba(255,255,255,0.02)';
+            ctx.fillRect(0, Math.floor(height / 2), width, Math.floor(height / 2)); // Bottom block
             
-            // Subtly grainy noise for an ancient/tactile feel
-            for (let i = 0; i < 8000; i++) {
-                const isLight = Math.random() > 0.5;
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.4)';
-                ctx.fillRect(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 2, 1 + Math.random() * 2);
+            // Add running bond joints
+            ctx.fillStyle = jointColor;
+            ctx.fillRect(0, Math.floor(height / 2) - 2, width, 4); // Horizontal joint
+            ctx.fillRect(Math.floor(width / 2) - 2, 0, 4, Math.floor(height / 2)); // Top vertical
+            ctx.fillRect(width - 4, Math.floor(height / 2), 4, Math.floor(height / 2)); // Bottom vertical
+            
+            // Subtly grainy noise, increased density for more texture
+            const noiseCount = (width * height) / 2;
+            for (let i = 0; i < noiseCount; i++) {
+                const isLight = Math.random() > 0.85; // Mostly dark grit
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.025)' : 'rgba(0, 0, 0, 0.25)';
+                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1); // Strictly 1px
             }
             
             const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(length / 4, 10);
             return texture;
         }
 
-        const organicTexture = createOrganicTexture();
+        function createFlagstoneTexture(width = 512, height = 512, baseColor = '#1a1712', jointColor = '#0a0807') {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = baseColor;
+            ctx.fillRect(0, 0, width, height);
+            
+            ctx.strokeStyle = jointColor;
+            ctx.lineWidth = 4;
+            
+            const rowHeight = height / 8;
+            const blockWidth = width / 4;
+            
+            // Draw running bond pattern with jitter
+            for (let y = 0; y <= height; y += rowHeight) {
+                // Horizontal line
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                for (let x = 0; x <= width; x += 32) {
+                    ctx.lineTo(x, y + (Math.random() - 0.5) * 8);
+                }
+                ctx.stroke();
+                
+                // Vertical lines, offset for every other row
+                if (y < height) {
+                    const offset = (Math.round(y / rowHeight) % 2 === 0) ? 0 : blockWidth / 2;
+                    for (let x = offset; x < width; x += blockWidth) {
+                        const actualX = x + (Math.random() - 0.5) * 20;
+                        if (actualX > 0 && actualX < width) {
+                            ctx.beginPath();
+                            ctx.moveTo(actualX, y);
+                            ctx.lineTo(actualX + (Math.random() - 0.5) * 8, y + rowHeight);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // Add grit
+            const noiseCount = (width * height) / 5;
+            for (let i = 0; i < noiseCount; i++) {
+                const isLight = Math.random() > 0.85;
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.15)';
+                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1); // Strictly 1px
+            }
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            return texture;
+        }
+
+        const floorTexture = createFlagstoneTexture(512, 512, '#1a1712', '#0a0807');
+        floorTexture.wrapS = THREE.RepeatWrapping;
+        floorTexture.wrapT = THREE.RepeatWrapping;
+        floorTexture.repeat.set(length / 20, 120 / 20); // Scale the flagstones
+        
+        const ceilingTexture = createOrganicTexture(512, 512, '#080706', '#000000');
+        ceilingTexture.wrapS = THREE.RepeatWrapping;
+        ceilingTexture.wrapT = THREE.RepeatWrapping;
+        ceilingTexture.repeat.set(length / 5, 120 / 5); 
+        
+        const wallTexture = createOrganicTexture(512, 512, '#181510', '#080605');
+        wallTexture.wrapS = THREE.RepeatWrapping;
+        wallTexture.wrapT = THREE.RepeatWrapping;
+        wallTexture.repeat.set(length / 20, 120 / 20);
+
         // Increased depth from 40 to 120 so the floor/ceiling don't clip at max zoom (Z=40)
         const planeGeo = new THREE.PlaneGeometry(length, 120);
-        const planeMat = new THREE.MeshLambertMaterial({ map: organicTexture });
+        const floorMat = new THREE.MeshLambertMaterial({ map: floorTexture });
+        const ceilingMat = new THREE.MeshLambertMaterial({ map: ceilingTexture });
+        const wallMat = new THREE.MeshLambertMaterial({ map: wallTexture });
         
-        const floor = new THREE.Mesh(planeGeo, planeMat);
+        const floor = new THREE.Mesh(planeGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
         floor.position.set((W / SCALE) / 2, floorY, 0);
         scene.add(floor);
 
-        const ceiling = new THREE.Mesh(planeGeo, planeMat);
+        const ceiling = new THREE.Mesh(planeGeo, ceilingMat);
         ceiling.rotation.x = Math.PI / 2;
         ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
         scene.add(ceiling);
 
         // Add stone wall just behind the tapestry
         const wallGeo = new THREE.PlaneGeometry(length, 120);
-        const backWall = new THREE.Mesh(wallGeo, planeMat);
+        const backWall = new THREE.Mesh(wallGeo, wallMat);
         backWall.position.set((W / SCALE) / 2, tapestryElevation, -0.5); // 0.5 units (6 inches) behind the tapestry (which is at Z=0)
         scene.add(backWall);
 
@@ -329,7 +415,7 @@
         });
         
         // Clone the texture to fix the UV scaling on the small profile
-        const plinthTexture = organicTexture.clone();
+        const plinthTexture = wallTexture.clone();
         plinthTexture.needsUpdate = true;
         plinthTexture.repeat.set(length / 2, 2); 
         const plinthMat = new THREE.MeshLambertMaterial({ map: plinthTexture });
@@ -343,20 +429,20 @@
 
 
 
-        // Lighting: Ambient light + 3 Dynamic Torches
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.03);
+        // Lighting: Ambient light + 4 Dynamic Torches
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.66);
         scene.add(ambientLight);
 
-        // We use 3 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
+        // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
         const torchLights = [];
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
             const torch = new THREE.PointLight(0xffffff, 1.5, 70); // Warm fire color, range 70
             scene.add(torch);
             torchLights.push(torch);
         }
         
         // Lighting Variables (linked to UI)
-        let configTorchInt = 0.80;
+        let configTorchInt = 1.25;
         let configTorchColor = new THREE.Color(0xffffff);
 
         // UI Listeners
@@ -467,8 +553,8 @@
                 if (initialPinchDistance > 0) {
                     const scale = initialPinchDistance / dist;
                     camera.position.z = initialPinchCamZ * scale;
-                    // Keep camera Z bounded between 2.0 and 40 to prevent getting too close and seeing pixelation
-                    camera.position.z = Math.max(2.0, Math.min(40, camera.position.z));
+                    // Keep camera Z bounded between 2.0 and 50 to prevent getting too close and seeing pixelation
+                    camera.position.z = Math.max(2.0, Math.min(50, camera.position.z));
                 }
             }
         }, {passive: false});
@@ -612,7 +698,7 @@
             if (camera.position.x > maxX) camera.position.x = maxX;
 
             if (camera.position.z < 2.0) camera.position.z = 2.0;
-            if (camera.position.z > 40) camera.position.z = 40;
+            if (camera.position.z > 50) camera.position.z = 50;
         }
 
         function updateTiles() {
@@ -691,14 +777,14 @@
             requestAnimationFrame(animate);
 
             // Dynamic Fixed Torches (Snap to fixed positions around the camera)
-            const torchSpacing = 30; // Restored spacing for 3 torches
+            const torchSpacing = 30; // Restored spacing
             const time = Date.now() * 0.00125; // Slower flicker rate
             
             // Find the nearest torch interval to the camera
             const centerIndex = Math.round(camera.position.x / torchSpacing);
             
-            for (let i = 0; i < 3; i++) {
-                const torchIndex = centerIndex - 1 + i; // Offset to keep them roughly centered around the camera
+            for (let i = 0; i < 4; i++) {
+                const torchIndex = centerIndex - 1.5 + i; // Offset to keep them centered around the camera
                 const torchX = torchIndex * torchSpacing;
                 
                 // Position above the tapestry, slightly forward
@@ -732,6 +818,7 @@
             updateCamera();
             updateTiles();
             renderer.render(scene, camera);
+            if (typeof updateAnnotations === 'function') updateAnnotations();
         }
 
         animate();
@@ -750,6 +837,181 @@
         if (urlParams.get('adv') === '1') {
             document.getElementById('lighting-controls-link').style.display = 'inline';
         }
+
+        // --- AUTHORING MODE LOGIC ---
+        let tituliData = [];
+        let placedTituli = [];
+        let currentTituliIndex = 0;
+        let isAuthoringMode = urlParams.get('author') === '1';
+
+        if (isAuthoringMode) {
+            document.getElementById('authoring-panel').style.display = 'block';
+            
+            // Re-bind the next button correctly
+            document.getElementById('auth-next').addEventListener('click', () => {
+                const currentAnn = annotations[currentTituliIndex];
+                if (currentAnn && window.activeMarkerPlaced) {
+                    const t = currentAnn.data;
+                    const existingIndex = placedTituli.findIndex(p => p.scene === t.scene);
+                    if (existingIndex !== -1) {
+                        placedTituli[existingIndex].x = t.x;
+                        placedTituli[existingIndex].y = t.y;
+                    } else {
+                        placedTituli.push({
+                            scene: t.scene,
+                            latin: t.latin,
+                            english: t.english,
+                            x: t.x,
+                            y: t.y
+                        });
+                    }
+                    currentAnn.el.style.color = '#1a1510'; // Turn back to normal color
+                    window.activeMarkerPlaced = false;
+                    
+                    localStorage.setItem('bayeux-tituli', JSON.stringify(placedTituli));
+                }
+                currentTituliIndex++;
+                updateAuthoringUI();
+            });
+            
+            document.getElementById('auth-export').addEventListener('click', () => {
+                console.log(JSON.stringify(placedTituli, null, 2));
+                alert('Exported ' + placedTituli.length + ' scenes to console! See developer tools.');
+            });
+        }
+        
+        function updateAuthoringUI() {
+            if (currentTituliIndex < tituliData.length) {
+                const t = tituliData[currentTituliIndex];
+                document.getElementById('auth-scene').innerText = t.scene;
+                document.getElementById('auth-latin').innerText = t.latin || '';
+                document.getElementById('auth-english').innerText = t.english;
+            } else {
+                document.getElementById('auth-scene').innerText = 'DONE';
+                document.getElementById('auth-latin').innerText = 'All scenes placed!';
+                document.getElementById('auth-english').innerText = '';
+            }
+        }
+
+        const raycaster = new THREE.Raycaster();
+        const mouseClick = new THREE.Vector2();
+
+        window.addEventListener('click', (event) => {
+            if (!isAuthoringMode || currentTituliIndex >= tituliData.length) return;
+            if (event.target.closest('#ui') || event.target.closest('#authoring-panel') || event.target.closest('#lighting-dialog') || event.target.closest('#about-dialog')) return;
+            
+            mouseClick.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseClick.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouseClick, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+            if (intersects.length > 0) {
+                const point = intersects[0].point;
+                const currentAnn = annotations[currentTituliIndex];
+                if (currentAnn) {
+                    currentAnn.data.x = point.x;
+                    currentAnn.data.y = point.y;
+                    window.activeMarkerPlaced = true;
+                    // Force the text to instantly snap to cursor by forcing an update
+                    if (typeof updateAnnotations === 'function') updateAnnotations();
+                }
+            }
+        });
+        // ----------------------------
+
+        // --- ANNOTATION DISPLAY LOGIC ---
+        let annotations = [];
+        const annContainer = document.createElement('div');
+        annContainer.id = 'annotations-container';
+        annContainer.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 50;';
+        document.body.appendChild(annContainer);
+
+        fetch('tituli.json?v=6').then(res => res.json()).then(data => {
+            if (isAuthoringMode) {
+                const savedData = localStorage.getItem('bayeux-tituli');
+                if (savedData) {
+                    try {
+                        const parsed = JSON.parse(savedData);
+                        data.forEach(t => {
+                            const match = parsed.find(p => p.scene === t.scene);
+                            if (match && match.x !== undefined) {
+                                t.x = match.x;
+                                t.y = match.y;
+                            }
+                        });
+                    } catch (e) { console.error("Error parsing local storage", e); }
+                }
+            }
+            
+            tituliData = data;
+            if (isAuthoringMode) updateAuthoringUI();
+            
+            data.forEach(t => {
+                const el = document.createElement('div');
+                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default;";
+                el.innerText = t.english;
+                // Highlight red if it hasn't been placed yet and we are authoring
+                if (isAuthoringMode && t.x === undefined) {
+                    el.style.color = '#aa0000';
+                }
+                annContainer.appendChild(el);
+                
+                const annObj = { data: t, el: el, isHovered: false, currentHover: 0 };
+                el.addEventListener('mouseenter', () => annObj.isHovered = true);
+                el.addEventListener('mouseleave', () => annObj.isHovered = false);
+                
+                annotations.push(annObj);
+                
+                if (isAuthoringMode && t.x !== undefined) {
+                    placedTituli.push(JSON.parse(JSON.stringify(t)));
+                }
+            });
+        });
+        
+        const tempV = new THREE.Vector3();
+        
+        window.updateAnnotations = function() {
+            let tiltMagnitude = Math.sqrt(camera.rotation.x * camera.rotation.x + camera.rotation.y * camera.rotation.y);
+            let scrollOpacityMult = Math.max(0, 1.0 - (tiltMagnitude / 0.25));
+            if (isAuthoringMode) scrollOpacityMult = 1.0; 
+            
+            annotations.forEach((ann, index) => {
+                if (ann.data.x === undefined || (isAuthoringMode && index !== currentTituliIndex)) {
+                    if (ann.el.style.display !== 'none') ann.el.style.display = 'none';
+                    return;
+                }
+                
+                tempV.set(ann.data.x, ann.data.y, 0.0);
+                tempV.project(camera);
+                
+                if (tempV.z > 1 || tempV.x < -1.5 || tempV.x > 1.5 || tempV.y < -1.5 || tempV.y > 1.5) {
+                    if (ann.el.style.display !== 'none') ann.el.style.display = 'none';
+                    return;
+                }
+                
+                const x = (tempV.x *  .5 + .5) * window.innerWidth;
+                const y = (tempV.y * -.5 + .5) * window.innerHeight;
+                
+                if (ann.isHovered) {
+                    ann.currentHover = Math.min(1.0, ann.currentHover + 0.05);
+                } else {
+                    ann.currentHover = Math.max(0.0, ann.currentHover - 0.05);
+                }
+                
+                let opacity = (0.15 + (ann.currentHover * 0.45)) * scrollOpacityMult;
+                if (isAuthoringMode) opacity = 1.0;
+                
+                if (opacity <= 0.01) {
+                    ann.el.style.display = 'none';
+                } else {
+                    ann.el.style.display = 'block';
+                    ann.el.style.left = x + 'px';
+                    ann.el.style.top = y + 'px';
+                    ann.el.style.opacity = opacity.toFixed(3);
+                }
+            });
+        };
+        // --------------------------------
 
         document.getElementById('lighting-controls-link').addEventListener('click', (e) => {
             e.preventDefault();

@@ -1,0 +1,142 @@
+[
+  {
+    "scene": "1",
+    "latin": "EDWARD REX",
+    "english": "King Edward",
+    "x": 3.716278840770437,
+    "y": 1.0531909333404674
+  },
+  {
+    "scene": "2",
+    "latin": "UBI HAROLD DUX ANGLORUM ET SUI MILITES EQUITANT AD BOSHAM ECCLESIA",
+    "english": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
+    "x": 7.67853214460127,
+    "y": 1.1488511460915523
+  },
+  {
+    "scene": "3",
+    "latin": "HIC HAROLD MARE NAVIGAVIT",
+    "english": "Here Harold sailed by sea",
+    "x": 27.18678642341985,
+    "y": 0.9919275895274506
+  },
+  {
+    "scene": "4",
+    "latin": "ET VELIS VENTO PLENIS VENIT IN TERRAM WIDONIS COMITIS",
+    "english": "and with sails filled with wind came to the land of Count Wido",
+    "x": 33.7724556583674,
+    "y": 1.0585755848923886
+  },
+  {
+    "scene": "5",
+    "latin": "HAROLD",
+    "english": "Harold",
+    "x": 48.52055150027487,
+    "y": 1.084434727090574
+  },
+  {
+    "scene": "6",
+    "latin": "HIC APPREHENDIT WIDO HAROLDU",
+    "english": "Here Wido seized Harold",
+    "x": 50.248655677748815,
+    "y": 1.0910868932440643
+  },
+  {
+    "scene": "7",
+    "latin": "ET DUXIT EUM AD BELREM ET IBI EUM TENUIT",
+    "english": "and led him to Beaurain and held him there",
+    "x": 56.886030527968614,
+    "y": 1.114365373430379
+  },
+  {
+    "scene": "8",
+    "latin": "UBI HAROLD ET WIDO PARABOLANT",
+    "english": "Where Harold and Wido converse",
+    "x": 71.8780474649045,
+    "y": 1.1246162587374684
+  },
+  {
+    "scene": "9",
+    "latin": "UBI NUNTII WILLELMI DUCIS VENERUNT AD WIDONU",
+    "english": "Where the messengers of Duke William came to Wido",
+    "x": 80.51724409361778,
+    "y": 1.2628086343701346
+  },
+  {
+    "scene": "10",
+    "latin": "TUROLD",
+    "english": "Turold",
+    "x": 85.25537180838738,
+    "y": 2.4
+  },
+  {
+    "scene": "11",
+    "latin": "NUNTII WILLELMI",
+    "english": "The messengers of William",
+    "x": 92.79733674428152,
+    "y": 1.3075815729888811
+  },
+  {
+    "scene": "12",
+    "latin": "HIC VENIT NUNTIUS AD WILGELMUM DUCEM",
+    "english": "Here the messenger came to Duke William",
+    "x": 97.13722004788707,
+    "y": 2.0
+  },
+  {
+    "scene": "13",
+    "latin": "HIC WIDO ADDUXIT HAROLDUM AD WILGELMUM NORMANNORUM DUCEM",
+    "english": "Here Wido brought Harold to William, Duke of the Normans",
+    "x": 105.01512019236344,
+    "y": 1.2052808874966745
+  },
+  {
+    "scene": "14",
+    "latin": "HIC DUX WILGELM CUM HAROLDO VENIT AD PALATIUM SUUM",
+    "english": "Here Duke William came to his palace with Harold",
+    "x": 122.73893918560225,
+    "y": 1.1835010380842204
+  },
+  {
+    "scene": "15",
+    "latin": "UBI UNUS CLERICUS ET AELFGYVA",
+    "english": "Where a certain cleric and Aelfgyva",
+    "x": 136.26439891946723,
+    "y": 1.2370271439409708
+  },
+  {
+    "scene": "16",
+    "latin": "HIC WILLELM DUX ET EXERCITUS EIUS VENERUNT AD MONTEM MICHAELIS",
+    "english": "Here Duke William and his army came to Mont Saint-Michel",
+    "x": 139.4763643135665,
+    "y": 2.0
+  },
+  {
+    "scene": "17",
+    "latin": "ET HIC TRANSIERUNT FLUMEN COSNONIS",
+    "english": "and here they crossed the river Couesnon",
+    "x": 152.48914707918416,
+    "y": 1.5949199647627865
+  },
+  {
+    "scene": "18",
+    "latin": "HIC HAROLD DUX TRAHEBAT EOS DE ARENA",
+    "english": "Here Duke Harold pulled them from the sand",
+    "x": 154.5951294170799,
+    "y": 1.0
+  },
+  {
+    "scene": "19",
+    "latin": "ET VENERUNT AD DOL ET CONAN FUGA VERTIT",
+    "english": "and they came to Dol and Conan fled",
+    "x": 159.77230569786423,
+    "y": 1.5951097388267923
+  },
+  {
+    "scene": "20",
+    "latin": "REDNES",
+    "english": "Rennes",
+    "x": 172.13050327285094,
+    "y": 1.7619869243864656
+  }
+]
