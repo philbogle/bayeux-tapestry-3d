@@ -113,7 +113,7 @@
         
         if (isMobileChrome || isIPhone) {
             document.getElementById('ui').style.display = 'none';
-            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use a different browser or device (like an <b>iPad</b> or Desktop).<br><br><span style="font-size: 16px; color: #a49176;">iPhones and Mobile Chrome are currently unsupported due to strict WebGL memory limitations.</span></div>';
+            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use a different browser or device (like <b>Safari on iPad</b> or Desktop).<br><br><span style="font-size: 16px; color: #a49176;">iPhones and Mobile Chrome are currently unsupported due to strict WebGL memory limitations.</span></div>';
             throw new Error("Mobile Chrome/iPhone is not supported.");
         }
 
