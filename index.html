@@ -90,6 +90,7 @@
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
         <p>Use <span class="key">←</span> <span class="key">→</span>, <span class="key">A</span> <span class="key">D</span>, or mouse to edges to explore.</p>
         <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
+        <p style="font-size: 11px; margin-top: 8px; color: #a49176;">Note: For iPad users, Safari is highly recommended. iOS Chrome enforces strict memory limits.</p>
         <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a></p>
     </div>
 
@@ -408,16 +409,16 @@
 
             if (keys.right) {
                 velocityX += currentAccel;
-                targetRotationY = -maxTilt;
             } else if (keys.left) {
                 velocityX -= currentAccel;
-                targetRotationY = maxTilt;
             } else if (mouseScrollDir !== 0) {
                 velocityX += currentAccel * mouseScrollDir;
-                targetRotationY = -maxTilt * mouseScrollDir;
-            } else {
-                targetRotationY = 0;
             }
+
+            // Unify tilt logic: tilt is purely based on current horizontal velocity.
+            // This natively adds the tilting effect to keyboard, mouse edge scroll, AND touch dragging/momentum!
+            const speedRatio = Math.max(-1, Math.min(1, velocityX / 0.15));
+            targetRotationY = -maxTilt * speedRatio;
             
             if (keys.up) velocityZ -= fixedZoomAccel;
             if (keys.down) velocityZ += fixedZoomAccel;
