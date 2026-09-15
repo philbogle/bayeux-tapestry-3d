@@ -199,7 +199,8 @@
                     mesh,
                     xCenter,
                     loaded: false,
-                    loading: false
+                    loading: false,
+                    failed: false
                 });
             }
         }
@@ -496,7 +497,7 @@
                 const isVisible = (tile.xCenter >= xMin && tile.xCenter <= xMax);
                 
                 if (isVisible) {
-                    if (!tile.loaded && !tile.loading && activeRequests < MAX_CONCURRENT_REQUESTS) {
+                    if (!tile.loaded && !tile.loading && !tile.failed && activeRequests < MAX_CONCURRENT_REQUESTS) {
                         tile.loading = true;
                         activeRequests++;
 
@@ -520,12 +521,14 @@
                                     URL.revokeObjectURL(objUrl);
                                     activeRequests--;
                                     tile.loading = false;
+                                    tile.failed = true;
                                     console.error("TextureLoad failed: " + url.split('/').pop());
                                 });
                             })
                             .catch(err => {
                                 activeRequests--;
                                 tile.loading = false;
+                                tile.failed = true;
                                 console.error("Fetch failed: " + url.split('/').pop() + " | " + (err.message || "Network Error"));
                             });
                     }
