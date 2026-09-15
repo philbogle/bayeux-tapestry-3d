@@ -367,7 +367,7 @@
             const width = height * camera.aspect;
 
             // Expand loading margin so tilting doesn't reveal blank tiles as easily
-            const margin = 80; // Increased aggressively for prefetching 
+            const margin = 20; // Reduced to prevent network saturation on mobile devices 
             const xMin = camera.position.x - width / 2 - margin;
             const xMax = camera.position.x + width / 2 + margin;
 
