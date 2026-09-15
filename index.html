@@ -207,7 +207,7 @@
 
         // Add floor and ceiling for perspective
         const floorY = -H / SCALE - 0.5;
-        const ceilingY = H / SCALE + 0.5;
+        const ceilingY = (H / SCALE + 0.5) * 2; // Doubled ceiling height
         const length = W / SCALE + 100;
 
         // Create a procedural organic texture (like dark stone/wood) to avoid modern geometric grids
@@ -239,7 +239,8 @@
         }
 
         const organicTexture = createOrganicTexture();
-        const planeGeo = new THREE.PlaneGeometry(length, 40);
+        // Increased depth from 40 to 120 so the floor/ceiling don't clip at max zoom (Z=40)
+        const planeGeo = new THREE.PlaneGeometry(length, 120);
         const planeMat = new THREE.MeshBasicMaterial({ map: organicTexture });
         
         const floor = new THREE.Mesh(planeGeo, planeMat);
