@@ -131,6 +131,11 @@
         const textureLoader = new THREE.TextureLoader();
         textureLoader.setCrossOrigin('anonymous');
         const tiles = [];
+        const emptyMaterial = new THREE.MeshBasicMaterial({ color: 0x333333, transparent: true, opacity: 0 });
+        
+        // Strict network queue to prevent Safari/iPad from stalling when requesting many tiles
+        let activeRequests = 0;
+        const MAX_CONCURRENT_REQUESTS = 4;
 
         // Create the geometry for all tiles, but don't load textures yet
         for (let r = 0; r < rows; r++) {
@@ -371,27 +376,55 @@
             const xMin = camera.position.x - width / 2 - margin;
             const xMax = camera.position.x + width / 2 + margin;
 
-            tiles.forEach(tile => {
-                if (tile.xCenter >= xMin && tile.xCenter <= xMax) {
-                    if (!tile.loaded && !tile.loading) {
+            for (let tile of tiles) {
+                // Approximate visibility using the tile's center point
+                const isVisible = (tile.xCenter >= xMin && tile.xCenter <= xMax);
+                
+                if (isVisible) {
+                    if (!tile.loaded && !tile.loading && activeRequests < MAX_CONCURRENT_REQUESTS) {
                         tile.loading = true;
+                        activeRequests++;
 
                         const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
                         
                         textureLoader.load(url, (texture) => {
+                            activeRequests--;
                             tile.mesh.material = new THREE.MeshBasicMaterial({ 
-                                map: texture,
-                                transparent: true 
+                                map: texture, 
+                                transparent: true,
+                                opacity: 0
                             });
                             tile.loaded = true;
-                            tile.loading = false;
-                        }, undefined, () => {
-                            // On error
+                            
+                            // Simple fade in
+                            let op = 0;
+                            const fade = setInterval(() => {
+                                op += 0.1;
+                                if (op >= 1) {
+                                    op = 1;
+                                    clearInterval(fade);
+                                }
+                                tile.mesh.material.opacity = op;
+                            }, 50);
+                        }, undefined, (err) => {
+                            activeRequests--;
                             tile.loading = false;
                         });
                     }
+                } else {
+                    // Mobile Safari WebGL Memory crash prevention
+                    // If a tile is very far away, unload its texture to free memory
+                    if (tile.loaded && Math.abs(tile.xCenter - camera.position.x) > margin * 3) {
+                        if (tile.mesh.material.map) {
+                            tile.mesh.material.map.dispose();
+                        }
+                        tile.mesh.material.dispose();
+                        tile.mesh.material = emptyMaterial; // Assign empty material back
+                        tile.loaded = false;
+                        tile.loading = false;
+                    }
                 }
-            });
+            }
         }
 
         function animate() {
