@@ -263,8 +263,14 @@
             up: false, down: false
         };
         let mouseScrollDir = 0;
+        let isTouch = false;
+
+        window.addEventListener('touchstart', () => { isTouch = true; mouseScrollDir = 0; }, {passive: true});
+        window.addEventListener('touchend', () => { mouseScrollDir = 0; });
 
         window.addEventListener('mousemove', (e) => {
+            if (isTouch) return; // Disable edge scrolling on touch devices
+            
             const edgeThreshold = window.innerWidth * 0.15; // 15% of screen edge triggers scroll
             if (e.clientX < edgeThreshold) {
                 const intensity = 1 - (e.clientX / edgeThreshold);
@@ -283,7 +289,10 @@
             }
         });
 
+        window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
+
         window.addEventListener('keydown', (e) => {
+            mouseScrollDir = 0; // Prevent mouse edge-scroll from hijacking when releasing keys
             if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
             if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
             if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = true;
