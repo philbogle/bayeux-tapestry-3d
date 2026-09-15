@@ -90,8 +90,9 @@
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
         <p>Use <span class="key">←</span> <span class="key">→</span>, <span class="key">A</span> <span class="key">D</span>, or mouse to edges to explore.</p>
         <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
-        <p style="margin-top: 8px;">
-            <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto; margin-right: 15px;">Learn more</a>
+        <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px;">
+            <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
+            <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
         </p>
     </div>
@@ -106,22 +107,42 @@
 
     <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
-        <label>Ambient Intensity: <span id="val-amb-int">0.80</span></label><br>
-        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="0.80" style="width: 100%; margin-bottom: 10px;"><br>
+        <label>Ambient Intensity: <span id="val-amb-int">1.03</span></label><br>
+        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.03" style="width: 100%; margin-bottom: 10px;"><br>
         
         <label>Ambient Color:</label><br>
-        <input type="color" id="amb-color" value="#fffafa" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
+        <input type="color" id="amb-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
         
-        <label>Torch Intensity: <span id="val-torch-int">1.06</span></label><br>
-        <input type="range" id="torch-int" min="0" max="5" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
+        <label>Torch Intensity: <span id="val-torch-int">0.80</span></label><br>
+        <input type="range" id="torch-int" min="0" max="5" step="0.01" value="0.80" style="width: 100%; margin-bottom: 10px;"><br>
         
         <label>Torch Color:</label><br>
-        <input type="color" id="torch-color" value="#fffafa" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
+        <input type="color" id="torch-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
         
         <div style="text-align: center;">
             <button id="close-lighting-dialog" style="padding: 8px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
+
+    <div id="yt-player" style="position: absolute; width: 0; height: 0; overflow: hidden; left: -9999px;"></div>
+
+    <!-- Load YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let ytPlayer;
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('yt-player', {
+                height: '1',
+                width: '1',
+                videoId: 'd6KTJpMLe1g',
+                playerVars: {
+                    'playsinline': 1,
+                    'loop': 1,
+                    'playlist': 'd6KTJpMLe1g' // Required for loop to work
+                }
+            });
+        }
+    </script>
 
     <!-- Load Three.js from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -162,11 +183,17 @@
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
         const initialZ = 7.5; // Zoomed out slightly from 5
+        // Coordinate system layout
+        const floorY = -H / SCALE - 0.5;
+        const tapestryElevation = 2.5; // Tapestry lowered by 6 inches
+        const cameraY = floorY + 6.5; // Viewpoint raised by 6 inches
+
+        // Initial setup to frame the start of the tapestry
         const initialVFOV = THREE.MathUtils.degToRad(60);
         const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
         
         // Start near the beginning of the tapestry
-        camera.position.set(initialVisibleWidth / 2, -H / 2 / SCALE, initialZ);
+        camera.position.set(initialVisibleWidth / 2, cameraY, initialZ);
 
         // Restore antialiasing for a smoother visual experience
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -201,7 +228,7 @@
                 const heightUnits = h / SCALE;
                 
                 const xCenter = (x_topLeft + w / 2) / SCALE;
-                const yCenter = -(y_topLeft + h / 2) / SCALE;
+                const yCenter = -(y_topLeft + h / 2) / SCALE + tapestryElevation;
 
                 // Alternate Z slightly to prevent Z-fighting from the 1px overlap
                 const zOffset = (c % 2) * 0.001 + (r % 2) * 0.002;
@@ -230,7 +257,6 @@
         scene.fog = new THREE.FogExp2(fogColor, 0.015);
 
         // Add floor and ceiling for perspective
-        const floorY = -H / SCALE - 0.5;
         const ceilingY = (H / SCALE + 0.5) * 2; // Doubled ceiling height
         const length = W / SCALE + 100;
 
@@ -280,23 +306,24 @@
         // Add stone wall just behind the tapestry
         const wallGeo = new THREE.PlaneGeometry(length, 120);
         const backWall = new THREE.Mesh(wallGeo, planeMat);
-        backWall.position.set((W / SCALE) / 2, 0, -1.0); // 1.0 unit behind the tapestry (which is at Z=0)
+        backWall.position.set((W / SCALE) / 2, tapestryElevation, -0.5); // 0.5 units (6 inches) behind the tapestry (which is at Z=0)
         scene.add(backWall);
 
         // Lighting: Ambient light + 3 Dynamic Torches
-        const ambientLight = new THREE.AmbientLight(0xfffafa, 0.80);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.03);
         scene.add(ambientLight);
 
         // We use 3 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
         const torchLights = [];
         for (let i = 0; i < 3; i++) {
-            const torch = new THREE.PointLight(0xfffafa, 1.5, 70); // Warm fire color, range 70
+            const torch = new THREE.PointLight(0xffffff, 1.5, 70); // Warm fire color, range 70
             scene.add(torch);
             torchLights.push(torch);
         }
         
         // Lighting Variables (linked to UI)
-        let configTorchInt = 1.06;
+        let configTorchInt = 0.80;
+        let configTorchColor = new THREE.Color(0xffffff);
 
         // UI Listeners
         document.getElementById('amb-int').addEventListener('input', (e) => {
@@ -314,9 +341,7 @@
         });
         
         document.getElementById('torch-color').addEventListener('input', (e) => {
-            for(let i=0; i<3; i++) {
-                torchLights[i].color.set(e.target.value);
-            }
+            configTorchColor.set(e.target.value);
         });
 
         // Add a subtle baked shadow directly below the tapestry
@@ -327,7 +352,7 @@
             const ctx = canvas.getContext('2d');
             
             const gradient = ctx.createLinearGradient(0, 0, 0, 64);
-            gradient.addColorStop(0, 'rgba(0,0,0,0.35)');
+            gradient.addColorStop(0, 'rgba(0,0,0,0.525)'); // Opacity increased by 50%
             gradient.addColorStop(1, 'rgba(0,0,0,0)');
             
             ctx.fillStyle = gradient;
@@ -344,8 +369,8 @@
             depthWrite: false 
         });
         const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
-        // Position it so its top edge touches the bottom of the tapestry (-H / SCALE)
-        shadowMesh.position.set((W / SCALE) / 2, -H / SCALE - (shadowHeight / 2), 0);
+        // Position it so its top edge touches the bottom of the tapestry
+        shadowMesh.position.set((W / SCALE) / 2, -H / SCALE - (shadowHeight / 2) + tapestryElevation, 0);
         scene.add(shadowMesh);
 
         // Input state
@@ -432,6 +457,12 @@
         window.addEventListener('mousemove', (e) => {
             if (isTouch) return; // Disable edge scrolling on touch devices
             
+            // Prevent edge-scroll if hovering over UI elements
+            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) {
+                mouseScrollDir = 0;
+                return;
+            }
+            
             const edgeThreshold = window.innerWidth * 0.15; // 15% of screen edge triggers scroll
             if (e.clientX < edgeThreshold) {
                 const intensity = 1 - (e.clientX / edgeThreshold);
@@ -481,7 +512,7 @@
         // Camera physics/smoothing
         let velocityX = 0;
         let velocityZ = 0;
-        const maxVelocityX = 0.25; // Decreased by another 35%
+        const maxVelocityX = 0.125; // Decreased by 50%
         const maxVelocityZ = 0.1;
         const fixedZoomAccel = 0.01;
         const friction = 0.92;
@@ -496,8 +527,8 @@
             let currentAccel = 0;
             if (keys.right || keys.left || mouseScrollDir !== 0) {
                 moveHoldTime += 1;
-                // Slower acceleration ramp up
-                currentAccel = 0.001 + Math.min(1, moveHoldTime / 300) * 0.024;
+                // Slower acceleration ramp up (halved initial speed and halved overall acceleration)
+                currentAccel = 0.0005 + Math.min(1, moveHoldTime / 300) * 0.012;
             } else {
                 moveHoldTime = 0;
             }
@@ -637,12 +668,25 @@
                 const torchX = torchIndex * torchSpacing;
                 
                 // Position above the tapestry, slightly forward
-                torchLights[i].position.set(torchX, 2.0, 3.0);
+                torchLights[i].position.set(torchX, tapestryElevation + 2.0, 3.0);
                 
-                // Very subtle, unsynchronized flickering
+                // Unsynchronized flickering
                 const phase = torchIndex * 13.5; 
-                const flicker = 1.0 + 0.03 * Math.sin(time + phase) + 0.015 * Math.sin((time + phase) * 1.7);
+                // Intensity fluctuation
+                const flicker = 1.0 + 0.0375 * Math.sin(time + phase) + 0.01875 * Math.sin((time + phase) * 1.7);
                 torchLights[i].intensity = configTorchInt * flicker;
+                
+                // Color shift: shift hue slightly when flickering to simulate real flames
+                const colorShift = (flicker - 1.0) * 1.5; // Degree of color shift
+                torchLights[i].color.copy(configTorchColor);
+                if (colorShift < 0) {
+                    // Darker flicker = warmer (drop blue & green)
+                    torchLights[i].color.b = Math.max(0, torchLights[i].color.b + colorShift);
+                    torchLights[i].color.g = Math.max(0, torchLights[i].color.g + colorShift * 0.4);
+                } else {
+                    // Brighter flicker = cooler/whiter
+                    torchLights[i].color.r = Math.min(1, torchLights[i].color.r + colorShift * 0.5);
+                }
             }
 
             updateCamera();
@@ -674,6 +718,23 @@
 
         document.getElementById('close-lighting-dialog').addEventListener('click', () => {
             document.getElementById('lighting-dialog').style.display = 'none';
+        });
+
+        document.getElementById('music-toggle').addEventListener('click', () => {
+            if (!ytPlayer || !ytPlayer.getPlayerState) return; // Not loaded yet
+            
+            const btn = document.getElementById('music-toggle');
+            const state = ytPlayer.getPlayerState();
+            
+            if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+                ytPlayer.pauseVideo();
+                btn.innerHTML = '🎵 Play Music';
+                btn.style.background = 'rgba(20,20,20,0.8)';
+            } else {
+                ytPlayer.playVideo();
+                btn.innerHTML = '⏸ Pause Music';
+                btn.style.background = 'rgba(214, 168, 72, 0.2)';
+            }
         });
     </script>
 </body>
