@@ -90,7 +90,10 @@
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
         <p>Use <span class="key">←</span> <span class="key">→</span>, <span class="key">A</span> <span class="key">D</span>, or mouse to edges to explore.</p>
         <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
-        <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a></p>
+        <p style="margin-top: 8px;">
+            <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto; margin-right: 15px;">Learn more</a>
+            <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
+        </p>
     </div>
 
     <div id="about-dialog">
@@ -99,6 +102,25 @@
         <p>You can view the original experience here:<br>
         <a href="https://www.britishmuseum.org/bayeux-tapestry-online-experience" target="_blank">British Museum: Bayeux Tapestry</a></p>
         <button id="close-dialog">Close</button>
+    </div>
+
+    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+        <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
+        <label>Ambient Intensity: <span id="val-amb-int">0.80</span></label><br>
+        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="0.80" style="width: 100%; margin-bottom: 10px;"><br>
+        
+        <label>Ambient Color:</label><br>
+        <input type="color" id="amb-color" value="#fffafa" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
+        
+        <label>Torch Intensity: <span id="val-torch-int">1.06</span></label><br>
+        <input type="range" id="torch-int" min="0" max="5" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
+        
+        <label>Torch Color:</label><br>
+        <input type="color" id="torch-color" value="#fffafa" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
+        
+        <div style="text-align: center;">
+            <button id="close-lighting-dialog" style="padding: 8px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+        </div>
     </div>
 
     <!-- Load Three.js from CDN -->
@@ -157,7 +179,7 @@
         const tiles = [];
         
         // Use visible: false instead of transparent/opacity to prevent mobile WebGL from trying to depth-sort 700 transparent planes
-        const emptyMaterial = new THREE.MeshBasicMaterial({ visible: false });
+        const emptyMaterial = new THREE.MeshLambertMaterial({ visible: false });
         
         // Strict network queue to prevent Safari/iPad from stalling when requesting many tiles
         let activeRequests = 0;
@@ -219,17 +241,17 @@
             canvas.height = 256;
             const ctx = canvas.getContext('2d');
             
-            ctx.fillStyle = '#1c1814'; // Brighter base color
+            ctx.fillStyle = '#2a251e'; // Further darkened stone base color
             ctx.fillRect(0, 0, 256, 256);
             
             // Faint, widely spaced vertical joints for motion reference
-            ctx.fillStyle = '#0a0806';
+            ctx.fillStyle = '#110d0a';
             ctx.fillRect(252, 0, 4, 256); 
             
             // Subtly grainy noise for an ancient/tactile feel
             for (let i = 0; i < 8000; i++) {
                 const isLight = Math.random() > 0.5;
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.6)';
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.4)';
                 ctx.fillRect(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 2, 1 + Math.random() * 2);
             }
             
@@ -243,7 +265,7 @@
         const organicTexture = createOrganicTexture();
         // Increased depth from 40 to 120 so the floor/ceiling don't clip at max zoom (Z=40)
         const planeGeo = new THREE.PlaneGeometry(length, 120);
-        const planeMat = new THREE.MeshBasicMaterial({ map: organicTexture });
+        const planeMat = new THREE.MeshLambertMaterial({ map: organicTexture });
         
         const floor = new THREE.Mesh(planeGeo, planeMat);
         floor.rotation.x = -Math.PI / 2;
@@ -254,6 +276,48 @@
         ceiling.rotation.x = Math.PI / 2;
         ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
         scene.add(ceiling);
+
+        // Add stone wall just behind the tapestry
+        const wallGeo = new THREE.PlaneGeometry(length, 120);
+        const backWall = new THREE.Mesh(wallGeo, planeMat);
+        backWall.position.set((W / SCALE) / 2, 0, -1.0); // 1.0 unit behind the tapestry (which is at Z=0)
+        scene.add(backWall);
+
+        // Lighting: Ambient light + 3 Dynamic Torches
+        const ambientLight = new THREE.AmbientLight(0xfffafa, 0.80);
+        scene.add(ambientLight);
+
+        // We use 3 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
+        const torchLights = [];
+        for (let i = 0; i < 3; i++) {
+            const torch = new THREE.PointLight(0xfffafa, 1.5, 70); // Warm fire color, range 70
+            scene.add(torch);
+            torchLights.push(torch);
+        }
+        
+        // Lighting Variables (linked to UI)
+        let configTorchInt = 1.06;
+
+        // UI Listeners
+        document.getElementById('amb-int').addEventListener('input', (e) => {
+            ambientLight.intensity = parseFloat(e.target.value);
+            document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
+        });
+        
+        document.getElementById('amb-color').addEventListener('input', (e) => {
+            ambientLight.color.set(e.target.value);
+        });
+        
+        document.getElementById('torch-int').addEventListener('input', (e) => {
+            configTorchInt = parseFloat(e.target.value);
+            document.getElementById('val-torch-int').innerText = configTorchInt.toFixed(2);
+        });
+        
+        document.getElementById('torch-color').addEventListener('input', (e) => {
+            for(let i=0; i<3; i++) {
+                torchLights[i].color.set(e.target.value);
+            }
+        });
 
         // Add a subtle baked shadow directly below the tapestry
         function createShadowTexture() {
@@ -389,6 +453,11 @@
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
         window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'h') {
+                const ui = document.getElementById('ui');
+                const isHidden = ui.style.display === 'none';
+                ui.style.display = isHidden ? 'block' : 'none';
+            }
             mouseScrollDir = 0; // Prevent mouse edge-scroll from hijacking when releasing keys
             if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
             if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
@@ -513,7 +582,7 @@
                             // Maximize texture sharpness when viewed at an oblique angle (tilting)
                             texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
                             
-                            tile.mesh.material = new THREE.MeshBasicMaterial({ 
+                            tile.mesh.material = new THREE.MeshLambertMaterial({ 
                                 map: texture,
                                 transparent: true,
                                 opacity: 0
@@ -555,6 +624,27 @@
 
         function animate() {
             requestAnimationFrame(animate);
+
+            // Dynamic Fixed Torches (Snap to fixed positions around the camera)
+            const torchSpacing = 30; // Restored spacing for 3 torches
+            const time = Date.now() * 0.0025; // Slower flicker rate
+            
+            // Find the nearest torch interval to the camera
+            const centerIndex = Math.round(camera.position.x / torchSpacing);
+            
+            for (let i = 0; i < 3; i++) {
+                const torchIndex = centerIndex - 1 + i; // Offset to keep them roughly centered around the camera
+                const torchX = torchIndex * torchSpacing;
+                
+                // Position above the tapestry, slightly forward
+                torchLights[i].position.set(torchX, 2.0, 3.0);
+                
+                // Very subtle, unsynchronized flickering
+                const phase = torchIndex * 13.5; 
+                const flicker = 1.0 + 0.03 * Math.sin(time + phase) + 0.015 * Math.sin((time + phase) * 1.7);
+                torchLights[i].intensity = configTorchInt * flicker;
+            }
+
             updateCamera();
             updateTiles();
             renderer.render(scene, camera);
@@ -570,6 +660,20 @@
 
         document.getElementById('close-dialog').addEventListener('click', () => {
             document.getElementById('about-dialog').style.display = 'none';
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('adv') === '1') {
+            document.getElementById('lighting-controls-link').style.display = 'inline';
+        }
+
+        document.getElementById('lighting-controls-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('lighting-dialog').style.display = 'block';
+        });
+
+        document.getElementById('close-lighting-dialog').addEventListener('click', () => {
+            document.getElementById('lighting-dialog').style.display = 'none';
         });
     </script>
 </body>
