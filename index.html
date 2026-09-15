@@ -340,8 +340,8 @@
                 if (initialPinchDistance > 0) {
                     const scale = initialPinchDistance / dist;
                     camera.position.z = initialPinchCamZ * scale;
-                    // Keep camera Z bounded between 1 and 20
-                    camera.position.z = Math.max(1, Math.min(20, camera.position.z));
+                    // Keep camera Z bounded between 1 and 40
+                    camera.position.z = Math.max(1, Math.min(40, camera.position.z));
                 }
             }
         }, {passive: false});
@@ -471,8 +471,8 @@
             const maxX = W / SCALE;
             if (camera.position.x > maxX) camera.position.x = maxX;
 
-            if (camera.position.z < 2) camera.position.z = 2;
-            if (camera.position.z > 15) camera.position.z = 15;
+            if (camera.position.z < 1) camera.position.z = 1;
+            if (camera.position.z > 40) camera.position.z = 40;
         }
 
         function updateTiles() {
