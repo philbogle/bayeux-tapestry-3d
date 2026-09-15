@@ -104,6 +104,25 @@
     <!-- Load Three.js from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIOSChrome = isIOS && /CriOS/.test(navigator.userAgent);
+        
+        if (isIOSChrome) {
+            document.getElementById('ui').style.display = 'none';
+            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use <b>Safari</b> on iPad/iPhone.<br><br><span style="font-size: 16px; color: #a49176;">Chrome on iOS has strict memory limits that prevent this high-resolution 3D experience from loading.</span></div>';
+            throw new Error("iOS Chrome is not supported due to WKWebView WebGL memory limits.");
+        }
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/.test(navigator.userAgent) || isIOS;
+        if (isMobile) {
+            document.getElementById('ui').innerHTML = `
+                <h2>Bayeux Tapestry 3D Walkthrough</h2>
+                <p>Drag left and right to explore.</p>
+                <p>Pinch to zoom in and out.</p>
+                <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a></p>
+            `;
+        }
+
         const T = 254; // Tile size without overlap
         const LEVEL = 16; // 16 provides a very high resolution while being manageable
         const W = 60262;
@@ -135,7 +154,7 @@
         
         // Strict network queue to prevent Safari/iPad from stalling when requesting many tiles
         let activeRequests = 0;
-        const MAX_CONCURRENT_REQUESTS = 4;
+        const MAX_CONCURRENT_REQUESTS = isMobile ? 4 : 32;
 
         // Create the geometry for all tiles, but don't load textures yet
         for (let r = 0; r < rows; r++) {
@@ -459,7 +478,7 @@
             const width = height * camera.aspect;
 
             // Expand loading margin so tilting doesn't reveal blank tiles as easily
-            const margin = 20; // Reduced to prevent network saturation on mobile devices 
+            const margin = isMobile ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
             const xMin = camera.position.x - width / 2 - margin;
             const xMax = camera.position.x + width / 2 + margin;
 
@@ -522,25 +541,6 @@
         }
 
         animate();
-
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isIOSChrome = isIOS && /CriOS/.test(navigator.userAgent);
-        
-        if (isIOSChrome) {
-            document.getElementById('ui').style.display = 'none';
-            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use <b>Safari</b> on iPad/iPhone.<br><br><span style="font-size: 16px; color: #a49176;">Chrome on iOS has strict memory limits that prevent this high-resolution 3D experience from loading.</span></div>';
-            throw new Error("iOS Chrome is not supported due to WKWebView WebGL memory limits.");
-        }
-
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/.test(navigator.userAgent) || isIOS;
-        if (isMobile) {
-            document.getElementById('ui').innerHTML = `
-                <h2>Bayeux Tapestry 3D Walkthrough</h2>
-                <p>Drag left and right to explore.</p>
-                <p>Pinch to zoom in and out.</p>
-                <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a></p>
-            `;
-        }
 
         // UI Dialog Listeners
         document.getElementById('learn-more-link').addEventListener('click', (e) => {
