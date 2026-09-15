@@ -38,6 +38,41 @@
             margin: 0 2px;
             font-family: monospace;
         }
+        #about-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 20, 20, 0.95);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            z-index: 1000;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        #about-dialog a {
+            color: #4da6ff;
+            text-decoration: none;
+        }
+        #about-dialog a:hover {
+            text-decoration: underline;
+        }
+        #close-dialog {
+            margin-top: 15px;
+            padding: 8px 15px;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #close-dialog:hover {
+            background: #555;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +80,15 @@
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
         <p>Use <span class="key">←</span> <span class="key">→</span> or <span class="key">A</span> <span class="key">D</span> to move along the tapestry.</p>
         <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
+        <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #4da6ff; text-decoration: none; pointer-events: auto;">Learn more</a></p>
+    </div>
+
+    <div id="about-dialog">
+        <h3>About this Visualization</h3>
+        <p>Special thanks to the British Museum for making their high-resolution Bayeux Tapestry image tiles available for public exploration.</p>
+        <p>You can view the original experience here:<br>
+        <a href="https://www.britishmuseum.org/bayeux-tapestry-online-experience" target="_blank">British Museum: Bayeux Tapestry</a></p>
+        <button id="close-dialog">Close</button>
     </div>
 
     <!-- Load Three.js from CDN -->
@@ -252,6 +296,16 @@
         }
 
         animate();
+
+        // UI Dialog Listeners
+        document.getElementById('learn-more-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('about-dialog').style.display = 'block';
+        });
+
+        document.getElementById('close-dialog').addEventListener('click', () => {
+            document.getElementById('about-dialog').style.display = 'none';
+        });
     </script>
 </body>
 </html>
