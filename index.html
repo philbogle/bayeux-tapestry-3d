@@ -88,7 +88,7 @@
 <body>
     <div id="ui">
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
-        <p>Use <span class="key">←</span> <span class="key">→</span> or <span class="key">A</span> <span class="key">D</span> to move along the tapestry.</p>
+        <p>Use <span class="key">←</span> <span class="key">→</span>, <span class="key">A</span> <span class="key">D</span>, or move your mouse to the edges of the screen to explore.</p>
         <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
         <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a></p>
     </div>
@@ -257,6 +257,26 @@
             left: false, right: false,
             up: false, down: false
         };
+        let mouseScrollDir = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            const edgeThreshold = window.innerWidth * 0.15; // 15% of screen edge triggers scroll
+            if (e.clientX < edgeThreshold) {
+                const intensity = 1 - (e.clientX / edgeThreshold);
+                mouseScrollDir = -intensity;
+            } else if (e.clientX > window.innerWidth - edgeThreshold) {
+                const intensity = 1 - ((window.innerWidth - e.clientX) / edgeThreshold);
+                mouseScrollDir = intensity;
+            } else {
+                mouseScrollDir = 0;
+            }
+        });
+
+        window.addEventListener('mouseout', (e) => {
+            if (e.relatedTarget === null) {
+                mouseScrollDir = 0;
+            }
+        });
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
@@ -294,7 +314,7 @@
 
         function updateCamera() {
             let currentAccel = 0;
-            if (keys.right || keys.left) {
+            if (keys.right || keys.left || mouseScrollDir !== 0) {
                 moveHoldTime += 1;
                 // Slowly ramp up acceleration over roughly 3 seconds (180 frames @ 60fps)
                 currentAccel = 0.002 + Math.min(1, moveHoldTime / 180) * 0.048;
@@ -308,6 +328,9 @@
             } else if (keys.left) {
                 velocityX -= currentAccel;
                 targetRotationY = maxTilt;
+            } else if (mouseScrollDir !== 0) {
+                velocityX += currentAccel * mouseScrollDir;
+                targetRotationY = -maxTilt * mouseScrollDir;
             } else {
                 targetRotationY = 0;
             }
