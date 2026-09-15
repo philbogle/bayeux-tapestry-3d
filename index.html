@@ -213,6 +213,35 @@
         ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
         scene.add(ceiling);
 
+        // Add a subtle baked shadow directly below the tapestry
+        function createShadowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 64);
+            gradient.addColorStop(0, 'rgba(0,0,0,0.8)');
+            gradient.addColorStop(1, 'rgba(0,0,0,0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1, 64);
+            
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        const shadowHeight = 0.5;
+        const shadowGeo = new THREE.PlaneGeometry(W / SCALE, shadowHeight);
+        const shadowMat = new THREE.MeshBasicMaterial({ 
+            map: createShadowTexture(), 
+            transparent: true,
+            depthWrite: false 
+        });
+        const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+        // Position it so its top edge touches the bottom of the tapestry (-H / SCALE)
+        shadowMesh.position.set((W / SCALE) / 2, -H / SCALE - (shadowHeight / 2), 0);
+        scene.add(shadowMesh);
+
         // Input state
         const keys = {
             left: false, right: false,
