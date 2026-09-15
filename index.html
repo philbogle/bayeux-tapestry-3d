@@ -75,6 +75,7 @@
         document.body.appendChild(renderer.domElement);
 
         const textureLoader = new THREE.TextureLoader();
+        textureLoader.setCrossOrigin('anonymous');
         const tiles = [];
 
         // Create the geometry for all tiles, but don't load textures yet
@@ -225,7 +226,7 @@
                     if (!tile.loaded && !tile.loading) {
                         tile.loading = true;
 
-                        const url = `/datasviewer/manifest_files/${LEVEL}/${tile.c}_${tile.r}.jpg`;
+                        const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
                         
                         textureLoader.load(url, (texture) => {
                             tile.mesh.material = new THREE.MeshBasicMaterial({ 
