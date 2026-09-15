@@ -433,7 +433,15 @@
             camera.position.z += velocityZ;
 
             // Smoothly interpolate the camera tilt
+            const previousRotationY = camera.rotation.y;
             camera.rotation.y += (targetRotationY - camera.rotation.y) * tiltSmoothing;
+
+            // Prevent the view from drifting backwards when the camera straightens out (untilt compensation)
+            const isUntilting = Math.abs(targetRotationY) < Math.abs(previousRotationY);
+            if (isUntilting) {
+                const focalXBefore = camera.position.x - camera.position.z * Math.tan(previousRotationY);
+                camera.position.x = focalXBefore + camera.position.z * Math.tan(camera.rotation.y);
+            }
 
             // Bounds
             if (camera.position.x < 0) camera.position.x = 0;
