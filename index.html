@@ -104,24 +104,18 @@
     <!-- Load Three.js from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // On-screen error logging for mobile debugging
-        window.onerror = function(msg, src, line) {
-            const errDiv = document.createElement('div');
-            errDiv.style.cssText = 'position:fixed;top:0;left:0;background:red;color:white;z-index:9999;padding:10px;font-size:12px;max-width:100%;pointer-events:none;';
-            errDiv.innerText = msg + ' @ ' + line;
-            document.body.appendChild(errDiv);
-        };
-        const origErr = console.error;
-        console.error = function(...args) {
-            const errDiv = document.createElement('div');
-            errDiv.style.cssText = 'position:fixed;bottom:0;left:0;background:orange;color:black;z-index:9999;padding:10px;font-size:12px;max-width:100%;pointer-events:none;';
-            errDiv.innerText = args.join(' ');
-            document.body.appendChild(errDiv);
-            origErr.apply(console, args);
-        };
-
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/.test(navigator.userAgent) || isIOS;
+        
+        // Detect Chrome on iOS (CriOS) or Android (Chrome)
+        const isMobileChrome = isMobile && (/CriOS/.test(navigator.userAgent) || /Chrome/.test(navigator.userAgent)) && !/Edge|Edg|EdgiOS|OPR|Opera/.test(navigator.userAgent);
+        
+        if (isMobileChrome) {
+            document.getElementById('ui').style.display = 'none';
+            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use a different browser (like <b>Safari</b>).<br><br><span style="font-size: 16px; color: #a49176;">Chrome on mobile devices is not supported due to strict WebGL networking limitations.</span></div>';
+            throw new Error("Mobile Chrome is not supported.");
+        }
+
         if (isMobile) {
             document.getElementById('ui').innerHTML = `
                 <h2>Bayeux Tapestry 3D Walkthrough</h2>
@@ -151,8 +145,8 @@
         // Start near the beginning of the tapestry
         camera.position.set(initialVisibleWidth / 2, -H / 2 / SCALE, initialZ);
 
-        // Disable antialiasing on mobile to save VRAM and prevent context loss
-        const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false });
+        // Restore antialiasing for a smoother visual experience
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -511,8 +505,23 @@
                             texture.minFilter = THREE.LinearFilter;
                             texture.magFilter = THREE.LinearFilter;
                             
-                            tile.mesh.material = new THREE.MeshBasicMaterial({ map: texture });
+                            tile.mesh.material = new THREE.MeshBasicMaterial({ 
+                                map: texture,
+                                transparent: true,
+                                opacity: 0
+                            });
                             tile.loaded = true;
+                            
+                            // Restore smooth fade-in
+                            let op = 0;
+                            const fade = setInterval(() => {
+                                op += 0.1;
+                                if (op >= 1) {
+                                    op = 1;
+                                    clearInterval(fade);
+                                }
+                                tile.mesh.material.opacity = op;
+                            }, 50);
                         }, undefined, (err) => {
                             activeRequests--;
                             tile.loading = false;
