@@ -101,7 +101,8 @@
         <h3>About this Visualization</h3>
         <p>Special thanks to the British Museum for making their high-resolution Bayeux Tapestry image tiles available for public exploration.</p>
         <p>You can view the original experience here:<br>
-        <a href="https://www.britishmuseum.org/bayeux-tapestry-online-experience" target="_blank">British Museum: Bayeux Tapestry</a></p>
+        <a href="https://www.britishmuseum.org/collection/bayeux-tapestry" target="_blank">British Museum: Bayeux Tapestry</a></p>
+        <p>Background music provided by: <br><a href="https://www.youtube.com/watch?v=d6KTJpMLe1g&list=PLoqoYP_8M-olqCZGLjQqtg8EEwxM0HTMb&index=40" target="_blank">YouTube Ambient Mix</a></p>
         <button id="close-dialog">Close</button>
     </div>
 
@@ -267,11 +268,11 @@
             canvas.height = 256;
             const ctx = canvas.getContext('2d');
             
-            ctx.fillStyle = '#2a251e'; // Further darkened stone base color
+            ctx.fillStyle = '#181510'; // Even darker stone base color
             ctx.fillRect(0, 0, 256, 256);
             
             // Faint, widely spaced vertical joints for motion reference
-            ctx.fillStyle = '#110d0a';
+            ctx.fillStyle = '#080605';
             ctx.fillRect(252, 0, 4, 256); 
             
             // Subtly grainy noise for an ancient/tactile feel
@@ -308,6 +309,39 @@
         const backWall = new THREE.Mesh(wallGeo, planeMat);
         backWall.position.set((W / SCALE) / 2, tapestryElevation, -0.5); // 0.5 units (6 inches) behind the tapestry (which is at Z=0)
         scene.add(backWall);
+
+        // Add a chamfered plinth course at the base of the wall
+        const plinthHeight = 0.4; 
+        const plinthDepth = 0.2; 
+        const chamferSize = 0.075; 
+        
+        const plinthShape = new THREE.Shape();
+        plinthShape.moveTo(0, 0);
+        plinthShape.lineTo(0, plinthHeight);
+        plinthShape.lineTo(-(plinthDepth - chamferSize), plinthHeight); // Flat top
+        plinthShape.lineTo(-plinthDepth, plinthHeight - chamferSize); // Chamfer slope
+        plinthShape.lineTo(-plinthDepth, 0); // Front face down
+        plinthShape.lineTo(0, 0);
+        
+        const plinthGeo = new THREE.ExtrudeGeometry(plinthShape, { 
+            depth: length, 
+            bevelEnabled: false 
+        });
+        
+        // Clone the texture to fix the UV scaling on the small profile
+        const plinthTexture = organicTexture.clone();
+        plinthTexture.needsUpdate = true;
+        plinthTexture.repeat.set(length / 2, 2); 
+        const plinthMat = new THREE.MeshLambertMaterial({ map: plinthTexture });
+        
+        const plinth = new THREE.Mesh(plinthGeo, plinthMat);
+        // Rotate 90 degrees around Y so the extrusion goes along the X axis
+        plinth.rotation.y = Math.PI / 2;
+        // Position at the left edge of the wall, on the floor, flush with the wall
+        plinth.position.set((W / SCALE) / 2 - length / 2, floorY, -0.5);
+        scene.add(plinth);
+
+
 
         // Lighting: Ambient light + 3 Dynamic Torches
         const ambientLight = new THREE.AmbientLight(0xffffff, 1.03);
@@ -518,7 +552,7 @@
         const friction = 0.92;
 
         let targetRotationY = 0;
-        const maxTilt = Math.PI / 8; // Max tilt angle (22.5 degrees)
+        const maxTilt = (Math.PI / 8) * 1.25; // Max tilt angle (~28.1 degrees)
         const tiltSmoothing = 0.006; // Reduced to slow down the tilt acceleration
 
         let moveHoldTime = 0;
@@ -658,7 +692,7 @@
 
             // Dynamic Fixed Torches (Snap to fixed positions around the camera)
             const torchSpacing = 30; // Restored spacing for 3 torches
-            const time = Date.now() * 0.0025; // Slower flicker rate
+            const time = Date.now() * 0.00125; // Slower flicker rate
             
             // Find the nearest torch interval to the camera
             const centerIndex = Math.round(camera.position.x / torchSpacing);
@@ -670,19 +704,25 @@
                 // Position above the tapestry, slightly forward
                 torchLights[i].position.set(torchX, tapestryElevation + 2.0, 3.0);
                 
-                // Unsynchronized flickering
+                // Unsynchronized chaotic flickering using non-harmonic sine waves and crackle
                 const phase = torchIndex * 13.5; 
-                // Intensity fluctuation
-                const flicker = 1.0 + 0.0375 * Math.sin(time + phase) + 0.01875 * Math.sin((time + phase) * 1.7);
+                const wave1 = Math.sin(time * 1.1 + phase);
+                const wave2 = Math.sin(time * 2.3 + phase * 2.1);
+                const wave3 = Math.sin(time * 3.7 + phase * 3.3);
+                const wave4 = Math.sin(time * 5.1 + phase * 4.5);
+                const crackle = (Math.random() - 0.5) * 0.02; // Further toned down crackle
+                
+                // Tone down the overall flicker amplitude
+                const flicker = 1.0 + (wave1 * 0.025) + (wave2 * 0.015) + (wave3 * 0.01) + (wave4 * 0.005) + crackle;
                 torchLights[i].intensity = configTorchInt * flicker;
                 
                 // Color shift: shift hue slightly when flickering to simulate real flames
-                const colorShift = (flicker - 1.0) * 1.5; // Degree of color shift
+                const colorShift = (flicker - 1.0) * 2.0; // Increased degree of color shift
                 torchLights[i].color.copy(configTorchColor);
                 if (colorShift < 0) {
-                    // Darker flicker = warmer (drop blue & green)
-                    torchLights[i].color.b = Math.max(0, torchLights[i].color.b + colorShift);
-                    torchLights[i].color.g = Math.max(0, torchLights[i].color.g + colorShift * 0.4);
+                    // Darker flicker = warmer/redder (drop blue significantly, drop green moderately)
+                    torchLights[i].color.b = Math.max(0, torchLights[i].color.b + colorShift * 1.5);
+                    torchLights[i].color.g = Math.max(0, torchLights[i].color.g + colorShift * 0.8);
                 } else {
                     // Brighter flicker = cooler/whiter
                     torchLights[i].color.r = Math.min(1, torchLights[i].color.r + colorShift * 0.5);
