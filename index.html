@@ -161,13 +161,39 @@
             }
         }
 
-        // Add a long floor just for perspective
-        const floorGeo = new THREE.PlaneGeometry(W / SCALE + 20, 20);
-        const floorMat = new THREE.MeshBasicMaterial({ color: 0x222222 });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
+        // Scene background and fog for depth
+        scene.background = new THREE.Color(0x0a0a0a);
+        scene.fog = new THREE.Fog(0x0a0a0a, 10, 40);
+
+        // Add floor and ceiling for perspective
+        const floorY = -H / SCALE - 0.5;
+        const ceilingY = H / SCALE + 0.5;
+        const length = W / SCALE + 100;
+        const divisions = Math.ceil(length);
+
+        const planeGeo = new THREE.PlaneGeometry(length, 40);
+        const planeMat = new THREE.MeshBasicMaterial({ color: 0x0a0a0a });
+        
+        const floor = new THREE.Mesh(planeGeo, planeMat);
         floor.rotation.x = -Math.PI / 2;
-        floor.position.set((W / SCALE) / 2, -H / SCALE - 0.5, 0);
+        floor.position.set((W / SCALE) / 2, floorY, 0);
         scene.add(floor);
+
+        const gridColor1 = 0x222222;
+        const gridColor2 = 0x1a1a1a;
+        
+        const floorGrid = new THREE.GridHelper(length, divisions, gridColor1, gridColor2);
+        floorGrid.position.set((W / SCALE) / 2, floorY + 0.01, 0);
+        scene.add(floorGrid);
+
+        const ceiling = new THREE.Mesh(planeGeo, planeMat);
+        ceiling.rotation.x = Math.PI / 2;
+        ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
+        scene.add(ceiling);
+
+        const ceilingGrid = new THREE.GridHelper(length, divisions, gridColor1, gridColor2);
+        ceilingGrid.position.set((W / SCALE) / 2, ceilingY - 0.01, 0);
+        scene.add(ceilingGrid);
 
         // Input state
         const keys = {
