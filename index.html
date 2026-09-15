@@ -161,39 +161,57 @@
             }
         }
 
-        // Scene background and fog for depth
-        scene.background = new THREE.Color(0x0a0a0a);
-        scene.fog = new THREE.Fog(0x0a0a0a, 10, 40);
+        // Scene background and fog for depth (dark earthy tone)
+        const fogColor = new THREE.Color(0x0a0806);
+        scene.background = fogColor;
+        scene.fog = new THREE.Fog(fogColor, 10, 40);
 
         // Add floor and ceiling for perspective
         const floorY = -H / SCALE - 0.5;
         const ceilingY = H / SCALE + 0.5;
         const length = W / SCALE + 100;
-        const divisions = Math.ceil(length);
 
+        // Create a procedural organic texture (like dark stone/wood) to avoid modern geometric grids
+        function createOrganicTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#0a0806'; // Base color matches fog
+            ctx.fillRect(0, 0, 256, 256);
+            
+            // Faint, widely spaced vertical joints for motion reference
+            ctx.fillStyle = '#050403';
+            ctx.fillRect(252, 0, 4, 256); 
+            
+            // Subtly grainy noise for an ancient/tactile feel
+            for (let i = 0; i < 6000; i++) {
+                const isLight = Math.random() > 0.5;
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.012)' : 'rgba(0, 0, 0, 0.3)';
+                ctx.fillRect(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 2, 1 + Math.random() * 2);
+            }
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(length / 4, 10);
+            return texture;
+        }
+
+        const organicTexture = createOrganicTexture();
         const planeGeo = new THREE.PlaneGeometry(length, 40);
-        const planeMat = new THREE.MeshBasicMaterial({ color: 0x0a0a0a });
+        const planeMat = new THREE.MeshBasicMaterial({ map: organicTexture });
         
         const floor = new THREE.Mesh(planeGeo, planeMat);
         floor.rotation.x = -Math.PI / 2;
         floor.position.set((W / SCALE) / 2, floorY, 0);
         scene.add(floor);
 
-        const gridColor1 = 0x222222;
-        const gridColor2 = 0x1a1a1a;
-        
-        const floorGrid = new THREE.GridHelper(length, divisions, gridColor1, gridColor2);
-        floorGrid.position.set((W / SCALE) / 2, floorY + 0.01, 0);
-        scene.add(floorGrid);
-
         const ceiling = new THREE.Mesh(planeGeo, planeMat);
         ceiling.rotation.x = Math.PI / 2;
         ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
         scene.add(ceiling);
-
-        const ceilingGrid = new THREE.GridHelper(length, divisions, gridColor1, gridColor2);
-        ceilingGrid.position.set((W / SCALE) / 2, ceilingY - 0.01, 0);
-        scene.add(ceilingGrid);
 
         // Input state
         const keys = {
