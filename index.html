@@ -148,6 +148,7 @@
 
         // Restore antialiasing for a smoother visual experience
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setPixelRatio(window.devicePixelRatio); // Maximizes sharpness on Retina/High-DPI displays
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -343,8 +344,8 @@
                 if (initialPinchDistance > 0) {
                     const scale = initialPinchDistance / dist;
                     camera.position.z = initialPinchCamZ * scale;
-                    // Keep camera Z bounded between 1 and 40
-                    camera.position.z = Math.max(1, Math.min(40, camera.position.z));
+                    // Keep camera Z bounded between 2.0 and 40 to prevent getting too close and seeing pixelation
+                    camera.position.z = Math.max(2.0, Math.min(40, camera.position.z));
                 }
             }
         }, {passive: false});
@@ -411,14 +412,14 @@
         // Camera physics/smoothing
         let velocityX = 0;
         let velocityZ = 0;
-        const maxVelocityX = 0.8; // Increased so top speed is higher after holding
+        const maxVelocityX = 0.25; // Decreased by another 35%
         const maxVelocityZ = 0.1;
         const fixedZoomAccel = 0.01;
         const friction = 0.92;
 
         let targetRotationY = 0;
-        const maxTilt = Math.PI / 8; // 22.5 degrees max tilt
-        const tiltSmoothing = 0.0125; // 1/4 the previous smoothing rate
+        const maxTilt = Math.PI / 8; // Max tilt angle (22.5 degrees)
+        const tiltSmoothing = 0.006; // Reduced to slow down the tilt acceleration
 
         let moveHoldTime = 0;
 
@@ -426,8 +427,8 @@
             let currentAccel = 0;
             if (keys.right || keys.left || mouseScrollDir !== 0) {
                 moveHoldTime += 1;
-                // Slowly ramp up acceleration over roughly 3 seconds (180 frames @ 60fps)
-                currentAccel = 0.002 + Math.min(1, moveHoldTime / 180) * 0.048;
+                // Slower acceleration ramp up
+                currentAccel = 0.001 + Math.min(1, moveHoldTime / 300) * 0.024;
             } else {
                 moveHoldTime = 0;
             }
@@ -458,12 +459,14 @@
             camera.position.x += velocityX;
             camera.position.z += velocityZ;
 
-            // Smoothly interpolate the camera tilt
-            const previousRotationY = camera.rotation.y;
-            camera.rotation.y += (targetRotationY - camera.rotation.y) * tiltSmoothing;
-
             // Prevent the view from drifting backwards when the camera straightens out (untilt compensation)
+            const previousRotationY = camera.rotation.y;
             const isUntilting = Math.abs(targetRotationY) < Math.abs(previousRotationY);
+            
+            // Use a 2.0x multiplier for returning to straight-on view to balance snappiness with smooth easing
+            const currentSmoothing = isUntilting ? tiltSmoothing * 2.0 : tiltSmoothing;
+            camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
+
             if (isUntilting) {
                 const focalXBefore = camera.position.x - camera.position.z * Math.tan(previousRotationY);
                 camera.position.x = focalXBefore + camera.position.z * Math.tan(camera.rotation.y);
@@ -474,7 +477,7 @@
             const maxX = W / SCALE;
             if (camera.position.x > maxX) camera.position.x = maxX;
 
-            if (camera.position.z < 1) camera.position.z = 1;
+            if (camera.position.z < 2.0) camera.position.z = 2.0;
             if (camera.position.z > 40) camera.position.z = 40;
         }
 
@@ -507,6 +510,8 @@
                             texture.generateMipmaps = false;
                             texture.minFilter = THREE.LinearFilter;
                             texture.magFilter = THREE.LinearFilter;
+                            // Maximize texture sharpness when viewed at an oblique angle (tilting)
+                            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
                             
                             tile.mesh.material = new THREE.MeshBasicMaterial({ 
                                 map: texture,
