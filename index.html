@@ -202,7 +202,8 @@
         // Scene background and fog for depth (dark earthy tone)
         const fogColor = new THREE.Color(0x161310);
         scene.background = fogColor;
-        scene.fog = new THREE.Fog(fogColor, 10, 40);
+        // Reduced fog density to 0.015 (from 0.04) so the tapestry doesn't darken excessively at the new max zoom out distance
+        scene.fog = new THREE.FogExp2(fogColor, 0.015);
 
         // Add floor and ceiling for perspective
         const floorY = -H / SCALE - 0.5;
