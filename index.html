@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayeux Tapestry 3D Walkthrough</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #111;
+            font-family: sans-serif;
+        }
+        #ui {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 6px;
+            pointer-events: none;
+            font-size: 12px;
+            transition: opacity 0.5s;
+        }
+        #ui h2 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        #ui p {
+            margin: 3px 0;
+        }
+        .key {
+            display: inline-block;
+            background: #333;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 0 2px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <h2>Bayeux Tapestry 3D Walkthrough</h2>
+        <p>Use <span class="key">←</span> <span class="key">→</span> or <span class="key">A</span> <span class="key">D</span> to move along the tapestry.</p>
+        <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
+    </div>
+
+    <!-- Load Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const T = 254; // Tile size without overlap
+        const LEVEL = 16; // 16 provides a very high resolution while being manageable
+        const W = 60262;
+        const H = 694;
+        const SCALE = 100; // 100 pixels = 1 Three.js unit
+
+        const cols = Math.ceil(W / T);
+        const rows = Math.ceil(H / T);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
+        const initialZ = 7.5; // Zoomed out slightly from 5
+        const initialVFOV = THREE.MathUtils.degToRad(60);
+        const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
+        
+        // Start near the beginning of the tapestry
+        camera.position.set(initialVisibleWidth / 2, -H / 2 / SCALE, initialZ);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const textureLoader = new THREE.TextureLoader();
+        const tiles = [];
+
+        // Create the geometry for all tiles, but don't load textures yet
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const x_topLeft = c === 0 ? 0 : c * T - 1;
+                const y_topLeft = r === 0 ? 0 : r * T - 1;
+
+                const w = (c === cols - 1) ? (W - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                const h = (r === rows - 1) ? (H - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+
+                const widthUnits = w / SCALE;
+                const heightUnits = h / SCALE;
+                
+                const xCenter = (x_topLeft + w / 2) / SCALE;
+                const yCenter = -(y_topLeft + h / 2) / SCALE;
+
+                // Alternate Z slightly to prevent Z-fighting from the 1px overlap
+                const zOffset = (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                const geometry = new THREE.PlaneGeometry(widthUnits, heightUnits);
+                // Start with a transparent/placeholder material
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0x333333,
+                    wireframe: false
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(xCenter, yCenter, zOffset);
+                scene.add(mesh);
+
+                tiles.push({
+                    c, r,
+                    mesh,
+                    xCenter,
+                    loaded: false,
+                    loading: false
+                });
+            }
+        }
+
+        // Add a long floor just for perspective
+        const floorGeo = new THREE.PlaneGeometry(W / SCALE + 20, 20);
+        const floorMat = new THREE.MeshBasicMaterial({ color: 0x222222 });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.set((W / SCALE) / 2, -H / SCALE - 0.5, 0);
+        scene.add(floor);
+
+        // Input state
+        const keys = {
+            left: false, right: false,
+            up: false, down: false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
+            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
+            if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = true;
+            if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') keys.down = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = false;
+            if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = false;
+            if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') keys.down = false;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Camera physics/smoothing
+        let velocityX = 0;
+        let velocityZ = 0;
+        const maxVelocityX = 0.8; // Increased so top speed is higher after holding
+        const maxVelocityZ = 0.1;
+        const fixedZoomAccel = 0.01;
+        const friction = 0.92;
+
+        let targetRotationY = 0;
+        const maxTilt = Math.PI / 8; // 22.5 degrees max tilt
+        const tiltSmoothing = 0.0125; // 1/4 the previous smoothing rate
+
+        let moveHoldTime = 0;
+
+        function updateCamera() {
+            let currentAccel = 0;
+            if (keys.right || keys.left) {
+                moveHoldTime += 1;
+                // Slowly ramp up acceleration over roughly 3 seconds (180 frames @ 60fps)
+                currentAccel = 0.002 + Math.min(1, moveHoldTime / 180) * 0.048;
+            } else {
+                moveHoldTime = 0;
+            }
+
+            if (keys.right) {
+                velocityX += currentAccel;
+                targetRotationY = -maxTilt;
+            } else if (keys.left) {
+                velocityX -= currentAccel;
+                targetRotationY = maxTilt;
+            } else {
+                targetRotationY = 0;
+            }
+            
+            if (keys.up) velocityZ -= fixedZoomAccel;
+            if (keys.down) velocityZ += fixedZoomAccel;
+
+            velocityX *= friction;
+            velocityZ *= friction;
+
+            // Clamp velocity
+            velocityX = Math.max(-maxVelocityX, Math.min(maxVelocityX, velocityX));
+            velocityZ = Math.max(-maxVelocityZ, Math.min(maxVelocityZ, velocityZ));
+
+            camera.position.x += velocityX;
+            camera.position.z += velocityZ;
+
+            // Smoothly interpolate the camera tilt
+            camera.rotation.y += (targetRotationY - camera.rotation.y) * tiltSmoothing;
+
+            // Bounds
+            if (camera.position.x < 0) camera.position.x = 0;
+            const maxX = W / SCALE;
+            if (camera.position.x > maxX) camera.position.x = maxX;
+
+            if (camera.position.z < 2) camera.position.z = 2;
+            if (camera.position.z > 15) camera.position.z = 15;
+        }
+
+        function updateTiles() {
+            // Calculate visible width based on camera Z and FOV
+            const vFOV = THREE.MathUtils.degToRad(camera.fov);
+            const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
+            const width = height * camera.aspect;
+
+            // Expand loading margin so tilting doesn't reveal blank tiles as easily
+            const margin = 80; // Increased aggressively for prefetching 
+            const xMin = camera.position.x - width / 2 - margin;
+            const xMax = camera.position.x + width / 2 + margin;
+
+            tiles.forEach(tile => {
+                if (tile.xCenter >= xMin && tile.xCenter <= xMax) {
+                    if (!tile.loaded && !tile.loading) {
+                        tile.loading = true;
+
+                        const url = `/datasviewer/manifest_files/${LEVEL}/${tile.c}_${tile.r}.jpg`;
+                        
+                        textureLoader.load(url, (texture) => {
+                            tile.mesh.material = new THREE.MeshBasicMaterial({ 
+                                map: texture,
+                                transparent: true 
+                            });
+                            tile.loaded = true;
+                            tile.loading = false;
+                        }, undefined, () => {
+                            // On error
+                            tile.loading = false;
+                        });
+                    }
+                }
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            updateCamera();
+            updateTiles();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

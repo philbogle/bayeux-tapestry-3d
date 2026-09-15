@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/datasviewer/:match*",
+      "destination": "https://www.bayeuxmuseum.com/datasviewer/:match*"
+    }
+  ]
+}
