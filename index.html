@@ -502,19 +502,32 @@
 
                         const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
                         
-                        textureLoader.load(url, (texture) => {
-                            activeRequests--;
-                            tile.mesh.material = new THREE.MeshBasicMaterial({ 
-                                map: texture 
+                        // Mobile Chrome often breaks CORS headers for <img> tags due to 'Lite Mode' / Data Saver proxies.
+                        // Bypassing the native Image loader by using fetch() directly usually solves this.
+                        fetch(url, { mode: 'cors' })
+                            .then(response => {
+                                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                                return response.blob();
+                            })
+                            .then(blob => {
+                                const objUrl = URL.createObjectURL(blob);
+                                textureLoader.load(objUrl, (texture) => {
+                                    URL.revokeObjectURL(objUrl);
+                                    activeRequests--;
+                                    tile.mesh.material = new THREE.MeshBasicMaterial({ map: texture });
+                                    tile.loaded = true;
+                                }, undefined, (err) => {
+                                    URL.revokeObjectURL(objUrl);
+                                    activeRequests--;
+                                    tile.loading = false;
+                                    console.error("TextureLoad failed: " + url.split('/').pop());
+                                });
+                            })
+                            .catch(err => {
+                                activeRequests--;
+                                tile.loading = false;
+                                console.error("Fetch failed: " + url.split('/').pop() + " | " + (err.message || "Network Error"));
                             });
-                            tile.loaded = true;
-                        }, undefined, (err) => {
-                            activeRequests--;
-                            tile.loading = false;
-                            let errMsg = err.message || err.type || "Unknown network/CORS error";
-                            if (err instanceof Event) errMsg = "Event type: " + err.type;
-                            console.error("Failed: " + url.split('/').pop() + " | " + errMsg);
-                        });
                     }
                 } else {
                     // Mobile Safari WebGL Memory crash prevention
