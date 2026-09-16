@@ -1044,7 +1044,7 @@
             data.forEach(t => {
                 const el = document.createElement('div');
                 // margin-top: 19px lowers the text by exactly half a letter height
-                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 38px; font-weight: normal; text-transform: uppercase; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: 19px;";
+                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 38px; font-weight: normal; text-transform: uppercase; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: 19px; pointer-events: auto;";
                 el.innerText = t.english;
                 // Highlight red if it hasn't been placed yet and we are authoring
                 if (isAuthoringMode && t.x === undefined) {
