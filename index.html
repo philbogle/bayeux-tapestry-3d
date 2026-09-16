@@ -454,7 +454,7 @@
         // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
         const torchLights = [];
         for (let i = 0; i < 4; i++) {
-            const torch = new THREE.PointLight(0xffffff, 1.5, 70); // Warm fire color, range 70
+            const torch = new THREE.PointLight(0xfff5f5, 1.5, 70); // rgb(255, 245, 245)
             scene.add(torch);
             torchLights.push(torch);
         }
