@@ -165,15 +165,7 @@
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/.test(navigator.userAgent) || isIOS;
         
-        // Detect Chrome on iOS (CriOS) or Android (Chrome)
-        const isMobileChrome = isMobile && (/CriOS/.test(navigator.userAgent) || /Chrome/.test(navigator.userAgent)) && !/Edge|Edg|EdgiOS|OPR|Opera/.test(navigator.userAgent);
-        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
-        
-        if (isMobileChrome || isIPhone) {
-            document.getElementById('ui').style.display = 'none';
-            document.body.innerHTML += '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; font-family: serif; font-size: 24px; padding: 30px; background: rgba(0,0,0,0.9); border: 2px solid #8c6a38; border-radius: 8px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">Please use a different browser or device (like <b>Safari on iPad</b> or Desktop).<br><br><span style="font-size: 16px; color: #a49176;">iPhones and Mobile Chrome are currently unsupported due to strict WebGL memory limitations.</span></div>';
-            throw new Error("Mobile Chrome/iPhone is not supported.");
-        }
+        // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
 
         if (isMobile) {
             document.getElementById('ui').innerHTML = `
