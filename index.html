@@ -722,41 +722,58 @@
                         tile.loading = true;
                         activeRequests++;
 
-                        const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp?type=texture`;
+                        const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
                         
-                        textureLoader.load(url, (texture) => {
-                            activeRequests--;
-                            // Mobile WebGL1 strict NPOT (Non-Power-Of-Two) texture compatibility
-                            // Since 254x254 is not a power of 2, generating mipmaps will crash/fail on strict mobile GPUs
-                            texture.generateMipmaps = false;
-                            texture.minFilter = THREE.LinearFilter;
-                            texture.magFilter = THREE.LinearFilter;
-                            // Maximize texture sharpness when viewed at an oblique angle (tilting)
-                            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-                            
-                            tile.mesh.material = new THREE.MeshLambertMaterial({ 
-                                map: texture,
-                                transparent: true,
-                                opacity: 0
+                        // Use fetch() instead of native Image loader to bypass Chrome's strict CORS caching bugs
+                        fetch(url, { mode: 'cors' })
+                            .then(response => {
+                                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                                return response.blob();
+                            })
+                            .then(blob => {
+                                const objUrl = URL.createObjectURL(blob);
+                                textureLoader.load(objUrl, (texture) => {
+                                    URL.revokeObjectURL(objUrl);
+                                    activeRequests--;
+                                    
+                                    // Mobile WebGL1 strict NPOT (Non-Power-Of-Two) texture compatibility
+                                    texture.generateMipmaps = false;
+                                    texture.minFilter = THREE.LinearFilter;
+                                    texture.magFilter = THREE.LinearFilter;
+                                    // Maximize texture sharpness when viewed at an oblique angle (tilting)
+                                    texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+                                    
+                                    tile.mesh.material = new THREE.MeshLambertMaterial({ 
+                                        map: texture,
+                                        transparent: true,
+                                        opacity: 0
+                                    });
+                                    tile.loaded = true;
+                                    
+                                    // Restore smooth fade-in
+                                    let op = 0;
+                                    const fade = setInterval(() => {
+                                        op += 0.1;
+                                        if (op >= 1) {
+                                            op = 1;
+                                            clearInterval(fade);
+                                        }
+                                        tile.mesh.material.opacity = op;
+                                    }, 50);
+                                }, undefined, (err) => {
+                                    URL.revokeObjectURL(objUrl);
+                                    activeRequests--;
+                                    tile.loading = false;
+                                    tile.failed = true;
+                                    console.error("TextureLoad failed: " + url.split('/').pop());
+                                });
+                            })
+                            .catch(err => {
+                                activeRequests--;
+                                tile.loading = false;
+                                tile.failed = true;
+                                console.error("Fetch failed: " + url.split('/').pop() + " | " + (err.message || "Network Error"));
                             });
-                            tile.loaded = true;
-                            
-                            // Restore smooth fade-in
-                            let op = 0;
-                            const fade = setInterval(() => {
-                                op += 0.1;
-                                if (op >= 1) {
-                                    op = 1;
-                                    clearInterval(fade);
-                                }
-                                tile.mesh.material.opacity = op;
-                            }, 50);
-                        }, undefined, (err) => {
-                            activeRequests--;
-                            tile.loading = false;
-                            tile.failed = true;
-                            console.error("Load failed: " + url.split('/').pop());
-                        });
                     }
                 } else {
                     // Mobile Safari WebGL Memory crash prevention
