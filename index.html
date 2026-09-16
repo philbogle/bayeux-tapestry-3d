@@ -663,7 +663,7 @@
                     const scale = initialPinchDistance / dist;
                     camera.position.z = initialPinchCamZ * scale;
                     // Keep camera Z bounded between 2.0 and 2000 to allow zooming out to see the entire tapestry
-                    camera.position.z = Math.max(2.0, Math.min(2000, camera.position.z));
+                    camera.position.z = Math.max(0.5, Math.min(2000, camera.position.z));
                 }
             }
         }, {passive: false});
@@ -871,7 +871,7 @@
             const maxX = W / SCALE;
             if (camera.position.x > maxX) camera.position.x = maxX;
 
-            if (camera.position.z < 2.0) camera.position.z = 2.0;
+            if (camera.position.z < 0.5) camera.position.z = 0.5;
             if (camera.position.z > 2000) camera.position.z = 2000;
         }
 
