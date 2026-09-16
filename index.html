@@ -370,7 +370,8 @@
             return texture;
         }
 
-        const floorTexture = createFlagstoneTexture(512, 512, '#1a1712', '#0a0807');
+        // Updated to a warm brown marble palette
+        const floorTexture = createFlagstoneTexture(512, 512, '#4a3219', '#2b1c0d');
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 20, 120 / 20); // Scale the flagstones
