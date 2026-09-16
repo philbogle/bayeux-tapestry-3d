@@ -49,6 +49,23 @@
             border-radius: 4px;
             margin: 0 2px;
             font-family: monospace;
+            border: 1px solid #444;
+            color: white;
+        }
+        button.key {
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.1s;
+            user-select: none;
+        }
+        button.key:hover {
+            background: #555;
+            border-color: #d6a848;
+        }
+        button.key:active {
+            background: #d6a848;
+            color: black;
+            border-color: #d6a848;
         }
         #about-dialog {
             display: none;
@@ -90,8 +107,8 @@
 <body>
     <div id="ui">
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
-        <p>Use <span class="key">←</span> <span class="key">→</span>, <span class="key">A</span> <span class="key">D</span>, or mouse to edges to explore.</p>
-        <p>Use <span class="key">↑</span> <span class="key">↓</span> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
+        <p>Use <button class="key" id="btn-left">←</button> <button class="key" id="btn-right">→</button>, <span class="key">A</span> <span class="key">D</span>, or mouse to edges to explore.</p>
+        <p>Use <button class="key" id="btn-up">↑</button> <button class="key" id="btn-down">↓</button> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
         <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px;">
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
             <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
@@ -613,6 +630,27 @@
             if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = false;
             if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') keys.down = false;
         });
+
+        // UI Button Controls
+        const setupButton = (id, keyName) => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            const start = (e) => { e.preventDefault(); keys[keyName] = true; };
+            const stop = (e) => { e.preventDefault(); keys[keyName] = false; };
+            
+            btn.addEventListener('mousedown', start);
+            btn.addEventListener('touchstart', start, {passive: false});
+            
+            window.addEventListener('mouseup', stop); // Use window so it stops even if mouse is released outside
+            btn.addEventListener('mouseleave', stop);
+            btn.addEventListener('touchend', stop);
+            btn.addEventListener('touchcancel', stop);
+        };
+        
+        setupButton('btn-left', 'left');
+        setupButton('btn-right', 'right');
+        setupButton('btn-up', 'up');
+        setupButton('btn-down', 'down');
 
         window.addEventListener('wheel', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog')) return;
