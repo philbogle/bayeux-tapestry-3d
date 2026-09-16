@@ -380,8 +380,8 @@
         ceilingTexture.wrapT = THREE.RepeatWrapping;
         ceilingTexture.repeat.set(length / 5, 120 / 5); 
         
-        // Lightened the base wall color slightly so the texture pops more
-        const wallTexture = createOrganicTexture(512, 512, '#1c1914');
+        // Darkened the base wall color to make the scene more dramatic
+        const wallTexture = createOrganicTexture(512, 512, '#0c0a08');
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
         wallTexture.repeat.set(length / 20, 120 / 20);
@@ -393,7 +393,7 @@
         // Since these are massive planes with only 4 vertices at the corners, Lambert will ignore point lights in the middle!
         const floorMat = new THREE.MeshPhongMaterial({ map: floorTexture, shininess: 5 });
         const ceilingMat = new THREE.MeshPhongMaterial({ map: ceilingTexture, shininess: 0 });
-        const wallMat = new THREE.MeshPhongMaterial({ map: wallTexture, shininess: 3 });
+        const wallMat = new THREE.MeshPhongMaterial({ map: wallTexture, shininess: 12 });
         
         const floor = new THREE.Mesh(planeGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
