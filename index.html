@@ -275,8 +275,8 @@
         const ceilingY = (H / SCALE + 0.5) * 2; // Doubled ceiling height
         const length = W / SCALE + 100;
 
-        // Create a procedural organic texture for walls/ceiling
-        function createOrganicTexture(width = 256, height = 256, baseColor = '#181510', jointColor = '#080605') {
+        // Create a procedural organic texture for walls/ceiling without blocks
+        function createOrganicTexture(width = 256, height = 256, baseColor = '#181510') {
             const canvas = document.createElement('canvas');
             canvas.width = width;
             canvas.height = height;
@@ -284,24 +284,20 @@
             
             ctx.fillStyle = baseColor;
             ctx.fillRect(0, 0, width, height);
+
+            // Add large, soft organic smudges (like old plaster or rough hewn stone)
+            for (let i = 0; i < 40; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.08)';
+                ctx.beginPath();
+                ctx.arc(Math.random() * width, Math.random() * height, 10 + Math.random() * 60, 0, Math.PI * 2);
+                ctx.fill();
+            }
             
-            // Add tonal variations to the blocks
-            ctx.fillStyle = 'rgba(0,0,0,0.15)';
-            ctx.fillRect(0, 0, Math.floor(width / 2), Math.floor(height / 2)); // Top left block
-            ctx.fillStyle = 'rgba(255,255,255,0.02)';
-            ctx.fillRect(0, Math.floor(height / 2), width, Math.floor(height / 2)); // Bottom block
-            
-            // Add running bond joints
-            ctx.fillStyle = jointColor;
-            ctx.fillRect(0, Math.floor(height / 2) - 2, width, 4); // Horizontal joint
-            ctx.fillRect(Math.floor(width / 2) - 2, 0, 4, Math.floor(height / 2)); // Top vertical
-            ctx.fillRect(width - 4, Math.floor(height / 2), 4, Math.floor(height / 2)); // Bottom vertical
-            
-            // Subtly grainy noise, increased density for more texture
-            const noiseCount = (width * height) / 2;
+            // Grainy noise, increased density and opacity for visible texture
+            const noiseCount = (width * height) * 0.8;
             for (let i = 0; i < noiseCount; i++) {
-                const isLight = Math.random() > 0.85; // Mostly dark grit
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.025)' : 'rgba(0, 0, 0, 0.25)';
+                const isLight = Math.random() > 0.80;
+                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.4)';
                 ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1); // Strictly 1px
             }
             
@@ -366,12 +362,13 @@
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 20, 120 / 20); // Scale the flagstones
         
-        const ceilingTexture = createOrganicTexture(512, 512, '#080706', '#000000');
+        const ceilingTexture = createOrganicTexture(512, 512, '#080706');
         ceilingTexture.wrapS = THREE.RepeatWrapping;
         ceilingTexture.wrapT = THREE.RepeatWrapping;
         ceilingTexture.repeat.set(length / 5, 120 / 5); 
         
-        const wallTexture = createOrganicTexture(512, 512, '#181510', '#080605');
+        // Lightened the base wall color slightly so the texture pops more
+        const wallTexture = createOrganicTexture(512, 512, '#1c1914');
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
         wallTexture.repeat.set(length / 20, 120 / 20);
