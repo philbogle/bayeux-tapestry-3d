@@ -287,11 +287,10 @@
         }
         
         const tilesL17 = [];
-        if (!isMobile) {
-            const W17 = W * 2;
-            const H17 = H * 2;
-            const cols17 = Math.ceil(W17 / T);
-            const rows17 = Math.ceil(H17 / T);
+        const W17 = W * 2;
+        const H17 = H * 2;
+        const cols17 = Math.ceil(W17 / T);
+        const rows17 = Math.ceil(H17 / T);
 
             for (let r = 0; r < rows17; r++) {
                 for (let c = 0; c < cols17; c++) {
@@ -325,7 +324,6 @@
                     });
                 }
             }
-        }
         
         const tilesL18 = [];
         if (!isMobile) {
@@ -969,20 +967,18 @@
             };
             
             // Prioritize processing based on zoom level to manage activeRequests cap
-            if (camera.position.z <= 2.5 && !isMobile) {
+            if (camera.position.z <= 2.5) {
                 processTiles(tilesL18, '18', true, 2.5);
                 processTiles(tilesL17, '17', true, 5.0);
                 processTiles(tiles, '16', false, 9999);
-            } else if (camera.position.z <= 5.0 && !isMobile) {
+            } else if (camera.position.z <= 5.0) {
                 processTiles(tilesL17, '17', true, 5.0);
                 processTiles(tiles, '16', false, 9999);
                 processTiles(tilesL18, '18', true, 2.5); // Fast unload
             } else {
                 processTiles(tiles, '16', false, 9999);
-                if (!isMobile) {
-                    processTiles(tilesL17, '17', true, 5.0); // Fast unload
-                    processTiles(tilesL18, '18', true, 2.5); // Fast unload
-                }
+                processTiles(tilesL17, '17', true, 5.0); // Fast unload
+                processTiles(tilesL18, '18', true, 2.5); // Fast unload
             }
         }
 
