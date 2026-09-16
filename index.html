@@ -1008,7 +1008,8 @@
             
             data.forEach(t => {
                 const el = document.createElement('div');
-                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity;";
+                // margin-top: 22px lowers the text by exactly half a letter height
+                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: 22px;";
                 el.innerText = t.english;
                 // Highlight red if it hasn't been placed yet and we are authoring
                 if (isAuthoringMode && t.x === undefined) {
@@ -1069,8 +1070,11 @@
                     ann.el.style.top = y + 'px';
                     ann.el.style.opacity = opacity.toFixed(3);
                     
-                    // Scale the font relative to a base zoom distance of 7.5
-                    const scaleFactor = 7.5 / Math.max(0.1, camera.position.z);
+                    // Scale the font relative to a base zoom distance of 7.5 and a baseline screen height of 900px
+                    // This ensures the text maintains perfect relative physical size to the tapestry across different monitor resolutions
+                    const heightFactor = window.innerHeight / 900;
+                    const scaleFactor = (7.5 / Math.max(0.1, camera.position.z)) * heightFactor;
+                    
                     ann.el.style.transform = `scale(${scaleFactor})`;
                 }
             });
