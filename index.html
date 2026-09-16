@@ -151,7 +151,8 @@
                 playerVars: {
                     'playsinline': 1,
                     'loop': 1,
-                    'playlist': 'd6KTJpMLe1g' // Required for loop to work
+                    'playlist': 'd6KTJpMLe1g', // Required for loop to work
+                    'origin': window.location.origin
                 }
             });
         }
@@ -1022,7 +1023,7 @@
             document.getElementById('lighting-dialog').style.display = 'block';
         });
 
-        document.getElementById('close-lighting-dialog').addEventListener('click', () => {
+        document.getElementById('close-lighting').addEventListener('click', () => {
             document.getElementById('lighting-dialog').style.display = 'none';
         });
 
