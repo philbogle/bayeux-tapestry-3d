@@ -868,7 +868,9 @@
                     const isVisible = (tile.xCenter >= minX && tile.xCenter <= maxX);
                     
                     if (isVisible) {
-                        if (!tile.loaded && !tile.loading && !tile.failed && activeRequests < MAX_CONCURRENT_REQUESTS) {
+                        const canLoadNewTile = !isHighRes || (smoothedCameraSpeed < 0.015);
+
+                        if (canLoadNewTile && !tile.loaded && !tile.loading && !tile.failed && activeRequests < MAX_CONCURRENT_REQUESTS) {
                             tile.loading = true;
                             activeRequests++;
 
