@@ -189,7 +189,11 @@
                 <h2>Bayeux Tapestry 3D Walkthrough</h2>
                 <p>Drag left and right to explore.</p>
                 <p>Pinch to zoom in and out.</p>
-                <p style="margin-top: 8px;"><a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a></p>
+                <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
+                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
+                    <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
+                </p>
             `;
         }
 
