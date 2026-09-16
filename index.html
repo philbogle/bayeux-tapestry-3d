@@ -277,12 +277,53 @@
 
                 tiles.push({
                     c, r,
-                    mesh,
                     xCenter,
+                    mesh: mesh,
                     loaded: false,
                     loading: false,
                     failed: false
                 });
+            }
+        }
+        
+        const tilesL17 = [];
+        if (!isMobile) {
+            const W17 = W * 2;
+            const H17 = H * 2;
+            const cols17 = Math.ceil(W17 / T);
+            const rows17 = Math.ceil(H17 / T);
+
+            for (let r = 0; r < rows17; r++) {
+                for (let c = 0; c < cols17; c++) {
+                    const x_topLeft = c === 0 ? 0 : c * T - 1;
+                    const y_topLeft = r === 0 ? 0 : r * T - 1;
+
+                    const w = (c === cols17 - 1) ? (W17 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                    const h = (r === rows17 - 1) ? (H17 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+
+                    const widthUnits = (w / SCALE) / 2; 
+                    const heightUnits = (h / SCALE) / 2;
+                    
+                    const xCenter = (x_topLeft + w / 2) / (SCALE * 2);
+                    const yCenter = -(y_topLeft + h / 2) / (SCALE * 2) + tapestryElevation;
+
+                    const zOffset = 0.01 + (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                    const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                    mesh.scale.set(widthUnits, heightUnits, 1);
+                    mesh.position.set(xCenter, yCenter, zOffset);
+                    
+                    scene.add(mesh);
+                    
+                    tilesL17.push({
+                        c, r,
+                        xCenter,
+                        mesh: mesh,
+                        loaded: false,
+                        loading: false,
+                        failed: false
+                    });
+                }
             }
         }
 
@@ -801,70 +842,97 @@
 
             // Expand loading margin so tilting doesn't reveal blank tiles as easily
             const margin = isMobile ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
-            const xMin = camera.position.x - width / 2 - margin;
-            const xMax = camera.position.x + width / 2 + margin;
-
-            for (let tile of tiles) {
-                // Approximate visibility using the tile's center point
-                const isVisible = (tile.xCenter >= xMin && tile.xCenter <= xMax);
-                
-                if (isVisible) {
-                    if (!tile.loaded && !tile.loading && !tile.failed && activeRequests < MAX_CONCURRENT_REQUESTS) {
-                        tile.loading = true;
-                        activeRequests++;
-
-                        // Use weserv.nl as a dedicated image proxy cache to bypass strict Cloudflare Bot Management IP blocks
-                        const baseUrl = `btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
-                        const url = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}`;
-                        
-                        // Load directly via textureLoader (which uses native <img> tag) 
-                        // This ensures Cloudflare sees the proper "Accept: image/webp" headers instead of a generic fetch()
-                        textureLoader.load(url, (texture) => {
-                            activeRequests--;
-                            // Mobile WebGL1 strict NPOT (Non-Power-Of-Two) texture compatibility
-                            texture.generateMipmaps = false;
-                            texture.minFilter = THREE.LinearFilter;
-                            texture.magFilter = THREE.LinearFilter;
-                            // Maximize texture sharpness when viewed at an oblique angle (tilting)
-                            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-                            
-                            tile.mesh.material = new THREE.MeshLambertMaterial({ 
-                                map: texture,
-                                transparent: true,
-                                opacity: 0
-                            });
-                            tile.loaded = true;
-                            
-                            // Restore smooth fade-in
-                            let op = 0;
-                            const fade = setInterval(() => {
-                                op += 0.1;
-                                if (op >= 1) {
-                                    op = 1;
-                                    clearInterval(fade);
-                                }
-                                tile.mesh.material.opacity = op;
-                            }, 50);
-                        }, undefined, (err) => {
-                            activeRequests--;
+            
+            // Helper function to process a tile array
+            const processTiles = (tileArray, levelStr, isHighRes) => {
+                // If it's a high-res layer and we're zoomed out, aggressively unload everything
+                if (isHighRes && camera.position.z > 5.0) {
+                    for (let tile of tileArray) {
+                        if (tile.loaded && tile.mesh.material !== emptyMaterial) {
+                            if (tile.mesh.material.map) tile.mesh.material.map.dispose();
+                            tile.mesh.material.dispose();
+                            tile.mesh.material = emptyMaterial;
+                            tile.loaded = false;
                             tile.loading = false;
-                            tile.failed = true;
-                            console.error("Load failed: " + url.split('/').pop());
-                        });
-                    }
-                } else {
-                    // Mobile Safari WebGL Memory crash prevention
-                    // If a tile is very far away, unload its texture to free memory
-                    if (tile.loaded && Math.abs(tile.xCenter - camera.position.x) > margin * 3) {
-                        if (tile.mesh.material.map) {
-                            tile.mesh.material.map.dispose();
                         }
-                        tile.mesh.material.dispose();
-                        tile.mesh.material = emptyMaterial; // Assign empty material back
-                        tile.loaded = false;
-                        tile.loading = false;
+                    }
+                    return;
+                }
+                
+                // For high-res tiles, we use a tighter margin so we don't spam requests for tiles slightly off screen
+                const actualMargin = isHighRes ? 10 : margin;
+                const minX = camera.position.x - width / 2 - actualMargin;
+                const maxX = camera.position.x + width / 2 + actualMargin;
+
+                for (let tile of tileArray) {
+                    const isVisible = (tile.xCenter >= minX && tile.xCenter <= maxX);
+                    
+                    if (isVisible) {
+                        if (!tile.loaded && !tile.loading && !tile.failed && activeRequests < MAX_CONCURRENT_REQUESTS) {
+                            tile.loading = true;
+                            activeRequests++;
+
+                            const baseUrl = `btstorage.britishmuseum.org/bayeux-tapestry/image_files/${levelStr}/${tile.c}_${tile.r}.webp`;
+                            const url = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}`;
+                            
+                            textureLoader.load(url, (texture) => {
+                                activeRequests--;
+                                texture.generateMipmaps = false;
+                                texture.minFilter = THREE.LinearFilter;
+                                texture.magFilter = THREE.LinearFilter;
+                                texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+                                
+                                tile.mesh.material = new THREE.MeshLambertMaterial({ 
+                                    map: texture,
+                                    transparent: true,
+                                    opacity: isHighRes ? 1.0 : 0 // Pop in instantly for high-res to prevent fade artifacts over base
+                                });
+                                tile.loaded = true;
+                                
+                                if (!isHighRes) {
+                                    let op = 0;
+                                    const fade = setInterval(() => {
+                                        op += 0.1;
+                                        if (op >= 1) {
+                                            op = 1;
+                                            clearInterval(fade);
+                                        }
+                                        if (tile.loaded) {
+                                            tile.mesh.material.opacity = op;
+                                        }
+                                    }, 50);
+                                }
+                            }, undefined, (err) => {
+                                activeRequests--;
+                                tile.loading = false;
+                                tile.failed = true;
+                            });
+                        }
+                    } else {
+                        // Unload far away tiles
+                        if (tile.loaded && Math.abs(tile.xCenter - camera.position.x) > actualMargin * 3) {
+                            if (tile.mesh.material.map) {
+                                tile.mesh.material.map.dispose();
+                            }
+                            if (tile.mesh.material !== emptyMaterial) {
+                                tile.mesh.material.dispose();
+                            }
+                            tile.mesh.material = emptyMaterial;
+                            tile.loaded = false;
+                            tile.loading = false;
+                        }
                     }
                 }
+            };
+            
+            // Prioritize processing based on zoom level to manage activeRequests cap
+            if (camera.position.z <= 5.0 && !isMobile) {
+                // If zoomed in, prioritize Level 17 requests so they skip the line
+                processTiles(tilesL17, '17', true);
+                processTiles(tiles, '16', false);
+            } else {
+                processTiles(tiles, '16', false);
+                if (!isMobile) processTiles(tilesL17, '17', true);
             }
         }
 
