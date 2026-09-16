@@ -189,7 +189,7 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
-        const initialZ = 10.0; // Zoomed out slightly from original 7.5
+        const initialZ = 11.0; // Moved back further to frame more canvas
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.5; // Tapestry lowered by 6 inches
@@ -619,13 +619,23 @@
             e.preventDefault();
             
             // Normalize scroll distance
-            let delta = e.deltaY;
-            if (e.deltaMode === 1) delta *= 33; // Line mode
-            else if (e.deltaMode === 2) delta *= window.innerHeight; // Page mode
+            let deltaY = e.deltaY;
+            let deltaX = e.deltaX;
+            if (e.deltaMode === 1) { deltaY *= 33; deltaX *= 33; } // Line mode
+            else if (e.deltaMode === 2) { deltaY *= window.innerHeight; deltaX *= window.innerWidth; } // Page mode
             
             // Apply zoom impulse (scales with distance so zooming is consistent at all depths)
-            const zoomImpulse = (delta * 0.0005) * Math.max(1.0, camera.position.z * 0.1);
-            velocityZ += zoomImpulse;
+            if (Math.abs(deltaY) > 0) {
+                const zoomImpulse = (deltaY * 0.0005) * Math.max(1.0, camera.position.z * 0.1);
+                velocityZ += zoomImpulse;
+            }
+            
+            // Apply horizontal pan impulse (scales with distance so panning feels consistent)
+            if (Math.abs(deltaX) > 0) {
+                // A slightly more sensitive multiplier for panning
+                const panImpulse = (deltaX * 0.0003) * Math.max(1.0, camera.position.z * 0.1);
+                velocityX += panImpulse;
+            }
         }, { passive: false });
 
         window.addEventListener('resize', () => {
