@@ -1093,7 +1093,9 @@
                 tempV.set(ann.data.x, ann.data.y, 0.0);
                 tempV.project(camera);
                 
-                if (tempV.z > 1 || tempV.x < -1.5 || tempV.x > 1.5 || tempV.y < -1.5 || tempV.y > 1.5) {
+                // Massively expanded X bounds from 1.5 to 5.0 so extremely long text strings 
+                // don't instantly despawn when their left-aligned pin point scrolls off-screen
+                if (tempV.z > 1 || tempV.x < -5.0 || tempV.x > 5.0 || tempV.y < -1.5 || tempV.y > 1.5) {
                     if (ann.el.style.display !== 'none') ann.el.style.display = 'none';
                     return;
                 }
