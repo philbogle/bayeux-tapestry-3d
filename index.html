@@ -289,7 +289,7 @@
         const length = W / SCALE + 100;
 
         // Create a procedural organic texture for walls/ceiling without blocks
-        function createOrganicTexture(width = 256, height = 256, baseColor = '#181510') {
+        function createOrganicTexture(width = 256, height = 256, baseColor = '#181510', withSplotches = true) {
             const canvas = document.createElement('canvas');
             canvas.width = width;
             canvas.height = height;
@@ -299,11 +299,13 @@
             ctx.fillRect(0, 0, width, height);
 
             // Add large, soft organic smudges (like old plaster or rough hewn stone)
-            for (let i = 0; i < 40; i++) {
-                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.08)';
-                ctx.beginPath();
-                ctx.arc(Math.random() * width, Math.random() * height, 10 + Math.random() * 60, 0, Math.PI * 2);
-                ctx.fill();
+            if (withSplotches) {
+                for (let i = 0; i < 40; i++) {
+                    ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.08)';
+                    ctx.beginPath();
+                    ctx.arc(Math.random() * width, Math.random() * height, 10 + Math.random() * 60, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
             
             // Grainy noise, increased density and opacity for visible texture
@@ -370,13 +372,13 @@
             return texture;
         }
 
-        // Updated to a warm brown marble palette
-        const floorTexture = createFlagstoneTexture(512, 512, '#4a3219', '#2b1c0d');
+        // Darker warm brown espresso/marble palette
+        const floorTexture = createFlagstoneTexture(512, 512, '#1a1007', '#080401');
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 20, 120 / 20); // Scale the flagstones
         
-        const ceilingTexture = createOrganicTexture(512, 512, '#080706');
+        const ceilingTexture = createOrganicTexture(512, 512, '#080706', false);
         ceilingTexture.wrapS = THREE.RepeatWrapping;
         ceilingTexture.wrapT = THREE.RepeatWrapping;
         ceilingTexture.repeat.set(length / 5, 120 / 5); 
