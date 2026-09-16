@@ -558,7 +558,8 @@
                 camera.position.x += moveWorldX;
                 
                 // Store recent movement as velocity for native-feeling momentum on release
-                velocityX = moveWorldX * 0.8; 
+                // Increased the multiplier to 1.5 for stronger inertia on touch devices
+                velocityX = moveWorldX * 1.5; 
                 
                 lastTouchX = currentTouchX;
             } else if (e.touches.length === 2) {
