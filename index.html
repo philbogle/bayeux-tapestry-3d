@@ -110,6 +110,10 @@
         <p>Use <button class="key" id="btn-left">←</button> <button class="key" id="btn-right">→</button> or mouse to edges to explore.</p>
         <p>Use <button class="key" id="btn-up">↑</button> <button class="key" id="btn-down">↓</button> to zoom in/out.</p>
         <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px;">
+            <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
+                Show Supertitles
+            </label>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
             <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
@@ -662,6 +666,16 @@
         setupButton('btn-right', 'right');
         setupButton('btn-up', 'up');
         setupButton('btn-down', 'down');
+        
+        const toggleSupertitles = document.getElementById('toggle-supertitles');
+        if (toggleSupertitles) {
+            toggleSupertitles.addEventListener('change', (e) => {
+                const container = document.getElementById('annotations-container');
+                if (container) {
+                    container.style.display = e.target.checked ? 'block' : 'none';
+                }
+            });
+        }
 
         let lastWheelTime = 0;
         window.addEventListener('wheel', (e) => {
