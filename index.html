@@ -723,8 +723,9 @@
                         tile.loading = true;
                         activeRequests++;
 
-                        // Add a cache buster parameter to bypass strict cache proxying issues
-                        const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp?v=1`;
+                        // Use weserv.nl as a dedicated image proxy cache to bypass strict Cloudflare Bot Management IP blocks
+                        const baseUrl = `btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
+                        const url = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}`;
                         
                         // Load directly via textureLoader (which uses native <img> tag) 
                         // This ensures Cloudflare sees the proper "Accept: image/webp" headers instead of a generic fetch()
