@@ -614,6 +614,20 @@
             if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') keys.down = false;
         });
 
+        window.addEventListener('wheel', (e) => {
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog')) return;
+            e.preventDefault();
+            
+            // Normalize scroll distance
+            let delta = e.deltaY;
+            if (e.deltaMode === 1) delta *= 33; // Line mode
+            else if (e.deltaMode === 2) delta *= window.innerHeight; // Page mode
+            
+            // Apply zoom impulse (scales with distance so zooming is consistent at all depths)
+            const zoomImpulse = (delta * 0.0005) * Math.max(1.0, camera.position.z * 0.1);
+            velocityZ += zoomImpulse;
+        }, { passive: false });
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
