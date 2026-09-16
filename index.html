@@ -1040,8 +1040,8 @@
             
             data.forEach(t => {
                 const el = document.createElement('div');
-                // margin-top: 22px lowers the text by exactly half a letter height
-                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: 22px;";
+                // margin-top: 19px lowers the text by exactly half a letter height
+                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 38px; font-weight: normal; text-transform: uppercase; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: 19px;";
                 el.innerText = t.english;
                 // Highlight red if it hasn't been placed yet and we are authoring
                 if (isAuthoringMode && t.x === undefined) {
@@ -1104,7 +1104,8 @@
                     ann.currentHover = Math.max(0.0, ann.currentHover - 0.05);
                 }
                 
-                let opacity = (0.15 + (ann.currentHover * 0.45)) * scrollOpacityMult;
+                // Increased base opacity to 0.35, hovering brings it to 0.85
+                let opacity = (0.35 + (ann.currentHover * 0.50)) * scrollOpacityMult;
                 if (isAuthoringMode) opacity = 1.0;
                 
                 if (opacity <= 0.01) {
