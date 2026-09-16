@@ -1074,9 +1074,12 @@
 
             let tiltMagnitude = Math.sqrt(camera.rotation.x * camera.rotation.x + camera.rotation.y * camera.rotation.y);
             
-            // Fade out based on either camera tilt OR camera movement speed
+            // Fade out based on camera tilt
             let tiltOpacity = Math.max(0, 1.0 - (tiltMagnitude / 0.25));
-            let speedOpacity = Math.max(0, 1.0 - (smoothedCameraSpeed / 0.05)); 
+            
+            // On desktop, also fade out based on fast panning speed
+            // On mobile, short quick drags are too brief, so we don't fade out based on speed
+            let speedOpacity = isMobile ? 1.0 : Math.max(0, 1.0 - (smoothedCameraSpeed / 0.05)); 
             
             let scrollOpacityMult = Math.min(tiltOpacity, speedOpacity);
             if (isAuthoringMode) scrollOpacityMult = 1.0; 
