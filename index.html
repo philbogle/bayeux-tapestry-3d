@@ -953,7 +953,7 @@
             
             data.forEach(t => {
                 const el = document.createElement('div');
-                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity;";
+                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 45px; font-weight: normal; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: -22px;";
                 el.innerText = t.english;
                 // Highlight red if it hasn't been placed yet and we are authoring
                 if (isAuthoringMode && t.x === undefined) {
