@@ -897,8 +897,8 @@
                 }
                 
                 // For high-res tiles, we use a tighter margin so we don't spam requests for tiles slightly off screen
-                // We use an incredibly tight margin (2) for Level 18 to prevent phones from queueing 200+ tile requests
-                const actualMargin = isHighRes ? (levelStr === '18' ? 2 : 10) : margin;
+                // We use tight margins for high-res layers to prevent phones from queueing 200+ tile requests
+                const actualMargin = isHighRes ? (levelStr === '18' ? 2 : 4) : margin;
                 const minX = camera.position.x - width / 2 - actualMargin;
                 const maxX = camera.position.x + width / 2 + actualMargin;
 
@@ -966,18 +966,18 @@
             };
             
             // Prioritize processing based on zoom level to manage activeRequests cap
-            if (camera.position.z <= 2.5) {
-                processTiles(tilesL18, '18', true, 2.5);
-                processTiles(tilesL17, '17', true, 5.0);
+            if (camera.position.z <= 1.0) {
+                processTiles(tilesL18, '18', true, 1.0);
+                processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
-            } else if (camera.position.z <= 5.0) {
-                processTiles(tilesL17, '17', true, 5.0);
+            } else if (camera.position.z <= 2.0) {
+                processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
-                processTiles(tilesL18, '18', true, 2.5); // Fast unload
+                processTiles(tilesL18, '18', true, 1.0); // Fast unload
             } else {
                 processTiles(tiles, '16', false, 9999);
-                processTiles(tilesL17, '17', true, 5.0); // Fast unload
-                processTiles(tilesL18, '18', true, 2.5); // Fast unload
+                processTiles(tilesL17, '17', true, 2.0); // Fast unload
+                processTiles(tilesL18, '18', true, 1.0); // Fast unload
             }
         }
 
