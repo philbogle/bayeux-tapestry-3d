@@ -662,9 +662,11 @@
         setupButton('btn-up', 'up');
         setupButton('btn-down', 'down');
 
+        let lastWheelTime = 0;
         window.addEventListener('wheel', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog')) return;
             e.preventDefault();
+            lastWheelTime = Date.now();
             
             // Normalize scroll distance
             let deltaY = e.deltaY;
@@ -708,12 +710,18 @@
 
         function updateCamera() {
             let currentAccel = 0;
-            if (keys.right || keys.left || mouseScrollDir !== 0) {
+            
+            const isActivelyPanning = keys.right || keys.left || mouseScrollDir !== 0 || isDragging || (Date.now() - lastWheelTime < 100);
+            
+            if (isActivelyPanning) {
                 moveHoldTime += 1;
-                // Slower acceleration ramp up (halved initial speed and halved overall acceleration)
-                currentAccel = 0.0005 + Math.min(1, moveHoldTime / 300) * 0.012;
             } else {
                 moveHoldTime = 0;
+            }
+
+            if (keys.right || keys.left || mouseScrollDir !== 0) {
+                // Slower acceleration ramp up (halved initial speed and halved overall acceleration)
+                currentAccel = 0.0005 + Math.min(1, moveHoldTime / 300) * 0.012;
             }
 
             if (keys.right) {
@@ -724,10 +732,12 @@
                 velocityX += currentAccel * mouseScrollDir;
             }
 
+            // Wait 2 seconds (120 frames at 60fps) of CONTINUOUS active panning before allowing the camera to tilt
+            const tiltFactor = Math.max(0, Math.min(1, (moveHoldTime - 120) / 60)); // Fades in smoothly over 1 second after the wait
+
             // Unify tilt logic: tilt is purely based on current horizontal velocity.
-            // This natively adds the tilting effect to keyboard, mouse edge scroll, AND touch dragging/momentum!
             const speedRatio = Math.max(-1, Math.min(1, velocityX / 0.15));
-            targetRotationY = -maxTilt * speedRatio;
+            targetRotationY = -maxTilt * speedRatio * tiltFactor;
             
             if (keys.up) velocityZ -= fixedZoomAccel;
             if (keys.down) velocityZ += fixedZoomAccel;
