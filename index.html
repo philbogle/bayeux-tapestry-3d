@@ -107,8 +107,8 @@
 <body>
     <div id="ui">
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
-        <p>Use <button class="key" id="btn-left">←</button> <button class="key" id="btn-right">→</button>, <span class="key">A</span> <span class="key">D</span>, or mouse to edges to explore.</p>
-        <p>Use <button class="key" id="btn-up">↑</button> <button class="key" id="btn-down">↓</button> or <span class="key">W</span> <span class="key">S</span> to zoom in/out.</p>
+        <p>Use <button class="key" id="btn-left">←</button> <button class="key" id="btn-right">→</button> or mouse to edges to explore.</p>
+        <p>Use <button class="key" id="btn-up">↑</button> <button class="key" id="btn-down">↓</button> to zoom in/out.</p>
         <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px;">
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
             <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
@@ -618,17 +618,17 @@
                 ui.style.display = isHidden ? 'block' : 'none';
             }
             mouseScrollDir = 0; // Prevent mouse edge-scroll from hijacking when releasing keys
-            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
-            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
-            if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = true;
-            if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') keys.down = true;
+            if (e.key === 'ArrowLeft') keys.left = true;
+            if (e.key === 'ArrowRight') keys.right = true;
+            if (e.key === 'ArrowUp') keys.up = true;
+            if (e.key === 'ArrowDown') keys.down = true;
         });
 
         window.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = false;
-            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = false;
-            if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = false;
-            if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') keys.down = false;
+            if (e.key === 'ArrowLeft') keys.left = false;
+            if (e.key === 'ArrowRight') keys.right = false;
+            if (e.key === 'ArrowUp') keys.up = false;
+            if (e.key === 'ArrowDown') keys.down = false;
         });
 
         // UI Button Controls
