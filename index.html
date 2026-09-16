@@ -326,6 +326,47 @@
                 }
             }
         }
+        
+        const tilesL18 = [];
+        if (!isMobile) {
+            const W18 = W * 4;
+            const H18 = H * 4;
+            const cols18 = Math.ceil(W18 / T);
+            const rows18 = Math.ceil(H18 / T);
+
+            for (let r = 0; r < rows18; r++) {
+                for (let c = 0; c < cols18; c++) {
+                    const x_topLeft = c === 0 ? 0 : c * T - 1;
+                    const y_topLeft = r === 0 ? 0 : r * T - 1;
+
+                    const w = (c === cols18 - 1) ? (W18 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                    const h = (r === rows18 - 1) ? (H18 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+
+                    const widthUnits = (w / SCALE) / 4; 
+                    const heightUnits = (h / SCALE) / 4;
+                    
+                    const xCenter = (x_topLeft + w / 2) / (SCALE * 4);
+                    const yCenter = -(y_topLeft + h / 2) / (SCALE * 4) + tapestryElevation;
+
+                    const zOffset = 0.02 + (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                    const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                    mesh.scale.set(widthUnits, heightUnits, 1);
+                    mesh.position.set(xCenter, yCenter, zOffset);
+                    
+                    scene.add(mesh);
+                    
+                    tilesL18.push({
+                        c, r,
+                        xCenter,
+                        mesh: mesh,
+                        loaded: false,
+                        loading: false,
+                        failed: false
+                    });
+                }
+            }
+        }
 
         // Scene background and fog for depth (dark earthy tone)
         const fogColor = new THREE.Color(0x161310);
@@ -844,9 +885,9 @@
             const margin = isMobile ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
             
             // Helper function to process a tile array
-            const processTiles = (tileArray, levelStr, isHighRes) => {
+            const processTiles = (tileArray, levelStr, isHighRes, unloadZ) => {
                 // If it's a high-res layer and we're zoomed out, aggressively unload everything
-                if (isHighRes && camera.position.z > 5.0) {
+                if (isHighRes && camera.position.z > unloadZ) {
                     for (let tile of tileArray) {
                         if (tile.loaded && tile.mesh.material !== emptyMaterial) {
                             if (tile.mesh.material.map) tile.mesh.material.map.dispose();
@@ -928,13 +969,20 @@
             };
             
             // Prioritize processing based on zoom level to manage activeRequests cap
-            if (camera.position.z <= 5.0 && !isMobile) {
-                // If zoomed in, prioritize Level 17 requests so they skip the line
-                processTiles(tilesL17, '17', true);
-                processTiles(tiles, '16', false);
+            if (camera.position.z <= 2.5 && !isMobile) {
+                processTiles(tilesL18, '18', true, 2.5);
+                processTiles(tilesL17, '17', true, 5.0);
+                processTiles(tiles, '16', false, 9999);
+            } else if (camera.position.z <= 5.0 && !isMobile) {
+                processTiles(tilesL17, '17', true, 5.0);
+                processTiles(tiles, '16', false, 9999);
+                processTiles(tilesL18, '18', true, 2.5); // Fast unload
             } else {
-                processTiles(tiles, '16', false);
-                if (!isMobile) processTiles(tilesL17, '17', true);
+                processTiles(tiles, '16', false, 9999);
+                if (!isMobile) {
+                    processTiles(tilesL17, '17', true, 5.0); // Fast unload
+                    processTiles(tilesL18, '18', true, 2.5); // Fast unload
+                }
             }
         }
 
