@@ -388,9 +388,12 @@
 
         // Increased depth from 40 to 120 so the floor/ceiling don't clip at max zoom (Z=40)
         const planeGeo = new THREE.PlaneGeometry(length, 120);
-        const floorMat = new THREE.MeshLambertMaterial({ map: floorTexture });
-        const ceilingMat = new THREE.MeshLambertMaterial({ map: ceilingTexture });
-        const wallMat = new THREE.MeshLambertMaterial({ map: wallTexture });
+        
+        // Use MeshPhongMaterial (per-pixel lighting) instead of Lambert (per-vertex).
+        // Since these are massive planes with only 4 vertices at the corners, Lambert will ignore point lights in the middle!
+        const floorMat = new THREE.MeshPhongMaterial({ map: floorTexture, shininess: 5 });
+        const ceilingMat = new THREE.MeshPhongMaterial({ map: ceilingTexture, shininess: 0 });
+        const wallMat = new THREE.MeshPhongMaterial({ map: wallTexture, shininess: 3 });
         
         const floor = new THREE.Mesh(planeGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
