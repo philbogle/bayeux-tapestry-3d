@@ -722,7 +722,8 @@
                         tile.loading = true;
                         activeRequests++;
 
-                        const url = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
+                        const baseUrl = `https://btstorage.britishmuseum.org/bayeux-tapestry/image_files/${LEVEL}/${tile.c}_${tile.r}.webp`;
+                        const url = `https://corsproxy.io/?${encodeURIComponent(baseUrl)}`;
                         
                         // Use fetch() instead of native Image loader to bypass Chrome's strict CORS caching bugs
                         fetch(url, { mode: 'cors' })
