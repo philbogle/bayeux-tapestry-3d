@@ -191,7 +191,7 @@
         if (isMobile) {
             document.getElementById('ui').innerHTML = `
                 <h2>Bayeux Tapestry 3D Walkthrough</h2>
-                <p>Drag, or use <button class="key" id="btn-left">←</button> <button class="key" id="btn-right">→</button> to explore.</p>
+                <p>Drag left and right to explore.</p>
                 <p>Pinch to zoom in and out.</p>
                 <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
@@ -566,8 +566,8 @@
                 camera.position.x += moveWorldX;
                 
                 // Store recent movement as velocity for native-feeling momentum on release
-                // Increased the multiplier to 1.5 for stronger inertia on touch devices
-                velocityX = moveWorldX * 1.5; 
+                // Increased the multiplier to 3.0 for massive inertia on touch devices
+                velocityX = moveWorldX * 3.0; 
                 
                 lastTouchX = currentTouchX;
             } else if (e.touches.length === 2) {
@@ -1066,9 +1066,22 @@
         
         const tempV = new THREE.Vector3();
         
+        let lastCameraXForFading = 0;
+        let smoothedCameraSpeed = 0;
+        
         window.updateAnnotations = function() {
+            // Calculate true camera speed (handles keys, edge scroll, trackpad, touch drag, AND inertia)
+            const currentSpeed = Math.abs(camera.position.x - lastCameraXForFading);
+            smoothedCameraSpeed = smoothedCameraSpeed * 0.8 + currentSpeed * 0.2; // Smooth speed to prevent flickering
+            lastCameraXForFading = camera.position.x;
+
             let tiltMagnitude = Math.sqrt(camera.rotation.x * camera.rotation.x + camera.rotation.y * camera.rotation.y);
-            let scrollOpacityMult = Math.max(0, 1.0 - (tiltMagnitude / 0.25));
+            
+            // Fade out based on either camera tilt OR camera movement speed
+            let tiltOpacity = Math.max(0, 1.0 - (tiltMagnitude / 0.25));
+            let speedOpacity = Math.max(0, 1.0 - (smoothedCameraSpeed / 0.05)); 
+            
+            let scrollOpacityMult = Math.min(tiltOpacity, speedOpacity);
             if (isAuthoringMode) scrollOpacityMult = 1.0; 
             
             annotations.forEach((ann, index) => {
