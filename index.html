@@ -248,7 +248,7 @@
         // Start near the beginning of the tapestry
         camera.position.set(initialVisibleWidth / 2 + 4.0, cameraY, initialZ);
 
-        // Restore antialiasing for a smoother visual experience
+        // Enable antialiasing for smooth geometry edges
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
         renderer.setPixelRatio(window.devicePixelRatio); // Maximizes sharpness on Retina/High-DPI displays
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -384,11 +384,11 @@
         // Scene background and fog for depth (dark earthy tone)
         const fogColor = new THREE.Color(0x161310);
         scene.background = fogColor;
-        // Reduced fog density to 0.015 (from 0.04) so the tapestry doesn't darken excessively at the new max zoom out distance
+        // Fog density calibrated so the tapestry remains visible at maximum zoom out distance
         scene.fog = new THREE.FogExp2(fogColor, 0.015);
 
         // Add floor and ceiling for perspective
-        const ceilingY = (H / SCALE + 0.5) * 4; // Quadrupled ceiling height for a more open hall feel
+        const ceilingY = (H / SCALE + 0.5) * 4; // 4x height multiplier creates an open, great hall feel
         const length = W / SCALE + 100;
 
         /**
@@ -448,7 +448,7 @@
         wallTexture.wrapT = THREE.RepeatWrapping;
         wallTexture.repeat.set(length / 20, 120 / 20);
 
-        // Increased depth from 40 to 120 so the floor/ceiling don't clip at max zoom (Z=40)
+        // Depth set to 120 so the floor and ceiling don't clip when the camera zooms out to Z=40
         const planeGeo = new THREE.PlaneGeometry(length, 120);
         
         // Use MeshPhongMaterial (per-pixel lighting) instead of Lambert (per-vertex).
