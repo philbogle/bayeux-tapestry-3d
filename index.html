@@ -551,10 +551,15 @@
 
         // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
         const torchLights = [];
-        for (let i = 0; i < 4; i++) {
-            const torch = new THREE.PointLight(0xfff5f5, 1.5, 70); // rgb(255, 245, 245)
-            scene.add(torch);
-            torchLights.push(torch);
+        if (!isMobile) {
+            for (let i = 0; i < 4; i++) {
+                const torch = new THREE.PointLight(0xfff5f5, 1.5, 70); // rgb(255, 245, 245)
+                scene.add(torch);
+                torchLights.push(torch);
+            }
+        } else {
+            // Simplify lighting drastically on mobile to improve framerates
+            ambientLight.intensity = 1.6;
         }
         
         // Lighting Variables (linked to UI)
@@ -622,6 +627,8 @@
         let isDragging = false;
         let initialPinchDistance = 0;
         let initialPinchCamZ = 0;
+        let lastPinchMidX = 0;
+        let lastPinchMidY = 0;
 
         window.addEventListener('touchstart', (e) => { 
             isTouch = true; 
@@ -639,7 +646,10 @@
                 const dy = e.touches[0].clientY - e.touches[1].clientY;
                 initialPinchDistance = Math.sqrt(dx*dx + dy*dy);
                 initialPinchCamZ = camera.position.z;
+                lastPinchMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                lastPinchMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
                 velocityZ = 0;
+                velocityY = 0;
             }
         }, {passive: false});
 
@@ -681,6 +691,27 @@
                     // Keep camera Z bounded between 2.0 and 2000 to allow zooming out to see the entire tapestry
                     camera.position.z = Math.max(0.5, Math.min(2000, camera.position.z));
                 }
+                
+                // 2-finger omnidirectional panning
+                const currentMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                const currentMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                if (lastPinchMidX > 0 && lastPinchMidY > 0) {
+                    const dxMid = currentMidX - lastPinchMidX;
+                    const dyMid = currentMidY - lastPinchMidY;
+                    const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
+                    
+                    const moveWorldX = -dxMid * pixelToWorld;
+                    const moveWorldY = dyMid * pixelToWorld;
+                    
+                    camera.position.x += moveWorldX;
+                    camera.position.y += moveWorldY;
+                    
+                    // Add smooth inertia for omnidirectional panning
+                    velocityX = velocityX * 0.5 + (moveWorldX * 0.8) * 0.5;
+                    velocityY = velocityY * 0.5 + (moveWorldY * 0.8) * 0.5;
+                }
+                lastPinchMidX = currentMidX;
+                lastPinchMidY = currentMidY;
             }
         }, {passive: false});
 
@@ -688,6 +719,14 @@
             mouseScrollDir = 0; 
             if (e.touches.length < 2) {
                 initialPinchDistance = 0;
+                lastPinchMidX = 0;
+                lastPinchMidY = 0;
+            }
+            if (e.touches.length === 1) {
+                // If they lift one finger, seamlessly transition back to 1-finger horizontal drag
+                isDragging = true;
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
             }
             if (e.touches.length === 0) {
                 isDragging = false;
@@ -1090,21 +1129,22 @@
 
             // Dynamic Fixed Torches (Snap to fixed positions around the camera)
             const torchSpacing = 30; // Restored spacing
-            const time = Date.now() * 0.00125; // Slower flicker rate
             
-            // Find the nearest torch interval to the camera
-            const centerIndex = Math.round(camera.position.x / torchSpacing);
-            
-            for (let i = 0; i < 4; i++) {
-                const torchIndex = centerIndex - 1.5 + i; // Offset to keep them centered around the camera
-                const torchX = torchIndex * torchSpacing;
+            if (!isMobile) {
+                // Find the nearest torch interval to the camera
+                const centerIndex = Math.round(camera.position.x / torchSpacing);
                 
-                // Position above the tapestry, slightly forward
-                torchLights[i].position.set(torchX, tapestryElevation + 2.0, 3.0);
-                
-                // Static torches (flicker disabled)
-                torchLights[i].intensity = configTorchInt;
-                torchLights[i].color.copy(configTorchColor);
+                for (let i = 0; i < 4; i++) {
+                    const torchIndex = centerIndex - 1.5 + i; // Offset to keep them centered around the camera
+                    const torchX = torchIndex * torchSpacing;
+                    
+                    // Position above the tapestry, slightly forward
+                    torchLights[i].position.set(torchX, tapestryElevation + 2.0, 3.0);
+                    
+                    // Static torches (flicker disabled)
+                    torchLights[i].intensity = configTorchInt;
+                    torchLights[i].color.copy(configTorchColor);
+                }
             }
 
             updateCamera();
