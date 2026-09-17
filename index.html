@@ -391,7 +391,6 @@
         const ceilingY = (H / SCALE + 0.5) * 4; // Quadrupled ceiling height for a more open hall feel
         const length = W / SCALE + 100;
 
-        // Create a procedural organic texture for walls/ceiling without blocks
         /**
          * Generates a procedural noise texture for the floor, ceiling, and walls.
          * @param {number} width - Canvas width
@@ -547,7 +546,6 @@
             configTorchColor.set(e.target.value);
         });
 
-        // Add a subtle baked shadow directly below the tapestry
         /**
          * Creates a subtle linear gradient texture to simulate ambient occlusion / shadow
          * beneath the 3D tapestry mesh.
