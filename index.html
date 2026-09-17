@@ -470,11 +470,11 @@
             return texture;
         }
 
-        // Deepest dark brown/black marble palette
-        const floorTexture = createFlagstoneTexture(512, 512, '#0d0803', '#030100');
+        // Reverted back to the original simple organic texture
+        const floorTexture = createOrganicTexture(512, 512, '#181510', true);
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
-        floorTexture.repeat.set(length / 20, 120 / 20); // Scale the flagstones
+        floorTexture.repeat.set(length / 5, 120 / 5);
         
         const ceilingTexture = createOrganicTexture(512, 512, '#080706', false);
         ceilingTexture.wrapS = THREE.RepeatWrapping;
