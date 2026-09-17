@@ -163,14 +163,15 @@
     </div>
 
     <!-- Authoring Panel -->
-    <div id="authoring-panel" style="display: none; position: fixed; top: 20px; left: 20px; background: rgba(0,0,0,0.85); color: white; padding: 20px; border: 2px solid #d6a848; z-index: 1000; font-family: monospace; max-width: 400px;">
-        <h3 style="margin-top:0; color: #d6a848;">Text Authoring Mode</h3>
-        <p><strong>Scene:</strong> <span id="auth-scene"></span></p>
-        <p><strong>Latin:</strong> <span id="auth-latin"></span></p>
-        <p><strong>English:</strong> <span id="auth-english"></span></p>
-        <p style="color: #aaa; font-size: 12px; margin-bottom: 20px;"><em>Click directly on the tapestry to drop or move the coordinate pin. Click Next Scene to confirm.</em></p>
-        <button id="auth-next" style="padding: 8px 12px; margin-right: 10px; cursor: pointer;">Next / Skip</button>
-        <button id="auth-export" style="padding: 8px 12px; cursor: pointer;">Export JSON</button>
+    <div id="authoring-panel" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 20px; border: 2px solid #d6a848; z-index: 1000; font-family: monospace; max-width: 500px; text-align: center; pointer-events: none;">
+        <h3 style="margin-top:0; color: #d6a848; pointer-events: auto;">Text Authoring Mode</h3>
+        <p style="color: #aaa; font-size: 12px; margin-bottom: 10px; pointer-events: auto;"><em>Drag any text label to reposition it. Changes save locally.</em></p>
+        <div id="auth-info" style="margin-bottom: 15px; text-align: left; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 4px; display: none; pointer-events: auto;">
+            <p style="margin: 0 0 5px 0;"><strong>Scene:</strong> <span id="auth-scene"></span></p>
+            <p style="margin: 0 0 5px 0; color: #d6a848;"><strong>Latin:</strong> <span id="auth-latin"></span></p>
+            <p style="margin: 0;"><strong>English:</strong> <span id="auth-english"></span></p>
+        </div>
+        <button id="auth-export" style="padding: 8px 12px; cursor: pointer; pointer-events: auto;">Export JSON</button>
     </div>
 
     <div id="yt-player" style="position: absolute; width: 0; height: 0; overflow: hidden; left: -9999px;"></div>
@@ -635,6 +636,17 @@
             mouseScrollDir = 0; 
             
             if (e.touches.length === 1) {
+                if (isAuthoringMode) {
+                    mouseCoords.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                    mouseCoords.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+                    dragRaycaster.setFromCamera(mouseCoords, camera);
+                    const annMeshes = annotations.map(a => a.mesh).filter(m => m && m.visible);
+                    const intersects = dragRaycaster.intersectObjects(annMeshes, false);
+                    if (intersects.length > 0) {
+                        draggedAnnotation = intersects[0].object.userData.annotation;
+                        return; // Prevent panning
+                    }
+                }
                 isDragging = true;
                 lastTouchX = e.touches[0].clientX;
                 lastTouchY = e.touches[0].clientY;
@@ -656,6 +668,20 @@
         window.addEventListener('touchmove', (e) => {
             if (!isTouch) return;
             
+            if (draggedAnnotation && e.touches.length === 1) {
+                e.preventDefault();
+                mouseCoords.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouseCoords.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+                dragRaycaster.setFromCamera(mouseCoords, camera);
+                const intersects = dragRaycaster.intersectObjects(scene.children, true);
+                if (intersects.length > 0) {
+                    draggedAnnotation.data.x = intersects[0].point.x;
+                    draggedAnnotation.data.y = intersects[0].point.y;
+                    if (typeof updateAnnotations === 'function') updateAnnotations();
+                }
+                return;
+            }
+
             if (e.touches.length === 1 && isDragging) {
                 e.preventDefault(); // Prevent native browser scrolling/bounce
                 
@@ -716,6 +742,11 @@
         }, {passive: false});
 
         window.addEventListener('touchend', (e) => { 
+            if (draggedAnnotation) {
+                draggedAnnotation = null;
+                localStorage.setItem('bayeux-tituli', JSON.stringify(annotations.map(a => a.data)));
+                return;
+            }
             mouseScrollDir = 0; 
             if (e.touches.length < 2) {
                 initialPinchDistance = 0;
@@ -739,9 +770,25 @@
         });
 
         let isMouseDown = false;
+        let draggedAnnotation = null;
+        const dragRaycaster = new THREE.Raycaster();
+
         window.addEventListener('mousedown', (e) => {
             if (isTouch) return;
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) return;
+            
+            if (isAuthoringMode) {
+                mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
+                mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                dragRaycaster.setFromCamera(mouseCoords, camera);
+                const annMeshes = annotations.map(a => a.mesh).filter(m => m && m.visible);
+                const intersects = dragRaycaster.intersectObjects(annMeshes, false);
+                if (intersects.length > 0) {
+                    draggedAnnotation = intersects[0].object.userData.annotation;
+                    document.body.style.cursor = 'grabbing';
+                    return; // Prevent camera panning
+                }
+            }
             isMouseDown = true;
             lastTouchX = e.clientX;
             lastTouchY = e.clientY;
@@ -751,6 +798,12 @@
         });
 
         window.addEventListener('mouseup', () => {
+            if (draggedAnnotation) {
+                draggedAnnotation = null;
+                document.body.style.cursor = 'default';
+                localStorage.setItem('bayeux-tituli', JSON.stringify(annotations.map(a => a.data)));
+                return;
+            }
             if (!isTouch && isMouseDown) {
                 isMouseDown = false;
                 document.body.style.cursor = 'default';
@@ -772,6 +825,17 @@
             // Track normalized mouse coordinates for 3D hover raycasting
             mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            
+            if (draggedAnnotation) {
+                dragRaycaster.setFromCamera(mouseCoords, camera);
+                const intersects = dragRaycaster.intersectObjects(scene.children, true);
+                if (intersects.length > 0) {
+                    draggedAnnotation.data.x = intersects[0].point.x;
+                    draggedAnnotation.data.y = intersects[0].point.y;
+                    if (typeof updateAnnotations === 'function') updateAnnotations();
+                }
+                return;
+            }
             
             if (isMouseDown) {
                 e.preventDefault();
@@ -1183,85 +1247,19 @@
             document.getElementById('lighting-controls-link').style.display = 'inline';
         }
 
-        // --- AUTHORING MODE LOGIC ---
+                // --- AUTHORING MODE LOGIC ---
         let tituliData = [];
-        let placedTituli = [];
-        let currentTituliIndex = 0;
         let isAuthoringMode = urlParams.get('author') === '1';
 
         if (isAuthoringMode) {
             document.getElementById('authoring-panel').style.display = 'block';
             
-            // Re-bind the next button correctly
-            document.getElementById('auth-next').addEventListener('click', () => {
-                const currentAnn = annotations[currentTituliIndex];
-                if (currentAnn && window.activeMarkerPlaced) {
-                    const t = currentAnn.data;
-                    const existingIndex = placedTituli.findIndex(p => p.scene === t.scene);
-                    if (existingIndex !== -1) {
-                        placedTituli[existingIndex].x = t.x;
-                        placedTituli[existingIndex].y = t.y;
-                    } else {
-                        placedTituli.push({
-                            scene: t.scene,
-                            latin: t.latin,
-                            english: t.english,
-                            x: t.x,
-                            y: t.y
-                        });
-                    }
-                    currentAnn.el.style.color = '#1a1510'; // Turn back to normal color
-                    window.activeMarkerPlaced = false;
-                    
-                    localStorage.setItem('bayeux-tituli', JSON.stringify(placedTituli));
-                }
-                currentTituliIndex++;
-                updateAuthoringUI();
-            });
-            
             document.getElementById('auth-export').addEventListener('click', () => {
-                console.log(JSON.stringify(placedTituli, null, 2));
-                alert('Exported ' + placedTituli.length + ' scenes to console! See developer tools.');
+                const exportData = annotations.map(a => a.data);
+                console.log(JSON.stringify(exportData, null, 2));
+                alert('Exported ' + exportData.length + ' scenes to console! See developer tools.');
             });
         }
-        
-        function updateAuthoringUI() {
-            if (currentTituliIndex < tituliData.length) {
-                const t = tituliData[currentTituliIndex];
-                document.getElementById('auth-scene').innerText = t.scene;
-                document.getElementById('auth-latin').innerText = t.latin || '';
-                document.getElementById('auth-english').innerText = t.english;
-            } else {
-                document.getElementById('auth-scene').innerText = 'DONE';
-                document.getElementById('auth-latin').innerText = 'All scenes placed!';
-                document.getElementById('auth-english').innerText = '';
-            }
-        }
-
-        const raycaster = new THREE.Raycaster();
-        const mouseClick = new THREE.Vector2();
-
-        window.addEventListener('click', (event) => {
-            if (!isAuthoringMode || currentTituliIndex >= tituliData.length) return;
-            if (event.target.closest('#ui') || event.target.closest('#authoring-panel') || event.target.closest('#lighting-dialog') || event.target.closest('#about-dialog')) return;
-            
-            mouseClick.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseClick.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            
-            raycaster.setFromCamera(mouseClick, camera);
-            const intersects = raycaster.intersectObjects(scene.children, true);
-            if (intersects.length > 0) {
-                const point = intersects[0].point;
-                const currentAnn = annotations[currentTituliIndex];
-                if (currentAnn) {
-                    currentAnn.data.x = point.x;
-                    currentAnn.data.y = point.y;
-                    window.activeMarkerPlaced = true;
-                    // Force the text to instantly snap to cursor by forcing an update
-                    if (typeof updateAnnotations === 'function') updateAnnotations();
-                }
-            }
-        });
         // ----------------------------
 
         // --- ANNOTATION DISPLAY LOGIC ---
@@ -1311,7 +1309,7 @@
             return mesh;
         }
 
-        fetch('tituli.json?v=11').then(res => res.json()).then(data => {
+        fetch('tituli.json?v=12').then(res => res.json()).then(data => {
             if (isAuthoringMode) {
                 const savedData = localStorage.getItem('bayeux-tituli');
                 if (savedData) {
@@ -1329,7 +1327,6 @@
             }
             
             tituliData = data;
-            if (isAuthoringMode) updateAuthoringUI();
             
             // Force the browser to download the custom font (since it's not used in standard DOM) before rendering
             document.fonts.load('80px "MedievalSharp"').then(() => {
@@ -1338,11 +1335,8 @@
                     mesh.visible = false;
                     
                     const annObj = { data: t, mesh: mesh, isHovered: false, currentHover: 0 };
+                    mesh.userData.annotation = annObj;
                     annotations.push(annObj);
-                    
-                    if (isAuthoringMode && t.x !== undefined) {
-                        placedTituli.push(JSON.parse(JSON.stringify(t)));
-                    }
                 });
             });
         });
@@ -1379,7 +1373,7 @@
             annotations.forEach((ann, index) => {
                 if (!ann.mesh) return;
                 
-                if (!showSupertitles || ann.data.x === undefined || (isAuthoringMode && index !== currentTituliIndex)) {
+                if (!showSupertitles || ann.data.x === undefined) {
                     ann.mesh.visible = false;
                     return;
                 }
@@ -1396,6 +1390,19 @@
                 
                 ann.mesh.material.opacity = opacity;
             });
+
+            if (isAuthoringMode) {
+                const activeAnn = draggedAnnotation ? draggedAnnotation : (hoveredMesh ? hoveredMesh.userData.annotation : null);
+                const infoDiv = document.getElementById('auth-info');
+                if (activeAnn) {
+                    infoDiv.style.display = 'block';
+                    document.getElementById('auth-scene').innerText = activeAnn.data.scene;
+                    document.getElementById('auth-latin').innerText = activeAnn.data.latin || '';
+                    document.getElementById('auth-english').innerText = activeAnn.data.english || '';
+                } else {
+                    infoDiv.style.display = 'none';
+                }
+            }
         };
         // --------------------------------
 

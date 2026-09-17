@@ -3,335 +3,413 @@
     "scene": "1",
     "latin": "EDWARD REX",
     "english": "King Edward",
-    "x": 3.716278840770437,
-    "y": 1.0531909333404674
+    "x": 3.6025481793707526,
+    "y": 0.8664716059201963
   },
   {
     "scene": "2",
     "latin": "UBI HAROLD DUX ANGLORUM ET SUI MILITES EQUITANT AD BOSHAM ECCLESIA",
     "english": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
-    "x": 7.67853214460127,
-    "y": 1.1488511460915523
+    "x": 7.684453159185632,
+    "y": 0.971151872475677
   },
   {
     "scene": "3",
     "latin": "HIC HAROLD MARE NAVIGAVIT",
     "english": "Here Harold sailed by sea",
-    "x": 27.18678642341985,
-    "y": 0.9919275895274506
+    "x": 27.084350475061495,
+    "y": 0.8167441958568001
   },
   {
     "scene": "4",
     "latin": "ET VELIS VENTO PLENIS VENIT IN TERRAM WIDONIS COMITIS",
     "english": "and with sails filled with wind came to the land of Count Wido",
-    "x": 33.7724556583674,
-    "y": 1.0585755848923886
+    "x": 33.568751751268046,
+    "y": 0.8082830035025065
   },
   {
     "scene": "5",
     "latin": "HAROLD",
     "english": "Harold",
-    "x": 48.52055150027487,
-    "y": 1.084434727090574
+    "x": 48.167001325775466,
+    "y": 0.8914315153808867
   },
   {
     "scene": "6",
     "latin": "HIC APPREHENDIT WIDO HAROLDU",
     "english": "Here Wido seized Harold",
-    "x": 50.248655677748815,
-    "y": 1.0910868932440643
+    "x": 50.128263002438565,
+    "y": 0.8729133741881965
   },
   {
     "scene": "7",
     "latin": "ET DUXIT EUM AD BELREM ET IBI EUM TENUIT",
     "english": "and led him to Beaurain and held him there",
-    "x": 56.886030527968614,
-    "y": 1.114365373430379
+    "x": 56.870767986267225,
+    "y": 0.9379319888582437
   },
   {
     "scene": "8",
     "latin": "UBI HAROLD ET WIDO PARABOLANT",
     "english": "Where Harold and Wido converse",
-    "x": 71.8780474649045,
-    "y": 1.1246162587374684
+    "x": 71.6062399585941,
+    "y": 0.9801913375283208
   },
   {
     "scene": "9",
     "latin": "UBI NUNTII WILLELMI DUCIS VENERUNT AD WIDONU",
     "english": "Where the messengers of Duke William came to Wido",
-    "x": 80.51724409361778,
-    "y": 1.2628086343701346
+    "x": 80.38334087906543,
+    "y": 1.0142420538136014
   },
   {
     "scene": "10",
     "latin": "TUROLD",
     "english": "Turold",
-    "x": 85.25537180838738,
-    "y": 1.868
+    "x": 84.99666400416714,
+    "y": 1.7493099736797584
   },
   {
     "scene": "11",
     "latin": "NUNTII WILLELMI",
     "english": "The messengers of William",
-    "x": 92.79733674428152,
-    "y": 1.3075815729888811
+    "x": 91.94509869644526,
+    "y": 0.9443112116039732
   },
   {
     "scene": "12",
     "latin": "HIC VENIT NUNTIUS AD WILGELMUM DUCEM",
     "english": "Here the messenger came to Duke William",
-    "x": 97.13722004788707,
-    "y": 0.9119
+    "x": 96.94651288268368,
+    "y": 1.4086119529922
   },
   {
     "scene": "13",
     "latin": "HIC WIDO ADDUXIT HAROLDUM AD WILGELMUM NORMANNORUM DUCEM",
     "english": "Here Wido brought Harold to William, Duke of the Normans",
-    "x": 105.01512019236344,
-    "y": 1.2052808874966745
+    "x": 104.92262353308344,
+    "y": 0.8119941007706337
   },
   {
     "scene": "14",
     "latin": "HIC DUX WILGELM CUM HAROLDO VENIT AD PALATIUM SUUM",
     "english": "Here Duke William came to his palace with Harold",
-    "x": 122.73893918560225,
-    "y": 1.1835010380842204
+    "x": 122.57572476460798,
+    "y": 0.8318549147706894
   },
   {
     "scene": "15",
     "latin": "UBI UNUS CLERICUS ET AELFGYVA",
     "english": "Where a certain cleric and Aelfgyva",
-    "x": 136.26439891946723,
-    "y": 1.2370271439409708
+    "x": 136.23820368821472,
+    "y": 0.7743740758593036
   },
   {
     "scene": "16",
     "latin": "HIC WILLELM DUX ET EXERCITUS EIUS VENERUNT AD MONTEM MICHAELIS",
     "english": "Here Duke William and his army came to Mont Saint-Michel",
-    "x": 139.4763643135665,
-    "y": 2.0
+    "x": 140.0509868552144,
+    "y": 1.2729571090662988
   },
   {
     "scene": "17",
     "latin": "ET HIC TRANSIERUNT FLUMEN COSNONIS",
     "english": "and here they crossed the river Couesnon",
-    "x": 152.48914707918416,
-    "y": 1.5949199647627865
+    "x": 152.26111085177152,
+    "y": 1.4489788385071898
   },
   {
     "scene": "18",
     "latin": "HIC HAROLD DUX TRAHEBAT EOS DE ARENA",
     "english": "Here Duke Harold pulled them from the sand",
     "x": 154.5951294170799,
-    "y": 1.0
+    "y": 1
   },
   {
     "scene": "19",
     "latin": "ET VENERUNT AD DOL ET CONAN FUGA VERTIT",
     "english": "and they came to Dol and Conan fled",
-    "x": 160.57230569786424,
-    "y": 1.5951097388267923
+    "x": 162.7889400660854,
+    "y": 1.3925064651564276
   },
   {
     "scene": "20",
     "latin": "REDNES",
     "english": "Rennes",
-    "x": 172.13050327285094,
-    "y": 1.7619869243864656
+    "x": 172.22841793875293,
+    "y": 1.1692149520769586
   },
   {
     "scene": "21",
     "latin": "HIC WILLELM DEDIT ARMA HAROLDO",
-    "english": "Here William gave arms to Harold"
+    "english": "Here William gave arms to Harold",
+    "x": 190.61962367639578,
+    "y": 1.331619040950402
   },
   {
     "scene": "22",
     "latin": "HIE",
-    "english": "Here William came to Bayeux"
+    "english": "Here William came to Bayeux",
+    "x": 196.63442740101317,
+    "y": 0.8815016979796846
   },
   {
     "scene": "23",
     "latin": "UBI HAROLD SACRAMENTUM FECIT WILLELMO DUCI",
-    "english": "Where Harold made an oath to Duke William"
+    "english": "Where Harold made an oath to Duke William",
+    "x": 202.67551704063766,
+    "y": 0.8859111217323842
   },
   {
     "scene": "24",
     "latin": "HIC HAROLD DUX REVERSUS EST AD ANGLICAM TERRAM",
-    "english": "Here Duke Harold returned to English land"
+    "english": "Here Duke Harold returned to English land",
+    "x": 215.1945353914672,
+    "y": 0.8475842571079717
   },
   {
     "scene": "25",
     "latin": "ET VENIT AD EDWARDU REGEM",
-    "english": "and he came to King Edward"
+    "english": "and he came to King Edward",
+    "x": 224.1563374789928,
+    "y": 0.863982969862745
   },
   {
     "scene": "26",
     "latin": "HIC PORTATUR CORPUS EADWARDI REGIS AD ECCLESIAM SCI PETRI APLI",
-    "english": "Here the body of King Edward is carried to the Church of Saint Peter the Apostle"
+    "english": "Here the body of King Edward is carried to the Church of Saint Peter the Apostle",
+    "x": 231.51077269895723,
+    "y": 0.9480323774813515
   },
   {
     "scene": "27",
     "latin": "HIC EADWARDUS REX IN LECTO ALLOQUIT FIDELES",
-    "english": "Here King Edward in bed speaks to his faithful followers"
+    "english": "Here King Edward in bed speaks to his faithful followers",
+    "x": 247.54101012260466,
+    "y": 1.3359328604738838
   },
   {
     "scene": "28",
     "latin": "ET HIC DEFUNCTUS EST",
-    "english": "and here he died"
+    "english": "and here he died",
+    "x": 257.70400000000006,
+    "y": 1
   },
   {
     "scene": "29",
     "latin": "HIC DEDERUNT HAROLDO CORONA REGIS",
-    "english": "Here they gave the king's crown to Harold"
+    "english": "Here they gave the king's crown to Harold",
+    "x": 268.4007500000001,
+    "y": 1
   },
   {
     "scene": "30",
     "latin": "HIC RESIDET HAROLD REX ANGLORUM",
-    "english": "Here sits Harold King of the English"
+    "english": "Here sits Harold King of the English",
+    "x": 279.0975000000001,
+    "y": 1
   },
   {
     "scene": "31",
     "latin": "STIGANT ARCHIEPS",
-    "english": "Archbishop Stigand"
+    "english": "Archbishop Stigand",
+    "x": 289.7942500000001,
+    "y": 1
   },
   {
     "scene": "32",
     "latin": "ISTI MIRANT STELLA",
-    "english": "These people marvel at the star"
+    "english": "These people marvel at the star",
+    "x": 300.4910000000001,
+    "y": 1
   },
   {
     "scene": "33",
     "latin": "HAROLD",
-    "english": "Harold"
+    "english": "Harold",
+    "x": 311.1877500000001,
+    "y": 1
   },
   {
     "scene": "34",
     "latin": "HIC NAVIS ANGLICA VENIT IN TERRAM WILLELMI DUCIS",
-    "english": "Here an English ship came to the land of Duke William"
+    "english": "Here an English ship came to the land of Duke William",
+    "x": 321.8845000000001,
+    "y": 1
   },
   {
     "scene": "35",
     "latin": "HIC WILLELM DUX JUSSIT NAVES EDIFICARE",
-    "english": "Here Duke William ordered ships to be built"
+    "english": "Here Duke William ordered ships to be built",
+    "x": 332.5812500000001,
+    "y": 1
   },
   {
     "scene": "36",
     "latin": "HIC TRAHUNT NAVES AD MARE",
-    "english": "Here they drag the ships to the sea"
+    "english": "Here they drag the ships to the sea",
+    "x": 343.27800000000013,
+    "y": 1
   },
   {
     "scene": "37",
     "latin": "ISTI PORTANT ARMAS AD NAVES ET HIC TRAHUNT CARRUM CUM VINO ET ARMIS",
-    "english": "These men carry arms to the ships and here they drag a cart (laden) with wine and arms"
+    "english": "These men carry arms to the ships and here they drag a cart (laden) with wine and arms",
+    "x": 353.97475000000014,
+    "y": 1
   },
   {
     "scene": "38",
-    "latin": "\u2020 HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENES\u00c6",
-    "english": "\u2020 Here Duke William in a great ship crossed the sea and came to Pevensey"
+    "latin": "† HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENESÆ",
+    "english": "† Here Duke William in a great ship crossed the sea and came to Pevensey",
+    "x": 364.67150000000015,
+    "y": 1
   },
   {
     "scene": "39",
     "latin": "HIC EXEUNT CABALLI DE NAVIBUS",
-    "english": "Here the horses leave the ships"
+    "english": "Here the horses leave the ships",
+    "x": 375.36825000000016,
+    "y": 1
   },
   {
     "scene": "40",
     "latin": "ET HIC MILITES FESTINAVERUNT HESTINGA UT CIBUM RAPERENTUR",
-    "english": "and here the knights have hurried to Hastings to seize food"
+    "english": "and here the knights have hurried to Hastings to seize food",
+    "x": 386.06500000000017,
+    "y": 1
   },
   {
     "scene": "41",
     "latin": "HIC EST WADARD",
-    "english": "Here is Wadard"
+    "english": "Here is Wadard",
+    "x": 396.7617500000002,
+    "y": 1
   },
   {
     "scene": "42",
     "latin": "HIC COQUITUR CARO ET HIC MINISTRAVERUNT MINISTRI",
-    "english": "Here the meat is being cooked and here the servants have served (it)"
+    "english": "Here the meat is being cooked and here the servants have served (it)",
+    "x": 407.4585000000002,
+    "y": 1
   },
   {
     "scene": "43",
     "latin": "HIC FECERUN PRANDIUM",
-    "english": "Here they have a meal"
+    "english": "Here they have a meal",
+    "x": 418.1552500000002,
+    "y": 1
   },
   {
     "scene": "44",
     "latin": "ODO EPS WILLEM ROTBERT",
-    "english": "Bishop Odo , William, Robert"
+    "english": "Bishop Odo , William, Robert",
+    "x": 428.8520000000002,
+    "y": 1
   },
   {
     "scene": "45",
     "latin": "ISTE JUSSIT UT FODERETUR CASTELLUM AT HESTENGA",
-    "english": "He ordered that a motte should be dug at Hastings"
+    "english": "He ordered that a motte should be dug at Hastings",
+    "x": 439.5487500000002,
+    "y": 1
   },
   {
     "scene": "237",
     "latin": "the camp",
-    "english": ""
+    "english": "",
+    "x": 450.2455000000002,
+    "y": 1
   },
   {
     "scene": "46",
     "latin": "HIC NUNTIATUM EST WILLELM DE HAROLD",
-    "english": "Here William was told about Harold"
+    "english": "Here William was told about Harold",
+    "x": 460.94225000000023,
+    "y": 1
   },
   {
     "scene": "47",
     "latin": "HIC DOMUS INCENDITUR",
-    "english": "Here a house is burned"
+    "english": "Here a house is burned",
+    "x": 471.63900000000024,
+    "y": 1
   },
   {
     "scene": "48",
     "latin": "HIC MILITES EXIERUNT DE HESTENGA ET VENERUNT AD PRELIUM CONTRA HAROLDUM REGE",
-    "english": "Here the knights have left Hastings and have come to the battle against King Harold"
+    "english": "Here the knights have left Hastings and have come to the battle against King Harold",
+    "x": 482.33575000000025,
+    "y": 1
   },
   {
     "scene": "49",
     "latin": "HIC WILLELM DUX INTERROGAT VITAL SI VIDISSET HAROLDI EXERCITU",
-    "english": "Here Duke William asks Vital if he has seen Harold's army"
+    "english": "Here Duke William asks Vital if he has seen Harold's army",
+    "x": 493.03250000000025,
+    "y": 1
   },
   {
     "scene": "50",
     "latin": "ISTE NUNTIAT HAROLDUM REGE DE EXERCITU WILLELMI DUCIS",
-    "english": "This messenger tells King Harold about Duke William's army"
+    "english": "This messenger tells King Harold about Duke William's army",
+    "x": 503.72925000000026,
+    "y": 1
   },
   {
     "scene": "51",
     "latin": "HIC WILLELM DUX ALLOQUITUR SUIS MILITIBUS UT PREPARAREN SE VIRILITER ET SAPIENTER AD PRELIUM CONTRA ANGLORUM EXERCITU",
-    "english": "Here Duke William speaks to his knights to prepare themselves manfully and wisely for the battle against the army of the English"
+    "english": "Here Duke William speaks to his knights to prepare themselves manfully and wisely for the battle against the army of the English",
+    "x": 514.4260000000003,
+    "y": 1
   },
   {
     "scene": "52",
-    "latin": "HIC CECIDERUNT LEWINE ET GYR\u00d0 FRATRES HAROLDI REGIS",
-    "english": "Here fell Leofwine and Gyrth , brothers of King Harold"
+    "latin": "HIC CECIDERUNT LEWINE ET GYRÐ FRATRES HAROLDI REGIS",
+    "english": "Here fell Leofwine and Gyrth , brothers of King Harold",
+    "x": 525.1227500000002,
+    "y": 1
   },
   {
     "scene": "53",
     "latin": "HIC CECIDERUNT SIMUL ANGLI ET FRANCI IN PRELIO",
-    "english": "Here English and French fell at the same time in battle"
+    "english": "Here English and French fell at the same time in battle",
+    "x": 535.8195000000002,
+    "y": 1
   },
   {
     "scene": "54",
     "latin": "HIC ODO EPS BACULU TENENS CONFORTAT PUEROS",
-    "english": "Here Bishop Odo, holding a club, gives strength to the boys"
+    "english": "Here Bishop Odo, holding a club, gives strength to the boys",
+    "x": 546.5162500000001,
+    "y": 1
   },
   {
     "scene": "55",
     "latin": "HIC EST WILLEL DUX",
-    "english": "Here is Duke William"
+    "english": "Here is Duke William",
+    "x": 557.2130000000001,
+    "y": 1
   },
   {
     "scene": "56",
     "latin": "ETIUS",
-    "english": "Eustace"
+    "english": "Eustace",
+    "x": 567.90975,
+    "y": 1
   },
   {
     "scene": "57",
     "latin": "HIC HAROLD REX INTERFECTUS EST",
-    "english": "Here King Harold was slain"
+    "english": "Here King Harold was slain",
+    "x": 578.6065,
+    "y": 1
   },
   {
     "scene": "58",
     "latin": "ET FUGA VERTERUNT ANGLI",
-    "english": "and the English have turned in flight"
+    "english": "and the English have turned in flight",
+    "x": 589.3032499999999,
+    "y": 1
   }
 ]
