@@ -180,6 +180,10 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         let ytPlayer;
+        /**
+         * Callback triggered by the YouTube IFrame API when it is fully loaded.
+         * Initializes the hidden YouTube audio player.
+         */
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
                 height: '1',
@@ -388,6 +392,14 @@
         const length = W / SCALE + 100;
 
         // Create a procedural organic texture for walls/ceiling without blocks
+        /**
+         * Generates a procedural noise texture for the floor, ceiling, and walls.
+         * @param {number} width - Canvas width
+         * @param {number} height - Canvas height
+         * @param {string} baseColor - Base fill color
+         * @param {boolean} withSplotches - Whether to add large dark organic splotches
+         * @returns {THREE.CanvasTexture}
+         */
         function createOrganicTexture(width = 256, height = 256, baseColor = '#181510', withSplotches = true) {
             const canvas = document.createElement('canvas');
             canvas.width = width;
@@ -536,6 +548,11 @@
         });
 
         // Add a subtle baked shadow directly below the tapestry
+        /**
+         * Creates a subtle linear gradient texture to simulate ambient occlusion / shadow
+         * beneath the 3D tapestry mesh.
+         * @returns {THREE.CanvasTexture}
+         */
         function createShadowTexture() {
             const canvas = document.createElement('canvas');
             canvas.width = 1;
@@ -580,6 +597,7 @@
         let lastPinchMidX = 0;
         let lastPinchMidY = 0;
 
+        // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
         window.addEventListener('touchstart', (e) => { 
             isTouch = true; 
             mouseScrollDir = 0; 
@@ -614,6 +632,7 @@
             }
         }, {passive: false});
 
+        // Handle 1-finger panning and 2-finger pinch-to-zoom for mobile devices.
         window.addEventListener('touchmove', (e) => {
             if (!isTouch) return;
             
@@ -690,6 +709,7 @@
             }
         }, {passive: false});
 
+        // Handle touch release to smoothly transition back to 1-finger drag or apply release momentum.
         window.addEventListener('touchend', (e) => { 
             if (draggedAnnotation) {
                 draggedAnnotation = null;
@@ -722,6 +742,7 @@
         let draggedAnnotation = null;
         const dragRaycaster = new THREE.Raycaster();
 
+        // Initialize mouse drag tracking, halt momentum, and handle raycasting for Authoring mode.
         window.addEventListener('mousedown', (e) => {
             if (isTouch) return;
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) return;
@@ -768,6 +789,7 @@
 
         const mouseCoords = new THREE.Vector2(-9999, -9999);
         
+        // Handle desktop mouse dragging (panning) and update normalized mouse coordinates for 3D hover detection.
         window.addEventListener('mousemove', (e) => {
             if (isTouch) return; 
             
@@ -833,6 +855,7 @@
 
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
+        // Handle keyboard navigation (arrow keys/WASD) and prevent default scrolling behavior.
         window.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 'h') {
                 const ui = document.getElementById('ui');
@@ -846,6 +869,7 @@
             if (e.key === 'ArrowDown') keys.down = true;
         });
 
+        // Clear keyboard navigation states upon key release.
         window.addEventListener('keyup', (e) => {
             if (e.key === 'ArrowLeft') keys.left = false;
             if (e.key === 'ArrowRight') keys.right = false;
@@ -885,6 +909,7 @@
         }
 
         let lastWheelTime = 0;
+        // Handle trackpad / mouse wheel zooming and horizontal panning.
         window.addEventListener('wheel', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog')) return;
             e.preventDefault();
@@ -910,6 +935,7 @@
             }
         }, { passive: false });
 
+        // Update the Three.js camera projection matrix and WebGL renderer dimensions on window resize.
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -933,6 +959,10 @@
         let moveHoldTime = 0;
         let zoomHoldTime = 0;
 
+        /**
+         * Core physics loop for camera movement.
+         * Handles inertia, keyboard acceleration, boundary clamping, and the 3D tilt effect.
+         */
         function updateCamera() {
             let currentAccel = 0;
             
@@ -1027,6 +1057,10 @@
             if (camera.position.z > 2000) camera.position.z = 2000;
         }
 
+        /**
+         * Main LOD (Level of Detail) manager.
+         * Calculates the visible frustum and queues texture loading/unloading for L16, L17, and L18 layers.
+         */
         function updateTiles() {
             // Calculate visible width based on camera Z and FOV
             const vFOV = THREE.MathUtils.degToRad(camera.fov);
@@ -1137,6 +1171,10 @@
             }
         }
 
+        /**
+         * Main WebGL render loop.
+         * Updates physics, animations, dynamic lighting, and triggers the renderer.
+         */
         function animate() {
             requestAnimationFrame(animate);
 
@@ -1216,6 +1254,12 @@
         // --- ANNOTATION DISPLAY LOGIC ---
         let annotations = [];
         
+        /**
+         * Renders English translation text to a 2D canvas and maps it onto a 3D PlaneGeometry.
+         * @param {string} text - The English string to render
+         * @param {boolean} isPlaced - In authoring mode, unplaced text is rendered in red
+         * @returns {THREE.Mesh}
+         */
         function createTextMesh(text, isPlaced) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
