@@ -420,7 +420,7 @@
         }
 
 
-        // Reverted back to the original simple organic texture, without large splotches to avoid visible seams
+        // Organic texture with a uniform noise profile to avoid visible tiling seams
         const floorTexture = createOrganicTexture(512, 512, '#0a0806', false);
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
@@ -431,7 +431,7 @@
         ceilingTexture.wrapT = THREE.RepeatWrapping;
         ceilingTexture.repeat.set(length / 5, 120 / 5); 
         
-        // Darkened the base wall color to make the scene more dramatic
+        // Dark base wall color creates a dramatic contrast with the illuminated tapestry
         const wallTexture = createOrganicTexture(512, 512, '#0c0a08', false);
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
@@ -643,7 +643,7 @@
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
                 const moveWorldX = -dx * pixelToWorld;
                 
-                // Vertical drag eliminated on mobile
+                // Vertical dragging is disabled on mobile devices for stability
                 camera.position.x += moveWorldX;
                 
                 // Store recent movement as velocity for native-feeling momentum on release
