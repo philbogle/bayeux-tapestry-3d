@@ -112,6 +112,20 @@
     "y": 1.4396478055897146
   },
   {
+    "scene": "19.1",
+    "latin": "HIC MILITES WILLELMI DUCIS PUGNANT CONTRA DINANTES",
+    "english": "Here the knights of Duke William fight against the men of Dinan",
+    "x": 170.0,
+    "y": 1.0
+  },
+  {
+    "scene": "19.2",
+    "latin": "ET CUNAN CLAVES PORREXIT",
+    "english": "and Conan surrendered the keys",
+    "x": 180.0,
+    "y": 1.0
+  },
+  {
     "scene": "21",
     "latin": "HIC WILLELM DEDIT ARMA HAROLDO",
     "english": "Here William gave arms to Harold",
