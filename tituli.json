@@ -115,22 +115,22 @@
     "scene": "19.1",
     "latin": "HIC MILITES WILLELMI DUCIS PUGNANT CONTRA DINANTES",
     "english": "Here the knights of Duke William fight against the men of Dinan",
-    "x": 170.0,
-    "y": 1.0
+    "x": 173.54291971048562,
+    "y": 1.2318878233993094
   },
   {
     "scene": "19.2",
     "latin": "ET CUNAN CLAVES PORREXIT",
     "english": "and Conan surrendered the keys",
-    "x": 180.0,
-    "y": 1.0
+    "x": 186.23909696347258,
+    "y": 1.269606159125943
   },
   {
     "scene": "21",
     "latin": "HIC WILLELM DEDIT ARMA HAROLDO",
     "english": "Here William gave arms to Harold",
-    "x": 190.61962367639578,
-    "y": 1.331619040950402
+    "x": 188.3908042624155,
+    "y": 0.8442762156566235
   },
   {
     "scene": "22",
@@ -143,15 +143,15 @@
     "scene": "23",
     "latin": "UBI HAROLD SACRAMENTUM FECIT WILLELMO DUCI",
     "english": "Where Harold made an oath to Duke William",
-    "x": 202.67551704063766,
-    "y": 0.8859111217323842
+    "x": 202.54337663935826,
+    "y": 1.4674639628106203
   },
   {
     "scene": "24",
     "latin": "HIC HAROLD DUX REVERSUS EST AD ANGLICAM TERRAM",
     "english": "Here Duke Harold returned to English land",
-    "x": 213.24128236926654,
-    "y": 0.8235280029386484
+    "x": 208.28752451898413,
+    "y": 0.8899045056303095
   },
   {
     "scene": "25",
@@ -232,8 +232,8 @@
   },
   {
     "scene": "38",
-    "latin": "\u2020 HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENES\u00c6",
-    "english": "\u2020 Here Duke William in a great ship crossed the sea and came to Pevensey",
+    "latin": "† HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENESÆ",
+    "english": "† Here Duke William in a great ship crossed the sea and came to Pevensey",
     "x": 314.15396900829165,
     "y": 0.9234693661297796
   },
@@ -316,7 +316,7 @@
   },
   {
     "scene": "52",
-    "latin": "HIC CECIDERUNT LEWINE ET GYR\u00d0 FRATRES HAROLDI REGIS",
+    "latin": "HIC CECIDERUNT LEWINE ET GYRÐ FRATRES HAROLDI REGIS",
     "english": "Here fell Leofwine and Gyrth , brothers of King Harold",
     "x": 509.8099302095928,
     "y": 0.8705123333840765
