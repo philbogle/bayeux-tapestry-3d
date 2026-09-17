@@ -383,7 +383,7 @@
         scene.fog = new THREE.FogExp2(fogColor, 0.015);
 
         // Add floor and ceiling for perspective
-        const ceilingY = (H / SCALE + 0.5) * 2; // Doubled ceiling height
+        const ceilingY = (H / SCALE + 0.5) * 4; // Quadrupled ceiling height for a more open hall feel
         const length = W / SCALE + 100;
 
         // Create a procedural organic texture for walls/ceiling without blocks
@@ -471,7 +471,7 @@
         }
 
         // Reverted back to the original simple organic texture, without large splotches to avoid visible seams
-        const floorTexture = createOrganicTexture(512, 512, '#181510', false);
+        const floorTexture = createOrganicTexture(512, 512, '#0a0806', false);
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 5, 120 / 5);
