@@ -1,12 +1,5 @@
 [
   {
-    "scene": "1",
-    "latin": "EDWARD REX",
-    "english": "King Edward",
-    "x": 3.6025481793707526,
-    "y": 0.8664716059201963
-  },
-  {
     "scene": "2",
     "latin": "UBI HAROLD DUX ANGLORUM ET SUI MILITES EQUITANT AD BOSHAM ECCLESIA",
     "english": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
@@ -26,13 +19,6 @@
     "english": "and with sails filled with wind came to the land of Count Wido",
     "x": 33.568751751268046,
     "y": 0.8082830035025065
-  },
-  {
-    "scene": "5",
-    "latin": "HAROLD",
-    "english": "Harold",
-    "x": 48.167001325775466,
-    "y": 0.8914315153808867
   },
   {
     "scene": "6",
@@ -61,13 +47,6 @@
     "english": "Where the messengers of Duke William came to Wido",
     "x": 80.38334087906543,
     "y": 1.0142420538136014
-  },
-  {
-    "scene": "10",
-    "latin": "TUROLD",
-    "english": "Turold",
-    "x": 84.99666400416714,
-    "y": 1.7493099736797584
   },
   {
     "scene": "11",
@@ -131,13 +110,6 @@
     "english": "and they came to Dol and Conan fled",
     "x": 160.88000357387793,
     "y": 1.4396478055897146
-  },
-  {
-    "scene": "20",
-    "latin": "REDNES",
-    "english": "Rennes",
-    "x": 172.22841793875293,
-    "y": 1.1692149520769586
   },
   {
     "scene": "21",
@@ -210,25 +182,11 @@
     "y": 0.983911365531573
   },
   {
-    "scene": "31",
-    "latin": "STIGANT ARCHIEPS",
-    "english": "Archbishop Stigand",
-    "x": 252.3921779662298,
-    "y": 2.2339635735218613
-  },
-  {
     "scene": "32",
     "latin": "ISTI MIRANT STELLA",
     "english": "These people marvel at the star",
     "x": 258.4928722875172,
     "y": 0.9621465921985917
-  },
-  {
-    "scene": "33",
-    "latin": "HAROLD",
-    "english": "Harold",
-    "x": 262.4390359258694,
-    "y": 1.3442947416112212
   },
   {
     "scene": "34",
@@ -260,8 +218,8 @@
   },
   {
     "scene": "38",
-    "latin": "† HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENESÆ",
-    "english": "† Here Duke William in a great ship crossed the sea and came to Pevensey",
+    "latin": "\u2020 HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENES\u00c6",
+    "english": "\u2020 Here Duke William in a great ship crossed the sea and came to Pevensey",
     "x": 314.15396900829165,
     "y": 0.9234693661297796
   },
@@ -280,13 +238,6 @@
     "y": 1.0237143640365116
   },
   {
-    "scene": "41",
-    "latin": "HIC EST WADARD",
-    "english": "Here is Wadard",
-    "x": 370.5882149617678,
-    "y": 1.0009448881893652
-  },
-  {
     "scene": "42",
     "latin": "HIC COQUITUR CARO ET HIC MINISTRAVERUNT MINISTRI",
     "english": "Here the meat is being cooked and here the servants have served (it)",
@@ -301,25 +252,11 @@
     "y": 0.8570234631713545
   },
   {
-    "scene": "44",
-    "latin": "ODO EPS WILLEM ROTBERT",
-    "english": "Bishop Odo , William, Robert",
-    "x": 389.4596580900894,
-    "y": 0.9034174852250236
-  },
-  {
     "scene": "45",
     "latin": "ISTE JUSSIT UT FODERETUR CASTELLUM AT HESTENGA",
     "english": "He ordered that a motte should be dug at Hastings",
     "x": 393.7496594505392,
     "y": 1.3323911773084578
-  },
-  {
-    "scene": "237",
-    "latin": "the camp",
-    "english": "",
-    "x": 450.2455000000002,
-    "y": 1
   },
   {
     "scene": "46",
@@ -365,7 +302,7 @@
   },
   {
     "scene": "52",
-    "latin": "HIC CECIDERUNT LEWINE ET GYRÐ FRATRES HAROLDI REGIS",
+    "latin": "HIC CECIDERUNT LEWINE ET GYR\u00d0 FRATRES HAROLDI REGIS",
     "english": "Here fell Leofwine and Gyrth , brothers of King Harold",
     "x": 509.8099302095928,
     "y": 0.8705123333840765
@@ -390,13 +327,6 @@
     "english": "Here is Duke William",
     "x": 534.3209794417476,
     "y": 0.5855181355429755
-  },
-  {
-    "scene": "56",
-    "latin": "ETIUS",
-    "english": "Eustace",
-    "x": 561.9731737723146,
-    "y": 0.8087493450081131
   },
   {
     "scene": "57",
