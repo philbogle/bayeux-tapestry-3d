@@ -664,8 +664,8 @@
                 
                 // Store recent movement as velocity for native-feeling momentum on release
                 // Apply heavy smoothing (0.5 blend) to prevent touch-polling rate jitter from causing twitchy spikes
-                velocityX = velocityX * 0.5 + (moveWorldX * 0.2) * 0.5; 
-                velocityY = velocityY * 0.5 + (moveWorldY * 0.2) * 0.5;
+                velocityX = velocityX * 0.5 + (moveWorldX * 0.4) * 0.5; 
+                velocityY = velocityY * 0.5 + (moveWorldY * 0.4) * 0.5;
                 
                 lastTouchX = currentTouchX;
                 lastTouchY = currentTouchY;
