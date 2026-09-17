@@ -1331,8 +1331,8 @@
             tituliData = data;
             if (isAuthoringMode) updateAuthoringUI();
             
-            // Wait for the custom web font to fully load before rendering to canvas
-            document.fonts.ready.then(() => {
+            // Force the browser to download the custom font (since it's not used in standard DOM) before rendering
+            document.fonts.load('80px "MedievalSharp"').then(() => {
                 data.forEach(t => {
                     const mesh = createTextMesh(t.english, t.x !== undefined);
                     mesh.visible = false;
