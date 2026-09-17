@@ -230,7 +230,7 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
-        const initialZ = isMobile ? 6.0 : 12.0; // Start closer on mobile, but not too cramped
+        const initialZ = isMobile ? 8.0 : 12.0; // Pull back slightly more on mobile for comfortable framing
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.0; // Tapestry lowered further
@@ -241,7 +241,7 @@
         const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
         
         // Start near the beginning of the tapestry
-        camera.position.set(initialVisibleWidth / 2 + 6.0, cameraY, initialZ);
+        camera.position.set(initialVisibleWidth / 2 + 4.0, cameraY, initialZ);
 
         // Restore antialiasing for a smoother visual experience
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
