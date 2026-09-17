@@ -110,17 +110,30 @@
 <body>
     <div id="ui">
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
-        <p>Use <button class="key" id="btn-left">←</button> <button class="key" id="btn-right">→</button> or mouse to edges to explore.</p>
-        <p>Use <button class="key" id="btn-up">↑</button> <button class="key" id="btn-down">↓</button> to zoom in/out.</p>
-        <p style="margin-top: 8px; display: flex; align-items: center; gap: 15px;">
+        <p style="margin-bottom: 4px;"><strong>Pan:</strong> Click & Drag or Arrow Keys</p>
+        <p><strong>Zoom:</strong> Scroll or W/S Keys</p>
+        <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
             <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
                 <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
                 Show Supertitles
             </label>
-            <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
+            <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
+            <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
             <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
         </p>
+    </div>
+
+    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+        <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
+        <ul style="padding-left: 20px; line-height: 1.6;">
+            <li><strong>Desktop:</strong> Left-click and drag anywhere to pan smoothly across the tapestry. Use your scroll wheel to zoom in and out. Keyboard arrows (or WASD) also work.</li>
+            <li><strong>Mobile:</strong> Swipe to pan in any direction. Use a two-finger pinch to zoom in and out.</li>
+            <li><strong>Details:</strong> Zoom in closely on a specific scene to automatically load ultra-high resolution textures.</li>
+        </ul>
+        <div style="text-align: right; margin-top: 20px;">
+            <button id="close-help" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+        </div>
     </div>
 
     <div id="about-dialog">
@@ -193,12 +206,13 @@
 
         if (isMobile) {
             document.getElementById('ui').innerHTML = `
-                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
                     <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
                         <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
                         Show Supertitles
                     </label>
-                    <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Learn more</a>
+                    <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
+                    <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
                     <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
                     <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
                 </div>
@@ -606,6 +620,7 @@
         let isTouch = false;
         
         let lastTouchX = 0;
+        let lastTouchY = 0;
         let isDragging = false;
         let initialPinchDistance = 0;
         let initialPinchCamZ = 0;
@@ -617,7 +632,9 @@
             if (e.touches.length === 1) {
                 isDragging = true;
                 lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
                 velocityX = 0; // Halt existing momentum
+                velocityY = 0;
             } else if (e.touches.length === 2) {
                 isDragging = false;
                 const dx = e.touches[0].clientX - e.touches[1].clientX;
@@ -635,19 +652,25 @@
                 e.preventDefault(); // Prevent native browser scrolling/bounce
                 
                 const currentTouchX = e.touches[0].clientX;
+                const currentTouchY = e.touches[0].clientY;
                 const dx = currentTouchX - lastTouchX;
+                const dy = currentTouchY - lastTouchY;
                 
                 // 1:1 pixel-to-world drag ratio based on current camera Z distance and 45deg FOV
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
                 const moveWorldX = -dx * pixelToWorld;
+                const moveWorldY = dy * pixelToWorld;
                 
                 camera.position.x += moveWorldX;
+                camera.position.y += moveWorldY;
                 
                 // Store recent movement as velocity for native-feeling momentum on release
                 // Increased the multiplier to 3.0 for massive inertia on touch devices
                 velocityX = moveWorldX * 3.0; 
+                velocityY = moveWorldY * 3.0;
                 
                 lastTouchX = currentTouchX;
+                lastTouchY = currentTouchY;
             } else if (e.touches.length === 2) {
                 e.preventDefault(); // Prevent native browser pinch-to-zoom
                 
@@ -679,8 +702,55 @@
             initialPinchDistance = 0;
         });
 
+        let isMouseDown = false;
+        window.addEventListener('mousedown', (e) => {
+            if (isTouch) return;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) return;
+            isMouseDown = true;
+            lastTouchX = e.clientX;
+            lastTouchY = e.clientY;
+            velocityX = 0;
+            velocityY = 0;
+            document.body.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (!isTouch && isMouseDown) {
+                isMouseDown = false;
+                document.body.style.cursor = 'default';
+            }
+        });
+        
+        window.addEventListener('mouseleave', () => {
+            if (!isTouch && isMouseDown) {
+                isMouseDown = false;
+                document.body.style.cursor = 'default';
+            }
+        });
+
         window.addEventListener('mousemove', (e) => {
-            if (isTouch) return; // Disable edge scrolling on touch devices
+            if (isTouch) return; 
+            
+            if (isMouseDown) {
+                e.preventDefault();
+                const dx = e.clientX - lastTouchX;
+                const dy = e.clientY - lastTouchY;
+                
+                const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
+                const moveWorldX = -dx * pixelToWorld;
+                const moveWorldY = dy * pixelToWorld;
+                
+                camera.position.x += moveWorldX;
+                camera.position.y += moveWorldY;
+                
+                velocityX = moveWorldX * 1.5; 
+                velocityY = moveWorldY * 1.5;
+                
+                lastTouchX = e.clientX;
+                lastTouchY = e.clientY;
+                mouseScrollDir = 0; 
+                return;
+            }
             
             // Prevent edge-scroll if hovering over UI elements
             if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) {
@@ -793,8 +863,10 @@
 
         // Camera physics/smoothing
         let velocityX = 0;
+        let velocityY = 0;
         let velocityZ = 0;
         const maxVelocityX = 0.125; // Decreased by 50%
+        const maxVelocityY = 0.125;
         const maxVelocityZ = 0.1;
         const fixedZoomAccel = 0.01;
         const friction = 0.92;
@@ -808,7 +880,7 @@
         function updateCamera() {
             let currentAccel = 0;
             
-            const isActivelyPanning = keys.right || keys.left || mouseScrollDir !== 0 || isDragging || (Date.now() - lastWheelTime < 100);
+            const isActivelyPanning = keys.right || keys.left || mouseScrollDir !== 0 || isDragging || isMouseDown || (Date.now() - lastWheelTime < 100);
             
             if (isActivelyPanning) {
                 moveHoldTime += 1;
@@ -840,13 +912,16 @@
             if (keys.down) velocityZ += fixedZoomAccel;
 
             velocityX *= friction;
+            velocityY *= friction;
             velocityZ *= friction;
 
             // Clamp velocity
             velocityX = Math.max(-maxVelocityX, Math.min(maxVelocityX, velocityX));
+            velocityY = Math.max(-maxVelocityY, Math.min(maxVelocityY, velocityY));
             velocityZ = Math.max(-maxVelocityZ, Math.min(maxVelocityZ, velocityZ));
 
             camera.position.x += velocityX;
+            camera.position.y += velocityY;
             camera.position.z += velocityZ;
 
             // Prevent the view from drifting backwards when the camera straightens out (untilt compensation)
@@ -866,6 +941,18 @@
             if (camera.position.x < 0) camera.position.x = 0;
             const maxX = W / SCALE;
             if (camera.position.x > maxX) camera.position.x = maxX;
+
+            // Vertical bounds: tapestry is between y=2.0 and y=-4.94
+            const maxY = 2.0;
+            const minY = -4.94;
+            if (camera.position.y > maxY) {
+                camera.position.y = maxY;
+                velocityY = 0;
+            }
+            if (camera.position.y < minY) {
+                camera.position.y = minY;
+                velocityY = 0;
+            }
 
             if (camera.position.z < 0.5) camera.position.z = 0.5;
             if (camera.position.z > 2000) camera.position.z = 2000;
@@ -1032,13 +1119,26 @@
         animate();
 
         // UI Dialog Listeners
-        document.getElementById('learn-more-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('about-dialog').style.display = 'block';
+        document.querySelectorAll('#learn-more-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('about-dialog').style.display = 'block';
+            });
+        });
+
+        document.querySelectorAll('#help-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('help-dialog').style.display = 'block';
+            });
         });
 
         document.getElementById('close-dialog').addEventListener('click', () => {
             document.getElementById('about-dialog').style.display = 'none';
+        });
+
+        document.getElementById('close-help').addEventListener('click', () => {
+            document.getElementById('help-dialog').style.display = 'none';
         });
 
         const urlParams = new URLSearchParams(window.location.search);
