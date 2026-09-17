@@ -528,20 +528,24 @@
         let configTorchColor = new THREE.Color(0xffffff);
 
         // UI Listeners
+        // Update ambient light intensity in real-time from the lighting dev panel
         document.getElementById('amb-int').addEventListener('input', (e) => {
             ambientLight.intensity = parseFloat(e.target.value);
             document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
         });
         
+        // Update ambient light color in real-time from the lighting dev panel
         document.getElementById('amb-color').addEventListener('input', (e) => {
             ambientLight.color.set(e.target.value);
         });
         
+        // Update dynamic torch light intensity in real-time from the lighting dev panel
         document.getElementById('torch-int').addEventListener('input', (e) => {
             configTorchInt = parseFloat(e.target.value);
             document.getElementById('val-torch-int').innerText = configTorchInt.toFixed(2);
         });
         
+        // Update dynamic torch light color in real-time from the lighting dev panel
         document.getElementById('torch-color').addEventListener('input', (e) => {
             configTorchColor.set(e.target.value);
         });
@@ -731,6 +735,7 @@
             }
         });
         
+        // Reset touch states if the browser cancels the touch event (e.g., system swipe gesture)
         window.addEventListener('touchcancel', () => {
             isDragging = false;
             initialPinchDistance = 0;
@@ -765,6 +770,7 @@
             document.body.style.cursor = 'grabbing';
         });
 
+        // Reset mouse dragging state when the mouse button is released anywhere on screen
         window.addEventListener('mouseup', () => {
             if (draggedAnnotation) {
                 draggedAnnotation = null;
@@ -778,6 +784,7 @@
             }
         });
         
+        // Reset mouse dragging state if the cursor leaves the browser window entirely
         window.addEventListener('mouseleave', () => {
             if (!isTouch && isMouseDown) {
                 isMouseDown = false;
@@ -845,12 +852,14 @@
             }
         });
 
+        // Halt edge-scrolling if the mouse leaves the viewport completely
         window.addEventListener('mouseout', (e) => {
             if (e.relatedTarget === null) {
                 mouseScrollDir = 0;
             }
         });
 
+        // Fallback to halt edge-scrolling if mouseleave fires on the window
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
         // Handle keyboard navigation (arrow keys/WASD) and prevent default scrolling behavior.
@@ -882,6 +891,7 @@
             const start = (e) => { e.preventDefault(); keys[keyName] = true; };
             const stop = (e) => { e.preventDefault(); keys[keyName] = false; };
             
+            // Bind mouse/touch events to trigger the directional navigation impulse
             btn.addEventListener('mousedown', start);
             btn.addEventListener('touchstart', start, {passive: false});
             
@@ -898,6 +908,7 @@
         
         const toggleSupertitles = document.getElementById('toggle-supertitles');
         if (toggleSupertitles) {
+            // Toggle the visibility of all loaded English text meshes
             toggleSupertitles.addEventListener('change', (e) => {
                 const container = document.getElementById('annotations-container');
                 if (container) {
@@ -1206,23 +1217,21 @@
 
         // UI Dialog Listeners
         document.querySelectorAll('#learn-more-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('about-dialog').style.display = 'block';
-            });
+            // Open the About dialog when the top navigation link is clicked
+            link.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('about-dialog').style.display = 'block'; });
         });
 
         document.querySelectorAll('#help-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('help-dialog').style.display = 'block';
-            });
+            // Open the Help/Controls dialog when the top navigation link is clicked
+            link.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('help-dialog').style.display = 'block'; });
         });
 
+        // Close the About dialog
         document.getElementById('close-dialog').addEventListener('click', () => {
             document.getElementById('about-dialog').style.display = 'none';
         });
 
+        // Close the Help/Controls dialog
         document.getElementById('close-help').addEventListener('click', () => {
             document.getElementById('help-dialog').style.display = 'none';
         });
@@ -1241,6 +1250,7 @@
         if (isAuthoringMode) {
             document.getElementById('authoring-panel').style.display = 'block';
             
+            // Export the current layout of 3D text meshes to the console as formatted JSON
             document.getElementById('auth-export').addEventListener('click', () => {
                 const exportData = annotations.map(a => a.data);
                 console.log(JSON.stringify(exportData, null, 2));
@@ -1398,15 +1408,18 @@
         };
         // --------------------------------
 
+        // Open the hidden lighting configuration dialog
         document.getElementById('lighting-controls-link').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('lighting-dialog').style.display = 'block';
         });
 
+        // Close the hidden lighting configuration dialog
         document.getElementById('close-lighting').addEventListener('click', () => {
             document.getElementById('lighting-dialog').style.display = 'none';
         });
 
+        // Toggle the background YouTube audio player state between play and pause
         document.getElementById('music-toggle').addEventListener('click', () => {
             if (!ytPlayer || !ytPlayer.getPlayerState) return; // Not loaded yet
             
