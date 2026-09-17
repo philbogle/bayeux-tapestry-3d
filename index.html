@@ -1286,7 +1286,7 @@
             // Re-apply context styles after canvas resize clears them
             ctx.font = `normal ${fontSize}px 'MedievalSharp', serif`;
             ctx.letterSpacing = '3px';
-            ctx.fillStyle = (!isPlaced && isAuthoringMode) ? '#aa0000' : '#1a1510';
+            ctx.fillStyle = (!isPlaced && isAuthoringMode) ? '#aa0000' : '#5b5349';
             ctx.textBaseline = 'top';
             ctx.fillText(text.toUpperCase(), 10, 10);
             
@@ -1305,7 +1305,7 @@
             const material = new THREE.MeshBasicMaterial({
                 map: texture,
                 transparent: true,
-                opacity: 0.35,
+                opacity: 0.75,
                 depthWrite: false
             });
             const mesh = new THREE.Mesh(geometry, material);
