@@ -419,57 +419,6 @@
             return texture;
         }
 
-        function createFlagstoneTexture(width = 512, height = 512, baseColor = '#1a1712', jointColor = '#0a0807') {
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            
-            ctx.fillStyle = baseColor;
-            ctx.fillRect(0, 0, width, height);
-            
-            ctx.strokeStyle = jointColor;
-            ctx.lineWidth = 4;
-            
-            const rowHeight = height / 8;
-            const blockWidth = width / 4;
-            
-            // Draw running bond pattern with jitter
-            for (let y = 0; y <= height; y += rowHeight) {
-                // Horizontal line
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                for (let x = 0; x <= width; x += 32) {
-                    ctx.lineTo(x, y + (Math.random() - 0.5) * 8);
-                }
-                ctx.stroke();
-                
-                // Vertical lines, offset for every other row
-                if (y < height) {
-                    const offset = (Math.round(y / rowHeight) % 2 === 0) ? 0 : blockWidth / 2;
-                    for (let x = offset; x < width; x += blockWidth) {
-                        const actualX = x + (Math.random() - 0.5) * 20;
-                        if (actualX > 0 && actualX < width) {
-                            ctx.beginPath();
-                            ctx.moveTo(actualX, y);
-                            ctx.lineTo(actualX + (Math.random() - 0.5) * 8, y + rowHeight);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-            
-            // Add grit
-            const noiseCount = (width * height) / 5;
-            for (let i = 0; i < noiseCount; i++) {
-                const isLight = Math.random() > 0.85;
-                ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.15)';
-                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1); // Strictly 1px
-            }
-            
-            const texture = new THREE.CanvasTexture(canvas);
-            return texture;
-        }
 
         // Reverted back to the original simple organic texture, without large splotches to avoid visible seams
         const floorTexture = createOrganicTexture(512, 512, '#0a0806', false);
