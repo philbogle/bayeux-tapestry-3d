@@ -111,13 +111,13 @@
     <div id="ui">
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
         <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
-            <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
-                Show Supertitles
-            </label>
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-            <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
+            <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Music</button>
+            <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
+                Titles
+            </label>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
         </p>
     </div>
@@ -205,13 +205,13 @@
         if (isMobile) {
             document.getElementById('ui').innerHTML = `
                 <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-                    <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
-                        Show Supertitles
-                    </label>
                     <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
                     <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Play Music</button>
+                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Music</button>
+                    <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
+                        Titles
+                    </label>
                     <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
                 </div>
             `;
@@ -726,8 +726,14 @@
             }
         });
 
+        const mouseCoords = new THREE.Vector2(-9999, -9999);
+        
         window.addEventListener('mousemove', (e) => {
             if (isTouch) return; 
+            
+            // Track normalized mouse coordinates for 3D hover raycasting
+            mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
             
             if (isMouseDown) {
                 e.preventDefault();
@@ -874,6 +880,7 @@
         const tiltSmoothing = 0.006; // Reduced to slow down the tilt acceleration
 
         let moveHoldTime = 0;
+        let zoomHoldTime = 0;
 
         function updateCamera() {
             let currentAccel = 0;
@@ -906,8 +913,20 @@
             const speedRatio = Math.max(-1, Math.min(1, velocityX / 0.15));
             targetRotationY = -maxTilt * speedRatio * tiltFactor;
             
-            if (keys.up) velocityZ -= fixedZoomAccel;
-            if (keys.down) velocityZ += fixedZoomAccel;
+            if (keys.up || keys.down) {
+                zoomHoldTime += 1;
+            } else {
+                zoomHoldTime = 0;
+            }
+
+            // Modest acceleration curve: start at base speed and gradually double it over 2 seconds
+            let currentZoomAccel = fixedZoomAccel * (1.0 + Math.min(1.0, zoomHoldTime / 120) * 1.0);
+            
+            // Further scale zoom acceleration by current Z distance so it doesn't crawl when fully zoomed out
+            currentZoomAccel *= Math.max(1.0, camera.position.z * 0.05);
+
+            if (keys.up) velocityZ -= currentZoomAccel;
+            if (keys.down) velocityZ += currentZoomAccel;
 
             velocityX *= friction;
             velocityY *= friction;
@@ -1083,29 +1102,9 @@
                 // Position above the tapestry, slightly forward
                 torchLights[i].position.set(torchX, tapestryElevation + 2.0, 3.0);
                 
-                // Unsynchronized chaotic flickering using non-harmonic sine waves and crackle
-                const phase = torchIndex * 13.5; 
-                const wave1 = Math.sin(time * 1.1 + phase);
-                const wave2 = Math.sin(time * 2.3 + phase * 2.1);
-                const wave3 = Math.sin(time * 3.7 + phase * 3.3);
-                const wave4 = Math.sin(time * 5.1 + phase * 4.5);
-                const crackle = (Math.random() - 0.5) * 0.02; // Further toned down crackle
-                
-                // Tone down the overall flicker amplitude
-                const flicker = 1.0 + (wave1 * 0.025) + (wave2 * 0.015) + (wave3 * 0.01) + (wave4 * 0.005) + crackle;
-                torchLights[i].intensity = configTorchInt * flicker;
-                
-                // Color shift: shift hue slightly when flickering to simulate real flames
-                const colorShift = (flicker - 1.0) * 2.0; // Increased degree of color shift
+                // Static torches (flicker disabled)
+                torchLights[i].intensity = configTorchInt;
                 torchLights[i].color.copy(configTorchColor);
-                if (colorShift < 0) {
-                    // Darker flicker = warmer/redder (drop blue significantly, drop green moderately)
-                    torchLights[i].color.b = Math.max(0, torchLights[i].color.b + colorShift * 1.5);
-                    torchLights[i].color.g = Math.max(0, torchLights[i].color.g + colorShift * 0.8);
-                } else {
-                    // Brighter flicker = cooler/whiter
-                    torchLights[i].color.r = Math.min(1, torchLights[i].color.r + colorShift * 0.5);
-                }
             }
 
             updateCamera();
@@ -1227,12 +1226,52 @@
 
         // --- ANNOTATION DISPLAY LOGIC ---
         let annotations = [];
-        const annContainer = document.createElement('div');
-        annContainer.id = 'annotations-container';
-        annContainer.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 50;';
-        document.body.appendChild(annContainer);
+        
+        function createTextMesh(text, isPlaced) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const fontSize = 80; // High-res font rendering
+            ctx.font = `normal ${fontSize}px 'MedievalSharp', serif`;
+            ctx.letterSpacing = '3px';
+            const metrics = ctx.measureText(text.toUpperCase());
+            canvas.width = Math.ceil(metrics.width) + 20;
+            canvas.height = fontSize * 1.5;
+            
+            // Re-apply context styles after canvas resize clears them
+            ctx.font = `normal ${fontSize}px 'MedievalSharp', serif`;
+            ctx.letterSpacing = '3px';
+            ctx.fillStyle = (!isPlaced && isAuthoringMode) ? '#aa0000' : '#1a1510';
+            ctx.textBaseline = 'top';
+            ctx.fillText(text.toUpperCase(), 10, 10);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            
+            // Convert pixels to 3D world units (scale down drastically)
+            const scale = 0.004433; // 10% larger
+            const worldWidth = canvas.width * scale;
+            const worldHeight = canvas.height * scale;
+            
+            const geometry = new THREE.PlaneGeometry(worldWidth, worldHeight);
+            // Translate geometry so that the origin is at the top-left rather than center,
+            // and shift it down by half a worldHeight
+            geometry.translate(worldWidth / 2, -worldHeight, 0);
+            
+            const material = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                opacity: 0.35,
+                depthWrite: false
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.z = 0.05; // Float above the highest LOD tapestry (z=0.02)
+            mesh.frustumCulled = false; // Prevent pop-in of wide text strings
+            mesh.renderOrder = 999; // Ensure text always renders ON TOP of all tapestry tiles
+            scene.add(mesh);
+            return mesh;
+        }
 
-        fetch('tituli.json?v=6').then(res => res.json()).then(data => {
+        fetch('tituli.json?v=9').then(res => res.json()).then(data => {
             if (isAuthoringMode) {
                 const savedData = localStorage.getItem('bayeux-tituli');
                 if (savedData) {
@@ -1252,93 +1291,70 @@
             tituliData = data;
             if (isAuthoringMode) updateAuthoringUI();
             
-            data.forEach(t => {
-                const el = document.createElement('div');
-                // margin-top: 19px lowers the text by exactly half a letter height
-                el.style.cssText = "position: absolute; color: #1a1510; font-family: 'MedievalSharp', serif; font-size: 38px; font-weight: normal; text-transform: uppercase; text-align: left; display: none; letter-spacing: 1px; white-space: nowrap; cursor: default; transform-origin: top left; will-change: transform, opacity; margin-top: 19px; pointer-events: auto;";
-                el.innerText = t.english;
-                // Highlight red if it hasn't been placed yet and we are authoring
-                if (isAuthoringMode && t.x === undefined) {
-                    el.style.color = '#aa0000';
-                }
-                annContainer.appendChild(el);
-                
-                const annObj = { data: t, el: el, isHovered: false, currentHover: 0 };
-                el.addEventListener('mouseenter', () => annObj.isHovered = true);
-                el.addEventListener('mouseleave', () => annObj.isHovered = false);
-                
-                annotations.push(annObj);
-                
-                if (isAuthoringMode && t.x !== undefined) {
-                    placedTituli.push(JSON.parse(JSON.stringify(t)));
-                }
+            // Wait for the custom web font to fully load before rendering to canvas
+            document.fonts.ready.then(() => {
+                data.forEach(t => {
+                    const mesh = createTextMesh(t.english, t.x !== undefined);
+                    mesh.visible = false;
+                    
+                    const annObj = { data: t, mesh: mesh, isHovered: false, currentHover: 0 };
+                    annotations.push(annObj);
+                    
+                    if (isAuthoringMode && t.x !== undefined) {
+                        placedTituli.push(JSON.parse(JSON.stringify(t)));
+                    }
+                });
             });
         });
         
-        const tempV = new THREE.Vector3();
-        
+        const hoverRaycaster = new THREE.Raycaster();
         let lastCameraXForFading = 0;
         let smoothedCameraSpeed = 0;
         
         window.updateAnnotations = function() {
-            // Calculate true camera speed (handles keys, edge scroll, trackpad, touch drag, AND inertia)
+            // Calculate true camera speed
             const currentSpeed = Math.abs(camera.position.x - lastCameraXForFading);
-            smoothedCameraSpeed = smoothedCameraSpeed * 0.8 + currentSpeed * 0.2; // Smooth speed to prevent flickering
+            smoothedCameraSpeed = smoothedCameraSpeed * 0.8 + currentSpeed * 0.2; 
             lastCameraXForFading = camera.position.x;
 
-            let tiltMagnitude = Math.sqrt(camera.rotation.x * camera.rotation.x + camera.rotation.y * camera.rotation.y);
-            
-            // Fade out based on camera tilt
-            // We wait to fade until the camera actually begins to tilt (which has a 2 second continuous-pan delay)
-            let tiltOpacity = Math.max(0, 1.0 - (tiltMagnitude / 0.25));
-            
-            let scrollOpacityMult = tiltOpacity;
+            let scrollOpacityMult = 1.0;
             if (isAuthoringMode) scrollOpacityMult = 1.0; 
             
+            // Perform raycasting for hover detection if we have valid mouse coordinates
+            let hoveredMesh = null;
+            if (mouseCoords.x !== -9999 && !isDragging && !isMouseDown) {
+                hoverRaycaster.setFromCamera(mouseCoords, camera);
+                // Extract visible annotation meshes
+                const annMeshes = annotations.map(a => a.mesh).filter(m => m && m.visible);
+                const intersects = hoverRaycaster.intersectObjects(annMeshes, false);
+                if (intersects.length > 0) {
+                    hoveredMesh = intersects[0].object;
+                }
+            }
+            
+            // Ensure UI checkbox sync
+            const toggleSupertitles = document.getElementById('toggle-supertitles');
+            const showSupertitles = toggleSupertitles ? toggleSupertitles.checked : true;
+            
             annotations.forEach((ann, index) => {
-                if (ann.data.x === undefined || (isAuthoringMode && index !== currentTituliIndex)) {
-                    if (ann.el.style.display !== 'none') ann.el.style.display = 'none';
+                if (!ann.mesh) return;
+                
+                if (!showSupertitles || ann.data.x === undefined || (isAuthoringMode && index !== currentTituliIndex)) {
+                    ann.mesh.visible = false;
                     return;
                 }
                 
-                tempV.set(ann.data.x, ann.data.y, 0.0);
-                tempV.project(camera);
+                // We rely on Three.js native frustum culling rather than hardcoded distance checks
                 
-                // Massively expanded X bounds from 1.5 to 5.0 so extremely long text strings 
-                // don't instantly despawn when their left-aligned pin point scrolls off-screen
-                if (tempV.z > 1 || tempV.x < -5.0 || tempV.x > 5.0 || tempV.y < -1.5 || tempV.y > 1.5) {
-                    if (ann.el.style.display !== 'none') ann.el.style.display = 'none';
-                    return;
-                }
+                ann.mesh.visible = true;
+                ann.mesh.position.x = ann.data.x;
+                ann.mesh.position.y = ann.data.y;
                 
-                const x = (tempV.x *  .5 + .5) * window.innerWidth;
-                const y = (tempV.y * -.5 + .5) * window.innerHeight;
-                
-                if (ann.isHovered) {
-                    ann.currentHover = Math.min(1.0, ann.currentHover + 0.05);
-                } else {
-                    ann.currentHover = Math.max(0.0, ann.currentHover - 0.05);
-                }
-                
-                // Increased base opacity to 0.35, hovering brings it to 0.85
-                let opacity = (0.35 + (ann.currentHover * 0.50)) * scrollOpacityMult;
+                // Static opacity, no hover effect
+                let opacity = 0.40 * scrollOpacityMult;
                 if (isAuthoringMode) opacity = 1.0;
                 
-                if (opacity <= 0.01) {
-                    ann.el.style.display = 'none';
-                } else {
-                    ann.el.style.display = 'block';
-                    ann.el.style.left = x + 'px';
-                    ann.el.style.top = y + 'px';
-                    ann.el.style.opacity = opacity.toFixed(3);
-                    
-                    // Scale the font relative to a base zoom distance of 7.5 and a baseline screen height of 900px
-                    // This ensures the text maintains perfect relative physical size to the tapestry across different monitor resolutions
-                    const heightFactor = window.innerHeight / 900;
-                    const scaleFactor = (7.5 / Math.max(0.1, camera.position.z)) * heightFactor;
-                    
-                    ann.el.style.transform = `scale(${scaleFactor})`;
-                }
+                ann.mesh.material.opacity = opacity;
             });
         };
         // --------------------------------
