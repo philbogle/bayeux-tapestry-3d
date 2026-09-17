@@ -241,7 +241,7 @@
         const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
         
         // Start near the beginning of the tapestry
-        camera.position.set(initialVisibleWidth / 2, cameraY, initialZ);
+        camera.position.set(initialVisibleWidth / 2 + 6.0, cameraY, initialZ);
 
         // Restore antialiasing for a smoother visual experience
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -559,7 +559,7 @@
             }
         } else {
             // Simplify lighting drastically on mobile to improve framerates
-            ambientLight.intensity = 1.0;
+            ambientLight.intensity = 1.3;
         }
         
         // Lighting Variables (linked to UI)
