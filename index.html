@@ -110,8 +110,6 @@
 <body>
     <div id="ui">
         <h2>Bayeux Tapestry 3D Walkthrough</h2>
-        <p style="margin-bottom: 4px;"><strong>Pan:</strong> Click & Drag or Arrow Keys</p>
-        <p><strong>Zoom:</strong> Scroll or Up/Down Arrows</p>
         <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
             <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
                 <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
@@ -1291,13 +1289,10 @@
             let tiltMagnitude = Math.sqrt(camera.rotation.x * camera.rotation.x + camera.rotation.y * camera.rotation.y);
             
             // Fade out based on camera tilt
+            // We wait to fade until the camera actually begins to tilt (which has a 2 second continuous-pan delay)
             let tiltOpacity = Math.max(0, 1.0 - (tiltMagnitude / 0.25));
             
-            // On desktop, also fade out based on fast panning speed
-            // On mobile, short quick drags are too brief, so we don't fade out based on speed
-            let speedOpacity = isMobile ? 1.0 : Math.max(0, 1.0 - (smoothedCameraSpeed / 0.05)); 
-            
-            let scrollOpacityMult = Math.min(tiltOpacity, speedOpacity);
+            let scrollOpacityMult = tiltOpacity;
             if (isAuthoringMode) scrollOpacityMult = 1.0; 
             
             annotations.forEach((ann, index) => {
