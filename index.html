@@ -203,11 +203,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/.test(navigator.userAgent) || isIOS;
+        const isIPad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        // Treat iPads and large tablets as desktop for full graphics/lighting, restrict simplified experience to phones
+        const isPhone = (/iPhone|iPod|IEMobile|Opera Mini/.test(navigator.userAgent)) || 
+                        (/Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent)) || 
+                        (isIOS && !isIPad) ||
+                        (window.innerWidth <= 600);
         
         // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
 
-        if (isMobile) {
+        if (isPhone) {
             document.getElementById('ui').innerHTML = `
                 <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
                     <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
@@ -235,7 +240,7 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
-        const initialZ = isMobile ? 8.0 : 12.0; // Pull back slightly more on mobile for comfortable framing
+        const initialZ = isPhone ? 8.0 : 12.0; // Pull back slightly more on mobile for comfortable framing
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.0; // Tapestry lowered further
@@ -263,7 +268,7 @@
         
         // Strict network queue to prevent Safari/iPad from stalling when requesting many tiles
         let activeRequests = 0;
-        const MAX_CONCURRENT_REQUESTS = isMobile ? 4 : 32;
+        const MAX_CONCURRENT_REQUESTS = isPhone ? 4 : 32;
 
         // Share a single base geometry across ALL tiles to massively reduce WebGL memory overhead (prevents mobile Chrome crashes)
         const baseGeometry = new THREE.PlaneGeometry(1, 1);
@@ -432,18 +437,18 @@
 
 
         // Organic texture with a uniform noise profile to avoid visible tiling seams
-        const floorTexture = createOrganicTexture(512, 512, '#0a0806', false);
+        const floorTexture = createOrganicTexture(512, 512, isPhone ? '#2a221a' : '#0a0806', false);
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 5, 120 / 5);
         
-        const ceilingTexture = createOrganicTexture(512, 512, '#080706', false);
+        const ceilingTexture = createOrganicTexture(512, 512, isPhone ? '#1c1815' : '#080706', false);
         ceilingTexture.wrapS = THREE.RepeatWrapping;
         ceilingTexture.wrapT = THREE.RepeatWrapping;
         ceilingTexture.repeat.set(length / 5, 120 / 5); 
         
         // Dark base wall color creates a dramatic contrast with the illuminated tapestry
-        const wallTexture = createOrganicTexture(512, 512, '#0c0a08', false);
+        const wallTexture = createOrganicTexture(512, 512, isPhone ? '#2c221a' : '#0c0a08', false);
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
         wallTexture.repeat.set(length / 20, 120 / 20);
@@ -512,7 +517,7 @@
 
         // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
         const torchLights = [];
-        if (!isMobile) {
+        if (!isPhone) {
             for (let i = 0; i < 4; i++) {
                 const torch = new THREE.PointLight(0xfff5f5, 1.5, 70); // rgb(255, 245, 245)
                 scene.add(torch);
@@ -1077,7 +1082,7 @@
             const width = height * camera.aspect;
 
             // The margin acts as an off-screen buffer, forcing tiles to load just outside the camera's field of view
-            const margin = isMobile ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
+            const margin = isPhone ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
             
             // LOD Tile Manager: Evaluates which tiles intersect the camera frustum and handles async texture loading/unloading to preserve memory
             const processTiles = (tileArray, levelStr, isHighRes, unloadZ) => {
@@ -1190,7 +1195,7 @@
             // Dynamic Fixed Torches (Snap to fixed positions around the camera)
             const torchSpacing = 30; // World units between each dynamically placed torch
             
-            if (!isMobile) {
+            if (!isPhone) {
                 // Find the nearest torch interval to the camera
                 const centerIndex = Math.round(camera.position.x / torchSpacing);
                 
