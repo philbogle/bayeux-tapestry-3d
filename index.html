@@ -559,7 +559,7 @@
                 torchLights.push(torch);
             }
         } else {
-            // Simplify lighting drastically on mobile to improve framerates
+            // Mobile clients use a simplified lighting model (ambient only) to maximize battery and framerates
             ambientLight.intensity = 1.3;
         }
         
@@ -594,7 +594,7 @@
             const ctx = canvas.getContext('2d');
             
             const gradient = ctx.createLinearGradient(0, 0, 0, 64);
-            gradient.addColorStop(0, 'rgba(0,0,0,0.525)'); // Opacity increased by 50%
+            gradient.addColorStop(0, 'rgba(0,0,0,0.525)'); // Core shadow intensity at the direct contact point
             gradient.addColorStop(1, 'rgba(0,0,0,0)');
             
             ctx.fillStyle = gradient;
@@ -822,7 +822,7 @@
         window.addEventListener('mousemove', (e) => {
             if (isTouch) return; 
             
-            // Track normalized mouse coordinates for 3D hover raycasting
+            // Normalized Device Coordinates (-1 to +1) required by Three.js Raycaster to map 2D screen touches into the 3D scene
             mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
             
@@ -955,7 +955,7 @@
             
             // Apply horizontal pan impulse (scales with distance so panning feels consistent)
             if (Math.abs(deltaX) > 0) {
-                // A slightly more sensitive multiplier for panning
+                // Panning sensitivity multiplier tuned for typical mouse wheel / trackpad gestures
                 const panImpulse = (deltaX * 0.0003) * Math.max(1.0, camera.position.z * 0.1);
                 velocityX += panImpulse;
             }
@@ -971,7 +971,7 @@
         let velocityX = 0;
         let velocityY = 0;
         let velocityZ = 0;
-        const maxVelocityX = 0.125; // Decreased by 50%
+        const maxVelocityX = 0.125; // Maximum permitted horizontal pan velocity
         const maxVelocityY = 0.125;
         const maxVelocityZ = 0.1;
         const fixedZoomAccel = 0.01;
@@ -979,7 +979,7 @@
 
         let targetRotationY = 0;
         const maxTilt = (Math.PI / 8) * 1.25; // Max tilt angle (~28.1 degrees)
-        const tiltSmoothing = 0.006; // Reduced to slow down the tilt acceleration
+        const tiltSmoothing = 0.006; // Controls the easing speed of the 3D camera tilt effect
 
         let moveHoldTime = 0;
         let zoomHoldTime = 0;
@@ -996,7 +996,7 @@
             }
 
             if (keys.right || keys.left || mouseScrollDir !== 0) {
-                // Slower acceleration ramp up (halved initial speed and halved overall acceleration)
+                // Smooth exponential acceleration curve for keyboard navigation
                 currentAccel = 0.0005 + Math.min(1, moveHoldTime / 300) * 0.012;
             }
 
@@ -1084,10 +1084,10 @@
             const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
             const width = height * camera.aspect;
 
-            // Expand loading margin so tilting doesn't reveal blank tiles as easily
+            // The margin acts as an off-screen buffer, forcing tiles to load just outside the camera's field of view
             const margin = isMobile ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
             
-            // Helper function to process a tile array
+            // LOD Tile Manager: Evaluates which tiles intersect the camera frustum and handles async texture loading/unloading to preserve memory
             const processTiles = (tileArray, levelStr, isHighRes, unloadZ) => {
                 // If it's a high-res layer and we're zoomed out, aggressively unload everything
                 if (isHighRes && camera.position.z > unloadZ) {
@@ -1104,7 +1104,7 @@
                 }
                 
                 // For high-res tiles, we use a tighter margin so we don't spam requests for tiles slightly off screen
-                // We use tight margins for high-res layers to prevent phones from queueing 200+ tile requests
+                // Tight culling margins for L18 (high-res) prevent mobile devices from exhausting their network request pool
                 const actualMargin = isHighRes ? (levelStr === '18' ? 2 : 4) : margin;
                 const minX = camera.position.x - width / 2 - actualMargin;
                 const maxX = camera.position.x + width / 2 + actualMargin;
@@ -1192,7 +1192,7 @@
             requestAnimationFrame(animate);
 
             // Dynamic Fixed Torches (Snap to fixed positions around the camera)
-            const torchSpacing = 30; // Restored spacing
+            const torchSpacing = 30; // World units between each dynamically placed torch
             
             if (!isMobile) {
                 // Find the nearest torch interval to the camera
@@ -1248,6 +1248,8 @@
         }
 
                 // --- AUTHORING MODE LOGIC ---
+        // Authoring mode allows editors to visually drag and drop text annotations over the tapestry.
+        // It bypasses the standard UI and enables raycasting-based 3D mesh dragging, saving directly to localStorage.
         let tituliData = [];
         let isAuthoringMode = urlParams.get('author') === '1';
 
@@ -1285,14 +1287,13 @@
             const texture = new THREE.CanvasTexture(canvas);
             texture.minFilter = THREE.LinearMipmapLinearFilter;
             
-            // Convert pixels to 3D world units (scale down drastically)
-            const scale = 0.004433; // 10% larger
+            // Convert raw canvas pixels into 3D world space coordinates
+            const scale = 0.004433; // Base scale factor applied to text meshes for legibility
             const worldWidth = canvas.width * scale;
             const worldHeight = canvas.height * scale;
             
             const geometry = new THREE.PlaneGeometry(worldWidth, worldHeight);
-            // Translate geometry so that the origin is at the top-left rather than center,
-            // and shift it down by half a worldHeight
+            // Re-anchor the mesh origin to its top-left corner to align cleanly with the parsed JSON coordinates
             geometry.translate(worldWidth / 2, -worldHeight, 0);
             
             const material = new THREE.MeshBasicMaterial({
