@@ -657,15 +657,14 @@
                 // 1:1 pixel-to-world drag ratio based on current camera Z distance and 45deg FOV
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
                 const moveWorldX = -dx * pixelToWorld;
-                const moveWorldY = dy * pixelToWorld;
                 
+                // Vertical drag eliminated on mobile
                 camera.position.x += moveWorldX;
-                camera.position.y += moveWorldY;
                 
                 // Store recent movement as velocity for native-feeling momentum on release
                 // Apply heavy smoothing (0.5 blend) to prevent touch-polling rate jitter from causing twitchy spikes
                 velocityX = velocityX * 0.5 + (moveWorldX * 0.8) * 0.5; 
-                velocityY = velocityY * 0.5 + (moveWorldY * 0.8) * 0.5;
+                velocityY = 0; // No vertical velocity on mobile
                 
                 lastTouchX = currentTouchX;
                 lastTouchY = currentTouchY;
@@ -928,9 +927,10 @@
             if (keys.up) velocityZ -= currentZoomAccel;
             if (keys.down) velocityZ += currentZoomAccel;
 
-            velocityX *= friction;
-            velocityY *= friction;
-            velocityZ *= friction;
+            const currentFriction = isTouch ? 0.99 : friction;
+            velocityX *= currentFriction;
+            velocityY *= currentFriction;
+            velocityZ *= currentFriction;
 
             // Clamp velocity
             velocityX = Math.max(-maxVelocityX, Math.min(maxVelocityX, velocityX));
