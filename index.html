@@ -230,7 +230,7 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
-        const initialZ = 12.0; // Moved back 1 more foot to frame more canvas
+        const initialZ = isMobile ? 3.5 : 12.0; // Start much closer on mobile so the tapestry fills the portrait screen
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.0; // Tapestry lowered further
@@ -559,7 +559,7 @@
             }
         } else {
             // Simplify lighting drastically on mobile to improve framerates
-            ambientLight.intensity = 1.6;
+            ambientLight.intensity = 1.0;
         }
         
         // Lighting Variables (linked to UI)
@@ -966,7 +966,7 @@
             if (keys.up) velocityZ -= currentZoomAccel;
             if (keys.down) velocityZ += currentZoomAccel;
 
-            const currentFriction = isTouch ? 0.99 : friction;
+            const currentFriction = isTouch ? 0.95 : friction;
             velocityX *= currentFriction;
             velocityY *= currentFriction;
             velocityZ *= currentFriction;
