@@ -470,8 +470,8 @@
             return texture;
         }
 
-        // Reverted back to the original simple organic texture
-        const floorTexture = createOrganicTexture(512, 512, '#181510', true);
+        // Reverted back to the original simple organic texture, without large splotches to avoid visible seams
+        const floorTexture = createOrganicTexture(512, 512, '#181510', false);
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 5, 120 / 5);
