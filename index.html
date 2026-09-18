@@ -109,7 +109,7 @@
 </head>
 <body>
     <div id="ui">
-        <h2>Bayeux Tapestry 3D Walkthrough</h2>
+        <h2>Bayeux Tapestry</h2>
         <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
@@ -118,6 +118,7 @@
                 <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
                 Titles
             </label>
+                <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🔍 Magnifier</button>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
         </p>
     </div>
@@ -238,6 +239,28 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // Magnifying Glass Setup
+        let magActive = false;
+        const magRenderTarget = new THREE.WebGLRenderTarget(512, 512);
+        const magCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+        magCamera.position.z = 2.5; // Zoomed in tight for maximum detail
+        
+        const uiScene = new THREE.Scene();
+        const uiCamera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 10);
+        uiCamera.position.z = 5;
+        
+        const lensGeo = new THREE.CircleGeometry(150, 64);
+        const lensMat = new THREE.MeshBasicMaterial({ map: magRenderTarget.texture });
+        const lensMesh = new THREE.Mesh(lensGeo, lensMat);
+        
+        const lensBorderGeo = new THREE.RingGeometry(150, 153, 64);
+        const lensBorderMat = new THREE.MeshBasicMaterial({ color: 0xd6a848 });
+        const lensBorder = new THREE.Mesh(lensBorderGeo, lensBorderMat);
+        
+        lensMesh.add(lensBorder);
+        lensMesh.position.set(-9999, -9999, 0);
+        uiScene.add(lensMesh);
+
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
         const initialZ = isPhone ? 8.0 : 12.0; // Pull back slightly more on mobile for comfortable framing
@@ -385,6 +408,48 @@
                     });
                 }
             }
+        const tilesL19 = [];
+        if (!isPhone) {
+        const W19 = W * 8;
+        const H19 = H * 8;
+        const cols19 = Math.ceil(W19 / T);
+        const rows19 = Math.ceil(H19 / T);
+
+            for (let r = 0; r < rows19; r++) {
+                for (let c = 0; c < cols19; c++) {
+                    const x_topLeft = c === 0 ? 0 : c * T - 1;
+                    const y_topLeft = r === 0 ? 0 : r * T - 1;
+
+                    const w = (c === cols19 - 1) ? (W19 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                    const h = (r === rows19 - 1) ? (H19 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+
+                    const widthUnits = (w / SCALE) / 8; 
+                    const heightUnits = (h / SCALE) / 8;
+                    
+                    const xCenter = (x_topLeft + w / 2) / (SCALE * 8);
+                    const yCenter = -(y_topLeft + h / 2) / (SCALE * 8) + tapestryElevation;
+
+                    const zOffset = 0.03 + (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                    const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                    mesh.scale.set(widthUnits, heightUnits, 1);
+                    mesh.position.set(xCenter, yCenter, zOffset);
+                    
+                    // Optional: only add to scene when mag is active to save 40k meshes in frustum culler?
+                    // Frustum culling 40k invisible meshes is fast enough in ThreeJS.
+                    scene.add(mesh);
+                    
+                    tilesL19.push({
+                        c, r,
+                        xCenter,
+                        mesh: mesh,
+                        loaded: false,
+                        loading: false,
+                        failed: false
+                    });
+                }
+            }
+        } // end !isPhone
 
         // Scene background and fog for depth (dark earthy tone)
         const fogColor = new THREE.Color(0x161310);
@@ -807,6 +872,20 @@
             mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
             
+            // Update magnifying glass position and camera
+            if (magActive) {
+                lensMesh.position.x = e.clientX - window.innerWidth / 2;
+                lensMesh.position.y = - (e.clientY - window.innerHeight / 2);
+                
+                dragRaycaster.setFromCamera(mouseCoords, camera);
+                const planeZ0 = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+                const target = new THREE.Vector3();
+                if (dragRaycaster.ray.intersectPlane(planeZ0, target)) {
+                    magCamera.position.x = target.x;
+                    magCamera.position.y = target.y;
+                }
+            }
+            
             if (draggedAnnotation) {
                 dragRaycaster.setFromCamera(mouseCoords, camera);
                 const intersects = dragRaycaster.intersectObjects(scene.children, true);
@@ -867,8 +946,27 @@
         // Fallback to halt edge-scrolling if mouseleave fires on the window
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
+        const magToggleBtn = document.getElementById('mag-toggle');
+        if (magToggleBtn) {
+            magToggleBtn.addEventListener('click', () => {
+                magActive = !magActive;
+                magToggleBtn.style.background = magActive ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
+                if (!magActive) lensMesh.position.set(-9999, -9999, 0);
+            });
+        }
+        
         // Handle keyboard navigation (arrow keys/WASD) and prevent default scrolling behavior.
         window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'm' && !isPhone) {
+                magActive = !magActive;
+                if (magToggleBtn) magToggleBtn.style.background = magActive ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
+                if (!magActive) lensMesh.position.set(-9999, -9999, 0);
+            }
+            if (e.key === 'Escape' && magActive) {
+                magActive = false;
+                if (magToggleBtn) magToggleBtn.style.background = 'rgba(20,20,20,0.8)';
+                lensMesh.position.set(-9999, -9999, 0);
+            }
             if (e.key.toLowerCase() === 'h') {
                 const ui = document.getElementById('ui');
                 const isHidden = ui.style.display === 'none';
@@ -954,6 +1052,11 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            uiCamera.left = window.innerWidth / -2;
+            uiCamera.right = window.innerWidth / 2;
+            uiCamera.top = window.innerHeight / 2;
+            uiCamera.bottom = window.innerHeight / -2;
+            uiCamera.updateProjectionMatrix();
         });
 
         // Camera physics/smoothing
@@ -1067,8 +1170,12 @@
                 velocityY = 0;
             }
 
-            if (camera.position.z < 0.5) camera.position.z = 0.5;
+            if (camera.position.z < 1.2) camera.position.z = 1.2; // Keep main camera back so magnifier is always useful
             if (camera.position.z > 2000) camera.position.z = 2000;
+            
+            if (magActive) {
+                magCamera.position.z = Math.max(0.3, camera.position.z * 0.25);
+            }
         }
 
         /**
@@ -1084,30 +1191,26 @@
             // The margin acts as an off-screen buffer, forcing tiles to load just outside the camera's field of view
             const margin = isPhone ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
             
+            let magMinX = 0, magMaxX = 0;
+            if (magActive) {
+                const magVisibleHeight = 2 * Math.tan(vFOV / 2) * magCamera.position.z;
+                const magVisibleWidth = magVisibleHeight * magCamera.aspect;
+                magMinX = magCamera.position.x - magVisibleWidth / 2;
+                magMaxX = magCamera.position.x + magVisibleWidth / 2;
+            }
+            
             // LOD Tile Manager: Evaluates which tiles intersect the camera frustum and handles async texture loading/unloading to preserve memory
             const processTiles = (tileArray, levelStr, isHighRes, unloadZ) => {
-                // If it's a high-res layer and we're zoomed out, aggressively unload everything
-                if (isHighRes && camera.position.z > unloadZ) {
-                    for (let tile of tileArray) {
-                        if (tile.loaded && tile.mesh.material !== emptyMaterial) {
-                            if (tile.mesh.material.map) tile.mesh.material.map.dispose();
-                            tile.mesh.material.dispose();
-                            tile.mesh.material = emptyMaterial;
-                            tile.loaded = false;
-                            tile.loading = false;
-                        }
-                    }
-                    return;
-                }
-                
                 // For high-res tiles, we use a tighter margin so we don't spam requests for tiles slightly off screen
                 // Tight culling margins for L18 (high-res) prevent mobile devices from exhausting their network request pool
-                const actualMargin = isHighRes ? (levelStr === '18' ? 2 : 4) : margin;
+                const actualMargin = isHighRes ? (levelStr === '19' ? 1 : (levelStr === '18' ? 2 : 4)) : margin;
                 const minX = camera.position.x - width / 2 - actualMargin;
                 const maxX = camera.position.x + width / 2 + actualMargin;
 
                 for (let tile of tileArray) {
-                    const isVisible = (tile.xCenter >= minX && tile.xCenter <= maxX);
+                    const isMainVisible = (camera.position.z <= unloadZ) && (tile.xCenter >= minX && tile.xCenter <= maxX);
+                    const isMagVisible = magActive && isHighRes && (tile.xCenter >= magMinX - actualMargin && tile.xCenter <= magMaxX + actualMargin);
+                    const isVisible = isMainVisible || isMagVisible;
                     
                     if (isVisible) {
                         const canLoadNewTile = !isHighRes || (smoothedCameraSpeed < 0.015);
@@ -1153,8 +1256,8 @@
                             });
                         }
                     } else {
-                        // Unload far away tiles
-                        if (tile.loaded && Math.abs(tile.xCenter - camera.position.x) > actualMargin * 3) {
+                        // Unload far away tiles smoothly. A large margin multiplier acts as a cache so tiles don't pop out immediately
+                        if (tile.loaded && Math.abs(tile.xCenter - camera.position.x) > actualMargin * 5) {
                             if (tile.mesh.material.map) {
                                 tile.mesh.material.map.dispose();
                             }
@@ -1170,18 +1273,28 @@
             };
             
             // Prioritize processing based on zoom level to manage activeRequests cap
-            if (camera.position.z <= 1.0) {
+            const effectiveZ = magActive ? Math.min(camera.position.z, magCamera.position.z) : camera.position.z;
+            
+            if (!isPhone && effectiveZ <= 0.5) {
+                processTiles(tilesL19, '19', true, 0.5);
                 processTiles(tilesL18, '18', true, 1.0);
                 processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
-            } else if (camera.position.z <= 2.0) {
+            } else if (effectiveZ <= 1.0) {
+                processTiles(tilesL18, '18', true, 1.0);
+                processTiles(tilesL17, '17', true, 2.0);
+                processTiles(tiles, '16', false, 9999);
+                if (!isPhone) processTiles(tilesL19, '19', true, 0.5); // Fast unload
+            } else if (effectiveZ <= 2.0) {
                 processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
                 processTiles(tilesL18, '18', true, 1.0); // Fast unload
+                if (!isPhone) processTiles(tilesL19, '19', true, 0.5); // Fast unload
             } else {
                 processTiles(tiles, '16', false, 9999);
                 processTiles(tilesL17, '17', true, 2.0); // Fast unload
                 processTiles(tilesL18, '18', true, 1.0); // Fast unload
+                if (!isPhone) processTiles(tilesL19, '19', true, 0.5); // Fast unload
             }
         }
 
@@ -1214,7 +1327,20 @@
 
             updateCamera();
             updateTiles();
+            
+            if (magActive) {
+                magCamera.position.z = Math.max(0.3, camera.position.z * 0.25);
+                renderer.setRenderTarget(magRenderTarget);
+                renderer.render(scene, magCamera);
+                renderer.setRenderTarget(null);
+            }
             renderer.render(scene, camera);
+            if (magActive) {
+                renderer.autoClear = false;
+                renderer.clearDepth();
+                renderer.render(uiScene, uiCamera);
+                renderer.autoClear = true;
+            }
             if (typeof updateAnnotations === 'function') updateAnnotations();
         }
 
