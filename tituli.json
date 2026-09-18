@@ -4,356 +4,407 @@
     "latin": "UBI HAROLD DUX ANGLORUM ET SUI MILITES EQUITANT AD BOSHAM ECCLESIA",
     "english": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
     "x": 7.684453159185632,
-    "y": 0.971151872475677
+    "y": 0.971151872475677,
+    "context": "The tapestry begins in 1064. King Edward the Confessor sends Harold Godwinson on a diplomatic mission to Normandy. Harold rides to his coastal estate at Bosham and prays at the local church before setting sail."
   },
   {
     "scene": "3",
     "latin": "HIC HAROLD MARE NAVIGAVIT",
     "english": "Here Harold sailed by sea",
     "x": 27.084350475061495,
-    "y": 0.8167441958568001
+    "y": 0.8167441958568001,
+    "context": "Harold and his men board their ships with hunting dogs and falcons. These animals signal that this is a peaceful diplomatic mission, not a military expedition."
   },
   {
     "scene": "4",
     "latin": "ET VELIS VENTO PLENIS VENIT IN TERRAM WIDONIS COMITIS",
     "english": "and with sails filled with wind came to the land of Count Wido",
     "x": 33.568751751268046,
-    "y": 0.8082830035025065
+    "y": 0.8082830035025065,
+    "context": "A storm blows Harold's fleet off course across the English Channel. They land in Ponthieu, where Count Guy (Wido) immediately seizes Harold in hopes of demanding a massive ransom."
   },
   {
     "scene": "6",
     "latin": "HIC APPREHENDIT WIDO HAROLDU",
     "english": "Here Wido seized Harold",
     "x": 50.128263002438565,
-    "y": 0.8729133741881965
+    "y": 0.8729133741881965,
+    "context": "Guy (Wido) of Ponthieu captures Harold. Shipwrecked travelers were often held for ransom in the Middle Ages. Harold is taken prisoner."
   },
   {
     "scene": "7",
     "latin": "ET DUXIT EUM AD BELREM ET IBI EUM TENUIT",
     "english": "and led him to Beaurain and held him there",
     "x": 56.73182257149524,
-    "y": 1.0516181046972501
+    "y": 1.0516181046972501,
+    "context": "Harold is taken to Guy's stronghold at Beaurain. He is treated as a high-value prisoner rather than a common captive."
   },
   {
     "scene": "8",
     "latin": "UBI HAROLD ET WIDO PARABOLANT",
     "english": "Where Harold and Wido converse",
     "x": 71.6062399585941,
-    "y": 0.9801913375283208
+    "y": 0.9801913375283208,
+    "context": "Guy and Harold converse. Guy is likely demanding a ransom or setting terms for Harold's captivity."
   },
   {
     "scene": "9",
     "latin": "UBI NUNTII WILLELMI DUCIS VENERUNT AD WIDONU",
     "english": "Where the messengers of Duke William came to Wido",
     "x": 80.38334087906543,
-    "y": 1.0142420538136014
+    "y": 1.0142420538136014,
+    "context": "Duke William of Normandy hears of Harold's capture and sends messengers to Guy of Ponthieu. William demands that Guy hand Harold over to him, as Guy is William's vassal."
   },
   {
     "scene": "11",
     "latin": "NUNTII WILLELMI",
     "english": "The messengers of William",
     "x": 91.94509869644526,
-    "y": 0.9443112116039732
+    "y": 0.9443112116039732,
+    "context": "The messengers arrive. Note the aggressive posture and the dwarf holding the horses, often identified as Turold."
   },
   {
     "scene": "12",
     "latin": "HIC VENIT NUNTIUS AD WILGELMUM DUCEM",
     "english": "Here the messenger came to Duke William",
     "x": 96.94651288268368,
-    "y": 1.4086119529922
+    "y": 1.4086119529922,
+    "context": "A messenger returns to William to report on the situation with Count Guy."
   },
   {
     "scene": "13",
     "latin": "HIC WIDO ADDUXIT HAROLDUM AD WILGELMUM NORMANNORUM DUCEM",
     "english": "Here Wido brought Harold to William, Duke of the Normans",
     "x": 104.92262353308344,
-    "y": 0.8119941007706337
+    "y": 0.8119941007706337,
+    "context": "Guy complies with William's demands and hands Harold over. This shifts Harold from being Guy's prisoner to William's 'guest' (and political pawn)."
   },
   {
     "scene": "14",
     "latin": "HIC DUX WILGELM CUM HAROLDO VENIT AD PALATIUM SUUM",
     "english": "Here Duke William came to his palace with Harold",
     "x": 122.57572476460798,
-    "y": 0.8318549147706894
+    "y": 0.8318549147706894,
+    "context": "William takes Harold back to his palace at Rouen. This begins Harold's time accompanying William on campaigns in Normandy."
   },
   {
     "scene": "15",
     "latin": "UBI UNUS CLERICUS ET AELFGYVA",
     "english": "Where a certain cleric and Aelfgyva",
     "x": 136.23820368821472,
-    "y": 0.7743740758593036
+    "y": 0.7743740758593036,
+    "context": "This is one of the most mysterious scenes in the tapestry. Aelfgyva is an English name, and a cleric is touching her face or striking her. Its exact meaning has been lost to history, but it likely refers to a scandal familiar to contemporary audiences."
   },
   {
     "scene": "16",
     "latin": "HIC WILLELM DUX ET EXERCITUS EIUS VENERUNT AD MONTEM MICHAELIS",
     "english": "Here Duke William and his army came to Mont Saint-Michel",
     "x": 140.0509868552144,
-    "y": 1.2729571090662988
+    "y": 1.2729571090662988,
+    "context": "William and Harold go on a military campaign against Conan II, Duke of Brittany. They pass Mont Saint-Michel, a famous abbey on a tidal island."
   },
   {
     "scene": "17",
     "latin": "ET HIC TRANSIERUNT FLUMEN COSNONIS",
     "english": "and here they crossed the river Couesnon",
     "x": 152.26111085177152,
-    "y": 1.4489788385071898
+    "y": 1.4489788385071898,
+    "context": "The army crosses the river Couesnon, the border between Normandy and Brittany. The shifting sands of the river mouth were incredibly dangerous."
   },
   {
     "scene": "18",
     "latin": "HIC HAROLD DUX TRAHEBAT EOS DE ARENA",
     "english": "Here Duke Harold pulled them from the sand",
     "x": 154.5951294170799,
-    "y": 1
+    "y": 1,
+    "context": "Several Norman soldiers sink into the quicksand. Harold, shown displaying great physical strength, rescues two Norman soldiers from drowning."
   },
   {
     "scene": "19",
     "latin": "ET VENERUNT AD DOL ET CONAN FUGA VERTIT",
     "english": "and they came to Dol and Conan fled",
     "x": 160.88000357387793,
-    "y": 1.4396478055897146
+    "y": 1.4396478055897146,
+    "context": "The army arrives at Dol, forcing Conan to flee down a rope from his castle."
   },
   {
     "scene": "19.1",
     "latin": "HIC MILITES WILLELMI DUCIS PUGNANT CONTRA DINANTES",
     "english": "Here the knights of Duke William fight against the men of Dinan",
     "x": 173.54291971048562,
-    "y": 1.2318878233993094
+    "y": 1.2318878233993094,
+    "context": "The Norman army lays siege to the town of Dinan, fighting the Bretons."
   },
   {
     "scene": "19.2",
     "latin": "ET CUNAN CLAVES PORREXIT",
     "english": "and Conan surrendered the keys",
     "x": 186.23909696347258,
-    "y": 1.269606159125943
+    "y": 1.269606159125943,
+    "context": "Conan II surrenders Dinan to William, passing the keys to the castle on the tip of a lance."
   },
   {
     "scene": "21",
     "latin": "HIC WILLELM DEDIT ARMA HAROLDO",
     "english": "Here William gave arms to Harold",
     "x": 188.3908042624155,
-    "y": 0.8442762156566235
+    "y": 0.8442762156566235,
+    "context": "William rewards Harold for his bravery in the campaign by giving him arms (knighting him). This cements a feudal bond where Harold becomes William's subordinate in the Norman tradition."
   },
   {
     "scene": "22",
     "latin": "HIE",
     "english": "Here William came to Bayeux",
     "x": 195.39875799705865,
-    "y": 0.848426818398365
+    "y": 0.848426818398365,
+    "context": "The army arrives in Bayeux, the seat of Bishop Odo (William's half-brother), who likely commissioned this tapestry."
   },
   {
     "scene": "23",
     "latin": "UBI HAROLD SACRAMENTUM FECIT WILLELMO DUCI",
     "english": "Where Harold made an oath to Duke William",
     "x": 202.54337663935826,
-    "y": 1.4674639628106203
+    "y": 1.4674639628106203,
+    "context": "The climax of the Norman narrative: Harold swears a sacred oath on holy relics to support William's claim to the English throne. By later breaking this oath, Harold is cast as a perjurer, justifying William's invasion."
   },
   {
     "scene": "24",
     "latin": "HIC HAROLD DUX REVERSUS EST AD ANGLICAM TERRAM",
     "english": "Here Duke Harold returned to English land",
     "x": 208.28752451898413,
-    "y": 0.8899045056303095
+    "y": 0.8899045056303095,
+    "context": "Harold is released and sails back to England."
   },
   {
     "scene": "25",
     "latin": "ET VENIT AD EDWARDU REGEM",
     "english": "and he came to King Edward",
     "x": 224.1563374789928,
-    "y": 0.863982969862745
+    "y": 0.863982969862745,
+    "context": "Harold reports back to King Edward the Confessor. Edward appears frail and aged, foreshadowing his impending death."
   },
   {
     "scene": "26",
     "latin": "HIC PORTATUR CORPUS EADWARDI REGIS AD ECCLESIAM SCI PETRI APLI",
     "english": "Here the body of King Edward is carried to the Church of Saint Peter the Apostle",
     "x": 230.55691573793672,
-    "y": 0.950192558208848
+    "y": 0.950192558208848,
+    "context": "King Edward dies. The tapestry uses non-linear storytelling here: his body is carried to Westminster Abbey, the great church he just finished building, before his death bed scene is shown."
   },
   {
     "scene": "27",
     "latin": "HIC EADWARDUS REX IN LECTO ALLOQUIT FIDELES",
     "english": "Here King Edward in bed speaks to his faithful followers",
     "x": 239.1178258674381,
-    "y": 1.3480669420148255
+    "y": 1.3480669420148255,
+    "context": "On his deathbed, Edward speaks to his followers. English tradition claims he appointed Harold as his successor with his dying breath, complicating William's claim."
   },
   {
     "scene": "28",
     "latin": "ET HIC DEFUNCTUS EST",
     "english": "and here he died",
     "x": 246.6903542726936,
-    "y": 0.9625574262405838
+    "y": 0.9625574262405838,
+    "context": "Edward passes away on January 5, 1066."
   },
   {
     "scene": "29",
     "latin": "HIC DEDERUNT HAROLDO CORONA REGIS",
     "english": "Here they gave the king's crown to Harold",
     "x": 250.5990509660769,
-    "y": 1.3715212857504633
+    "y": 1.3715212857504633,
+    "context": "The English nobles offer the crown to Harold. He accepts, breaking the oath he made to William in Bayeux."
   },
   {
     "scene": "30",
     "latin": "HIC RESIDET HAROLD REX ANGLORUM",
     "english": "Here sits Harold King of the English",
     "x": 250.86503579944963,
-    "y": 0.983911365531573
+    "y": 0.983911365531573,
+    "context": "Harold is crowned King of England. He is shown holding the orb and sceptre, symbols of royal authority, with Archbishop Stigand nearby."
   },
   {
     "scene": "32",
     "latin": "ISTI MIRANT STELLA",
     "english": "These people marvel at the star",
     "x": 258.4928722875172,
-    "y": 0.9621465921985917
+    "y": 0.9621465921985917,
+    "context": "Halley's Comet appears in the sky in April 1066. The Anglo-Saxons view it as a terrible omen of doom, pointing at the comet in fear while a spectral invasion fleet is hinted at below."
   },
   {
     "scene": "34",
     "latin": "HIC NAVIS ANGLICA VENIT IN TERRAM WILLELMI DUCIS",
     "english": "Here an English ship came to the land of Duke William",
     "x": 266.27748327395534,
-    "y": 0.9497971893097029
+    "y": 0.9497971893097029,
+    "context": "News of Harold's coronation and the breaking of the oath reaches Duke William in Normandy. An English ship arrives with the message."
   },
   {
     "scene": "35",
     "latin": "HIC WILLELM DUX JUSSIT NAVES EDIFICARE",
     "english": "Here Duke William ordered ships to be built",
     "x": 277.34460906078675,
-    "y": 0.92597560523291
+    "y": 0.92597560523291,
+    "context": "William decides to invade England to claim the throne. He orders a massive fleet of transport ships to be built."
   },
   {
     "scene": "36",
     "latin": "HIC TRAHUNT NAVES AD MARE",
     "english": "Here they drag the ships to the sea",
     "x": 295.09944150549427,
-    "y": 0.8511563983757735
+    "y": 0.8511563983757735,
+    "context": "The Normans cut down trees and construct ships, dragging them to the sea in preparation for the invasion."
   },
   {
     "scene": "37",
     "latin": "ISTI PORTANT ARMAS AD NAVES ET HIC TRAHUNT CARRUM CUM VINO ET ARMIS",
     "english": "These men carry arms to the ships and here they drag a cart (laden) with wine and arms",
     "x": 306.43738162347444,
-    "y": 1.3788280224510097
+    "y": 1.3788280224510097,
+    "context": "Weapons, armor, and supplies (including large casks of wine) are loaded onto the ships."
   },
   {
     "scene": "38",
-    "latin": "† HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENESÆ",
-    "english": "† Here Duke William in a great ship crossed the sea and came to Pevensey",
+    "latin": "\u2020 HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENES\u00c6",
+    "english": "\u2020 Here Duke William in a great ship crossed the sea and came to Pevensey",
     "x": 314.15396900829165,
-    "y": 0.9234693661297796
+    "y": 0.9234693661297796,
+    "context": "The Norman fleet crosses the English Channel. William's flagship, the Mora, was a gift from his wife Matilda. They land at Pevensey in Sussex on September 28, 1066."
   },
   {
     "scene": "39",
     "latin": "HIC EXEUNT CABALLI DE NAVIBUS",
     "english": "Here the horses leave the ships",
     "x": 347.7838205635219,
-    "y": 0.9988807786515501
+    "y": 0.9988807786515501,
+    "context": "The valuable warhorses are unloaded from the ships. The Norman use of cavalry would prove decisive in the coming battle."
   },
   {
     "scene": "40",
     "latin": "ET HIC MILITES FESTINAVERUNT HESTINGA UT CIBUM RAPERENTUR",
     "english": "and here the knights have hurried to Hastings to seize food",
     "x": 354.5069392226753,
-    "y": 1.0237143640365116
+    "y": 1.0237143640365116,
+    "context": "The Norman army moves to Hastings and begins foraging for supplies, which involved pillaging the local English countryside to provoke Harold into battle."
   },
   {
     "scene": "42",
     "latin": "HIC COQUITUR CARO ET HIC MINISTRAVERUNT MINISTRI",
     "english": "Here the meat is being cooked and here the servants have served (it)",
     "x": 375.25947363017747,
-    "y": 1.3396286175442302
+    "y": 1.3396286175442302,
+    "context": "A feast is prepared. Meat is boiled and roasted on spits. This highlights the logistics of feeding a medieval army on campaign."
   },
   {
     "scene": "43",
     "latin": "HIC FECERUN PRANDIUM",
     "english": "Here they have a meal",
     "x": 382.38208680873464,
-    "y": 0.8570234631713545
+    "y": 0.8570234631713545,
+    "context": "Bishop Odo blesses the food at a banquet. The semicircular table resembles depictions of the Last Supper."
   },
   {
     "scene": "45",
     "latin": "ISTE JUSSIT UT FODERETUR CASTELLUM AT HESTENGA",
     "english": "He ordered that a motte should be dug at Hastings",
     "x": 393.7496594505392,
-    "y": 1.3323911773084578
+    "y": 1.3323911773084578,
+    "context": "William orders the construction of a motte-and-bailey castle at Hastings to secure his beachhead and protect his forces."
   },
   {
     "scene": "46",
     "latin": "HIC NUNTIATUM EST WILLELM DE HAROLD",
     "english": "Here William was told about Harold",
     "x": 404.0876618916677,
-    "y": 1.0477157405346134
+    "y": 1.0477157405346134,
+    "context": "A messenger informs William that Harold's army is approaching. Harold had just defeated a Norwegian invasion in the north and marched his army rapidly south to meet William."
   },
   {
     "scene": "47",
     "latin": "HIC DOMUS INCENDITUR",
     "english": "Here a house is burned",
     "x": 410.1184489831617,
-    "y": 1.4578653338629735
+    "y": 1.4578653338629735,
+    "context": "The Normans burn a local house, terrorizing the population. A woman and child flee the burning building."
   },
   {
     "scene": "48",
     "latin": "HIC MILITES EXIERUNT DE HESTENGA ET VENERUNT AD PRELIUM CONTRA HAROLDUM REGE",
     "english": "Here the knights have left Hastings and have come to the battle against King Harold",
     "x": 413.38888472025246,
-    "y": 1.0082878181095611
+    "y": 1.0082878181095611,
+    "context": "The Norman cavalry rides out from Hastings on the morning of October 14, 1066, to meet the English army in battle."
   },
   {
     "scene": "49",
     "latin": "HIC WILLELM DUX INTERROGAT VITAL SI VIDISSET HAROLDI EXERCITU",
     "english": "Here Duke William asks Vital if he has seen Harold's army",
     "x": 436.27281559498437,
-    "y": 0.8903798204673934
+    "y": 0.8903798204673934,
+    "context": "William asks his scout, Vital, if he has spotted Harold's forces."
   },
   {
     "scene": "50",
     "latin": "ISTE NUNTIAT HAROLDUM REGE DE EXERCITU WILLELMI DUCIS",
     "english": "This messenger tells King Harold about Duke William's army",
     "x": 454.16631336323684,
-    "y": 0.8178003311617209
+    "y": 0.8178003311617209,
+    "context": "An English scout spots the Norman army and reports back to King Harold."
   },
   {
     "scene": "51",
     "latin": "HIC WILLELM DUX ALLOQUITUR SUIS MILITIBUS UT PREPARAREN SE VIRILITER ET SAPIENTER AD PRELIUM CONTRA ANGLORUM EXERCITU",
     "english": "Here Duke William speaks to his knights to prepare themselves manfully and wisely for the battle against the army of the English",
     "x": 460.9476589963693,
-    "y": 1.4945471210416144
+    "y": 1.4945471210416144,
+    "context": "Duke William delivers a pre-battle speech to rally his troops, urging them to fight bravely."
   },
   {
     "scene": "52",
-    "latin": "HIC CECIDERUNT LEWINE ET GYRÐ FRATRES HAROLDI REGIS",
+    "latin": "HIC CECIDERUNT LEWINE ET GYR\u00d0 FRATRES HAROLDI REGIS",
     "english": "Here fell Leofwine and Gyrth , brothers of King Harold",
     "x": 509.8099302095928,
-    "y": 0.8705123333840765
+    "y": 0.8705123333840765,
+    "context": "The Battle of Hastings begins. The English form a shield wall on Senlac Hill. Harold's brothers, Leofwine and Gyrth, are killed early in the brutal fighting."
   },
   {
     "scene": "53",
     "latin": "HIC CECIDERUNT SIMUL ANGLI ET FRANCI IN PRELIO",
     "english": "Here English and French fell at the same time in battle",
     "x": 527.2844936135477,
-    "y": 0.9441755074915352
+    "y": 0.9441755074915352,
+    "context": "The fighting is fierce, with heavy casualties on both sides. Horses tumble, and the lower border is filled with the bodies of the dead and dying."
   },
   {
     "scene": "54",
     "latin": "HIC ODO EPS BACULU TENENS CONFORTAT PUEROS",
     "english": "Here Bishop Odo, holding a club, gives strength to the boys",
     "x": 542.1194574186238,
-    "y": 0.833244314555426
+    "y": 0.833244314555426,
+    "context": "A rumor spreads that William has been killed, causing the Normans to panic. Bishop Odo rides into the fray wielding a club to rally the fleeing troops."
   },
   {
     "scene": "55",
     "latin": "HIC EST WILLEL DUX",
     "english": "Here is Duke William",
     "x": 534.3209794417476,
-    "y": 0.5855181355429755
+    "y": 0.5855181355429755,
+    "context": "Duke William lifts his helmet to show his face to his men, proving he is still alive and restoring their morale."
   },
   {
     "scene": "57",
     "latin": "HIC HAROLD REX INTERFECTUS EST",
     "english": "Here King Harold was slain",
     "x": 577.5083342988927,
-    "y": 0.9318633028070245
+    "y": 0.9318633028070245,
+    "context": "The death of King Harold. He is traditionally identified as the figure with an arrow in his eye, though he may also be the figure being struck down by a Norman knight's sword. His death breaks the English resistance."
   },
   {
     "scene": "58",
     "latin": "ET FUGA VERTERUNT ANGLI",
     "english": "and the English have turned in flight",
     "x": 587.5585481956152,
-    "y": 0.8105844737429088
+    "y": 0.8105844737429088,
+    "context": "With their king dead, the English army collapses and flees the battlefield. The Normans are victorious, and William will become the Conqueror."
   }
 ]

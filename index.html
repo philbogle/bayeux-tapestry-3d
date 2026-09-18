@@ -162,6 +162,15 @@
             <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
+    <div id="context-scroll" style="display: none; position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgba(244, 228, 188, 0.95); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; max-width: 420px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+        <h3 id="context-title" style="margin-top: 0; font-size: 19px; border-bottom: 1px solid #8b7355; padding-bottom: 8px;">Scene Context</h3>
+        <p id="context-text" style="font-size: 14.5px; line-height: 1.5; text-align: left; font-family: serif; margin-bottom: 12px;"></p>
+        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+            <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
+            <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
+            <button id="next-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Next &raquo;</button>
+        </div>
+    </div>
 
     <!-- Authoring Panel -->
     <div id="authoring-panel" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 20px; border: 2px solid #d6a848; z-index: 1000; font-family: monospace; max-width: 500px; text-align: center; pointer-events: none;">
@@ -669,9 +678,12 @@
         let lastPinchMidX = 0;
         let lastPinchMidY = 0;
 
+        let hasTouchDragged = false;
+        
         // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
         window.addEventListener('touchstart', (e) => { 
             isTouch = true; 
+            hasTouchDragged = false;
             mouseScrollDir = 0; 
             
             if (e.touches.length === 1) {
@@ -706,6 +718,7 @@
 
         // Handle 1-finger panning and 2-finger pinch-to-zoom for mobile devices.
         window.addEventListener('touchmove', (e) => {
+            hasTouchDragged = true;
             if (!isTouch) return;
             
             if (draggedAnnotation && e.touches.length === 1) {
@@ -802,6 +815,9 @@
             }
             if (e.touches.length === 0) {
                 isDragging = false;
+                if (!hasTouchDragged && e.changedTouches.length > 0) {
+                    handleAnnotationClick(e.changedTouches[0].clientX, e.changedTouches[0].clientY, e.target);
+                }
             }
         });
         
@@ -816,9 +832,14 @@
         const dragRaycaster = new THREE.Raycaster();
 
         // Initialize mouse drag tracking, halt momentum, and handle raycasting for Authoring mode.
+        let mouseStartX = 0;
+        let mouseStartY = 0;
+        
         window.addEventListener('mousedown', (e) => {
             if (isTouch) return;
-            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) return;
+            mouseStartX = e.clientX;
+            mouseStartY = e.clientY;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll')) return;
             
             if (isAuthoringMode) {
                 mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -841,7 +862,7 @@
         });
 
         // Reset mouse dragging state when the mouse button is released anywhere on screen
-        window.addEventListener('mouseup', () => {
+        window.addEventListener('mouseup', (e) => {
             if (draggedAnnotation) {
                 draggedAnnotation = null;
                 document.body.style.cursor = 'default';
@@ -851,6 +872,10 @@
             if (!isTouch && isMouseDown) {
                 isMouseDown = false;
                 document.body.style.cursor = 'default';
+                const dist = Math.hypot(e.clientX - mouseStartX, e.clientY - mouseStartY);
+                if (dist < 5) {
+                    handleAnnotationClick(e.clientX, e.clientY, e.target);
+                }
             }
         });
         
@@ -1020,11 +1045,74 @@
             });
         }
 
+
+        
+        let currentPopupSceneIndex = 0;
+
+        function updatePopupUI(index) {
+            if (index < 0 || index >= tituliData.length) return;
+            currentPopupSceneIndex = index;
+            const annoData = tituliData[index];
+            
+            document.getElementById('context-title').innerText = `"${annoData.english}"`;
+            document.getElementById('context-title').style.fontStyle = 'italic';
+            
+            const contextText = (annoData.context) ? annoData.context : "No historical context available for this scene.";
+            document.getElementById('context-text').innerText = contextText;
+            
+            document.getElementById('prev-scene').style.opacity = (index === 0) ? '0.5' : '1.0';
+            document.getElementById('prev-scene').style.pointerEvents = (index === 0) ? 'none' : 'auto';
+            
+            document.getElementById('next-scene').style.opacity = (index === tituliData.length - 1) ? '0.5' : '1.0';
+            document.getElementById('next-scene').style.pointerEvents = (index === tituliData.length - 1) ? 'none' : 'auto';
+            
+            document.getElementById('context-scroll').style.display = 'block';
+            
+            if (annoData.x !== undefined) {
+                autoScrollTargetX = annoData.x;
+            }
+        }
+
+        document.getElementById('prev-scene').addEventListener('click', () => {
+            updatePopupUI(currentPopupSceneIndex - 1);
+        });
+
+        document.getElementById('next-scene').addEventListener('click', () => {
+            updatePopupUI(currentPopupSceneIndex + 1);
+        });
+
+        function handleAnnotationClick(clientX, clientY, target) {
+            if (isPhone) return; // Feature disabled on mobile devices
+            if (target && target.closest && (target.closest('#ui') || target.closest('#authoring-panel') || target.closest('#about-dialog') || target.closest('#lighting-dialog') || target.closest('#help-dialog') || target.closest('#context-scroll'))) {
+                return;
+            }
+            
+            mouseCoords.x = (clientX / window.innerWidth) * 2 - 1;
+            mouseCoords.y = -(clientY / window.innerHeight) * 2 + 1;
+            dragRaycaster.setFromCamera(mouseCoords, camera);
+            
+            // Raycast against all visible annotations
+            const annMeshes = annotations.map(a => a.mesh).filter(m => m && m.visible);
+            
+            const intersects = dragRaycaster.intersectObjects(annMeshes, false);
+            
+            if (intersects.length > 0) {
+                const clickedMesh = intersects[0].object;
+                const annoObj = clickedMesh.userData.annotation;
+                const annoData = annoObj ? annoObj.data : null;
+                
+                if (annoData) {
+                    const index = tituliData.indexOf(annoData);
+                    updatePopupUI(index);
+                }
+            }
+        }
         let lastWheelTime = 0;
         // Handle trackpad / mouse wheel zooming and horizontal panning.
         window.addEventListener('wheel', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog')) return;
             e.preventDefault();
+            autoScrollTargetX = null;
             lastWheelTime = Date.now();
             
             // Normalize scroll distance
@@ -1302,8 +1390,18 @@
          * Main WebGL render loop.
          * Updates physics, animations, dynamic lighting, and triggers the renderer.
          */
+        let autoScrollTargetX = null;
+        
         function animate() {
             requestAnimationFrame(animate);
+            
+            if (autoScrollTargetX !== null) {
+                camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
+                if (Math.abs(camera.position.x - autoScrollTargetX) < 0.01) {
+                    camera.position.x = autoScrollTargetX;
+                    autoScrollTargetX = null;
+                }
+            }
 
             // Dynamic Fixed Torches (Snap to fixed positions around the camera)
             const torchSpacing = 30; // World units between each dynamically placed torch
@@ -1365,6 +1463,11 @@
         // Close the Help/Controls dialog
         document.getElementById('close-help').addEventListener('click', () => {
             document.getElementById('help-dialog').style.display = 'none';
+        });
+
+        // Close the Context popup
+        document.getElementById('close-context').addEventListener('click', () => {
+            document.getElementById('context-scroll').style.display = 'none';
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -1442,7 +1545,7 @@
             return mesh;
         }
 
-        fetch('tituli.json?v=16').then(res => res.json()).then(data => {
+        fetch('tituli.json?v=20').then(res => res.json()).then(data => {
             if (isAuthoringMode) {
                 const savedData = localStorage.getItem('bayeux-tituli');
                 if (savedData) {
@@ -1497,6 +1600,11 @@
                 if (intersects.length > 0) {
                     hoveredMesh = intersects[0].object;
                 }
+                
+                // Change mouse cursor to indicate clickability
+                if (!isAuthoringMode) {
+                    document.body.style.cursor = hoveredMesh ? 'pointer' : 'default';
+                }
             }
             
             // Ensure UI checkbox sync
@@ -1517,11 +1625,19 @@
                 ann.mesh.position.x = ann.data.x;
                 ann.mesh.position.y = ann.data.y;
                 
-                // Static opacity, no hover effect
-                let opacity = 0.50 * scrollOpacityMult;
-                if (isAuthoringMode) opacity = 1.0;
+                // Smoothly transition opacity to 1.0 when hovered, 0.50 normally
+                if (ann.currentOpacity === undefined) ann.currentOpacity = 0.50;
                 
-                ann.mesh.material.opacity = opacity;
+                const targetOpacity = (hoveredMesh === ann.mesh || isAuthoringMode) ? 1.0 : 0.50;
+                ann.currentOpacity += (targetOpacity - ann.currentOpacity) * 0.2; // Smooth lerp
+                
+                ann.mesh.material.opacity = ann.currentOpacity * scrollOpacityMult;
+                
+                // Add a subtle scale effect on hover as well
+                const targetScale = (hoveredMesh === ann.mesh) ? 1.01 : 1.0;
+                if (ann.currentScale === undefined) ann.currentScale = 1.0;
+                ann.currentScale += (targetScale - ann.currentScale) * 0.2;
+                ann.mesh.scale.set(ann.currentScale, ann.currentScale, 1);
             });
 
             if (isAuthoringMode) {
