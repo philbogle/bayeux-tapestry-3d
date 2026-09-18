@@ -2,409 +2,1021 @@
   {
     "scene": "2",
     "latin": "UBI HAROLD DUX ANGLORUM ET SUI MILITES EQUITANT AD BOSHAM ECCLESIA",
-    "english": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
     "x": 7.684453159185632,
     "y": 0.971151872475677,
-    "context": "The tapestry begins in 1064. King Edward the Confessor sends Harold Godwinson on a diplomatic mission to Normandy. Harold rides to his coastal estate at Bosham and prays at the local church before setting sail."
+    "translations": {
+      "en": {
+        "text": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
+        "context": "The tapestry begins in 1064. King Edward the Confessor sends Harold Godwinson on a diplomatic mission to Normandy. Harold rides to his coastal estate at Bosham and prays at the local church before setting sail."
+      },
+      "zh": {
+        "text": "英国公爵哈罗德和他的骑士们骑马前往博舍姆教堂的地方",
+        "context": "故事开始于 1064 年。忏悔者爱德华国王派遣哈罗德·戈德温森前往诺曼底执行外交任务。哈罗德骑马前往他位于博舍姆的沿海庄园，在启航前在当地教堂祈祷。"
+      },
+      "fr": {
+        "text": "Où Harold, duc des Anglais, et ses chevaliers se rendent à l'église de Bosham",
+        "context": "La tapisserie commence en 1064. Le roi Édouard le Confesseur envoie Harold Godwinson en mission diplomatique en Normandie. Harold se rend à son domaine côtier de Bosham et prie à l'église locale avant de mettre les voiles."
+      }
+    }
   },
   {
     "scene": "3",
     "latin": "HIC HAROLD MARE NAVIGAVIT",
-    "english": "Here Harold sailed by sea",
     "x": 27.084350475061495,
     "y": 0.8167441958568001,
-    "context": "Harold and his men board their ships with hunting dogs and falcons. These animals signal that this is a peaceful diplomatic mission, not a military expedition."
+    "translations": {
+      "en": {
+        "text": "Here Harold sailed by sea",
+        "context": "Harold and his men board their ships with hunting dogs and falcons. These animals signal that this is a peaceful diplomatic mission, not a military expedition."
+      },
+      "zh": {
+        "text": "哈罗德在这里航行",
+        "context": "哈罗德和他的手下带着猎犬和猎鹰登船。这些动物表明这是一次和平的外交使命，而不是军事远征。"
+      },
+      "fr": {
+        "text": "Ici, Harold a navigué sur la mer",
+        "context": "Harold et ses hommes montent à bord de leurs navires avec des chiens de chasse et des faucons. Ces animaux indiquent qu’il s’agit d’une mission diplomatique pacifique et non d’une expédition militaire."
+      }
+    }
   },
   {
     "scene": "4",
     "latin": "ET VELIS VENTO PLENIS VENIT IN TERRAM WIDONIS COMITIS",
-    "english": "and with sails filled with wind came to the land of Count Wido",
     "x": 33.568751751268046,
     "y": 0.8082830035025065,
-    "context": "A storm blows Harold's fleet off course across the English Channel. They land in Ponthieu, where Count Guy (Wido) immediately seizes Harold in hopes of demanding a massive ransom."
+    "translations": {
+      "en": {
+        "text": "and with sails filled with wind came to the land of Count Wido",
+        "context": "A storm blows Harold's fleet off course across the English Channel. They land in Ponthieu, where Count Guy (Wido) immediately seizes Harold in hopes of demanding a massive ransom."
+      },
+      "zh": {
+        "text": "驾着满载风的船帆来到了维多伯爵的土地",
+        "context": "一场暴风雨将哈罗德的舰队吹离航线横渡英吉利海峡。他们降落在蓬蒂厄，盖伊伯爵（维多饰）立即抓住了哈罗德，希望索要巨额赎金。"
+      },
+      "fr": {
+        "text": "et avec les voiles pleines de vent, je suis arrivé au pays du comte Wido",
+        "context": "Une tempête fait dévier la flotte d'Harold de l'autre côté de la Manche. Ils débarquent à Ponthieu, où le comte Guy (Wido) s'empare immédiatement d'Harold dans l'espoir d'exiger une rançon massive."
+      }
+    }
   },
   {
     "scene": "6",
     "latin": "HIC APPREHENDIT WIDO HAROLDU",
-    "english": "Here Wido seized Harold",
     "x": 50.128263002438565,
     "y": 0.8729133741881965,
-    "context": "Guy (Wido) of Ponthieu captures Harold. Shipwrecked travelers were often held for ransom in the Middle Ages. Harold is taken prisoner."
+    "translations": {
+      "en": {
+        "text": "Here Wido seized Harold",
+        "context": "Guy (Wido) of Ponthieu captures Harold. Shipwrecked travelers were often held for ransom in the Middle Ages. Harold is taken prisoner."
+      },
+      "zh": {
+        "text": "维多在这里抓住了哈罗德",
+        "context": "蓬蒂厄的盖伊（维多）俘虏了哈罗德。在中世纪，遭遇海难的旅行者经常被勒索赎金。哈罗德被俘。"
+      },
+      "fr": {
+        "text": "Ici Wido a saisi Harold",
+        "context": "Guy (Wido) de Ponthieu capture Harold. Au Moyen Âge, les naufragés étaient souvent détenus contre rançon. Harold est fait prisonnier."
+      }
+    }
   },
   {
     "scene": "7",
     "latin": "ET DUXIT EUM AD BELREM ET IBI EUM TENUIT",
-    "english": "and led him to Beaurain and held him there",
     "x": 56.73182257149524,
     "y": 1.0516181046972501,
-    "context": "Harold is taken to Guy's stronghold at Beaurain. He is treated as a high-value prisoner rather than a common captive."
+    "translations": {
+      "en": {
+        "text": "and led him to Beaurain and held him there",
+        "context": "Harold is taken to Guy's stronghold at Beaurain. He is treated as a high-value prisoner rather than a common captive."
+      },
+      "zh": {
+        "text": "带他到博兰并把他扣留在那里",
+        "context": "哈罗德被带到盖伊在博兰的据点。他被视为一个高价值的囚犯，而不是一个普通的俘虏。"
+      },
+      "fr": {
+        "text": "et l'a conduit à Beaurain et l'y a retenu",
+        "context": "Harold est emmené au fief de Guy à Beaurain. Il est traité comme un prisonnier de grande valeur plutôt que comme un simple captif."
+      }
+    }
   },
   {
     "scene": "8",
     "latin": "UBI HAROLD ET WIDO PARABOLANT",
-    "english": "Where Harold and Wido converse",
     "x": 71.6062399585941,
     "y": 0.9801913375283208,
-    "context": "Guy and Harold converse. Guy is likely demanding a ransom or setting terms for Harold's captivity."
+    "translations": {
+      "en": {
+        "text": "Where Harold and Wido converse",
+        "context": "Guy and Harold converse. Guy is likely demanding a ransom or setting terms for Harold's captivity."
+      },
+      "zh": {
+        "text": "哈罗德和维多交谈的地方",
+        "context": "盖伊和哈罗德交谈。盖伊可能会索要赎金或为哈罗德的囚禁设定条件。"
+      },
+      "fr": {
+        "text": "Où Harold et Wido discutent",
+        "context": "Guy et Harold discutent. Guy exige probablement une rançon ou fixe les conditions de la captivité d'Harold."
+      }
+    }
   },
   {
     "scene": "9",
     "latin": "UBI NUNTII WILLELMI DUCIS VENERUNT AD WIDONU",
-    "english": "Where the messengers of Duke William came to Wido",
     "x": 80.38334087906543,
     "y": 1.0142420538136014,
-    "context": "Duke William of Normandy hears of Harold's capture and sends messengers to Guy of Ponthieu. William demands that Guy hand Harold over to him, as Guy is William's vassal."
+    "translations": {
+      "en": {
+        "text": "Where the messengers of Duke William came to Wido",
+        "context": "Duke William of Normandy hears of Harold's capture and sends messengers to Guy of Ponthieu. William demands that Guy hand Harold over to him, as Guy is William's vassal."
+      },
+      "zh": {
+        "text": "威廉公爵的使者来到维多的地方",
+        "context": "诺曼底公爵威廉得知哈罗德被捕的消息后，派使者去见蓬蒂约的居伊。威廉要求盖伊将哈罗德交给他，因为盖伊是威廉的封臣。"
+      },
+      "fr": {
+        "text": "Où les messagers du duc William sont venus à Wido",
+        "context": "Le duc Guillaume de Normandie apprend la capture d'Harold et envoie des messagers à Guy de Ponthieu. William exige que Guy lui remette Harold, car Guy est le vassal de William."
+      }
+    }
   },
   {
     "scene": "11",
     "latin": "NUNTII WILLELMI",
-    "english": "The messengers of William",
     "x": 91.94509869644526,
     "y": 0.9443112116039732,
-    "context": "The messengers arrive. Note the aggressive posture and the dwarf holding the horses, often identified as Turold."
+    "translations": {
+      "en": {
+        "text": "The messengers of William",
+        "context": "The messengers arrive. Note the aggressive posture and the dwarf holding the horses, often identified as Turold."
+      },
+      "zh": {
+        "text": "威廉的使者",
+        "context": "使者来了。注意攻击性的姿势和牵着马匹的矮人，通常被认为是图罗德。"
+      },
+      "fr": {
+        "text": "Les messagers de Guillaume",
+        "context": "Les messagers arrivent. Notez la posture agressive et le nain tenant les chevaux, souvent identifié comme étant Turold."
+      }
+    }
   },
   {
     "scene": "12",
     "latin": "HIC VENIT NUNTIUS AD WILGELMUM DUCEM",
-    "english": "Here the messenger came to Duke William",
     "x": 96.94651288268368,
     "y": 1.4086119529922,
-    "context": "A messenger returns to William to report on the situation with Count Guy."
+    "translations": {
+      "en": {
+        "text": "Here the messenger came to Duke William",
+        "context": "A messenger returns to William to report on the situation with Count Guy."
+      },
+      "zh": {
+        "text": "使者来到威廉公爵那里",
+        "context": "一名信使返回威廉，向盖伊伯爵汇报情况。"
+      },
+      "fr": {
+        "text": "Ici, le messager est venu au duc William",
+        "context": "Un messager revient vers William pour lui rendre compte de la situation avec le comte Guy."
+      }
+    }
   },
   {
     "scene": "13",
     "latin": "HIC WIDO ADDUXIT HAROLDUM AD WILGELMUM NORMANNORUM DUCEM",
-    "english": "Here Wido brought Harold to William, Duke of the Normans",
     "x": 104.92262353308344,
     "y": 0.8119941007706337,
-    "context": "Guy complies with William's demands and hands Harold over. This shifts Harold from being Guy's prisoner to William's 'guest' (and political pawn)."
+    "translations": {
+      "en": {
+        "text": "Here Wido brought Harold to William, Duke of the Normans",
+        "context": "Guy complies with William's demands and hands Harold over. This shifts Harold from being Guy's prisoner to William's 'guest' (and political pawn)."
+      },
+      "zh": {
+        "text": "维多在这里将哈罗德带到诺曼公爵威廉",
+        "context": "盖伊遵守了威廉的要求，将哈罗德交给了他。这使得哈罗德从盖伊的囚犯变成了威廉的“客人”（和政治棋子）。"
+      },
+      "fr": {
+        "text": "Ici Wido a amené Harold à Guillaume, duc des Normands",
+        "context": "Guy se conforme aux demandes de William et remet Harold. Cela fait passer Harold du statut de prisonnier de Guy à celui d'« invité » de William (et de pion politique)."
+      }
+    }
   },
   {
     "scene": "14",
     "latin": "HIC DUX WILGELM CUM HAROLDO VENIT AD PALATIUM SUUM",
-    "english": "Here Duke William came to his palace with Harold",
     "x": 122.57572476460798,
     "y": 0.8318549147706894,
-    "context": "William takes Harold back to his palace at Rouen. This begins Harold's time accompanying William on campaigns in Normandy."
+    "translations": {
+      "en": {
+        "text": "Here Duke William came to his palace with Harold",
+        "context": "William takes Harold back to his palace at Rouen. This begins Harold's time accompanying William on campaigns in Normandy."
+      },
+      "zh": {
+        "text": "威廉公爵与哈罗德一起来到他的宫殿",
+        "context": "威廉将哈罗德带回他位于鲁昂的宫殿。哈罗德陪伴威廉参加诺曼底战役的时间由此开始。"
+      },
+      "fr": {
+        "text": "Ici, le duc William est venu à son palais avec Harold",
+        "context": "William ramène Harold dans son palais de Rouen. C'est ainsi que commence le temps d'Harold qui accompagne William lors des campagnes en Normandie."
+      }
+    }
   },
   {
     "scene": "15",
     "latin": "UBI UNUS CLERICUS ET AELFGYVA",
-    "english": "Where a certain cleric and Aelfgyva",
     "x": 136.23820368821472,
     "y": 0.7743740758593036,
-    "context": "This is one of the most mysterious scenes in the tapestry. Aelfgyva is an English name, and a cleric is touching her face or striking her. Its exact meaning has been lost to history, but it likely refers to a scandal familiar to contemporary audiences."
+    "translations": {
+      "en": {
+        "text": "Where a certain cleric and Aelfgyva",
+        "context": "This is one of the most mysterious scenes in the tapestry. Aelfgyva is an English name, and a cleric is touching her face or striking her. Its exact meaning has been lost to history, but it likely refers to a scandal familiar to contemporary audiences."
+      },
+      "zh": {
+        "text": "某个牧师和 Aelfgyva 所在的地方",
+        "context": "这是挂毯中最神秘的场景之一。 Aelfgyva 是一个英文名字，一名牧师正在触摸她的脸或殴打她。它的确切含义已被历史遗忘，但它可能指的是当代观众熟悉的丑闻。"
+      },
+      "fr": {
+        "text": "Où un certain clerc et Aelfgyva",
+        "context": "C'est l'une des scènes les plus mystérieuses de la tapisserie. Aelfgyva est un nom anglais et un clerc lui touche le visage ou la frappe. Sa signification exacte a été perdue dans l’histoire, mais il fait probablement référence à un scandale familier au public contemporain."
+      }
+    }
   },
   {
     "scene": "16",
     "latin": "HIC WILLELM DUX ET EXERCITUS EIUS VENERUNT AD MONTEM MICHAELIS",
-    "english": "Here Duke William and his army came to Mont Saint-Michel",
     "x": 140.0509868552144,
     "y": 1.2729571090662988,
-    "context": "William and Harold go on a military campaign against Conan II, Duke of Brittany. They pass Mont Saint-Michel, a famous abbey on a tidal island."
+    "translations": {
+      "en": {
+        "text": "Here Duke William and his army came to Mont Saint-Michel",
+        "context": "William and Harold go on a military campaign against Conan II, Duke of Brittany. They pass Mont Saint-Michel, a famous abbey on a tidal island."
+      },
+      "zh": {
+        "text": "威廉公爵和他的军队来到了圣米歇尔山",
+        "context": "威廉和哈罗德对布列塔尼公爵柯南二世发动军事行动。他们经过圣米歇尔山，一座位于潮汐岛上的著名修道院。"
+      },
+      "fr": {
+        "text": "Ici le duc Guillaume et son armée sont venus au Mont Saint-Michel",
+        "context": "William et Harold partent en campagne militaire contre Conan II, duc de Bretagne. Ils passent devant le Mont Saint-Michel, une célèbre abbaye située sur une île à marée."
+      }
+    }
   },
   {
     "scene": "17",
     "latin": "ET HIC TRANSIERUNT FLUMEN COSNONIS",
-    "english": "and here they crossed the river Couesnon",
     "x": 152.26111085177152,
     "y": 1.4489788385071898,
-    "context": "The army crosses the river Couesnon, the border between Normandy and Brittany. The shifting sands of the river mouth were incredibly dangerous."
+    "translations": {
+      "en": {
+        "text": "and here they crossed the river Couesnon",
+        "context": "The army crosses the river Couesnon, the border between Normandy and Brittany. The shifting sands of the river mouth were incredibly dangerous."
+      },
+      "zh": {
+        "text": "他们在这里渡过库埃农河",
+        "context": "军队渡过诺曼底和布列塔尼的边界库埃农河。河口的流沙极其危险。"
+      },
+      "fr": {
+        "text": "et ici ils traversèrent la rivière Couesnon",
+        "context": "L'armée traverse la rivière Couesnon, frontière entre la Normandie et la Bretagne. Les sables mouvants de l’embouchure de la rivière étaient incroyablement dangereux."
+      }
+    }
   },
   {
     "scene": "18",
     "latin": "HIC HAROLD DUX TRAHEBAT EOS DE ARENA",
-    "english": "Here Duke Harold pulled them from the sand",
     "x": 154.5951294170799,
     "y": 1,
-    "context": "Several Norman soldiers sink into the quicksand. Harold, shown displaying great physical strength, rescues two Norman soldiers from drowning."
+    "translations": {
+      "en": {
+        "text": "Here Duke Harold pulled them from the sand",
+        "context": "Several Norman soldiers sink into the quicksand. Harold, shown displaying great physical strength, rescues two Norman soldiers from drowning."
+      },
+      "zh": {
+        "text": "哈罗德公爵在这里把他们从沙子里拉出来",
+        "context": "几名诺曼士兵陷入流沙之中。哈罗德展现出强大的体力，救起了两名落水的诺曼士兵。"
+      },
+      "fr": {
+        "text": "Ici, le duc Harold les a retirés du sable",
+        "context": "Plusieurs soldats normands s'enfoncent dans les sables mouvants. Harold, montré faisant preuve d'une grande force physique, sauve deux soldats normands de la noyade."
+      }
+    }
   },
   {
     "scene": "19",
     "latin": "ET VENERUNT AD DOL ET CONAN FUGA VERTIT",
-    "english": "and they came to Dol and Conan fled",
     "x": 160.88000357387793,
     "y": 1.4396478055897146,
-    "context": "The army arrives at Dol, forcing Conan to flee down a rope from his castle."
+    "translations": {
+      "en": {
+        "text": "and they came to Dol and Conan fled",
+        "context": "The army arrives at Dol, forcing Conan to flee down a rope from his castle."
+      },
+      "zh": {
+        "text": "他们来到了多尔，柯南逃走了",
+        "context": "军队到达多尔，迫使柯南从城堡里用绳子逃走。"
+      },
+      "fr": {
+        "text": "et ils sont venus à Dol et Conan s'est enfui",
+        "context": "L'armée arrive à Dol, forçant Conan à fuir son château en empruntant une corde."
+      }
+    }
   },
   {
     "scene": "19.1",
     "latin": "HIC MILITES WILLELMI DUCIS PUGNANT CONTRA DINANTES",
-    "english": "Here the knights of Duke William fight against the men of Dinan",
     "x": 173.54291971048562,
     "y": 1.2318878233993094,
-    "context": "The Norman army lays siege to the town of Dinan, fighting the Bretons."
+    "translations": {
+      "en": {
+        "text": "Here the knights of Duke William fight against the men of Dinan",
+        "context": "The Norman army lays siege to the town of Dinan, fighting the Bretons."
+      },
+      "zh": {
+        "text": "威廉公爵的骑士在这里与迪南的人作战",
+        "context": "诺曼军队围攻迪南镇，与布列塔尼人作战。"
+      },
+      "fr": {
+        "text": "Ici les chevaliers du duc Guillaume combattent les hommes de Dinan",
+        "context": "L'armée normande assiège la ville de Dinan et combat les Bretons."
+      }
+    }
   },
   {
     "scene": "19.2",
     "latin": "ET CUNAN CLAVES PORREXIT",
-    "english": "and Conan surrendered the keys",
     "x": 186.23909696347258,
     "y": 1.269606159125943,
-    "context": "Conan II surrenders Dinan to William, passing the keys to the castle on the tip of a lance."
+    "translations": {
+      "en": {
+        "text": "and Conan surrendered the keys",
+        "context": "Conan II surrenders Dinan to William, passing the keys to the castle on the tip of a lance."
+      },
+      "zh": {
+        "text": "柯南交出了钥匙",
+        "context": "柯南二世将迪南交给威廉，并用长矛尖传递了城堡的钥匙。"
+      },
+      "fr": {
+        "text": "et Conan a rendu les clés",
+        "context": "Conan II rend Dinan à Guillaume, lui transmettant les clés du château au bout d'une lance."
+      }
+    }
   },
   {
     "scene": "21",
     "latin": "HIC WILLELM DEDIT ARMA HAROLDO",
-    "english": "Here William gave arms to Harold",
     "x": 188.3908042624155,
     "y": 0.8442762156566235,
-    "context": "William rewards Harold for his bravery in the campaign by giving him arms (knighting him). This cements a feudal bond where Harold becomes William's subordinate in the Norman tradition."
+    "translations": {
+      "en": {
+        "text": "Here William gave arms to Harold",
+        "context": "William rewards Harold for his bravery in the campaign by giving him arms (knighting him). This cements a feudal bond where Harold becomes William's subordinate in the Norman tradition."
+      },
+      "zh": {
+        "text": "威廉在这里向哈罗德伸出了武器",
+        "context": "威廉授予哈罗德武器（授予他爵位），以表彰他在战役中的勇敢。这巩固了封建纽带，哈罗德在诺曼传统中成为威廉的下属。"
+      },
+      "fr": {
+        "text": "Ici, William a donné des armes à Harold",
+        "context": "William récompense Harold pour sa bravoure dans la campagne en lui donnant des armes (en le faisant chevalier). Cela cimente un lien féodal où Harold devient le subordonné de William dans la tradition normande."
+      }
+    }
   },
   {
     "scene": "22",
     "latin": "HIE",
-    "english": "Here William came to Bayeux",
     "x": 195.39875799705865,
     "y": 0.848426818398365,
-    "context": "The army arrives in Bayeux, the seat of Bishop Odo (William's half-brother), who likely commissioned this tapestry."
+    "translations": {
+      "en": {
+        "text": "Here William came to Bayeux",
+        "context": "The army arrives in Bayeux, the seat of Bishop Odo (William's half-brother), who likely commissioned this tapestry."
+      },
+      "zh": {
+        "text": "威廉来到了巴约",
+        "context": "军队抵达巴约，这是奥多主教（威廉同父异母的兄弟）的所在地，这幅挂毯很可能是他委托制作的。"
+      },
+      "fr": {
+        "text": "Ici William est venu à Bayeux",
+        "context": "L'armée arrive à Bayeux, siège de Mgr Odo (demi-frère de Guillaume), qui a probablement commandé cette tapisserie."
+      }
+    }
   },
   {
     "scene": "23",
     "latin": "UBI HAROLD SACRAMENTUM FECIT WILLELMO DUCI",
-    "english": "Where Harold made an oath to Duke William",
     "x": 202.54337663935826,
     "y": 1.4674639628106203,
-    "context": "The climax of the Norman narrative: Harold swears a sacred oath on holy relics to support William's claim to the English throne. By later breaking this oath, Harold is cast as a perjurer, justifying William's invasion."
+    "translations": {
+      "en": {
+        "text": "Where Harold made an oath to Duke William",
+        "context": "The climax of the Norman narrative: Harold swears a sacred oath on holy relics to support William's claim to the English throne. By later breaking this oath, Harold is cast as a perjurer, justifying William's invasion."
+      },
+      "zh": {
+        "text": "哈罗德向威廉公爵宣誓的地方",
+        "context": "诺曼叙事的高潮：哈罗德对着圣物宣誓支持威廉继承英国王位。后来哈罗德违背了这个誓言，被认定为伪证者，为威廉的入侵辩护。"
+      },
+      "fr": {
+        "text": "Où Harold a prêté serment au duc William",
+        "context": "Le point culminant du récit normand : Harold prête un serment sacré sur des reliques sacrées pour soutenir la prétention de Guillaume au trône d'Angleterre. En rompant plus tard ce serment, Harold est présenté comme un parjure, justifiant l'invasion de William."
+      }
+    }
   },
   {
     "scene": "24",
     "latin": "HIC HAROLD DUX REVERSUS EST AD ANGLICAM TERRAM",
-    "english": "Here Duke Harold returned to English land",
     "x": 208.28752451898413,
     "y": 0.8899045056303095,
-    "context": "Harold is released and sails back to England."
+    "translations": {
+      "en": {
+        "text": "Here Duke Harold returned to English land",
+        "context": "Harold is released and sails back to England."
+      },
+      "zh": {
+        "text": "哈罗德公爵在这里回到了英国土地",
+        "context": "哈罗德获释并乘船返回英国。"
+      },
+      "fr": {
+        "text": "Ici, le duc Harold est revenu en terre anglaise",
+        "context": "Harold est libéré et retourne en Angleterre."
+      }
+    }
   },
   {
     "scene": "25",
     "latin": "ET VENIT AD EDWARDU REGEM",
-    "english": "and he came to King Edward",
     "x": 224.1563374789928,
     "y": 0.863982969862745,
-    "context": "Harold reports back to King Edward the Confessor. Edward appears frail and aged, foreshadowing his impending death."
+    "translations": {
+      "en": {
+        "text": "and he came to King Edward",
+        "context": "Harold reports back to King Edward the Confessor. Edward appears frail and aged, foreshadowing his impending death."
+      },
+      "zh": {
+        "text": "他来到爱德华国王身边",
+        "context": "哈罗德向忏悔者爱德华国王汇报。爱德华显得虚弱而苍老，预示着他即将死亡。"
+      },
+      "fr": {
+        "text": "et il est venu voir le roi Édouard",
+        "context": "Harold fait rapport au roi Édouard le Confesseur. Edward semble fragile et âgé, préfigurant sa mort imminente."
+      }
+    }
   },
   {
     "scene": "26",
     "latin": "HIC PORTATUR CORPUS EADWARDI REGIS AD ECCLESIAM SCI PETRI APLI",
-    "english": "Here the body of King Edward is carried to the Church of Saint Peter the Apostle",
     "x": 230.55691573793672,
     "y": 0.950192558208848,
-    "context": "King Edward dies. The tapestry uses non-linear storytelling here: his body is carried to Westminster Abbey, the great church he just finished building, before his death bed scene is shown."
+    "translations": {
+      "en": {
+        "text": "Here the body of King Edward is carried to the Church of Saint Peter the Apostle",
+        "context": "King Edward dies. The tapestry uses non-linear storytelling here: his body is carried to Westminster Abbey, the great church he just finished building, before his death bed scene is shown."
+      },
+      "zh": {
+        "text": "爱德华国王的遗体在这里被运往使徒圣彼得教堂",
+        "context": "爱德华国王去世。挂毯在这里使用了非线性的故事讲述：他的尸体被带到威斯敏斯特教堂，这是他刚刚完成的伟大教堂，然后展示了他临终前的床戏。"
+      },
+      "fr": {
+        "text": "Ici, le corps du roi Édouard est transporté à l'église Saint-Pierre-Apôtre",
+        "context": "Le roi Édouard meurt. La tapisserie utilise ici une narration non linéaire : son corps est transporté à l'abbaye de Westminster, la grande église qu'il vient de terminer de construire, avant que la scène de son lit de mort ne soit montrée."
+      }
+    }
   },
   {
     "scene": "27",
     "latin": "HIC EADWARDUS REX IN LECTO ALLOQUIT FIDELES",
-    "english": "Here King Edward in bed speaks to his faithful followers",
     "x": 239.1178258674381,
     "y": 1.3480669420148255,
-    "context": "On his deathbed, Edward speaks to his followers. English tradition claims he appointed Harold as his successor with his dying breath, complicating William's claim."
+    "translations": {
+      "en": {
+        "text": "Here King Edward in bed speaks to his faithful followers",
+        "context": "On his deathbed, Edward speaks to his followers. English tradition claims he appointed Harold as his successor with his dying breath, complicating William's claim."
+      },
+      "zh": {
+        "text": "爱德华国王在床上向他忠实的追随者讲话",
+        "context": "爱德华临终前对他的追随者讲话。英国传统称，他在临终前任命哈罗德为继承人，这使威廉的主张变得更加复杂。"
+      },
+      "fr": {
+        "text": "Ici, le roi Édouard au lit parle à ses fidèles disciples",
+        "context": "Sur son lit de mort, Edward parle à ses partisans. La tradition anglaise prétend qu'il a nommé Harold comme son successeur avec son dernier souffle, ce qui complique la revendication de William."
+      }
+    }
   },
   {
     "scene": "28",
     "latin": "ET HIC DEFUNCTUS EST",
-    "english": "and here he died",
     "x": 246.6903542726936,
     "y": 0.9625574262405838,
-    "context": "Edward passes away on January 5, 1066."
+    "translations": {
+      "en": {
+        "text": "and here he died",
+        "context": "Edward passes away on January 5, 1066."
+      },
+      "zh": {
+        "text": "他就在这里死了",
+        "context": "爱德华于 1066 年 1 月 5 日去世。"
+      },
+      "fr": {
+        "text": "et ici il est mort",
+        "context": "Édouard décède le 5 janvier 1066."
+      }
+    }
   },
   {
     "scene": "29",
     "latin": "HIC DEDERUNT HAROLDO CORONA REGIS",
-    "english": "Here they gave the king's crown to Harold",
     "x": 250.5990509660769,
     "y": 1.3715212857504633,
-    "context": "The English nobles offer the crown to Harold. He accepts, breaking the oath he made to William in Bayeux."
+    "translations": {
+      "en": {
+        "text": "Here they gave the king's crown to Harold",
+        "context": "The English nobles offer the crown to Harold. He accepts, breaking the oath he made to William in Bayeux."
+      },
+      "zh": {
+        "text": "他们在这里将国王的王冠授予哈罗德",
+        "context": "英国贵族将王冠授予哈罗德。他接受了，打破了他在巴约向威廉发的誓言。"
+      },
+      "fr": {
+        "text": "Ici, ils ont donné la couronne du roi à Harold",
+        "context": "Les nobles anglais offrent la couronne à Harold. Il accepte, rompant le serment qu'il a prêté à Guillaume à Bayeux."
+      }
+    }
   },
   {
     "scene": "30",
     "latin": "HIC RESIDET HAROLD REX ANGLORUM",
-    "english": "Here sits Harold King of the English",
     "x": 250.86503579944963,
     "y": 0.983911365531573,
-    "context": "Harold is crowned King of England. He is shown holding the orb and sceptre, symbols of royal authority, with Archbishop Stigand nearby."
+    "translations": {
+      "en": {
+        "text": "Here sits Harold King of the English",
+        "context": "Harold is crowned King of England. He is shown holding the orb and sceptre, symbols of royal authority, with Archbishop Stigand nearby."
+      },
+      "zh": {
+        "text": "英国国王哈罗德坐在这里",
+        "context": "哈罗德加冕为英格兰国王。他手握王权象征的球体和权杖，斯蒂甘德大主教就在附近。"
+      },
+      "fr": {
+        "text": "Ici est assis Harold King des Anglais",
+        "context": "Harold est couronné roi d'Angleterre. Il est représenté tenant l'orbe et le sceptre, symboles de l'autorité royale, avec l'archevêque Stigand à proximité."
+      }
+    }
   },
   {
     "scene": "32",
     "latin": "ISTI MIRANT STELLA",
-    "english": "These people marvel at the star",
     "x": 258.4928722875172,
     "y": 0.9621465921985917,
-    "context": "Halley's Comet appears in the sky in April 1066. The Anglo-Saxons view it as a terrible omen of doom, pointing at the comet in fear while a spectral invasion fleet is hinted at below."
+    "translations": {
+      "en": {
+        "text": "These people marvel at the star",
+        "context": "Halley's Comet appears in the sky in April 1066. The Anglo-Saxons view it as a terrible omen of doom, pointing at the comet in fear while a spectral invasion fleet is hinted at below."
+      },
+      "zh": {
+        "text": "这些人惊叹于明星",
+        "context": "1066 年 4 月，哈雷彗星出现在天空中。盎格鲁撒克逊人将其视为可怕的厄运预兆，他们恐惧地指着彗星，而下方则暗示着一支幽灵入侵舰队。"
+      },
+      "fr": {
+        "text": "Ces gens s'émerveillent devant l'étoile",
+        "context": "La comète de Halley apparaît dans le ciel en avril 1066. Les Anglo-Saxons y voient un terrible présage de malheur, pointant la comète avec peur tandis qu'une flotte d'invasion spectrale est évoquée ci-dessous."
+      }
+    }
   },
   {
     "scene": "34",
     "latin": "HIC NAVIS ANGLICA VENIT IN TERRAM WILLELMI DUCIS",
-    "english": "Here an English ship came to the land of Duke William",
     "x": 266.27748327395534,
     "y": 0.9497971893097029,
-    "context": "News of Harold's coronation and the breaking of the oath reaches Duke William in Normandy. An English ship arrives with the message."
+    "translations": {
+      "en": {
+        "text": "Here an English ship came to the land of Duke William",
+        "context": "News of Harold's coronation and the breaking of the oath reaches Duke William in Normandy. An English ship arrives with the message."
+      },
+      "zh": {
+        "text": "一艘英国船来到了威廉公爵的土地",
+        "context": "哈罗德加冕和违背誓言的消息传到了诺曼底的威廉公爵那里。一艘英国船带着消息抵达。"
+      },
+      "fr": {
+        "text": "Ici, un navire anglais est arrivé au pays du duc William",
+        "context": "La nouvelle du couronnement d'Harold et de la rupture du serment parvient au duc Guillaume en Normandie. Un navire anglais arrive avec le message."
+      }
+    }
   },
   {
     "scene": "35",
     "latin": "HIC WILLELM DUX JUSSIT NAVES EDIFICARE",
-    "english": "Here Duke William ordered ships to be built",
     "x": 277.34460906078675,
     "y": 0.92597560523291,
-    "context": "William decides to invade England to claim the throne. He orders a massive fleet of transport ships to be built."
+    "translations": {
+      "en": {
+        "text": "Here Duke William ordered ships to be built",
+        "context": "William decides to invade England to claim the throne. He orders a massive fleet of transport ships to be built."
+      },
+      "zh": {
+        "text": "威廉公爵在这里下令建造船只",
+        "context": "威廉决定入侵英格兰夺取王位。他下令建造一支庞大的运输船队。"
+      },
+      "fr": {
+        "text": "Ici, le duc William a ordonné la construction de navires",
+        "context": "Guillaume décide d'envahir l'Angleterre pour réclamer le trône. Il ordonne la construction d’une flotte massive de navires de transport."
+      }
+    }
   },
   {
     "scene": "36",
     "latin": "HIC TRAHUNT NAVES AD MARE",
-    "english": "Here they drag the ships to the sea",
     "x": 295.09944150549427,
     "y": 0.8511563983757735,
-    "context": "The Normans cut down trees and construct ships, dragging them to the sea in preparation for the invasion."
+    "translations": {
+      "en": {
+        "text": "Here they drag the ships to the sea",
+        "context": "The Normans cut down trees and construct ships, dragging them to the sea in preparation for the invasion."
+      },
+      "zh": {
+        "text": "他们在这里把船拖到海里",
+        "context": "诺曼人砍伐树木并建造船只，将它们拖到海上，为入侵做准备。"
+      },
+      "fr": {
+        "text": "Ici, ils traînent les navires vers la mer",
+        "context": "Les Normands abattent des arbres et construisent des navires qu'ils traînent jusqu'à la mer en prévision de l'invasion."
+      }
+    }
   },
   {
     "scene": "37",
     "latin": "ISTI PORTANT ARMAS AD NAVES ET HIC TRAHUNT CARRUM CUM VINO ET ARMIS",
-    "english": "These men carry arms to the ships and here they drag a cart (laden) with wine and arms",
     "x": 306.43738162347444,
     "y": 1.3788280224510097,
-    "context": "Weapons, armor, and supplies (including large casks of wine) are loaded onto the ships."
+    "translations": {
+      "en": {
+        "text": "These men carry arms to the ships and here they drag a cart (laden) with wine and arms",
+        "context": "Weapons, armor, and supplies (including large casks of wine) are loaded onto the ships."
+      },
+      "zh": {
+        "text": "这些人携带武器到船上，在这里他们拖着一辆装满酒和武器的车",
+        "context": "武器、盔甲和补给品（包括大桶酒）被装载到船上。"
+      },
+      "fr": {
+        "text": "Ces hommes portent des armes jusqu'aux navires et ici ils traînent une charrette (chargée) de vin et d'armes.",
+        "context": "Les armes, armures et fournitures (y compris de grands tonneaux de vin) sont chargées sur les navires."
+      }
+    }
   },
   {
     "scene": "38",
-    "latin": "\u2020 HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENES\u00c6",
-    "english": "\u2020 Here Duke William in a great ship crossed the sea and came to Pevensey",
+    "latin": "† HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENESÆ",
     "x": 314.15396900829165,
     "y": 0.9234693661297796,
-    "context": "The Norman fleet crosses the English Channel. William's flagship, the Mora, was a gift from his wife Matilda. They land at Pevensey in Sussex on September 28, 1066."
+    "translations": {
+      "en": {
+        "text": "† Here Duke William in a great ship crossed the sea and came to Pevensey",
+        "context": "The Norman fleet crosses the English Channel. William's flagship, the Mora, was a gift from his wife Matilda. They land at Pevensey in Sussex on September 28, 1066."
+      },
+      "zh": {
+        "text": "† 威廉公爵驾着一艘大船横渡大海来到佩文西",
+        "context": "诺曼舰队横渡英吉利海峡。威廉的旗舰莫拉号是他的妻子玛蒂尔达送给他的礼物。 1066 年 9 月 28 日，他们在苏塞克斯的佩文西登陆。"
+      },
+      "fr": {
+        "text": "† Ici, le duc William a traversé la mer à bord d'un grand navire et est arrivé à Pevensey.",
+        "context": "La flotte normande traverse la Manche. Le vaisseau amiral de William, le Mora, était un cadeau de sa femme Matilda. Ils atterrissent à Pevensey dans le Sussex le 28 septembre 1066."
+      }
+    }
   },
   {
     "scene": "39",
     "latin": "HIC EXEUNT CABALLI DE NAVIBUS",
-    "english": "Here the horses leave the ships",
     "x": 347.7838205635219,
     "y": 0.9988807786515501,
-    "context": "The valuable warhorses are unloaded from the ships. The Norman use of cavalry would prove decisive in the coming battle."
+    "translations": {
+      "en": {
+        "text": "Here the horses leave the ships",
+        "context": "The valuable warhorses are unloaded from the ships. The Norman use of cavalry would prove decisive in the coming battle."
+      },
+      "zh": {
+        "text": "马匹在这里离开船只",
+        "context": "珍贵的战马从船上卸下来。诺曼人对骑兵的使用将在即将到来的战斗中发挥决定性作用。"
+      },
+      "fr": {
+        "text": "Ici les chevaux quittent les bateaux",
+        "context": "Les précieux chevaux de guerre sont déchargés des navires. L'utilisation normande de la cavalerie s'avérerait décisive dans la bataille à venir."
+      }
+    }
   },
   {
     "scene": "40",
     "latin": "ET HIC MILITES FESTINAVERUNT HESTINGA UT CIBUM RAPERENTUR",
-    "english": "and here the knights have hurried to Hastings to seize food",
     "x": 354.5069392226753,
     "y": 1.0237143640365116,
-    "context": "The Norman army moves to Hastings and begins foraging for supplies, which involved pillaging the local English countryside to provoke Harold into battle."
+    "translations": {
+      "en": {
+        "text": "and here the knights have hurried to Hastings to seize food",
+        "context": "The Norman army moves to Hastings and begins foraging for supplies, which involved pillaging the local English countryside to provoke Harold into battle."
+      },
+      "zh": {
+        "text": "骑士们已经赶往黑斯廷斯抢夺食物",
+        "context": "诺曼军队转移到黑斯廷斯并开始搜寻补给，其中包括掠夺当地的英国乡村以挑衅哈罗德参战。"
+      },
+      "fr": {
+        "text": "et ici les chevaliers se sont précipités à Hastings pour saisir de la nourriture",
+        "context": "L'armée normande se déplace vers Hastings et commence à chercher des fournitures, ce qui impliquait de piller la campagne anglaise locale pour provoquer Harold au combat."
+      }
+    }
   },
   {
     "scene": "42",
     "latin": "HIC COQUITUR CARO ET HIC MINISTRAVERUNT MINISTRI",
-    "english": "Here the meat is being cooked and here the servants have served (it)",
     "x": 375.25947363017747,
     "y": 1.3396286175442302,
-    "context": "A feast is prepared. Meat is boiled and roasted on spits. This highlights the logistics of feeding a medieval army on campaign."
+    "translations": {
+      "en": {
+        "text": "Here the meat is being cooked and here the servants have served (it)",
+        "context": "A feast is prepared. Meat is boiled and roasted on spits. This highlights the logistics of feeding a medieval army on campaign."
+      },
+      "zh": {
+        "text": "这里正在煮肉，这里仆人已经上菜了（它）",
+        "context": "一场盛宴已准备就绪。肉被煮沸并在烤叉上烤。这凸显了中世纪军队在战役中的后勤保障。"
+      },
+      "fr": {
+        "text": "Ici la viande est cuite et ici les domestiques l'ont servie.",
+        "context": "Un festin est préparé. La viande est bouillie et rôtie à la broche. Cela met en évidence la logistique nécessaire pour nourrir une armée médiévale en campagne."
+      }
+    }
   },
   {
     "scene": "43",
     "latin": "HIC FECERUN PRANDIUM",
-    "english": "Here they have a meal",
     "x": 382.38208680873464,
     "y": 0.8570234631713545,
-    "context": "Bishop Odo blesses the food at a banquet. The semicircular table resembles depictions of the Last Supper."
+    "translations": {
+      "en": {
+        "text": "Here they have a meal",
+        "context": "Bishop Odo blesses the food at a banquet. The semicircular table resembles depictions of the Last Supper."
+      },
+      "zh": {
+        "text": "他们在这里吃饭",
+        "context": "奥多主教在宴会上祝福食物。半圆形的桌子类似于《最后的晚餐》的描绘。"
+      },
+      "fr": {
+        "text": "Ici, ils prennent un repas",
+        "context": "L'évêque Odo bénit la nourriture lors d'un banquet. La table semi-circulaire ressemble à des représentations de la Dernière Cène."
+      }
+    }
   },
   {
     "scene": "45",
     "latin": "ISTE JUSSIT UT FODERETUR CASTELLUM AT HESTENGA",
-    "english": "He ordered that a motte should be dug at Hastings",
     "x": 393.7496594505392,
     "y": 1.3323911773084578,
-    "context": "William orders the construction of a motte-and-bailey castle at Hastings to secure his beachhead and protect his forces."
+    "translations": {
+      "en": {
+        "text": "He ordered that a motte should be dug at Hastings",
+        "context": "William orders the construction of a motte-and-bailey castle at Hastings to secure his beachhead and protect his forces."
+      },
+      "zh": {
+        "text": "他下令在黑斯廷斯挖一个土丘",
+        "context": "威廉下令在黑斯廷斯建造一座莫特贝利城堡，以确保他的滩头阵地并保护他的部队。"
+      },
+      "fr": {
+        "text": "Il ordonna qu'une motte soit creusée à Hastings",
+        "context": "William ordonne la construction d'un château de motte-et-bailey à Hastings pour sécuriser sa tête de pont et protéger ses forces."
+      }
+    }
   },
   {
     "scene": "46",
     "latin": "HIC NUNTIATUM EST WILLELM DE HAROLD",
-    "english": "Here William was told about Harold",
     "x": 404.0876618916677,
     "y": 1.0477157405346134,
-    "context": "A messenger informs William that Harold's army is approaching. Harold had just defeated a Norwegian invasion in the north and marched his army rapidly south to meet William."
+    "translations": {
+      "en": {
+        "text": "Here William was told about Harold",
+        "context": "A messenger informs William that Harold's army is approaching. Harold had just defeated a Norwegian invasion in the north and marched his army rapidly south to meet William."
+      },
+      "zh": {
+        "text": "威廉在这里得知了哈罗德的事迹",
+        "context": "一名信使通知威廉，哈罗德的军队正在逼近。哈罗德刚刚击败了北方的挪威入侵，并率军迅速南下迎战威廉。"
+      },
+      "fr": {
+        "text": "Ici, William a été informé de Harold",
+        "context": "Un messager informe William que l'armée d'Harold approche. Harold venait de vaincre une invasion norvégienne dans le nord et fit marcher rapidement son armée vers le sud pour rencontrer William."
+      }
+    }
   },
   {
     "scene": "47",
     "latin": "HIC DOMUS INCENDITUR",
-    "english": "Here a house is burned",
     "x": 410.1184489831617,
     "y": 1.4578653338629735,
-    "context": "The Normans burn a local house, terrorizing the population. A woman and child flee the burning building."
+    "translations": {
+      "en": {
+        "text": "Here a house is burned",
+        "context": "The Normans burn a local house, terrorizing the population. A woman and child flee the burning building."
+      },
+      "zh": {
+        "text": "这里有一座房子被烧毁",
+        "context": "诺曼人烧毁了当地的一座房屋，恐吓民众。一名妇女和儿童逃离着火的大楼。"
+      },
+      "fr": {
+        "text": "Ici une maison est incendiée",
+        "context": "Les Normands brûlent une maison locale, terrorisant la population. Une femme et un enfant fuient le bâtiment en feu."
+      }
+    }
   },
   {
     "scene": "48",
     "latin": "HIC MILITES EXIERUNT DE HESTENGA ET VENERUNT AD PRELIUM CONTRA HAROLDUM REGE",
-    "english": "Here the knights have left Hastings and have come to the battle against King Harold",
     "x": 413.38888472025246,
     "y": 1.0082878181095611,
-    "context": "The Norman cavalry rides out from Hastings on the morning of October 14, 1066, to meet the English army in battle."
+    "translations": {
+      "en": {
+        "text": "Here the knights have left Hastings and have come to the battle against King Harold",
+        "context": "The Norman cavalry rides out from Hastings on the morning of October 14, 1066, to meet the English army in battle."
+      },
+      "zh": {
+        "text": "在这里，骑士们离开了黑斯廷斯，来到了与哈罗德国王的战斗中",
+        "context": "1066 年 10 月 14 日早晨，诺曼骑兵从黑斯廷斯出发，与英国军队交战。"
+      },
+      "fr": {
+        "text": "Ici, les chevaliers ont quitté Hastings et sont venus à la bataille contre le roi Harold.",
+        "context": "La cavalerie normande quitte Hastings le matin du 14 octobre 1066 pour rencontrer l'armée anglaise au combat."
+      }
+    }
   },
   {
     "scene": "49",
     "latin": "HIC WILLELM DUX INTERROGAT VITAL SI VIDISSET HAROLDI EXERCITU",
-    "english": "Here Duke William asks Vital if he has seen Harold's army",
     "x": 436.27281559498437,
     "y": 0.8903798204673934,
-    "context": "William asks his scout, Vital, if he has spotted Harold's forces."
+    "translations": {
+      "en": {
+        "text": "Here Duke William asks Vital if he has seen Harold's army",
+        "context": "William asks his scout, Vital, if he has spotted Harold's forces."
+      },
+      "zh": {
+        "text": "威廉公爵询问维塔尔是否见过哈罗德的军队",
+        "context": "威廉询问他的侦察兵维塔尔是否发现了哈罗德的部队。"
+      },
+      "fr": {
+        "text": "Ici, le duc William demande à Vital s'il a vu l'armée d'Harold",
+        "context": "William demande à son éclaireur, Vital, s'il a repéré les forces d'Harold."
+      }
+    }
   },
   {
     "scene": "50",
     "latin": "ISTE NUNTIAT HAROLDUM REGE DE EXERCITU WILLELMI DUCIS",
-    "english": "This messenger tells King Harold about Duke William's army",
     "x": 454.16631336323684,
     "y": 0.8178003311617209,
-    "context": "An English scout spots the Norman army and reports back to King Harold."
+    "translations": {
+      "en": {
+        "text": "This messenger tells King Harold about Duke William's army",
+        "context": "An English scout spots the Norman army and reports back to King Harold."
+      },
+      "zh": {
+        "text": "这位信使告诉哈罗德国王威廉公爵的军队",
+        "context": "一名英国侦察兵发现了诺曼军队并向哈罗德国王报告。"
+      },
+      "fr": {
+        "text": "Ce messager parle au roi Harold de l'armée du duc William.",
+        "context": "Un éclaireur anglais repère l'armée normande et fait son rapport au roi Harold."
+      }
+    }
   },
   {
     "scene": "51",
     "latin": "HIC WILLELM DUX ALLOQUITUR SUIS MILITIBUS UT PREPARAREN SE VIRILITER ET SAPIENTER AD PRELIUM CONTRA ANGLORUM EXERCITU",
-    "english": "Here Duke William speaks to his knights to prepare themselves manfully and wisely for the battle against the army of the English",
     "x": 460.9476589963693,
     "y": 1.4945471210416144,
-    "context": "Duke William delivers a pre-battle speech to rally his troops, urging them to fight bravely."
+    "translations": {
+      "en": {
+        "text": "Here Duke William speaks to his knights to prepare themselves manfully and wisely for the battle against the army of the English",
+        "context": "Duke William delivers a pre-battle speech to rally his troops, urging them to fight bravely."
+      },
+      "zh": {
+        "text": "威廉公爵在这里向他的骑士们讲话，让他们勇敢而明智地做好与英国军队的战斗的准备",
+        "context": "威廉公爵发表战前讲话，集结部队，鼓励他们勇敢战斗。"
+      },
+      "fr": {
+        "text": "Ici, le duc William s'adresse à ses chevaliers pour qu'ils se préparent vaillamment et sagement à la bataille contre l'armée anglaise.",
+        "context": "Le duc William prononce un discours d'avant-bataille pour rallier ses troupes, les exhortant à se battre avec courage."
+      }
+    }
   },
   {
     "scene": "52",
-    "latin": "HIC CECIDERUNT LEWINE ET GYR\u00d0 FRATRES HAROLDI REGIS",
-    "english": "Here fell Leofwine and Gyrth , brothers of King Harold",
+    "latin": "HIC CECIDERUNT LEWINE ET GYRÐ FRATRES HAROLDI REGIS",
     "x": 509.8099302095928,
     "y": 0.8705123333840765,
-    "context": "The Battle of Hastings begins. The English form a shield wall on Senlac Hill. Harold's brothers, Leofwine and Gyrth, are killed early in the brutal fighting."
+    "translations": {
+      "en": {
+        "text": "Here fell Leofwine and Gyrth , brothers of King Harold",
+        "context": "The Battle of Hastings begins. The English form a shield wall on Senlac Hill. Harold's brothers, Leofwine and Gyrth, are killed early in the brutal fighting."
+      },
+      "zh": {
+        "text": "哈罗德国王的兄弟利奥夫温和吉尔斯就死在了这里",
+        "context": "黑斯廷斯战役开始。英国人在森拉克山上筑起了盾墙。哈罗德的兄弟利奥夫温和吉尔斯在残酷的战斗中早早阵亡。"
+      },
+      "fr": {
+        "text": "Ici tombèrent Leofwine et Gyrth, frères du roi Harold",
+        "context": "La bataille d'Hastings commence. Les Anglais forment un mur de bouclier sur la colline de Senlac. Les frères d'Harold, Leofwine et Gyrth, sont tués au début des combats brutaux."
+      }
+    }
   },
   {
     "scene": "53",
     "latin": "HIC CECIDERUNT SIMUL ANGLI ET FRANCI IN PRELIO",
-    "english": "Here English and French fell at the same time in battle",
     "x": 527.2844936135477,
     "y": 0.9441755074915352,
-    "context": "The fighting is fierce, with heavy casualties on both sides. Horses tumble, and the lower border is filled with the bodies of the dead and dying."
+    "translations": {
+      "en": {
+        "text": "Here English and French fell at the same time in battle",
+        "context": "The fighting is fierce, with heavy casualties on both sides. Horses tumble, and the lower border is filled with the bodies of the dead and dying."
+      },
+      "zh": {
+        "text": "在这里，英语和法语在战斗中同时倒下",
+        "context": "战斗十分激烈，双方伤亡惨重。马匹翻滚，下边界堆满了死者和垂死者的尸体。"
+      },
+      "fr": {
+        "text": "Ici, les Anglais et les Français tombèrent en même temps au combat",
+        "context": "Les combats sont féroces, avec de lourdes pertes des deux côtés. Les chevaux dégringolent et la bordure inférieure est remplie de cadavres de morts et de mourants."
+      }
+    }
   },
   {
     "scene": "54",
     "latin": "HIC ODO EPS BACULU TENENS CONFORTAT PUEROS",
-    "english": "Here Bishop Odo, holding a club, gives strength to the boys",
     "x": 542.1194574186238,
     "y": 0.833244314555426,
-    "context": "A rumor spreads that William has been killed, causing the Normans to panic. Bishop Odo rides into the fray wielding a club to rally the fleeing troops."
+    "translations": {
+      "en": {
+        "text": "Here Bishop Odo, holding a club, gives strength to the boys",
+        "context": "A rumor spreads that William has been killed, causing the Normans to panic. Bishop Odo rides into the fray wielding a club to rally the fleeing troops."
+      },
+      "zh": {
+        "text": "奥多主教手持球杆，为孩子们提供力量",
+        "context": "威廉被杀的谣言四起，诺曼人陷入恐慌。奥多主教挥舞着棍棒骑马加入战斗，集结逃跑的部队。"
+      },
+      "fr": {
+        "text": "Ici, Mgr Odo, tenant un club, donne de la force aux garçons",
+        "context": "Une rumeur se répand selon laquelle Guillaume a été tué, provoquant la panique parmi les Normands. L'évêque Odo entre dans la mêlée en brandissant une massue pour rallier les troupes en fuite."
+      }
+    }
   },
   {
     "scene": "55",
     "latin": "HIC EST WILLEL DUX",
-    "english": "Here is Duke William",
     "x": 534.3209794417476,
     "y": 0.5855181355429755,
-    "context": "Duke William lifts his helmet to show his face to his men, proving he is still alive and restoring their morale."
+    "translations": {
+      "en": {
+        "text": "Here is Duke William",
+        "context": "Duke William lifts his helmet to show his face to his men, proving he is still alive and restoring their morale."
+      },
+      "zh": {
+        "text": "这是威廉公爵",
+        "context": "威廉公爵举起头盔向他的士兵们展示他的脸，证明他还活着，并恢复了他们的士气。"
+      },
+      "fr": {
+        "text": "Voici le duc William",
+        "context": "Le duc William lève son casque pour montrer son visage à ses hommes, prouvant qu'il est toujours en vie et leur redonnant le moral."
+      }
+    }
   },
   {
     "scene": "57",
     "latin": "HIC HAROLD REX INTERFECTUS EST",
-    "english": "Here King Harold was slain",
     "x": 577.5083342988927,
     "y": 0.9318633028070245,
-    "context": "The death of King Harold. He is traditionally identified as the figure with an arrow in his eye, though he may also be the figure being struck down by a Norman knight's sword. His death breaks the English resistance."
+    "translations": {
+      "en": {
+        "text": "Here King Harold was slain",
+        "context": "The death of King Harold. He is traditionally identified as the figure with an arrow in his eye, though he may also be the figure being struck down by a Norman knight's sword. His death breaks the English resistance."
+      },
+      "zh": {
+        "text": "哈罗德国王在这里被杀",
+        "context": "哈罗德国王去世。传统上，他被认为是眼睛中箭的人物，尽管他也可能是被诺曼骑士的剑击倒的人物。他的死打破了英国的抵抗。"
+      },
+      "fr": {
+        "text": "Ici le roi Harold a été tué",
+        "context": "La mort du roi Harold. Il est traditionnellement identifié comme le personnage avec une flèche dans l'œil, bien qu'il puisse également être le personnage frappé par l'épée d'un chevalier normand. Sa mort brise la résistance anglaise."
+      }
+    }
   },
   {
     "scene": "58",
     "latin": "ET FUGA VERTERUNT ANGLI",
-    "english": "and the English have turned in flight",
     "x": 587.5585481956152,
     "y": 0.8105844737429088,
-    "context": "With their king dead, the English army collapses and flees the battlefield. The Normans are victorious, and William will become the Conqueror."
+    "translations": {
+      "en": {
+        "text": "and the English have turned in flight",
+        "context": "With their king dead, the English army collapses and flees the battlefield. The Normans are victorious, and William will become the Conqueror."
+      },
+      "zh": {
+        "text": "英国人已经转身逃跑",
+        "context": "国王死后，英国军队崩溃并逃离战场。诺曼人取得了胜利，威廉将成为征服者。"
+      },
+      "fr": {
+        "text": "et les Anglais se sont retournés en fuite",
+        "context": "Leur roi étant mort, l'armée anglaise s'effondre et fuit le champ de bataille. Les Normands sont victorieux et Guillaume deviendra le Conquérant."
+      }
+    }
   }
 ]
