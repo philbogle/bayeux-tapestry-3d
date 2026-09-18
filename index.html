@@ -465,7 +465,7 @@
         const fogColor = new THREE.Color(0x161310);
         scene.background = fogColor;
         // Fog density calibrated so the tapestry remains visible at maximum zoom out distance
-        scene.fog = new THREE.FogExp2(fogColor, 0.015);
+        scene.fog = new THREE.FogExp2(fogColor, 0.005);
 
         // Add floor and ceiling for perspective
         const ceilingY = (H / SCALE + 0.5) * 4; // 4x height multiplier creates an open, great hall feel
@@ -1124,7 +1124,7 @@
             
             // Apply zoom impulse (scales with distance so zooming is consistent at all depths)
             if (Math.abs(deltaY) > 0) {
-                const zoomImpulse = (deltaY * 0.0005) * Math.max(1.0, camera.position.z * 0.1);
+                const zoomImpulse = (deltaY * 0.0012) * Math.max(1.0, camera.position.z * 0.1);
                 velocityZ += zoomImpulse;
             }
             
@@ -1155,7 +1155,7 @@
         const maxVelocityX = 0.125; // Maximum permitted horizontal pan velocity
         const maxVelocityY = 0.125;
         const maxVelocityZ = 0.1;
-        const fixedZoomAccel = 0.01;
+        const fixedZoomAccel = 0.025;
         const friction = 0.92;
 
         let targetRotationY = 0;
