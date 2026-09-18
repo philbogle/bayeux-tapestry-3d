@@ -113,12 +113,10 @@
         <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-            <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Music</button>
-            <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
-                Titles
-            </label>
-                <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🔍 Magnifier</button>
+            <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
+            <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
+            <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
+            <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
         </p>
     </div>
@@ -126,10 +124,11 @@
     <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
         <ul style="padding-left: 20px; line-height: 1.6;">
-            <li><strong>Desktop:</strong> Left-click and drag anywhere to pan smoothly across the tapestry. Use your scroll wheel to zoom in and out. Keyboard arrows also work.</li>
-            <li><strong>Desktop:</strong> Click on any English translation floating in the scene to open an interactive historical context popup!</li>
-            <li><strong>Mobile:</strong> Swipe to pan in any direction. Use a two-finger pinch to zoom in and out.</li>
-            <li><strong>Details:</strong> Zoom in closely on a specific scene to automatically load ultra-high resolution textures.</li>
+            <li id="help-desktop-1">Left-click and drag anywhere to pan smoothly across the tapestry. Use your scroll wheel to zoom in and out. Keyboard arrows also work.</li>
+            <li id="help-desktop-2">Click on any English translation floating in the scene to open an interactive historical context popup!</li>
+            <li id="help-mobile-1" style="display: none;">Swipe to pan in any direction. Use a two-finger pinch to zoom in and out.</li>
+            <li id="help-mobile-2" style="display: none;">Tap on any English translation to open an interactive historical context popup! (Tablet/iPad only)</li>
+            <li>Zoom in closely on a specific scene to automatically load ultra-high resolution textures.</li>
         </ul>
         <div style="text-align: right; margin-top: 20px;">
             <button id="close-help" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
@@ -228,11 +227,9 @@
                 <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
                     <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
                     <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">🎵 Music</button>
-                    <label style="color: #d6a848; font-family: serif; font-size: 14px; pointer-events: auto; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="toggle-supertitles" checked style="pointer-events: auto; cursor: pointer;">
-                        Titles
-                    </label>
+                    <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
+                    <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
+                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
                     <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
                 </div>
             `;
@@ -251,6 +248,7 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         // Magnifying Glass Setup
         let magActive = false;
+        let showSupertitles = true;
         const magRenderTarget = new THREE.WebGLRenderTarget(512, 512);
         const magCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
         magCamera.position.z = 2.5; // Zoomed in tight for maximum detail
@@ -973,7 +971,19 @@
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
         const magToggleBtn = document.getElementById('mag-toggle');
-        if (magToggleBtn) {
+        const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+        
+        // Dynamically toggle help dialog instructions based on device type
+        if (isPhone || isTouchDevice) {
+            document.getElementById('help-desktop-1').style.display = 'none';
+            document.getElementById('help-desktop-2').style.display = 'none';
+            document.getElementById('help-mobile-1').style.display = 'list-item';
+            if (!isPhone) document.getElementById('help-mobile-2').style.display = 'list-item'; // iPad supports popups
+        }
+        
+        if (magToggleBtn && (isPhone || isTouchDevice)) {
+            magToggleBtn.style.display = 'none';
+        } else if (magToggleBtn) {
             magToggleBtn.addEventListener('click', () => {
                 magActive = !magActive;
                 magToggleBtn.style.background = magActive ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
@@ -1036,12 +1046,16 @@
         setupButton('btn-down', 'down');
         
         const toggleSupertitles = document.getElementById('toggle-supertitles');
+        
         if (toggleSupertitles) {
             // Toggle the visibility of all loaded English text meshes
-            toggleSupertitles.addEventListener('change', (e) => {
+            toggleSupertitles.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSupertitles = !showSupertitles;
+                toggleSupertitles.style.background = showSupertitles ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
                 const container = document.getElementById('annotations-container');
                 if (container) {
-                    container.style.display = e.target.checked ? 'block' : 'none';
+                    container.style.display = showSupertitles ? 'block' : 'none';
                 }
             });
         }
@@ -1050,7 +1064,7 @@
         
         let currentPopupSceneIndex = 0;
 
-        function updatePopupUI(index) {
+        function updatePopupUI(index, shouldAutoScroll = true) {
             if (index < 0 || index >= tituliData.length) return;
             currentPopupSceneIndex = index;
             const annoData = tituliData[index];
@@ -1067,10 +1081,21 @@
             document.getElementById('next-scene').style.opacity = (index === tituliData.length - 1) ? '0.5' : '1.0';
             document.getElementById('next-scene').style.pointerEvents = (index === tituliData.length - 1) ? 'none' : 'auto';
             
-            document.getElementById('context-scroll').style.display = 'block';
+            // Restore static center positioning
+            const popup = document.getElementById('context-scroll');
+            popup.style.left = '50%';
+            popup.style.transform = 'translateX(-50%)';
+            popup.style.display = 'block';
             
-            if (annoData.x !== undefined) {
-                autoScrollTargetX = annoData.x;
+            if (shouldAutoScroll && annoData.x !== undefined) {
+                // Find the mesh to calculate its width so we can center on it perfectly
+                const annObj = annotations.find(a => a.data === annoData);
+                if (annObj && annObj.mesh) {
+                    const width = annObj.mesh.geometry.parameters.width;
+                    autoScrollTargetX = annoData.x + (width / 2.0);
+                } else {
+                    autoScrollTargetX = annoData.x;
+                }
             }
         }
 
@@ -1393,8 +1418,40 @@
          */
         let autoScrollTargetX = null;
         
+        function updateDynamicPopup() {
+            const popup = document.getElementById('context-scroll');
+            if (!popup || popup.style.display === 'none') return;
+            if (autoScrollTargetX !== null) return; // Don't interfere with auto-scrolling
+            
+            let closestIndex = -1;
+            let minDistance = Infinity;
+            
+            for (let i = 0; i < annotations.length; i++) {
+                const ann = annotations[i];
+                if (!ann || !ann.mesh || !ann.data) continue;
+                
+                const width = ann.mesh.geometry.parameters.width;
+                const centerPoint = ann.data.x + width / 2.0;
+                
+                const dist = Math.abs(camera.position.x - centerPoint);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIndex = tituliData.indexOf(ann.data);
+                }
+            }
+            
+            if (closestIndex !== -1 && closestIndex !== currentPopupSceneIndex) {
+                // Only update if it's reasonably close to the center of the screen (within 10 units of distance)
+                // This prevents the popup from jumping to a scene that is completely off-screen
+                if (minDistance < 8.0) {
+                    updatePopupUI(closestIndex, false);
+                }
+            }
+        }
+
         function animate() {
             requestAnimationFrame(animate);
+            updateDynamicPopup();
             
             if (autoScrollTargetX !== null) {
                 camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
@@ -1446,6 +1503,45 @@
         animate();
 
         // UI Dialog Listeners
+        
+        const notesBtn = document.getElementById('notes-btn');
+        if (notesBtn) {
+            notesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const popup = document.getElementById('context-scroll');
+                
+                // Toggle logic
+                if (popup && popup.style.display !== 'none') {
+                    popup.style.display = 'none';
+                    notesBtn.style.background = 'rgba(20,20,20,0.8)';
+                    return;
+                }
+                
+                notesBtn.style.background = 'rgba(214,168,72,0.3)';
+                
+                let closestIndex = -1;
+                let minDistance = Infinity;
+                
+                for (let i = 0; i < annotations.length; i++) {
+                    const ann = annotations[i];
+                    if (!ann || !ann.mesh || !ann.data) continue;
+                    
+                    const width = ann.mesh.geometry.parameters.width;
+                    const centerPoint = ann.data.x + width / 2.0;
+                    
+                    const dist = Math.abs(camera.position.x - centerPoint);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestIndex = tituliData.indexOf(ann.data);
+                    }
+                }
+                
+                if (closestIndex !== -1) {
+                    updatePopupUI(closestIndex, true);
+                }
+            });
+        }
+
         document.querySelectorAll('#learn-more-link').forEach(link => {
             // Open the About dialog when the top navigation link is clicked
             link.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('about-dialog').style.display = 'block'; });
@@ -1469,6 +1565,8 @@
         // Close the Context popup
         document.getElementById('close-context').addEventListener('click', () => {
             document.getElementById('context-scroll').style.display = 'none';
+            const btn = document.getElementById('notes-btn');
+            if (btn) btn.style.background = 'rgba(20,20,20,0.8)';
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -1608,9 +1706,8 @@
                 }
             }
             
-            // Ensure UI checkbox sync
-            const toggleSupertitles = document.getElementById('toggle-supertitles');
-            const showSupertitles = toggleSupertitles ? toggleSupertitles.checked : true;
+            // UI button state controls visibility
+            // (showSupertitles is now a global variable updated by the click listener)
             
             annotations.forEach((ann, index) => {
                 if (!ann.mesh) return;
@@ -1676,11 +1773,11 @@
             
             if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
                 ytPlayer.pauseVideo();
-                btn.innerHTML = '🎵 Play Music';
+                btn.innerHTML = '►';
                 btn.style.background = 'rgba(20,20,20,0.8)';
             } else {
                 ytPlayer.playVideo();
-                btn.innerHTML = '⏸ Pause Music';
+                btn.innerHTML = '||';
                 btn.style.background = 'rgba(214, 168, 72, 0.2)';
             }
         });
