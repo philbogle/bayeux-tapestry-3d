@@ -291,6 +291,14 @@
                     hamburgerBtn.innerText = '☰';
                 }
             });
+            
+            // Auto-close menu when a UI action is selected
+            uiContainer.addEventListener('click', (e) => {
+                if (e.target.closest('button') || e.target.closest('a')) {
+                    uiContainer.style.display = 'none';
+                    hamburgerBtn.innerText = '☰';
+                }
+            });
         }
 
         // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
