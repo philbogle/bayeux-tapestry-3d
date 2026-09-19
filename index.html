@@ -498,7 +498,7 @@
         const fogColor = new THREE.Color(0x161310);
         scene.background = fogColor;
         // Fog density calibrated so the tapestry remains visible at maximum zoom out distance
-        scene.fog = new THREE.FogExp2(fogColor, 0.005);
+        // scene.fog = new THREE.FogExp2(fogColor, 0.005);
 
         // Add floor and ceiling for perspective
         const ceilingY = (H / SCALE + 0.5) * 4; // 4x height multiplier creates an open, great hall feel
@@ -620,7 +620,7 @@
 
 
         // Lighting: Ambient light + 4 Dynamic Torches
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.66);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.73);
         scene.add(ambientLight);
 
         // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
