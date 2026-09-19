@@ -118,6 +118,7 @@
     </style>
 </head>
 <body>
+    <button id="hamburger-btn" style="position: absolute; top: 20px; right: 20px; z-index: 200; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 20px; display: none;">☰</button>
     <div id="ui">
         <h2>Bayeux Tapestry</h2>
         <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
@@ -255,6 +256,43 @@
                         (isIOS && !isIPad) ||
                         (window.innerWidth <= 600);
         
+
+        const uiContainer = document.getElementById('ui');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        
+        if (isPhone) {
+            hamburgerBtn.style.display = 'block';
+            uiContainer.style.display = 'none';
+            
+            // Convert bottom bar to a top-right dropdown menu
+            uiContainer.style.top = '60px';
+            uiContainer.style.right = '20px';
+            uiContainer.style.left = 'auto';
+            uiContainer.style.bottom = 'auto';
+            uiContainer.style.transform = 'none';
+            uiContainer.style.width = 'auto';
+            uiContainer.style.background = 'rgba(20, 20, 20, 0.95)';
+            uiContainer.style.padding = '15px';
+            uiContainer.style.borderRadius = '8px';
+            uiContainer.style.border = '1px solid #5a4a35';
+            
+            // Make the flex container stack vertically
+            const uiFlex = uiContainer.querySelector('p');
+            uiFlex.style.flexDirection = 'column';
+            uiFlex.style.alignItems = 'flex-end';
+            uiFlex.style.gap = '15px';
+            
+            hamburgerBtn.addEventListener('click', () => {
+                if (uiContainer.style.display === 'none') {
+                    uiContainer.style.display = 'block';
+                    hamburgerBtn.innerText = '✕';
+                } else {
+                    uiContainer.style.display = 'none';
+                    hamburgerBtn.innerText = '☰';
+                }
+            });
+        }
+
         // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
 
         if (isPhone) {
