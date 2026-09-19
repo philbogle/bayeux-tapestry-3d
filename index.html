@@ -128,7 +128,7 @@
             <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
             <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
             <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
-            <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
+            <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">Lighting Controls</a>
         </p>
     </div>
 
@@ -176,9 +176,12 @@
 
     <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
-        <label>Ambient Intensity: <span id="val-amb-int">1.03</span></label><br>
-        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.03" style="width: 100%; margin-bottom: 10px;"><br>
+        <label>Ambient Intensity: <span id="val-amb-int">1.06</span></label><br>
+        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
         
+        
+        <label>Bump Scale: <span id="val-bump-scale">-0.020</span></label><br>
+        <input type="range" id="bump-scale" min="-0.25" max="0.25" step="0.001" value="-0.020" style="width: 100%; margin-bottom: 10px;"><br>
         <label>Ambient Color:</label><br>
         <input type="color" id="amb-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
         
@@ -262,7 +265,7 @@
                     <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
                     <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
                     <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
-                    <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
+                    <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">Lighting Controls</a>
                 </div>
             `;
         }
@@ -688,7 +691,7 @@
         scene.add(magLight.target); // Required for SpotLight target tracking
 
 
-        ambientLight.intensity = 1.0;
+        ambientLight.intensity = 1.06;
         
         // Lighting Variables (linked to UI)
         let configTorchInt = 1.25;
@@ -702,6 +705,21 @@
         });
         
         // Update ambient light color in real-time from the lighting dev panel
+        
+        document.getElementById('bump-scale').addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            document.getElementById('val-bump-scale').innerText = val.toFixed(3);
+            const allTileArrays = [tiles, tilesL17, tilesL18, tilesL19];
+            allTileArrays.forEach(arr => {
+                arr.forEach(t => {
+                    if (t.mesh && t.mesh.material && t.mesh.material.bumpScale !== undefined) {
+                        t.mesh.material.bumpScale = val;
+                        t.mesh.material.needsUpdate = true;
+                    }
+                });
+            });
+        });
+
         document.getElementById('amb-color').addEventListener('input', (e) => {
             ambientLight.color.set(e.target.value);
         });
@@ -1430,7 +1448,7 @@
                                 tile.mesh.material = new THREE.MeshStandardMaterial({ 
                                     map: texture,
                                     bumpMap: texture,
-                                    bumpScale: -0.015,
+                                    bumpScale: -0.020,
                                     roughness: 0.85,
                                     metalness: 0.0,
                                     transparent: true,
