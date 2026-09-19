@@ -128,7 +128,11 @@
         <div id="lang-options" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
             <button class="lang-option" data-lang="en" style="padding: 10px; background: #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
             <button class="lang-option" data-lang="zh" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">中文 (Chinese)</button>
+            <button class="lang-option" data-lang="es" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Español (Spanish)</button>
             <button class="lang-option" data-lang="fr" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Français (French)</button>
+            <button class="lang-option" data-lang="de" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Deutsch (German)</button>
+            <button class="lang-option" data-lang="nl" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Nederlands (Dutch)</button>
+            <button class="lang-option" data-lang="pt" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Português (Portuguese)</button>
         </div>
         <div style="text-align: right; margin-top: 20px;">
             <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
@@ -200,7 +204,7 @@
     <div id="yt-player" style="position: absolute; width: 0; height: 0; overflow: hidden; left: -9999px;"></div>
 
     <!-- Load YouTube IFrame API -->
-    <script src="https://www.youtube.com/iframe_api">    changeLanguage(currentLanguage);
+    <script src="https://www.youtube.com/iframe_api">
     </script>
     <script>
         let ytPlayer;
@@ -221,11 +225,11 @@
                 }
             });
         }
-        changeLanguage(currentLanguage);
+    
     </script>
 
     <!-- Load Three.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">    changeLanguage(currentLanguage);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
     </script>
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -1673,7 +1677,11 @@
             const uiDict = {
                 'en': { help: 'Help', about: 'About', titles: 'Titles', notes: '☰ Notes', prev: 'Prev', next: 'Next', close: 'Close' },
                 'zh': { help: '帮助', about: '关于', titles: '标题', notes: '☰ 笔记', prev: '上一个', next: '下一个', close: '关闭' },
-                'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' }
+                'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', notes: '☰ Notas', prev: 'Ant', next: 'Sig', close: 'Cerrar' },
+                'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' },
+                'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', notes: '☰ Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen' },
+                'nl': { help: 'Help', about: 'Over', titles: 'Titels', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
+                'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' }
             };
             
             const dict = uiDict[currentLanguage] || uiDict['en'];
@@ -1758,7 +1766,7 @@
             return mesh;
         }
 
-        fetch('tituli.json?v=23').then(res => res.json()).then(data => {
+        fetch('tituli.json?v=27').then(res => res.json()).then(data => {
             if (isAuthoringMode) {
                 const savedData = localStorage.getItem('bayeux-tituli');
                 if (savedData) {
@@ -1896,6 +1904,8 @@
                 btn.style.background = 'rgba(214, 168, 72, 0.2)';
             }
         });
+
+        // Initialize language settings on boot
         changeLanguage(currentLanguage);
     </script>
 </body>
