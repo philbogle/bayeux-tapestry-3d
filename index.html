@@ -802,7 +802,7 @@
                     const scale = initialPinchDistance / dist;
                     camera.position.z = initialPinchCamZ * scale;
                     // Keep camera Z bounded between 2.0 and 2000 to allow zooming out to see the entire tapestry
-                    camera.position.z = Math.max(0.3, Math.min(2000, camera.position.z));
+                    camera.position.z = Math.max(0.6, Math.min(2000, camera.position.z));
                 }
                 
                 // 2-finger omnidirectional panning
@@ -1325,7 +1325,7 @@
                 velocityY = 0;
             }
 
-            if (camera.position.z < 0.3) camera.position.z = 0.3; // Allow close inspection for max L19 LOD detail
+            if (camera.position.z < 0.6) camera.position.z = 0.6; // Allow close inspection for max L19 LOD detail
             if (camera.position.z > 2000) camera.position.z = 2000;
             
             if (magActive) {
@@ -1430,8 +1430,8 @@
             // Prioritize processing based on zoom level to manage activeRequests cap
             const effectiveZ = magActive ? Math.min(camera.position.z, magCamera.position.z) : camera.position.z;
             
-            if (!isPhone && effectiveZ <= 0.5) {
-                processTiles(tilesL19, '19', true, 0.5);
+            if (!isPhone && effectiveZ <= 0.6) {
+                processTiles(tilesL19, '19', true, 0.6);
                 processTiles(tilesL18, '18', true, 1.0);
                 processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
@@ -1439,17 +1439,17 @@
                 processTiles(tilesL18, '18', true, 1.0);
                 processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
-                if (!isPhone) processTiles(tilesL19, '19', true, 0.5); // Fast unload
+                if (!isPhone) processTiles(tilesL19, '19', true, 0.6); // Fast unload
             } else if (effectiveZ <= 2.0) {
                 processTiles(tilesL17, '17', true, 2.0);
                 processTiles(tiles, '16', false, 9999);
                 processTiles(tilesL18, '18', true, 1.0); // Fast unload
-                if (!isPhone) processTiles(tilesL19, '19', true, 0.5); // Fast unload
+                if (!isPhone) processTiles(tilesL19, '19', true, 0.6); // Fast unload
             } else {
                 processTiles(tiles, '16', false, 9999);
                 processTiles(tilesL17, '17', true, 2.0); // Fast unload
                 processTiles(tilesL18, '18', true, 1.0); // Fast unload
-                if (!isPhone) processTiles(tilesL19, '19', true, 0.5); // Fast unload
+                if (!isPhone) processTiles(tilesL19, '19', true, 0.6); // Fast unload
             }
         }
 
