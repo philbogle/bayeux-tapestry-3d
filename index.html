@@ -1251,7 +1251,8 @@
             
             // Apply zoom impulse (scales with distance so zooming is consistent at all depths)
             if (Math.abs(deltaY) > 0) {
-                const zoomImpulse = (deltaY * 0.0012) * Math.max(0.1, camera.position.z * 0.1);
+                const distanceMultiplier = Math.max(0.02, Math.pow(camera.position.z / 10, 1.5));
+                const zoomImpulse = (deltaY * 0.0012) * distanceMultiplier;
                 velocityZ += zoomImpulse;
             }
             
@@ -1337,7 +1338,7 @@
             let currentZoomAccel = fixedZoomAccel * (1.0 + Math.min(1.0, zoomHoldTime / 120) * 1.0);
             
             // Further scale zoom acceleration by current Z distance so it doesn't crawl when fully zoomed out
-            currentZoomAccel *= Math.max(0.1, camera.position.z * 0.1);
+            currentZoomAccel *= Math.max(0.02, Math.pow(camera.position.z / 10, 1.5));
 
             if (keys.up) velocityZ -= currentZoomAccel;
             if (keys.down) velocityZ += currentZoomAccel;
