@@ -1730,7 +1730,10 @@
         function createTextMesh(text, isPlaced) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const fontSize = 80; // High-res font rendering
+            let fontSize = 80; // High-res font rendering
+            if (currentLanguage === 'de' || currentLanguage === 'nl') {
+                fontSize = 60; // Make font smaller for longer languages
+            }
             const fontStr = (currentLanguage === 'zh' || currentLanguage === 'hi' || currentLanguage === 'ar' || currentLanguage === 'bn') ? `normal ${fontSize}px serif` : `normal ${fontSize}px 'MedievalSharp', serif`;
             ctx.font = fontStr;
             ctx.letterSpacing = '3px';
