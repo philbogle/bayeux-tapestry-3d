@@ -123,25 +123,25 @@
     </div>
 
 
-    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0;">Select Language</h3>
-        <div id="lang-options" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px; max-height: 60vh; overflow-y: auto;">
-            <button class="lang-option" data-lang="en" style="padding: 10px; background: #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
-            <button class="lang-option" data-lang="zh" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">中文 (Chinese)</button>
-            <button class="lang-option" data-lang="es" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Español (Spanish)</button>
-            <button class="lang-option" data-lang="fr" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Français (French)</button>
-            <button class="lang-option" data-lang="de" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Deutsch (German)</button>
-            <button class="lang-option" data-lang="nl" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Nederlands (Dutch)</button>
-            <button class="lang-option" data-lang="pt" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Português (Portuguese)</button>
-            <button class="lang-option" data-lang="hi" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">हिन्दी (Hindi)</button>
-            <button class="lang-option" data-lang="ar" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">العربية (Arabic)</button>
-            <button class="lang-option" data-lang="bn" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">বাংলা (Bengali)</button>
+        <div id="lang-options" style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px; max-height: 60vh; overflow-y: auto;">
+            <button class="lang-option" data-lang="en" style="padding: 6px 10px; background: #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
+            <button class="lang-option" data-lang="zh" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">中文 (Chinese)</button>
+            <button class="lang-option" data-lang="es" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Español (Spanish)</button>
+            <button class="lang-option" data-lang="fr" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Français (French)</button>
+            <button class="lang-option" data-lang="de" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Deutsch (German)</button>
+            <button class="lang-option" data-lang="nl" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Nederlands (Dutch)</button>
+            <button class="lang-option" data-lang="pt" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Português (Portuguese)</button>
+            <button class="lang-option" data-lang="hi" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">हिन्दी (Hindi)</button>
+            <button class="lang-option" data-lang="ar" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">العربية (Arabic)</button>
+            <button class="lang-option" data-lang="bn" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">বাংলা (Bengali)</button>
         </div>
         <div style="text-align: right; margin-top: 20px;">
             <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
         </div>
     </div>
-    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
         <ul style="padding-left: 20px; line-height: 1.6;">
             <li id="help-desktop-1">Left-click and drag anywhere to pan smoothly across the tapestry. Use your scroll wheel to zoom in and out. Keyboard arrows also work.</li>
@@ -164,7 +164,7 @@
         <button id="close-dialog">Close</button>
     </div>
 
-    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 20px 30px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
         <label>Ambient Intensity: <span id="val-amb-int">1.03</span></label><br>
         <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.03" style="width: 100%; margin-bottom: 10px;"><br>
