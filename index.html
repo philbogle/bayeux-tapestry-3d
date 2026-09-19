@@ -135,6 +135,7 @@
             <button class="lang-option" data-lang="pt" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Português (Portuguese)</button>
             <button class="lang-option" data-lang="hi" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">हिन्दी (Hindi)</button>
             <button class="lang-option" data-lang="ar" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">العربية (Arabic)</button>
+            <button class="lang-option" data-lang="bn" style="padding: 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">বাংলা (Bengali)</button>
         </div>
         <div style="text-align: right; margin-top: 20px;">
             <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
@@ -1685,7 +1686,8 @@
                 'nl': { help: 'Help', about: 'Over', titles: 'Titels', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
                 'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' },
                 'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', notes: '☰ नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें' },
-                'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' }
+                'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' },
+                'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', notes: '☰ নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন' }
             };
             
             const dict = uiDict[currentLanguage] || uiDict['en'];
@@ -1729,7 +1731,7 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const fontSize = 80; // High-res font rendering
-            const fontStr = (currentLanguage === 'zh' || currentLanguage === 'hi' || currentLanguage === 'ar') ? `normal ${fontSize}px serif` : `normal ${fontSize}px 'MedievalSharp', serif`;
+            const fontStr = (currentLanguage === 'zh' || currentLanguage === 'hi' || currentLanguage === 'ar' || currentLanguage === 'bn') ? `normal ${fontSize}px serif` : `normal ${fontSize}px 'MedievalSharp', serif`;
             ctx.font = fontStr;
             ctx.letterSpacing = '3px';
             const renderText = currentLanguage === 'zh' ? text : text.toUpperCase();
@@ -1770,7 +1772,7 @@
             return mesh;
         }
 
-        fetch('tituli.json?v=29').then(res => res.json()).then(data => {
+        fetch('tituli.json?v=30').then(res => res.json()).then(data => {
             if (isAuthoringMode) {
                 const savedData = localStorage.getItem('bayeux-tituli');
                 if (savedData) {

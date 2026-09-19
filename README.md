@@ -9,7 +9,8 @@ This project builds on and is complementary to the high-resolution Bayeux Tapest
 ### Features
 * **Continuous 3D Navigation**: Pan across the 224-foot tapestry using momentum-based physics.
 * **Variable Level of Detail (LOD)**: The system manages three tiers of image resolution based on zoom depth and camera speed. A base layer handles panning across the canvas. When you stop moving and zoom in close, the engine fetches 2x and 4x resolution textures, allowing you to inspect individual stitches while managing device memory.
-* **Interactive Supertitles**: English translations hover over the Latin script, fading out during fast camera movements to reduce visual clutter.
+* **Interactive Supertitles**: Translations hover over the Latin script, fading out during fast camera movements to reduce visual clutter.
+* **Multilingual Support**: Fully localized in English, Chinese (中文), Spanish (Español), French (Français), German (Deutsch), Dutch (Nederlands), Portuguese (Português), Hindi (हिन्दी), Arabic (العربية), and Bengali (বাংলা). This is a completely unique feature among online Bayeux tapestry resources!
 * **Cross-Platform**: Support for desktop and mobile, including trackpads, scroll wheels, and touch gestures.
 
 ### Controls
