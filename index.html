@@ -126,6 +126,7 @@
             <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
             <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
             <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
+            <button id="bump-toggle" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Bump</button>
             <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
             <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
             <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
@@ -263,6 +264,7 @@
             <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
                     <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
                     <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
+            <button id="bump-toggle" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Bump</button>
                     <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
                     <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">⚙️ Lighting Controls</a>
                 </div>
@@ -283,6 +285,8 @@
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         // Magnifying Glass Setup
         let magActive = false;
+        let bumpEnabled = true;
+        let bumpEnabled = true;
         let showSupertitles = true;
         const magRenderTarget = new THREE.WebGLRenderTarget(512, 512);
         const magCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
@@ -1057,6 +1061,24 @@
         // Fallback to halt edge-scrolling if mouseleave fires on the window
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
+        
+        const bumpToggleBtn = document.getElementById('bump-toggle');
+        if (bumpToggleBtn) {
+            bumpToggleBtn.addEventListener('click', () => {
+                bumpEnabled = !bumpEnabled;
+                bumpToggleBtn.style.background = bumpEnabled ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
+                const allTileArrays = [tiles, tilesL17, tilesL18, tilesL19];
+                allTileArrays.forEach(arr => {
+                    arr.forEach(t => {
+                        if (t.mesh && t.mesh.material && t.mesh.material.bumpScale !== undefined) {
+                            t.mesh.material.bumpScale = bumpEnabled ? -0.02 : 0;
+                            t.mesh.material.needsUpdate = true;
+                        }
+                    });
+                });
+            });
+        }
+
         const magToggleBtn = document.getElementById('mag-toggle');
         const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
         
@@ -1436,8 +1458,11 @@
                                 texture.magFilter = THREE.LinearFilter;
                                 texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
                                 
-                                tile.mesh.material = new THREE.MeshLambertMaterial({ 
+                                tile.mesh.material = new THREE.MeshPhongMaterial({ 
                                     map: texture,
+                                    bumpMap: texture,
+                                    bumpScale: bumpEnabled ? -0.02 : 0, // Negative scale makes darker colors protrude
+                                    shininess: 5,
                                     transparent: true,
                                     opacity: isHighRes ? 1.0 : 0 // Pop in instantly for high-res to prevent fade artifacts over base
                                 });
