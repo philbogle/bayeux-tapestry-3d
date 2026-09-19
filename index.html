@@ -260,7 +260,7 @@
         const uiContainer = document.getElementById('ui');
         const hamburgerBtn = document.getElementById('hamburger-btn');
         
-        if (isPhone) {
+        if (isPhone || window.innerWidth <= 900) {
             hamburgerBtn.style.display = 'block';
             uiContainer.style.display = 'none';
             
@@ -294,20 +294,6 @@
         }
 
         // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
-
-        if (isPhone) {
-            document.getElementById('ui').innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-                    <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
-                    <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-            <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
-                    <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
-                    <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
-                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
-                    <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">Lighting Controls</a>
-                </div>
-            `;
-        }
 
         const T = 254; // Tile size without overlap
         const LEVEL = 16; // 16 provides a very high resolution while being manageable
