@@ -1251,14 +1251,14 @@
             
             // Apply zoom impulse (scales with distance so zooming is consistent at all depths)
             if (Math.abs(deltaY) > 0) {
-                const zoomImpulse = (deltaY * 0.0012) * Math.max(1.0, camera.position.z * 0.1);
+                const zoomImpulse = (deltaY * 0.0012) * Math.max(0.1, camera.position.z * 0.1);
                 velocityZ += zoomImpulse;
             }
             
             // Apply horizontal pan impulse (scales with distance so panning feels consistent)
             if (Math.abs(deltaX) > 0) {
                 // Panning sensitivity multiplier tuned for typical mouse wheel / trackpad gestures
-                const panImpulse = (deltaX * 0.0003) * Math.max(1.0, camera.position.z * 0.1);
+                const panImpulse = (deltaX * 0.0003) * Math.max(0.1, camera.position.z * 0.1);
                 velocityX += panImpulse;
             }
         }, { passive: false });
@@ -1337,7 +1337,7 @@
             let currentZoomAccel = fixedZoomAccel * (1.0 + Math.min(1.0, zoomHoldTime / 120) * 1.0);
             
             // Further scale zoom acceleration by current Z distance so it doesn't crawl when fully zoomed out
-            currentZoomAccel *= Math.max(1.0, camera.position.z * 0.05);
+            currentZoomAccel *= Math.max(0.1, camera.position.z * 0.1);
 
             if (keys.up) velocityZ -= currentZoomAccel;
             if (keys.down) velocityZ += currentZoomAccel;
