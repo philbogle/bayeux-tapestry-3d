@@ -121,7 +121,7 @@
     <button id="hamburger-btn" style="position: absolute; top: 20px; right: 20px; z-index: 200; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 20px; display: none;">☰</button>
     <div id="ui">
         <h2>Bayeux Tapestry</h2>
-        <p style="margin-top: 12px; display: flex; align-items: center; gap: 15px;">
+        <p style="margin-top: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 15px;">
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
             <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
@@ -260,7 +260,7 @@
         const uiContainer = document.getElementById('ui');
         const hamburgerBtn = document.getElementById('hamburger-btn');
         
-        if (isPhone || window.innerWidth <= 900) {
+        if (isPhone || (window.innerWidth <= 900 && !isIPad)) {
             hamburgerBtn.style.display = 'block';
             uiContainer.style.display = 'none';
             
