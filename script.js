@@ -1,5 +1,9 @@
 
         let ytPlayer;
+        /**
+         * Callback triggered by the YouTube IFrame API when it is fully loaded.
+         * Initializes the hidden YouTube audio player.
+         */
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
                 height: '1',
@@ -13,4 +17,5 @@
                 }
             });
         }
+    
     

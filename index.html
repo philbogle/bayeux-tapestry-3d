@@ -41,7 +41,9 @@
             bottom: 10px;
             left: 10px;
             color: rgba(255, 255, 255, 0.7);
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 10px;
             border-radius: 6px;
             pointer-events: none;
@@ -86,7 +88,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(20, 20, 20, 0.95);
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             color: white;
             padding: 20px 30px;
             border-radius: 8px;
@@ -128,6 +132,53 @@
             background: rgba(214,168,72,0.35) !important;
             border-color: #f4e4bc !important;
         }
+        #hamburger-btn:hover, #hamburger-btn:active {
+            background: rgba(45, 36, 26, 0.95) !important;
+            border-color: #d6a848 !important;
+        }
+        .menu-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 18px;
+            background: transparent;
+            border: none;
+            color: #f4e4bc;
+            font-family: serif;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: left;
+            user-select: none;
+            box-sizing: border-box;
+            transition: background 0.15s ease, color 0.15s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .menu-row:hover, .menu-row:active {
+            background: rgba(214, 168, 72, 0.16);
+            color: #fff;
+        }
+        .menu-text {
+            flex-grow: 1;
+            white-space: nowrap;
+        }
+        .menu-badge {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: rgba(214, 168, 72, 0.18);
+            color: #d6a848;
+            border: 1px solid rgba(214, 168, 72, 0.35);
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+        .menu-divider {
+            height: 1px;
+            background: rgba(139, 115, 85, 0.25);
+            margin: 5px 14px;
+        }
         @media (max-width: 900px) {
             #context-scroll {
                 top: 10px !important;
@@ -168,11 +219,55 @@
     </style>
 </head>
 <body>
-    <button id="hamburger-btn" style="position: absolute; top: 20px; right: 20px; z-index: 200; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 20px; display: none;">☰</button>
+    <button id="hamburger-btn" aria-label="Menu" aria-expanded="false" style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.88); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
+    <div id="mobile-menu-scrim" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;"></div>
+    <nav id="mobile-menu" role="menu" aria-label="Main Navigation" style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.8); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); overflow: hidden; box-sizing: border-box;">
+        <div style="padding: 12px 18px 8px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); display: flex; align-items: center; justify-content: space-between;">
+            <span style="color: #d6a848; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">Bayeux Tapestry</span>
+        </div>
+        <div style="padding: 6px 0;">
+            <button class="menu-row" id="m-menu-tour" role="menuitem">
+                <span class="menu-text" id="m-text-tour">Start Tour</span>
+            </button>
+            <button class="menu-row" id="m-menu-notes" role="menuitem">
+                <span class="menu-text" id="m-text-notes">Scene Notes</span>
+            </button>
+            <button class="menu-row" id="m-menu-titles" role="menuitem">
+                <span class="menu-text" id="m-text-titles">Titles</span>
+                <span class="menu-badge" id="m-badge-titles">ON</span>
+            </button>
+
+            <div class="menu-divider"></div>
+
+            <button class="menu-row" id="m-menu-lang" role="menuitem">
+                <span class="menu-text" id="m-text-lang">Language</span>
+                <span class="menu-badge" id="m-badge-lang">EN</span>
+            </button>
+            <button class="menu-row" id="m-menu-help" role="menuitem">
+                <span class="menu-text" id="m-text-help">Help</span>
+            </button>
+            <button class="menu-row" id="m-menu-about" role="menuitem">
+                <span class="menu-text" id="m-text-about">About</span>
+            </button>
+
+            <div class="menu-divider"></div>
+
+            <button class="menu-row" id="m-menu-music" role="menuitem">
+                <span class="menu-text" id="m-text-music">Music</span>
+                <span class="menu-badge" id="m-badge-music">OFF</span>
+            </button>
+            <button class="menu-row" id="m-menu-fullscreen" role="menuitem">
+                <span class="menu-text" id="m-text-fullscreen">Fullscreen</span>
+            </button>
+            <button class="menu-row" id="m-menu-lighting" role="menuitem" style="display: none;">
+                <span class="menu-text">Lighting</span>
+            </button>
+        </div>
+    </nav>
     <button id="mobile-tour-btn" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 200; pointer-events: auto; background: rgba(20, 16, 12, 0.92); border: 1px solid #d6a848; border-radius: 30px; padding: 10px 22px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 8px; font-family: serif; color: #f4e4bc; font-size: 15px; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); user-select: none; outline: none;">
         <span style="color: #d6a848; font-size: 13px;">▶</span> <span id="mobile-tour-label">Start Tour</span>
     </button>
-    <div id="tour-control-bar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; background: rgba(20, 16, 12, 0.92); border: 1px solid #d6a848; border-radius: 30px; padding: 6px 14px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 12px; font-family: serif; color: #f4e4bc; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); user-select: none;">
+    <div id="tour-control-bar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; background: rgba(20, 16, 12, 0.7); border: 1px solid #d6a848; border-radius: 30px; padding: 6px 14px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 12px; font-family: serif; color: #f4e4bc; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); user-select: none;">
         <span style="font-size: 13px; color: #d6a848; font-weight: bold; letter-spacing: 0.5px; display: flex; align-items: center; gap: 7px;">
             <span id="tour-indicator-dot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d6a848; box-shadow: 0 0 8px #d6a848;"></span>
             <span id="tour-status-label">Touring</span>
@@ -197,7 +292,7 @@
     </div>
 
 
-    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0;">Select Language</h3>
         <div id="lang-options" style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px; max-height: 60vh; overflow-y: auto;">
             <button class="lang-option" data-lang="en" style="padding: 6px 10px; background: #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
@@ -215,7 +310,7 @@
             <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
         </div>
     </div>
-    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
         <ul style="padding-left: 20px; line-height: 1.6;">
             <li id="help-desktop-1"><strong>Pan:</strong> Click and drag, swipe your touchpad, or push your mouse to the left/right screen edges. Keyboard arrows also work.</li>
@@ -238,7 +333,7 @@
         <button id="close-dialog">Close</button>
     </div>
 
-    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.95); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
         <label>Ambient Intensity: <span id="val-amb-int">1.06</span></label><br>
         <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
@@ -257,7 +352,7 @@
             <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
-    <div id="context-scroll" style="display: none; position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgba(244, 228, 188, 0.95); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+    <div id="context-scroll" style="display: none; position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgba(244, 228, 188, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
             <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
             <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
@@ -319,75 +414,196 @@
                         (window.innerWidth <= 600);
         
 
+        let isTourActive = false;
+        let isTourPaused = false;
+
+        function isMobileMode() {
+            return isPhone || (window.innerWidth <= 900 && !isIPad);
+        }
+
         const uiContainer = document.getElementById('ui');
         const hamburgerBtn = document.getElementById('hamburger-btn');
-        
-        if (isPhone || (window.innerWidth <= 900 && !isIPad)) {
-            hamburgerBtn.style.display = 'block';
-            uiContainer.style.display = 'none';
-            
-            // Convert bottom bar to a top-right dropdown menu
-            uiContainer.style.top = '60px';
-            uiContainer.style.right = '20px';
-            uiContainer.style.left = 'auto';
-            uiContainer.style.bottom = 'auto';
-            uiContainer.style.transform = 'none';
-            uiContainer.style.width = '180px';
-            uiContainer.style.background = 'rgba(20, 20, 20, 0.95)';
-            uiContainer.style.padding = '15px';
-            uiContainer.style.borderRadius = '8px';
-            uiContainer.style.border = '1px solid #5a4a35';
-            uiContainer.style.textAlign = 'left';
-            uiContainer.style.boxSizing = 'border-box';
-            
-            const uiTitle = uiContainer.querySelector('h2');
-            if (uiTitle) {
-                uiTitle.style.textAlign = 'left';
-                uiTitle.style.color = '#d6a848';
-                uiTitle.style.marginBottom = '12px';
-            }
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuScrim = document.getElementById('mobile-menu-scrim');
 
-            // Make the flex container stack vertically and left-align all items
-            const uiFlex = uiContainer.querySelector('p');
-            uiFlex.style.flexDirection = 'column';
-            uiFlex.style.alignItems = 'stretch';
-            uiFlex.style.gap = '12px';
-            uiFlex.style.width = '100%';
-
-            // Ensure all buttons and links in the menu are left-aligned
-            uiFlex.querySelectorAll('button, a').forEach(el => {
-                el.style.textAlign = 'left';
-                el.style.justifyContent = 'flex-start';
-                el.style.width = '100%';
-                el.style.boxSizing = 'border-box';
-            });
-
-            // Show mobile tour button when on mobile
-            const mobileTourBtn = document.getElementById('mobile-tour-btn');
-            if (mobileTourBtn) mobileTourBtn.style.display = 'flex';
-            
-            hamburgerBtn.addEventListener('click', () => {
-                if (uiContainer.style.display === 'none') {
-                    uiContainer.style.display = 'block';
-                    hamburgerBtn.innerText = '✕';
-                } else {
-                    uiContainer.style.display = 'none';
-                    hamburgerBtn.innerText = '☰';
-                }
-            });
-
-            if (new URLSearchParams(window.location.search).get('menu') === '1') {
-                uiContainer.style.display = 'block';
+        function openMobileMenu() {
+            if (!mobileMenu) return;
+            mobileMenu.style.display = 'block';
+            if (mobileMenuScrim) mobileMenuScrim.style.display = 'block';
+            if (hamburgerBtn) {
                 hamburgerBtn.innerText = '✕';
+                hamburgerBtn.setAttribute('aria-expanded', 'true');
             }
-            
-            // Auto-close menu when a UI action is selected
-            uiContainer.addEventListener('click', (e) => {
-                if (e.target.closest('button') || e.target.closest('a')) {
-                    uiContainer.style.display = 'none';
-                    hamburgerBtn.innerText = '☰';
+        }
+
+        function closeMobileMenu() {
+            if (!mobileMenu) return;
+            mobileMenu.style.display = 'none';
+            if (mobileMenuScrim) mobileMenuScrim.style.display = 'none';
+            if (hamburgerBtn) {
+                hamburgerBtn.innerText = '☰';
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function toggleMobileMenu() {
+            if (mobileMenu && mobileMenu.style.display === 'block') {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
+
+        function updateLayoutMode() {
+            const mobile = isMobileMode();
+            if (hamburgerBtn) hamburgerBtn.style.display = mobile ? 'flex' : 'none';
+            if (uiContainer) uiContainer.style.display = mobile ? 'none' : 'block';
+            const mTourBtn = document.getElementById('mobile-tour-btn');
+            if (!mobile) {
+                closeMobileMenu();
+                if (mTourBtn) mTourBtn.style.display = 'none';
+            } else {
+                if (mTourBtn) {
+                    mTourBtn.style.display = isTourActive ? 'none' : 'flex';
+                }
+            }
+        }
+
+        updateLayoutMode();
+        window.addEventListener('resize', updateLayoutMode);
+
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
+        }
+
+        if (mobileMenuScrim) {
+            mobileMenuScrim.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeMobileMenu();
+            });
+            mobileMenuScrim.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                closeMobileMenu();
+            }, { passive: true });
+        }
+
+        if (mobileMenu) {
+            ['mousedown', 'touchstart', 'pointerdown', 'click'].forEach(evt => {
+                mobileMenu.addEventListener(evt, (e) => {
+                    e.stopPropagation();
+                });
+            });
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+
+        // Wire mobile menu action rows
+        const mTour = document.getElementById('m-menu-tour');
+        if (mTour) {
+            mTour.addEventListener('click', () => {
+                closeMobileMenu();
+                if (typeof isTourActive !== 'undefined' && isTourActive) {
+                    stopTour();
+                } else {
+                    startTour();
                 }
             });
+        }
+
+        const mNotes = document.getElementById('m-menu-notes');
+        if (mNotes) {
+            mNotes.addEventListener('click', () => {
+                closeMobileMenu();
+                const popup = document.getElementById('context-scroll');
+                if (popup && popup.style.display !== 'none') {
+                    popup.style.display = 'none';
+                    const notesBtn = document.getElementById('notes-btn');
+                    if (notesBtn) notesBtn.style.background = 'rgba(20,20,20,0.8)';
+                } else {
+                    openNotes(true);
+                }
+            });
+        }
+
+        const mTitles = document.getElementById('m-menu-titles');
+        if (mTitles) {
+            mTitles.addEventListener('click', () => {
+                closeMobileMenu();
+                showSupertitles = !showSupertitles;
+                if (typeof updateTitlesUI === 'function') updateTitlesUI();
+            });
+        }
+
+        const mLang = document.getElementById('m-menu-lang');
+        if (mLang) {
+            mLang.addEventListener('click', () => {
+                closeMobileMenu();
+                document.querySelectorAll('.lang-option').forEach(opt => {
+                    if (opt.getAttribute('data-lang') === currentLanguage) {
+                        opt.style.background = '#8b7355';
+                        opt.style.border = '1px solid #f4e4bc';
+                    } else {
+                        opt.style.background = '#2c221a';
+                        opt.style.border = '1px solid #444';
+                    }
+                });
+                document.getElementById('lang-dialog').style.display = 'block';
+            });
+        }
+
+        const mHelp = document.getElementById('m-menu-help');
+        if (mHelp) {
+            mHelp.addEventListener('click', () => {
+                closeMobileMenu();
+                document.getElementById('help-dialog').style.display = 'block';
+            });
+        }
+
+        const mAbout = document.getElementById('m-menu-about');
+        if (mAbout) {
+            mAbout.addEventListener('click', () => {
+                closeMobileMenu();
+                document.getElementById('about-dialog').style.display = 'block';
+            });
+        }
+
+        const mMusic = document.getElementById('m-menu-music');
+        if (mMusic) {
+            mMusic.addEventListener('click', () => {
+                closeMobileMenu();
+                if (typeof toggleMusic === 'function') toggleMusic();
+            });
+        }
+
+        const mFullscreen = document.getElementById('m-menu-fullscreen');
+        if (mFullscreen) {
+            mFullscreen.addEventListener('click', () => {
+                closeMobileMenu();
+                if (typeof toggleFullscreen === 'function') toggleFullscreen();
+            });
+        }
+
+        const mLighting = document.getElementById('m-menu-lighting');
+        if (mLighting) {
+            if (new URLSearchParams(window.location.search).get('adv') === '1') {
+                mLighting.style.display = 'flex';
+                mLighting.addEventListener('click', () => {
+                    closeMobileMenu();
+                    document.getElementById('lighting-dialog').style.display = 'block';
+                });
+            }
+        }
+
+        if (new URLSearchParams(window.location.search).get('menu') === '1') {
+            openMobileMenu();
+            setTimeout(openMobileMenu, 250);
         }
 
         // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
@@ -399,16 +615,16 @@
         const SCALE = 100; // 100 pixels = 1 Three.js unit
         let currentLanguage = localStorage.getItem('bayeux_lang') || 'en';
         const uiDict = {
-            'en': { help: 'Help', about: 'About', titles: 'Titles', tour: 'Tour', startTour: 'Start Tour', tourStatus: 'Touring', paused: 'Paused', notes: '☰ Notes', prev: 'Prev', next: 'Next', close: 'Close' },
-            'zh': { help: '帮助', about: '关于', titles: '标题', tour: '导览', startTour: '开始导览', tourStatus: '导览中', paused: '已暂停', notes: '☰ 笔记', prev: '上一个', next: '下一个', close: '关闭' },
-            'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', tour: 'Recorrido', startTour: 'Iniciar recorrido', tourStatus: 'Recorrido', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Sig', close: 'Cerrar' },
-            'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', tour: 'Visite', startTour: 'Commencer la visite', tourStatus: 'Visite', paused: 'En pause', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' },
-            'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', tour: 'Tour', startTour: 'Tour starten', tourStatus: 'Tour', paused: 'Pausiert', notes: '☰ Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen' },
-            'nl': { help: 'Help', about: 'Over', titles: 'Titels', tour: 'Rondleiding', startTour: 'Start rondleiding', tourStatus: 'Rondleiding', paused: 'Gepauzeerd', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
-            'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', tour: 'Tour', startTour: 'Iniciar tour', tourStatus: 'Em tour', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' },
-            'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', tour: 'दौरा', startTour: 'दौरा शुरू करें', tourStatus: 'दौरा जारी', paused: 'रोक दिया', notes: '☰ नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें' },
-            'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', tour: 'جولة', startTour: 'بدء الجولة', tourStatus: 'جولة مستمرة', paused: 'متوقف', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' },
-            'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', tour: 'পরিদর্শন', startTour: 'পরিদর্শন শুরু করুন', tourStatus: 'চলমান', paused: 'বিরতি', notes: '☰ নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন' }
+            'en': { help: 'Help', about: 'About', titles: 'Titles', tour: 'Tour', startTour: 'Start Tour', stopTour: 'Stop Tour', tourStatus: 'Touring', paused: 'Paused', notes: '☰ Notes', sceneNotes: 'Scene Notes', prev: 'Prev', next: 'Next', close: 'Close', language: 'Language', music: 'Music', fullscreen: 'Fullscreen' },
+            'zh': { help: '帮助', about: '关于', titles: '标题', tour: '导览', startTour: '开始导览', stopTour: '停止导览', tourStatus: '导览中', paused: '已暂停', notes: '☰ 笔记', sceneNotes: '场景笔记', prev: '上一个', next: '下一个', close: '关闭', language: '语言', music: '音乐', fullscreen: '全屏' },
+            'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', tour: 'Recorrido', startTour: 'Iniciar recorrido', stopTour: 'Detener recorrido', tourStatus: 'Recorrido', paused: 'Pausado', notes: '☰ Notas', sceneNotes: 'Notas de escena', prev: 'Ant', next: 'Sig', close: 'Cerrar', language: 'Idioma', music: 'Música', fullscreen: 'Pantalla completa' },
+            'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', tour: 'Visite', startTour: 'Commencer la visite', stopTour: 'Arrêter la visite', tourStatus: 'Visite', paused: 'En pause', notes: '☰ Notes', sceneNotes: 'Notes de scène', prev: 'Préc', next: 'Suivant', close: 'Fermer', language: 'Langue', music: 'Musique', fullscreen: 'Plein écran' },
+            'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', tour: 'Tour', startTour: 'Tour starten', stopTour: 'Tour beenden', tourStatus: 'Tour', paused: 'Pausiert', notes: '☰ Notizen', sceneNotes: 'Szenen-Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen', language: 'Sprache', music: 'Musik', fullscreen: 'Vollbild' },
+            'nl': { help: 'Help', about: 'Over', titles: 'Titels', tour: 'Rondleiding', startTour: 'Start rondleiding', stopTour: 'Stop rondleiding', tourStatus: 'Rondleiding', paused: 'Gepauzeerd', notes: '☰ Notities', sceneNotes: 'Scènenotities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten', language: 'Taal', music: 'Muziek', fullscreen: 'Volledig scherm' },
+            'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', tour: 'Tour', startTour: 'Iniciar tour', stopTour: 'Parar tour', tourStatus: 'Em tour', paused: 'Pausado', notes: '☰ Notas', sceneNotes: 'Notas da cena', prev: 'Ant', next: 'Seg', close: 'Fechar', language: 'Idioma', music: 'Música', fullscreen: 'Tela cheia' },
+            'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', tour: 'दौरा', startTour: 'दौरा शुरू करें', stopTour: 'दौरा रोकें', tourStatus: 'दौरा जारी', paused: 'रोक दिया', notes: '☰ नोट्स', sceneNotes: 'दृश्य नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें', language: 'भाषा', music: 'संगीत', fullscreen: 'पूर्ण स्क्रीन' },
+            'ar': { help: 'مساعدة', about: 'حول', titles: 'العनाوين', tour: 'جولة', startTour: 'بدء الجولة', stopTour: 'إيقاف الجولة', tourStatus: 'جولة مستمرة', paused: 'متوقف', notes: '☰ ملاحظات', sceneNotes: 'ملاحظات المشهد', prev: 'السابق', next: 'التالي', close: 'إغلاق', language: 'اللغة', music: 'الموسيقى', fullscreen: 'ملء الشاشة' },
+            'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', tour: 'পরিদর্শন', startTour: 'পরিদর্শন শুরু করুন', stopTour: 'পরিদর্শন বন্ধ', tourStatus: 'চলমান', paused: 'বিরতি', notes: '☰ নোট', sceneNotes: 'দৃশ্য নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন', language: 'ভাষা', music: 'সঙ্গীত', fullscreen: 'পূর্ণ পর্দা' }
         };
 
 
@@ -1294,7 +1510,7 @@
         
         // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
         window.addEventListener('touchstart', (e) => { 
-            if (e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn')) return;
+            if (e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
             isTouch = true; 
             hasTouchDragged = false;
             mouseScrollDir = 0; 
@@ -1456,7 +1672,7 @@
             if (isTouch) return;
             mouseStartX = e.clientX;
             mouseStartY = e.clientY;
-            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn')) return;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
             
             if (isAuthoringMode) {
                 mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1566,7 +1782,7 @@
             }
             
             // Prevent edge-scroll if hovering over UI elements
-            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn')) {
+            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) {
                 mouseScrollDir = 0;
                 return;
             }
@@ -1593,18 +1809,21 @@
         // Fallback to halt edge-scrolling if mouseleave fires on the window
         window.addEventListener('mouseleave', () => { mouseScrollDir = 0; });
 
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
         
         const fullscreenBtn = document.getElementById('fullscreen-toggle');
         if (fullscreenBtn) {
-            fullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log(`Error attempting to enable fullscreen: ${err.message}`);
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
-            });
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
             document.addEventListener('fullscreenchange', () => {
                 if (document.fullscreenElement) {
                     fullscreenBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>';
@@ -1695,6 +1914,24 @@
         setupButton('btn-up', 'up');
         setupButton('btn-down', 'down');
         
+        function updateTitlesUI() {
+            const toggleSupertitles = document.getElementById('toggle-supertitles');
+            if (toggleSupertitles) {
+                toggleSupertitles.style.background = showSupertitles ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
+            }
+            const badge = document.getElementById('m-badge-titles');
+            if (badge) {
+                badge.innerText = showSupertitles ? 'ON' : 'OFF';
+                badge.style.color = showSupertitles ? '#d6a848' : '#888';
+                badge.style.borderColor = showSupertitles ? 'rgba(214,168,72,0.35)' : 'rgba(255,255,255,0.15)';
+                badge.style.background = showSupertitles ? 'rgba(214,168,72,0.18)' : 'rgba(255,255,255,0.05)';
+            }
+            const container = document.getElementById('annotations-container');
+            if (container) {
+                container.style.display = showSupertitles ? 'block' : 'none';
+            }
+        }
+
         const toggleSupertitles = document.getElementById('toggle-supertitles');
         
         if (toggleSupertitles) {
@@ -1702,22 +1939,100 @@
             toggleSupertitles.addEventListener('click', (e) => {
                 e.preventDefault();
                 showSupertitles = !showSupertitles;
-                toggleSupertitles.style.background = showSupertitles ? 'rgba(214,168,72,0.3)' : 'rgba(20,20,20,0.8)';
-                const container = document.getElementById('annotations-container');
-                if (container) {
-                    container.style.display = showSupertitles ? 'block' : 'none';
-                }
+                updateTitlesUI();
             });
         }
 
         // --- TOUR MODE LOGIC ---
-        let isTourActive = false;
-        let isTourPaused = false;
-        const tourSpeed = 1.25; // units per second (smooth, comfortable glide across the 70m tapestry)
+        const tourCruiseSpeed = 1.35;
+        const tourSlowSpeed = 0.75;
+        const tourTransitionDist = 1.5;
+        let tourSpeed = tourCruiseSpeed;
+
+        // --- KEN BURNS FLYING CAMERA ---
+        // Each scene has a unique zoom (Z) and vertical offset (Y) target.
+        // The camera smoothly interpolates between the previous scene's target and
+        // the current scene's target as it travels, creating a cinematic Ken Burns effect.
+
+        let tourElapsed = 0;  // used for smooth startup easing
+
+        // Zoom range: how much closer/farther than the base Z each scene can be
+        const tourZoomRange = 2.0;       // ± this amount from base Z
+        const tourYRange = 0.3;          // ± vertical offset from center
+        const tourCamLerpRate = 0.03;    // Per-frame smoothing for camera transitions
+
+        /**
+         * Deterministic pseudo-random hash for a scene index.
+         * Returns a value in [0, 1) that is stable across frames.
+         */
+        function sceneHash(index, seed) {
+            const n = Math.sin(index * 127.1 + (seed || 0) * 311.7) * 43758.5453;
+            return n - Math.floor(n);
+        }
+
+        /**
+         * Returns { targetZ, targetY } for a given scene index.
+         * Each scene gets a unique, deterministic camera framing.
+         */
+        function getSceneKenBurns(index, baseZ) {
+            // Use two different seeds for Z and Y so they vary independently
+            const zHash = sceneHash(index, 1);  // 0..1
+            const yHash = sceneHash(index, 2);  // 0..1
+            return {
+                targetZ: baseZ + (zHash - 0.5) * 2 * tourZoomRange,
+                targetY: cameraY + (yHash - 0.5) * 2 * tourYRange
+            };
+        }
+
+        /**
+         * Calculates dynamic tour speed based on proximity to key points (scenes).
+         * Smoothly decelerates to tourSlowSpeed when entering a scene's observation zone,
+         * and accelerates back to tourCruiseSpeed across gaps between scenes.
+         */
+        function calculateTourSpeed(currentX) {
+            const list = (typeof annotations !== 'undefined' && annotations.length > 0)
+                ? annotations
+                : ((typeof tituliData !== 'undefined' && tituliData.length > 0) ? tituliData : null);
+
+            if (!list || list.length === 0) return tourCruiseSpeed;
+
+            let minD = Infinity;
+            for (let i = 0; i < list.length; i++) {
+                const item = list[i];
+                let cx = 0;
+                let halfSpan = 1.5;
+
+                if (item.mesh && item.mesh.geometry && item.mesh.geometry.parameters && item.data) {
+                    const w = item.mesh.geometry.parameters.width || 4.0;
+                    halfSpan = Math.max(1.2, w / 2.0);
+                    cx = item.data.x + w / 2.0;
+                } else if (item.data && typeof item.data.x === 'number') {
+                    cx = item.data.x + 2.5;
+                    halfSpan = 1.5;
+                } else if (typeof item.x === 'number') {
+                    cx = item.x + 2.5;
+                    halfSpan = 1.5;
+                } else {
+                    continue;
+                }
+
+                const d = Math.max(0, Math.abs(currentX - cx) - halfSpan);
+                if (d < minD) {
+                    minD = d;
+                    if (minD === 0) break;
+                }
+            }
+
+            if (minD >= tourTransitionDist) return tourCruiseSpeed;
+            const u = minD / tourTransitionDist;
+            const s = u * u * (3 - 2 * u); // Smooth Hermite smoothstep
+            return tourSlowSpeed + (tourCruiseSpeed - tourSlowSpeed) * s;
+        }
 
         function updateTourUI() {
             const tourBtn = document.getElementById('tour-btn');
             const mobileTourBtn = document.getElementById('mobile-tour-btn');
+            const mTextTour = document.getElementById('m-text-tour');
             const controlBar = document.getElementById('tour-control-bar');
             const pauseBtn = document.getElementById('tour-pause-btn');
             const statusLabel = document.getElementById('tour-status-label');
@@ -1728,6 +2043,7 @@
             if (isTourActive) {
                 if (controlBar) controlBar.style.display = 'flex';
                 if (mobileTourBtn) mobileTourBtn.style.display = 'none';
+                if (mTextTour) mTextTour.innerText = dict.stopTour || 'Stop Tour';
                 if (tourBtn) {
                     tourBtn.style.background = 'rgba(214,168,72,0.3)';
                     tourBtn.style.borderColor = '#d6a848';
@@ -1755,9 +2071,10 @@
                 }
             } else {
                 if (controlBar) controlBar.style.display = 'none';
-                if (mobileTourBtn && (isPhone || (window.innerWidth <= 900 && !isIPad))) {
+                if (mobileTourBtn && isMobileMode()) {
                     mobileTourBtn.style.display = 'flex';
                 }
+                if (mTextTour) mTextTour.innerText = dict.startTour || 'Start Tour';
                 if (tourBtn) {
                     tourBtn.style.background = 'rgba(20,20,20,0.8)';
                     tourBtn.style.borderColor = '#5a4a35';
@@ -1792,6 +2109,7 @@
         function startTour() {
             isTourActive = true;
             isTourPaused = false;
+            tourElapsed = 0; // Reset flying camera oscillation clock
             
             // If we are already at or near the end of the tapestry, loop back to the start
             const maxX = W / SCALE;
@@ -1845,6 +2163,9 @@
         function stopTour() {
             isTourActive = false;
             isTourPaused = false;
+            tourElapsed = 0;
+            // Reset camera Y to neutral baseline (will lerp naturally via updateCamera)
+            camera.position.y = cameraY;
             updateTourUI();
         }
 
@@ -1952,7 +2273,7 @@
 
         function handleAnnotationClick(clientX, clientY, target) {
             if (isPhone) return; // Feature disabled on mobile devices
-            if (target && target.closest && (target.closest('#ui') || target.closest('#authoring-panel') || target.closest('#about-dialog') || target.closest('#lighting-dialog') || target.closest('#help-dialog') || target.closest('#context-scroll'))) {
+            if (target && target.closest && (target.closest('#ui') || target.closest('#authoring-panel') || target.closest('#about-dialog') || target.closest('#lighting-dialog') || target.closest('#help-dialog') || target.closest('#context-scroll') || target.closest('#mobile-menu') || target.closest('#mobile-menu-scrim') || target.closest('#hamburger-btn') || target.closest('#mobile-tour-btn') || target.closest('#tour-control-bar'))) {
                 return;
             }
             
@@ -1979,7 +2300,7 @@
         let lastWheelTime = 0;
         // Handle trackpad / mouse wheel zooming and horizontal panning.
         window.addEventListener('wheel', (e) => {
-            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog') || e.target.closest('#tour-control-bar')) return;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-menu') || e.target.closest('#hamburger-btn') || e.target.closest('#mobile-tour-btn')) return;
             e.preventDefault();
             autoScrollTargetX = null;
             lastWheelTime = Date.now();
@@ -2310,8 +2631,78 @@
             updateDynamicPopup();
             
             if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused) {
-                camera.position.x += tourSpeed * dt;
-                targetRotationY = 0;
+                camera.position.x += tourCruiseSpeed * dt;
+                tourElapsed += dt;
+
+                // --- Ken Burns flying camera ---
+                // Find the two nearest scenes (before and after the camera) and interpolate
+                const isNarrow = isPhone || (window.innerWidth <= 900 && !isIPad);
+                const baseZ = isNarrow ? 6.0 : 12.0;
+                const cx = camera.position.x;
+
+                // Build sorted list of scene center-x positions
+                const list = (typeof annotations !== 'undefined' && annotations.length > 0)
+                    ? annotations
+                    : ((typeof tituliData !== 'undefined' && tituliData.length > 0) ? tituliData : null);
+
+                let targetZ = baseZ;
+                let targetY = cameraY;
+
+                if (list && list.length > 0) {
+                    // Get center-x for each scene
+                    const centers = [];
+                    for (let i = 0; i < list.length; i++) {
+                        const item = list[i];
+                        let sceneX = 0;
+                        if (item.mesh && item.mesh.geometry && item.mesh.geometry.parameters && item.data) {
+                            const w = item.mesh.geometry.parameters.width || 4.0;
+                            sceneX = item.data.x + w / 2.0;
+                        } else if (item.data && typeof item.data.x === 'number') {
+                            sceneX = item.data.x + 2.5;
+                        } else if (typeof item.x === 'number') {
+                            sceneX = item.x + 2.5;
+                        } else {
+                            continue;
+                        }
+                        centers.push({ x: sceneX, idx: i });
+                    }
+                    centers.sort((a, b) => a.x - b.x);
+
+                    // Find which two scenes we're between
+                    let prevScene = centers[0];
+                    let nextScene = centers[centers.length - 1];
+                    for (let i = 0; i < centers.length; i++) {
+                        if (centers[i].x >= cx) {
+                            nextScene = centers[i];
+                            prevScene = (i > 0) ? centers[i - 1] : centers[i];
+                            break;
+                        }
+                        prevScene = centers[i];
+                    }
+
+                    // Get Ken Burns targets for each scene
+                    const prevKB = getSceneKenBurns(prevScene.idx, baseZ);
+                    const nextKB = getSceneKenBurns(nextScene.idx, baseZ);
+
+                    // Interpolation factor: 0 at prevScene, 1 at nextScene
+                    const span = nextScene.x - prevScene.x;
+                    const t = (span > 0.1) ? Math.max(0, Math.min(1, (cx - prevScene.x) / span))
+                                           : 0.5;
+                    // Smooth hermite for cinematic easing
+                    const st = t * t * (3 - 2 * t);
+
+                    targetZ = prevKB.targetZ + (nextKB.targetZ - prevKB.targetZ) * st;
+                    targetY = prevKB.targetY + (nextKB.targetY - prevKB.targetY) * st;
+                }
+
+                // Smooth startup: ease from current camera to targets over the first 2 seconds
+                const startupEase = Math.min(1, tourElapsed / 2.0);
+                const lerpRate = tourCamLerpRate * startupEase;
+
+                camera.position.z += (targetZ - camera.position.z) * lerpRate;
+                camera.position.y += (targetY - camera.position.y) * lerpRate;
+                targetRotationY = 0; // Ken Burns effect is zoom+pan, no yaw sway
+
                 const maxX = W / SCALE;
                 if (camera.position.x >= maxX) {
                     camera.position.x = maxX;
@@ -2515,6 +2906,28 @@
                 if (statusLabel) statusLabel.innerText = isTourPaused ? (dict.paused || 'Paused') : (dict.tourStatus || 'Touring');
             }
             document.querySelectorAll('#notes-btn').forEach(el => el.innerText = dict.notes);
+
+            // Translate mobile menu elements
+            const mTextTour = document.getElementById('m-text-tour');
+            if (mTextTour) {
+                mTextTour.innerText = (typeof isTourActive !== 'undefined' && isTourActive) ? (dict.stopTour || 'Stop Tour') : (dict.startTour || 'Start Tour');
+            }
+            const mTextNotes = document.getElementById('m-text-notes');
+            if (mTextNotes) mTextNotes.innerText = dict.sceneNotes || 'Scene Notes';
+            const mTextTitles = document.getElementById('m-text-titles');
+            if (mTextTitles) mTextTitles.innerText = dict.titles || 'Titles';
+            const mTextLang = document.getElementById('m-text-lang');
+            if (mTextLang) mTextLang.innerText = dict.language || 'Language';
+            const mBadgeLang = document.getElementById('m-badge-lang');
+            if (mBadgeLang) mBadgeLang.innerText = currentLanguage.toUpperCase();
+            const mTextHelp = document.getElementById('m-text-help');
+            if (mTextHelp) mTextHelp.innerText = dict.help || 'Help';
+            const mTextAbout = document.getElementById('m-text-about');
+            if (mTextAbout) mTextAbout.innerText = dict.about || 'About';
+            const mTextMusic = document.getElementById('m-text-music');
+            if (mTextMusic) mTextMusic.innerText = dict.music || 'Music';
+            const mTextFullscreen = document.getElementById('m-text-fullscreen');
+            if (mTextFullscreen) mTextFullscreen.innerText = dict.fullscreen || 'Fullscreen';
             
             const prevBtn = document.getElementById('prev-scene');
             const nextBtn = document.getElementById('next-scene');
@@ -2628,6 +3041,9 @@
                 if (urlParams.get('notes') === '1') {
                     openNotes();
                 }
+                if (urlParams.get('menu') === '1') {
+                    openMobileMenu();
+                }
             });
         });
         
@@ -2720,23 +3136,45 @@
             document.getElementById('lighting-dialog').style.display = 'none';
         });
 
-        // Toggle the background YouTube audio player state between play and pause
-        document.getElementById('music-toggle').addEventListener('click', () => {
+        function toggleMusic() {
             if (!ytPlayer || !ytPlayer.getPlayerState) return; // Not loaded yet
             
             const btn = document.getElementById('music-toggle');
+            const badge = document.getElementById('m-badge-music');
             const state = ytPlayer.getPlayerState();
             
             if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
                 ytPlayer.pauseVideo();
-                btn.innerHTML = '►';
-                btn.style.background = 'rgba(20,20,20,0.8)';
+                if (btn) {
+                    btn.innerHTML = '►';
+                    btn.style.background = 'rgba(20,20,20,0.8)';
+                }
+                if (badge) {
+                    badge.innerText = 'OFF';
+                    badge.style.color = '#888';
+                    badge.style.borderColor = 'rgba(255,255,255,0.15)';
+                    badge.style.background = 'rgba(255,255,255,0.05)';
+                }
             } else {
                 ytPlayer.playVideo();
-                btn.innerHTML = '||';
-                btn.style.background = 'rgba(214, 168, 72, 0.2)';
+                if (btn) {
+                    btn.innerHTML = '||';
+                    btn.style.background = 'rgba(214, 168, 72, 0.2)';
+                }
+                if (badge) {
+                    badge.innerText = 'ON';
+                    badge.style.color = '#d6a848';
+                    badge.style.borderColor = 'rgba(214,168,72,0.35)';
+                    badge.style.background = 'rgba(214,168,72,0.18)';
+                }
             }
-        });
+        }
+
+        // Toggle the background YouTube audio player state between play and pause
+        const musicToggleBtn = document.getElementById('music-toggle');
+        if (musicToggleBtn) {
+            musicToggleBtn.addEventListener('click', toggleMusic);
+        }
 
         // Initialize language settings on boot
         changeLanguage(currentLanguage);
