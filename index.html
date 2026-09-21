@@ -115,16 +115,34 @@
         #close-dialog:hover {
             background: #555;
         }
+        #tour-btn:hover {
+            background: rgba(214,168,72,0.2) !important;
+        }
+        #tour-pause-btn:hover {
+            background: rgba(214,168,72,0.45) !important;
+        }
+        #tour-stop-btn:hover {
+            background: rgba(255,255,255,0.2) !important;
+        }
     </style>
 </head>
 <body>
     <button id="hamburger-btn" style="position: absolute; top: 20px; right: 20px; z-index: 200; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 20px; display: none;">☰</button>
+    <div id="tour-control-bar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; background: rgba(20, 16, 12, 0.92); border: 1px solid #d6a848; border-radius: 30px; padding: 6px 14px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 12px; font-family: serif; color: #f4e4bc; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); user-select: none;">
+        <span style="font-size: 13px; color: #d6a848; font-weight: bold; letter-spacing: 0.5px; display: flex; align-items: center; gap: 7px;">
+            <span id="tour-indicator-dot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d6a848; box-shadow: 0 0 8px #d6a848;"></span>
+            <span id="tour-status-label">Touring</span>
+        </span>
+        <button id="tour-pause-btn" title="Pause / Resume" style="background: rgba(214,168,72,0.25); border: 1px solid #d6a848; color: #d6a848; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; padding: 0; outline: none; touch-action: manipulation;">⏸</button>
+        <button id="tour-stop-btn" title="Stop Tour" style="background: rgba(255,255,255,0.08); border: 1px solid #777; color: #ddd; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; padding: 0; outline: none; touch-action: manipulation;">⏹</button>
+    </div>
     <div id="ui">
         <h2>Bayeux Tapestry</h2>
         <p style="margin-top: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 15px;">
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
             <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
+            <button id="tour-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Tour</button>
             <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
             <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
             <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
@@ -309,6 +327,18 @@
         const H = 694;
         const SCALE = 100; // 100 pixels = 1 Three.js unit
         let currentLanguage = localStorage.getItem('bayeux_lang') || 'en';
+        const uiDict = {
+            'en': { help: 'Help', about: 'About', titles: 'Titles', tour: 'Tour', tourStatus: 'Touring', paused: 'Paused', notes: '☰ Notes', prev: 'Prev', next: 'Next', close: 'Close' },
+            'zh': { help: '帮助', about: '关于', titles: '标题', tour: '导览', tourStatus: '导览中', paused: '已暂停', notes: '☰ 笔记', prev: '上一个', next: '下一个', close: '关闭' },
+            'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', tour: 'Recorrido', tourStatus: 'Recorrido', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Sig', close: 'Cerrar' },
+            'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', tour: 'Visite', tourStatus: 'Visite', paused: 'En pause', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' },
+            'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', tour: 'Tour', tourStatus: 'Tour', paused: 'Pausiert', notes: '☰ Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen' },
+            'nl': { help: 'Help', about: 'Over', titles: 'Titels', tour: 'Rondleiding', tourStatus: 'Rondleiding', paused: 'Gepauzeerd', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
+            'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', tour: 'Tour', tourStatus: 'Em tour', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' },
+            'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', tour: 'दौरा', tourStatus: 'दौरा जारी', paused: 'रोक दिया', notes: '☰ नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें' },
+            'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', tour: 'جولة', tourStatus: 'جولة مستمرة', paused: 'متوقف', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' },
+            'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', tour: 'পরিদর্শন', tourStatus: 'চলমান', paused: 'বিরতি', notes: '☰ নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন' }
+        };
 
         const cols = Math.ceil(W / T);
         const rows = Math.ceil(H / T);
@@ -703,6 +733,298 @@
         plinth.position.set((W / SCALE) / 2 - length / 2, floorY, -0.5);
         canvasGroup.add(plinth);
 
+        // --- 3D ARCHITECTURAL TAPESTRY SUPPORTS (LEFT & RIGHT) ---
+        // Provides physical museum vitrine framing and cantilever wall supports along both edges
+        // Textured in realistic matte blackened steel and dark black-oxide architectural metal (no distracting brass)
+        function createBlackIronTexture(width = 256, height = 256) {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            // Matte charcoal base
+            ctx.fillStyle = '#161616';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Directional brushed grain along extrusion axis
+            for (let i = 0; i < 700; i++) {
+                const x = Math.random() * width;
+                const len = 15 + Math.random() * 70;
+                const y = Math.random() * height;
+                const isLight = Math.random() > 0.45;
+                const alpha = isLight ? (0.02 + Math.random() * 0.04) : (0.04 + Math.random() * 0.06);
+                ctx.strokeStyle = isLight ? ('rgba(255,255,255,' + alpha + ')') : ('rgba(0,0,0,' + alpha + ')');
+                ctx.lineWidth = 1 + Math.random() * 1.5;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + len);
+                ctx.stroke();
+            }
+            
+            // Fine cast-iron stippling / micro-pitting
+            const count = (width * height) * 0.3;
+            for (let i = 0; i < count; i++) {
+                const val = Math.random() > 0.65 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.5)';
+                ctx.fillStyle = val;
+                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
+            }
+            
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.wrapS = THREE.RepeatWrapping;
+            tex.wrapT = THREE.RepeatWrapping;
+            tex.repeat.set(1, 3);
+            return tex;
+        }
+
+        function createIronBumpTexture(width = 256, height = 256) {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#808080';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Striations for micro-relief
+            for (let i = 0; i < 400; i++) {
+                const x = Math.random() * width;
+                const len = 15 + Math.random() * 60;
+                const y = Math.random() * height;
+                const shade = Math.random() > 0.5 ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.09)';
+                ctx.strokeStyle = shade;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + len);
+                ctx.stroke();
+            }
+            
+            // Roughness noise
+            for (let i = 0; i < (width * height) * 0.3; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
+                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
+            }
+            
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.wrapS = THREE.RepeatWrapping;
+            tex.wrapT = THREE.RepeatWrapping;
+            tex.repeat.set(1, 3);
+            return tex;
+        }
+
+        const blackIronTexture = createBlackIronTexture();
+        const ironBumpTexture = createIronBumpTexture();
+        
+        // Matte blackened structural steel
+        const blackSteelMat = new THREE.MeshPhongMaterial({
+            map: blackIronTexture,
+            bumpMap: ironBumpTexture,
+            bumpScale: 0.02,
+            color: 0x181818,
+            specular: 0x383838,
+            shininess: 22
+        });
+
+        // Dark black oxide / gunmetal for hardware, bolts, flanges, and tie-rods
+        const blackOxideMat = new THREE.MeshPhongMaterial({
+            map: blackIronTexture,
+            bumpMap: ironBumpTexture,
+            bumpScale: 0.015,
+            color: 0x111111,
+            specular: 0x4d4d4d,
+            shininess: 45
+        });
+
+        function createSideSupport(isRightSide) {
+            const supportGroup = new THREE.Group();
+            const xEdge = isRightSide ? (W / SCALE) : 0;
+            const dir = isRightSide ? 1 : -1; // Outward direction: +1 on right, -1 on left
+            
+            const colWidth = 0.14;
+            const colHeight = 7.18; // Covers the full height plus top/bottom overlaps
+            const colDepth = 0.58;  // Spans from back wall (Z = -0.50) to slightly past tapestry (Z = +0.08)
+            const colCenterX = xEdge + dir * (colWidth / 2);
+            const colCenterY = -1.47;
+            const colCenterZ = -0.21; // Midpoint between -0.50 and +0.08
+            
+            // 1. Heavy Vertical Stanchion Channel (Side Beam)
+            const colGeo = new THREE.BoxGeometry(colWidth, colHeight, colDepth);
+            const colMesh = new THREE.Mesh(colGeo, blackSteelMat);
+            colMesh.position.set(colCenterX, colCenterY, colCenterZ);
+            supportGroup.add(colMesh);
+            
+            // 2. Front Retaining Bezel / Edge Clamp (physically overlaps front of tapestry)
+            const bezelWidth = 0.09;
+            const bezelHeight = colHeight;
+            const bezelDepth = 0.05;
+            const bezelGeo = new THREE.BoxGeometry(bezelWidth, bezelHeight, bezelDepth);
+            const bezelMesh = new THREE.Mesh(bezelGeo, blackSteelMat);
+            // Positions over the front edge of the tapestry
+            bezelMesh.position.set(xEdge - dir * (bezelWidth / 2), colCenterY, 0.045);
+            supportGroup.add(bezelMesh);
+            
+            // 3. Top Stanchion Cap & Corner Joint
+            const topCapGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.10, colDepth * 1.08);
+            const topCap = new THREE.Mesh(topCapGeo, blackSteelMat);
+            topCap.position.set(colCenterX, 2.16, colCenterZ);
+            supportGroup.add(topCap);
+            
+            // Black oxide corner reinforcement block on top
+            const topBlockGeo = new THREE.BoxGeometry(0.12, 0.12, 0.14);
+            const topBlock = new THREE.Mesh(topBlockGeo, blackOxideMat);
+            topBlock.position.set(colCenterX, 2.10, 0.04);
+            supportGroup.add(topBlock);
+            
+            // 4. Bottom Load-Bearing Shelf & Cantilever Arm
+            // Horizontal shelf cradling the bottom edge of the tilted tapestry
+            const shelfDepth = 0.68;
+            const shelfHeight = 0.14;
+            const shelfGeo = new THREE.BoxGeometry(colWidth * 1.5, shelfHeight, shelfDepth);
+            const shelfMesh = new THREE.Mesh(shelfGeo, blackSteelMat);
+            shelfMesh.position.set(colCenterX, -5.01, -0.16);
+            supportGroup.add(shelfMesh);
+            
+            // Front lip on shelf preventing fabric board from sliding forward
+            const frontLipGeo = new THREE.BoxGeometry(colWidth * 1.5, 0.20, 0.06);
+            const frontLip = new THREE.Mesh(frontLipGeo, blackSteelMat);
+            frontLip.position.set(colCenterX, -4.89, 0.15);
+            supportGroup.add(frontLip);
+            
+            // Heavy diagonal knee-brace strut underneath the bottom shelf
+            // Connects from back wall at Y = -5.85, Z = -0.48 to shelf front at Y = -5.08, Z = 0.08
+            const strutLen = 0.98;
+            const strutGeo = new THREE.CylinderGeometry(0.04, 0.04, strutLen, 12);
+            const strutMesh = new THREE.Mesh(strutGeo, blackSteelMat);
+            const angleKnee = Math.atan2(0.56, 0.77); // Angle between Y and Z
+            strutMesh.rotation.x = angleKnee;
+            strutMesh.position.set(colCenterX, -5.46, -0.20);
+            supportGroup.add(strutMesh);
+            
+            // Knee-brace wall anchor base plate
+            const kneeBaseGeo = new THREE.BoxGeometry(colWidth * 1.4, 0.35, 0.05);
+            const kneeBase = new THREE.Mesh(kneeBaseGeo, blackSteelMat);
+            kneeBase.position.set(colCenterX, -5.85, -0.475);
+            supportGroup.add(kneeBase);
+            
+            // 5. Vertical Foundation Column extending down to the Floor/Plinth
+            // Grounding the cantilever load into the museum floor plinth
+            const postHeight = 1.60;
+            const postGeo = new THREE.BoxGeometry(colWidth * 1.1, postHeight, 0.16);
+            const postMesh = new THREE.Mesh(postGeo, blackSteelMat);
+            postMesh.position.set(colCenterX, -6.65, -0.45);
+            supportGroup.add(postMesh);
+            
+            // Pedestal base plate on the floor
+            const pedestalBaseGeo = new THREE.BoxGeometry(colWidth * 1.8, 0.08, 0.28);
+            const pedestalBase = new THREE.Mesh(pedestalBaseGeo, blackSteelMat);
+            pedestalBase.position.set(colCenterX, -7.40, -0.45);
+            supportGroup.add(pedestalBase);
+            
+            // 6. Wall Standoff Flanges & Heavy Fastener Bolts
+            const standoffHeights = [1.55, -1.47, -4.20];
+            standoffHeights.forEach((posY) => {
+                // Wall mounting flange (round black-oxide disc flush on stone wall)
+                const flangeGeo = new THREE.CylinderGeometry(0.11, 0.11, 0.03, 16);
+                const flange = new THREE.Mesh(flangeGeo, blackOxideMat);
+                flange.rotation.x = Math.PI / 2;
+                flange.position.set(colCenterX, posY, -0.485);
+                supportGroup.add(flange);
+                
+                // Connecting standoff boss/hub
+                const hubGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.12, 12);
+                const hub = new THREE.Mesh(hubGeo, blackSteelMat);
+                hub.rotation.x = Math.PI / 2;
+                hub.position.set(colCenterX, posY, -0.42);
+                supportGroup.add(hub);
+                
+                // Outer side clamping bolts on the stanchion face
+                const sideBoltGeo = new THREE.CylinderGeometry(0.022, 0.022, 0.03, 8);
+                const sideBolt = new THREE.Mesh(sideBoltGeo, blackOxideMat);
+                sideBolt.rotation.z = Math.PI / 2;
+                sideBolt.position.set(xEdge + dir * (colWidth + 0.01), posY, -0.15);
+                supportGroup.add(sideBolt);
+                
+                const sideBolt2 = new THREE.Mesh(sideBoltGeo, blackOxideMat);
+                sideBolt2.rotation.z = Math.PI / 2;
+                sideBolt2.position.set(xEdge + dir * (colWidth + 0.01), posY, -0.32);
+                supportGroup.add(sideBolt2);
+            });
+            
+            // 7. Top Tension Tie-Rod / Diagonal Suspension Strut
+            // Anchors high on the back wall to prevent forward tipping
+            const cableLen = 1.35;
+            const cableGeo = new THREE.CylinderGeometry(0.015, 0.015, cableLen, 8);
+            const cableMesh = new THREE.Mesh(cableGeo, blackOxideMat);
+            const cableAngle = Math.atan2(0.48, 1.05); // Connects wall (Z=-0.48, Y=3.15) to cap (Z=0.00, Y=2.10)
+            cableMesh.rotation.x = -cableAngle;
+            cableMesh.position.set(colCenterX, 2.62, -0.24);
+            supportGroup.add(cableMesh);
+            
+            // Wall clevis bracket at top of tension rod
+            const clevisGeo = new THREE.BoxGeometry(colWidth * 0.9, 0.18, 0.08);
+            const clevis = new THREE.Mesh(clevisGeo, blackSteelMat);
+            clevis.position.set(colCenterX, 3.15, -0.46);
+            supportGroup.add(clevis);
+            
+            const clevisPinGeo = new THREE.CylinderGeometry(0.02, 0.02, colWidth * 1.1, 8);
+            const clevisPin = new THREE.Mesh(clevisPinGeo, blackOxideMat);
+            clevisPin.rotation.z = Math.PI / 2;
+            clevisPin.position.set(colCenterX, 3.15, -0.44);
+            supportGroup.add(clevisPin);
+
+            return supportGroup;
+        }
+
+        const leftSupport = createSideSupport(false);
+        canvasGroup.add(leftSupport);
+
+        const rightSupport = createSideSupport(true);
+        canvasGroup.add(rightSupport);
+
+        // --- CONTINUOUS TOP & BOTTOM VITRINE RAILS ---
+        // Spans the full 70m length of the tapestry, creating a cohesive blackened steel frame
+        const railLength = W / SCALE;
+        const railCenterX = (W / SCALE) / 2;
+
+        const railTex = blackIronTexture.clone();
+        railTex.needsUpdate = true;
+        railTex.repeat.set(railLength / 2, 1);
+
+        const railBump = ironBumpTexture.clone();
+        railBump.needsUpdate = true;
+        railBump.repeat.set(railLength / 2, 1);
+
+        const railMat = new THREE.MeshPhongMaterial({
+            map: railTex,
+            bumpMap: railBump,
+            bumpScale: 0.02,
+            color: 0x181818,
+            specular: 0x383838,
+            shininess: 22
+        });
+
+        // 1. TOP RAIL (caps the top edge of the tapestry and meets the stone wall)
+        const topRailBeamGeo = new THREE.BoxGeometry(railLength, 0.10, 0.56);
+        const topRailBeam = new THREE.Mesh(topRailBeamGeo, railMat);
+        topRailBeam.position.set(railCenterX, 2.05, -0.22);
+        canvasGroup.add(topRailBeam);
+
+        const topRailLipGeo = new THREE.BoxGeometry(railLength, 0.06, 0.04);
+        const topRailLip = new THREE.Mesh(topRailLipGeo, railMat);
+        topRailLip.position.set(railCenterX, 1.98, 0.05);
+        canvasGroup.add(topRailLip);
+
+        // 2. BOTTOM RAIL (load-bearing shelf cradling the tilted tapestry bottom with retaining lip)
+        const bottomRailShelfGeo = new THREE.BoxGeometry(railLength, 0.12, 0.60);
+        const bottomRailShelf = new THREE.Mesh(bottomRailShelfGeo, railMat);
+        bottomRailShelf.position.set(railCenterX, -5.00, -0.20);
+        canvasGroup.add(bottomRailShelf);
+
+        const bottomRailLipGeo = new THREE.BoxGeometry(railLength, 0.14, 0.05);
+        const bottomRailLip = new THREE.Mesh(bottomRailLipGeo, railMat);
+        bottomRailLip.position.set(railCenterX, -4.92, 0.09);
+        canvasGroup.add(bottomRailLip);
+
 
 
         // Lighting: Ambient light + 4 Dynamic Torches
@@ -818,6 +1140,7 @@
         
         // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
         window.addEventListener('touchstart', (e) => { 
+            if (e.target.closest('#tour-control-bar')) return;
             isTouch = true; 
             hasTouchDragged = false;
             mouseScrollDir = 0; 
@@ -879,6 +1202,9 @@
                 const currentTouchY = e.touches[0].clientY;
                 const dx = currentTouchX - lastTouchX;
                 const dy = currentTouchY - lastTouchY;
+                if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused && Math.abs(dx) > 6) {
+                    pauseTour();
+                }
                 
                 // 1:1 pixel-to-world drag ratio based on current camera Z distance and 45deg FOV
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
@@ -976,7 +1302,7 @@
             if (isTouch) return;
             mouseStartX = e.clientX;
             mouseStartY = e.clientY;
-            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll')) return;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar')) return;
             
             if (isAuthoringMode) {
                 mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1065,6 +1391,9 @@
                 e.preventDefault();
                 const dx = e.clientX - lastTouchX;
                 const dy = e.clientY - lastTouchY;
+                if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused && Math.abs(dx) > 6) {
+                    pauseTour();
+                }
                 
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
                 const moveWorldX = -dx * pixelToWorld;
@@ -1083,7 +1412,7 @@
             }
             
             // Prevent edge-scroll if hovering over UI elements
-            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog')) {
+            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#tour-control-bar')) {
                 mouseScrollDir = 0;
                 return;
             }
@@ -1170,8 +1499,14 @@
                 ui.style.display = isHidden ? 'block' : 'none';
             }
             mouseScrollDir = 0; // Prevent mouse edge-scroll from hijacking when releasing keys
-            if (e.key === 'ArrowLeft') keys.left = true;
-            if (e.key === 'ArrowRight') keys.right = true;
+            if (e.key === 'ArrowLeft') {
+                keys.left = true;
+                if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused) pauseTour();
+            }
+            if (e.key === 'ArrowRight') {
+                keys.right = true;
+                if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused) pauseTour();
+            }
             if (e.key === 'ArrowUp') keys.up = true;
             if (e.key === 'ArrowDown') keys.down = true;
         });
@@ -1220,6 +1555,178 @@
                 }
             });
         }
+
+        // --- TOUR MODE LOGIC ---
+        let isTourActive = false;
+        let isTourPaused = false;
+        const tourSpeed = 1.25; // units per second (smooth, comfortable glide across the 70m tapestry)
+
+        function updateTourUI() {
+            const tourBtn = document.getElementById('tour-btn');
+            const controlBar = document.getElementById('tour-control-bar');
+            const pauseBtn = document.getElementById('tour-pause-btn');
+            const statusLabel = document.getElementById('tour-status-label');
+            const dot = document.getElementById('tour-indicator-dot');
+            
+            const dict = (typeof uiDict !== 'undefined' && uiDict[currentLanguage]) ? uiDict[currentLanguage] : { tourStatus: 'Touring', paused: 'Paused' };
+            
+            if (isTourActive) {
+                if (controlBar) controlBar.style.display = 'flex';
+                if (tourBtn) {
+                    tourBtn.style.background = 'rgba(214,168,72,0.3)';
+                    tourBtn.style.borderColor = '#d6a848';
+                }
+                if (isTourPaused) {
+                    if (pauseBtn) {
+                        pauseBtn.innerText = '▶';
+                        pauseBtn.title = 'Resume Tour';
+                    }
+                    if (statusLabel) statusLabel.innerText = dict.paused || 'Paused';
+                    if (dot) {
+                        dot.style.background = '#888';
+                        dot.style.boxShadow = 'none';
+                    }
+                } else {
+                    if (pauseBtn) {
+                        pauseBtn.innerText = '⏸';
+                        pauseBtn.title = 'Pause Tour';
+                    }
+                    if (statusLabel) statusLabel.innerText = dict.tourStatus || 'Touring';
+                    if (dot) {
+                        dot.style.background = '#d6a848';
+                        dot.style.boxShadow = '0 0 8px #d6a848';
+                    }
+                }
+            } else {
+                if (controlBar) controlBar.style.display = 'none';
+                if (tourBtn) {
+                    tourBtn.style.background = 'rgba(20,20,20,0.8)';
+                    tourBtn.style.borderColor = '#5a4a35';
+                }
+            }
+        }
+
+        function openNotes(shouldAutoScroll = false) {
+            const popup = document.getElementById('context-scroll');
+            const notesBtn = document.getElementById('notes-btn');
+            if (popup) popup.style.display = 'block';
+            if (notesBtn) notesBtn.style.background = 'rgba(214,168,72,0.3)';
+            
+            let closestIndex = -1;
+            let minDistance = Infinity;
+            for (let i = 0; i < annotations.length; i++) {
+                const ann = annotations[i];
+                if (!ann || !ann.mesh || !ann.data) continue;
+                const width = ann.mesh.geometry.parameters.width;
+                const centerPoint = ann.data.x + width / 2.0;
+                const dist = Math.abs(camera.position.x - centerPoint);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIndex = tituliData.indexOf(ann.data);
+                }
+            }
+            if (closestIndex !== -1) {
+                updatePopupUI(closestIndex, shouldAutoScroll);
+            }
+        }
+
+        function startTour() {
+            isTourActive = true;
+            isTourPaused = false;
+            
+            // If we are already at or near the end of the tapestry, loop back to the start
+            const maxX = W / SCALE;
+            if (camera.position.x >= maxX - 5.0) {
+                camera.position.x = Math.max(0, initialVisibleWidth / 2 - 2.0);
+            }
+            
+            // If camera is way too far out, gently ease to standard viewing distance
+            if (camera.position.z > 22.0) {
+                camera.position.z = isPhone ? 8.0 : 12.0;
+            }
+
+            // Ensure supertitles are enabled so titles are displayed as we glide by
+            if (!showSupertitles) {
+                showSupertitles = true;
+                const toggleBtn = document.getElementById('toggle-supertitles');
+                if (toggleBtn) toggleBtn.style.background = 'rgba(214,168,72,0.3)';
+                const container = document.getElementById('annotations-container');
+                if (container) container.style.display = 'block';
+            }
+
+            // Always turn on notes when starting the tour
+            openNotes(false);
+            
+            updateTourUI();
+        }
+
+        function pauseTour() {
+            if (!isTourActive) return;
+            isTourPaused = true;
+            updateTourUI();
+        }
+
+        function resumeTour() {
+            if (!isTourActive) return;
+            isTourPaused = false;
+            updateTourUI();
+        }
+
+        function toggleTourPause() {
+            if (!isTourActive) {
+                startTour();
+            } else if (isTourPaused) {
+                resumeTour();
+            } else {
+                pauseTour();
+            }
+        }
+
+        function stopTour() {
+            isTourActive = false;
+            isTourPaused = false;
+            updateTourUI();
+        }
+
+        const tourBtn = document.getElementById('tour-btn');
+        if (tourBtn) {
+            tourBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (isTourActive) {
+                    stopTour();
+                } else {
+                    startTour();
+                }
+            });
+        }
+
+        const tourPauseBtn = document.getElementById('tour-pause-btn');
+        if (tourPauseBtn) {
+            tourPauseBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleTourPause();
+            });
+        }
+
+        const tourStopBtn = document.getElementById('tour-stop-btn');
+        if (tourStopBtn) {
+            tourStopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                stopTour();
+            });
+        }
+
+        const tourControlBar = document.getElementById('tour-control-bar');
+        if (tourControlBar) {
+            ['mousedown', 'touchstart', 'pointerdown', 'click'].forEach(evt => {
+                tourControlBar.addEventListener(evt, (e) => {
+                    e.stopPropagation();
+                }, { passive: false });
+            });
+        }
+
 
 
         
@@ -1303,7 +1810,7 @@
         let lastWheelTime = 0;
         // Handle trackpad / mouse wheel zooming and horizontal panning.
         window.addEventListener('wheel', (e) => {
-            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog')) return;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog') || e.target.closest('#tour-control-bar')) return;
             e.preventDefault();
             autoScrollTargetX = null;
             lastWheelTime = Date.now();
@@ -1627,9 +2134,21 @@
             }
         }
 
+        const tourClock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
+            const dt = Math.min(tourClock.getDelta(), 0.1);
             updateDynamicPopup();
+            
+            if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused) {
+                camera.position.x += tourSpeed * dt;
+                targetRotationY = 0;
+                const maxX = W / SCALE;
+                if (camera.position.x >= maxX) {
+                    camera.position.x = maxX;
+                    stopTour();
+                }
+            }
             
             if (autoScrollTargetX !== null) {
                 camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
@@ -1698,28 +2217,7 @@
                     return;
                 }
                 
-                notesBtn.style.background = 'rgba(214,168,72,0.3)';
-                
-                let closestIndex = -1;
-                let minDistance = Infinity;
-                
-                for (let i = 0; i < annotations.length; i++) {
-                    const ann = annotations[i];
-                    if (!ann || !ann.mesh || !ann.data) continue;
-                    
-                    const width = ann.mesh.geometry.parameters.width;
-                    const centerPoint = ann.data.x + width / 2.0;
-                    
-                    const dist = Math.abs(camera.position.x - centerPoint);
-                    if (dist < minDistance) {
-                        minDistance = dist;
-                        closestIndex = tituliData.indexOf(ann.data);
-                    }
-                }
-                
-                if (closestIndex !== -1) {
-                    updatePopupUI(closestIndex, true);
-                }
+                openNotes(true);
             });
         }
 
@@ -1827,23 +2325,15 @@
             });
             
             // Translate static UI elements
-            const uiDict = {
-                'en': { help: 'Help', about: 'About', titles: 'Titles', notes: '☰ Notes', prev: 'Prev', next: 'Next', close: 'Close' },
-                'zh': { help: '帮助', about: '关于', titles: '标题', notes: '☰ 笔记', prev: '上一个', next: '下一个', close: '关闭' },
-                'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', notes: '☰ Notas', prev: 'Ant', next: 'Sig', close: 'Cerrar' },
-                'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' },
-                'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', notes: '☰ Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen' },
-                'nl': { help: 'Help', about: 'Over', titles: 'Titels', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
-                'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' },
-                'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', notes: '☰ नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें' },
-                'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' },
-                'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', notes: '☰ নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন' }
-            };
-            
             const dict = uiDict[currentLanguage] || uiDict['en'];
             document.querySelectorAll('#help-link').forEach(el => el.innerText = dict.help);
             document.querySelectorAll('#learn-more-link').forEach(el => el.innerText = dict.about);
             document.querySelectorAll('#toggle-supertitles').forEach(el => el.innerText = dict.titles);
+            document.querySelectorAll('#tour-btn').forEach(el => el.innerText = dict.tour);
+            if (typeof isTourActive !== 'undefined' && isTourActive) {
+                const statusLabel = document.getElementById('tour-status-label');
+                if (statusLabel) statusLabel.innerText = isTourPaused ? (dict.paused || 'Paused') : (dict.tourStatus || 'Touring');
+            }
             document.querySelectorAll('#notes-btn').forEach(el => el.innerText = dict.notes);
             
             const prevBtn = document.getElementById('prev-scene');
@@ -2005,10 +2495,11 @@
                 ann.mesh.position.x = ann.data.x;
                 ann.mesh.position.y = ann.data.y;
                 
-                // Smoothly transition opacity to 1.0 when hovered, 0.50 normally
+                // Smoothly transition opacity to 1.0 when hovered, 0.50 normally (or 0.85 when touring)
                 if (ann.currentOpacity === undefined) ann.currentOpacity = 0.50;
                 
-                const targetOpacity = (hoveredMesh === ann.mesh || isAuthoringMode) ? 1.0 : 0.50;
+                const baseOpacity = (typeof isTourActive !== 'undefined' && isTourActive) ? 0.85 : 0.50;
+                const targetOpacity = (hoveredMesh === ann.mesh || isAuthoringMode) ? 1.0 : baseOpacity;
                 ann.currentOpacity += (targetOpacity - ann.currentOpacity) * 0.2; // Smooth lerp
                 
                 ann.mesh.material.opacity = ann.currentOpacity * scrollOpacityMult;
