@@ -1042,6 +1042,115 @@
         bottomShelfHighlight.position.set(railCenterX, -5.06, 0.10);
         canvasGroup.add(bottomShelfHighlight);
 
+        // --- PERIODIC VERTICAL SUPPORTS UNDER THE TAPESTRY ---
+        // Heavy architectural stanchions extending from the bottom vitrine rail all the way down to the stone floor
+        // Spaced every ~3.5 meters (~30 units) to provide authentic, convincing structural support
+        function createUnderSupport(xPos) {
+            const group = new THREE.Group();
+            const colWidth = 0.14;
+            const colDepth = 0.16;
+            const colCenterZ = -0.05; // Placed forward directly under the vitrine rail to catch light and provide direct support
+
+            // 1. Continuous vertical foundation column extending from underside of bottom rail (-5.04) all the way down to the floor (-7.44)
+            const postHeight = 2.40;
+            const postGeo = new THREE.BoxGeometry(colWidth, postHeight, colDepth);
+            const postMesh = new THREE.Mesh(postGeo, blackSteelMat);
+            postMesh.position.set(xPos, -6.24, colCenterZ);
+            group.add(postMesh);
+
+            // Subtle vertical edge highlights on the front corners of the column
+            const edgeHlGeo = new THREE.BoxGeometry(0.008, postHeight, 0.008);
+            const leftHl = new THREE.Mesh(edgeHlGeo, bottomEdgeHighlightMat);
+            leftHl.position.set(xPos - colWidth / 2, -6.24, colCenterZ + colDepth / 2 + 0.002);
+            group.add(leftHl);
+
+            const rightHl = new THREE.Mesh(edgeHlGeo, bottomEdgeHighlightMat);
+            rightHl.position.set(xPos + colWidth / 2, -6.24, colCenterZ + colDepth / 2 + 0.002);
+            group.add(rightHl);
+
+            // 2. Top under-shelf saddle collar (cups the underside of the bottom rail at Y = -5.04)
+            const cradleGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.08, 0.44);
+            const cradle = new THREE.Mesh(cradleGeo, blackSteelMat);
+            cradle.position.set(xPos, -5.04, -0.16);
+            group.add(cradle);
+
+            // Front retaining clip wrapping up the front lip of the rail
+            const clipGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.18, 0.04);
+            const clip = new THREE.Mesh(clipGeo, blackSteelMat);
+            clip.position.set(xPos, -4.93, 0.105);
+            group.add(clip);
+
+            // Edge highlight on the front clip
+            const clipHlGeo = new THREE.BoxGeometry(colWidth * 1.36, 0.008, 0.008);
+            const clipHl = new THREE.Mesh(clipHlGeo, bottomEdgeHighlightMat);
+            clipHl.position.set(xPos, -4.84, 0.125);
+            group.add(clipHl);
+
+            // Front clip hex fastener bolts
+            [-4.88, -4.98].forEach((bY) => {
+                const boltGeo = new THREE.CylinderGeometry(0.014, 0.014, 0.015, 8);
+                const bolt = new THREE.Mesh(boltGeo, blackOxideMat);
+                bolt.rotation.x = Math.PI / 2;
+                bolt.position.set(xPos, bY, 0.126);
+                group.add(bolt);
+            });
+
+            // 3. Wall tie-back anchor strut (stabilizes the column back to the stone wall at Z = -0.50)
+            const strutGeo = new THREE.CylinderGeometry(0.032, 0.032, 0.35, 12);
+            const strut = new THREE.Mesh(strutGeo, blackSteelMat);
+            strut.rotation.x = Math.PI / 2;
+            strut.position.set(xPos, -5.85, -0.30);
+            group.add(strut);
+
+            // Wall mounting flange against the stone wall
+            const wallFlangeGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.03, 16);
+            const wallFlange = new THREE.Mesh(wallFlangeGeo, blackOxideMat);
+            wallFlange.rotation.x = Math.PI / 2;
+            wallFlange.position.set(xPos, -5.85, -0.485);
+            group.add(wallFlange);
+
+            const wallBoltGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.02, 8);
+            const wallBolt = new THREE.Mesh(wallBoltGeo, blackOxideMat);
+            wallBolt.rotation.x = Math.PI / 2;
+            wallBolt.position.set(xPos, -5.85, -0.47);
+            group.add(wallBolt);
+
+            // 4. Ground pedestal base plate firmly planted on the stone floor at floorY = -7.44
+            const basePlinthGeo = new THREE.BoxGeometry(colWidth * 2.0, 0.08, colDepth * 1.8);
+            const basePlinth = new THREE.Mesh(basePlinthGeo, blackSteelMat);
+            basePlinth.position.set(xPos, -7.40, colCenterZ);
+            group.add(basePlinth);
+
+            const baseStepGeo = new THREE.BoxGeometry(colWidth * 1.5, 0.04, colDepth * 1.4);
+            const baseStep = new THREE.Mesh(baseStepGeo, blackSteelMat);
+            baseStep.position.set(xPos, -7.34, colCenterZ);
+            group.add(baseStep);
+
+            // Floor anchor bolts securing the base plinth to the stone floor
+            const boltOffsets = [-0.09, 0.09];
+            boltOffsets.forEach((bx) => {
+                [-0.09, 0.09].forEach((bz) => {
+                    const floorBoltGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.02, 8);
+                    const floorBolt = new THREE.Mesh(floorBoltGeo, blackOxideMat);
+                    floorBolt.position.set(xPos + bx, -7.35, colCenterZ + bz);
+                    group.add(floorBolt);
+                });
+            });
+
+            return group;
+        }
+
+        // Place periodic vertical supports every ~3.5 meters (~30.13 units) across the 70m tapestry
+        const tapestryLength = W / SCALE;
+        const numBays = 20; // 20 bays (~3.5 meters / ~11.5 ft spacing) for convincing structural rhythm
+        const supportSpacing = tapestryLength / numBays;
+
+        for (let i = 1; i < numBays; i++) {
+            const xPos = i * supportSpacing;
+            const underSupport = createUnderSupport(xPos);
+            canvasGroup.add(underSupport);
+        }
+
 
 
         // Lighting: Ambient light + 4 Dynamic Torches
