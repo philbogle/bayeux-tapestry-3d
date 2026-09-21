@@ -314,6 +314,9 @@
         const rows = Math.ceil(H / T);
 
         const scene = new THREE.Scene();
+        const canvasGroup = new THREE.Group();
+        canvasGroup.rotation.x = -0.08; // Tilt canvas backward by ~4.5 degrees
+        scene.add(canvasGroup);
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         // Magnifying Glass Setup
         let magActive = false;
@@ -395,7 +398,7 @@
                 const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
                 mesh.scale.set(widthUnits, heightUnits, 1);
                 mesh.position.set(xCenter, yCenter, zOffset);
-                scene.add(mesh);
+                canvasGroup.add(mesh);
 
                 tiles.push({
                     c, r,
@@ -434,7 +437,7 @@
                     mesh.scale.set(widthUnits, heightUnits, 1);
                     mesh.position.set(xCenter, yCenter, zOffset);
                     
-                    scene.add(mesh);
+                    canvasGroup.add(mesh);
                     
                     tilesL17.push({
                         c, r,
@@ -473,7 +476,7 @@
                     mesh.scale.set(widthUnits, heightUnits, 1);
                     mesh.position.set(xCenter, yCenter, zOffset);
                     
-                    scene.add(mesh);
+                    canvasGroup.add(mesh);
                     
                     tilesL18.push({
                         c, r,
@@ -513,7 +516,7 @@
                     
                     // Optional: only add to scene when mag is active to save 40k meshes in frustum culler?
                     // Frustum culling 40k invisible meshes is fast enough in ThreeJS.
-                    scene.add(mesh);
+                    canvasGroup.add(mesh);
                     
                     tilesL19.push({
                         c, r,
@@ -667,7 +670,7 @@
         const wallGeo = new THREE.PlaneGeometry(length, 120);
         const backWall = new THREE.Mesh(wallGeo, wallMat);
         backWall.position.set((W / SCALE) / 2, tapestryElevation, -0.5); // 0.5 units (6 inches) behind the tapestry (which is at Z=0)
-        scene.add(backWall);
+        canvasGroup.add(backWall);
 
         // Add a chamfered plinth course at the base of the wall
         const plinthHeight = 0.4; 
@@ -698,7 +701,7 @@
         plinth.rotation.y = Math.PI / 2;
         // Position at the left edge of the wall, on the floor, flush with the wall
         plinth.position.set((W / SCALE) / 2 - length / 2, floorY, -0.5);
-        scene.add(plinth);
+        canvasGroup.add(plinth);
 
 
 
@@ -766,7 +769,8 @@
             const ctx = canvas.getContext('2d');
             
             const gradient = ctx.createLinearGradient(0, 0, 0, 64);
-            gradient.addColorStop(0, 'rgba(0,0,0,0.525)'); // Core shadow intensity at the direct contact point
+            gradient.addColorStop(0, 'rgba(0,0,0,0.6)'); // Much darker core shadow to anchor it
+            gradient.addColorStop(0.2, 'rgba(0,0,0,0.6)');
             gradient.addColorStop(1, 'rgba(0,0,0,0)');
             
             ctx.fillStyle = gradient;
@@ -775,7 +779,7 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        const shadowHeight = 0.5;
+        const shadowHeight = 1.1; // Reduced drop shadow height slightly
         const shadowGeo = new THREE.PlaneGeometry(W / SCALE, shadowHeight);
         const shadowMat = new THREE.MeshBasicMaterial({ 
             map: createShadowTexture(), 
@@ -783,9 +787,16 @@
             depthWrite: false 
         });
         const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
-        // Position it so its top edge touches the bottom of the tapestry
-        shadowMesh.position.set((W / SCALE) / 2, -H / SCALE - (shadowHeight / 2) + tapestryElevation, 0);
-        scene.add(shadowMesh);
+        // Position it so its top edge touches the bottom of the tapestry, but pushed back onto the wall
+        shadowMesh.position.set((W / SCALE) / 2, -H / SCALE - (shadowHeight / 2) + tapestryElevation, -0.48);
+        canvasGroup.add(shadowMesh);
+        
+        // Add a top shadow to simulate ambient occlusion / thickness where it meets the wall
+        const topShadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+        topShadowMesh.rotation.z = Math.PI; // Flip it upside down
+        topShadowMesh.scale.y = 0.33; // Significantly reduce the size of the top shadow
+        topShadowMesh.position.set((W / SCALE) / 2, 0 + (shadowHeight * 0.33 / 2) + tapestryElevation, -0.48);
+        canvasGroup.add(topShadowMesh);
 
         // Input state
         const keys = {
@@ -853,8 +864,9 @@
                 dragRaycaster.setFromCamera(mouseCoords, camera);
                 const intersects = dragRaycaster.intersectObjects(scene.children, true);
                 if (intersects.length > 0) {
-                    draggedAnnotation.data.x = intersects[0].point.x;
-                    draggedAnnotation.data.y = intersects[0].point.y;
+                    const localPoint = canvasGroup.worldToLocal(intersects[0].point.clone());
+                    draggedAnnotation.data.x = localPoint.x;
+                    draggedAnnotation.data.y = localPoint.y;
                     if (typeof updateAnnotations === 'function') updateAnnotations();
                 }
                 return;
@@ -1028,7 +1040,8 @@
                 lensMesh.position.y = - (e.clientY - window.innerHeight / 2);
                 
                 dragRaycaster.setFromCamera(mouseCoords, camera);
-                const planeZ0 = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+                const planeNormal = new THREE.Vector3(0, 0, 1).applyEuler(canvasGroup.rotation);
+                const planeZ0 = new THREE.Plane(planeNormal, 0);
                 const target = new THREE.Vector3();
                 if (dragRaycaster.ray.intersectPlane(planeZ0, target)) {
                     magCamera.position.x = target.x;
@@ -1040,8 +1053,9 @@
                 dragRaycaster.setFromCamera(mouseCoords, camera);
                 const intersects = dragRaycaster.intersectObjects(scene.children, true);
                 if (intersects.length > 0) {
-                    draggedAnnotation.data.x = intersects[0].point.x;
-                    draggedAnnotation.data.y = intersects[0].point.y;
+                    const localPoint = canvasGroup.worldToLocal(intersects[0].point.clone());
+                    draggedAnnotation.data.x = localPoint.x;
+                    draggedAnnotation.data.y = localPoint.y;
                     if (typeof updateAnnotations === 'function') updateAnnotations();
                 }
                 return;
@@ -1854,7 +1868,7 @@
                 newMesh.position.set(ann.data.x, ann.data.y, 0.05);
                 newMesh.visible = false;
                 ann.mesh = newMesh;
-                scene.add(newMesh);
+                canvasGroup.add(newMesh);
             });
             const popup = document.getElementById('context-scroll');
             if (popup && popup.style.display !== 'none') {
@@ -1907,7 +1921,7 @@
             mesh.position.z = 0.05; // Float above the highest LOD tapestry (z=0.02)
             mesh.frustumCulled = false; // Prevent pop-in of wide text strings
             mesh.renderOrder = 999; // Ensure text always renders ON TOP of all tapestry tiles
-            scene.add(mesh);
+            canvasGroup.add(mesh);
             return mesh;
         }
 
@@ -2000,7 +2014,7 @@
                 ann.mesh.material.opacity = ann.currentOpacity * scrollOpacityMult;
                 
                 // Add a subtle scale effect on hover as well
-                const targetScale = (hoveredMesh === ann.mesh) ? 1.01 : 1.0;
+                const targetScale = (hoveredMesh === ann.mesh) ? 1.002 : 1.0; // Drastically reduced hover scale to prevent perceived horizontal shifting
                 if (ann.currentScale === undefined) ann.currentScale = 1.0;
                 ann.currentScale += (targetScale - ann.currentScale) * 0.2;
                 ann.mesh.scale.set(ann.currentScale, ann.currentScale, 1);
