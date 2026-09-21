@@ -950,27 +950,6 @@
                 supportGroup.add(sideBolt2);
             });
             
-            // 7. Top Tension Tie-Rod / Diagonal Suspension Strut
-            // Anchors high on the back wall to prevent forward tipping
-            const cableLen = 1.35;
-            const cableGeo = new THREE.CylinderGeometry(0.015, 0.015, cableLen, 8);
-            const cableMesh = new THREE.Mesh(cableGeo, blackOxideMat);
-            const cableAngle = Math.atan2(0.48, 1.05); // Connects wall (Z=-0.48, Y=3.15) to cap (Z=0.00, Y=2.10)
-            cableMesh.rotation.x = -cableAngle;
-            cableMesh.position.set(colCenterX, 2.62, -0.24);
-            supportGroup.add(cableMesh);
-            
-            // Wall clevis bracket at top of tension rod
-            const clevisGeo = new THREE.BoxGeometry(colWidth * 0.9, 0.18, 0.08);
-            const clevis = new THREE.Mesh(clevisGeo, blackSteelMat);
-            clevis.position.set(colCenterX, 3.15, -0.46);
-            supportGroup.add(clevis);
-            
-            const clevisPinGeo = new THREE.CylinderGeometry(0.02, 0.02, colWidth * 1.1, 8);
-            const clevisPin = new THREE.Mesh(clevisPinGeo, blackOxideMat);
-            clevisPin.rotation.z = Math.PI / 2;
-            clevisPin.position.set(colCenterX, 3.15, -0.44);
-            supportGroup.add(clevisPin);
 
             return supportGroup;
         }
