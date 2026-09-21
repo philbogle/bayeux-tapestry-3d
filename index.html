@@ -565,7 +565,7 @@
         // scene.fog = new THREE.FogExp2(fogColor, 0.005);
 
         // Add floor and ceiling for perspective
-        const ceilingY = (H / SCALE + 0.5) * 4; // 4x height multiplier creates an open, great hall feel
+        const ceilingY = (H / SCALE + 0.5) * 3.8; // 9.5-meter cathedral-style vault (35.7 units from floor plinth)
         const length = W / SCALE + 100;
 
         /**
@@ -666,7 +666,7 @@
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 24, 120 / 24);
         
-        const ceilingTexture = createOrganicTexture(512, 512, '#080808', false);
+        const ceilingTexture = createOrganicTexture(512, 512, '#121212', false);
         ceilingTexture.wrapS = THREE.RepeatWrapping;
         ceilingTexture.wrapT = THREE.RepeatWrapping;
         ceilingTexture.repeat.set(length / 5, 120 / 5); 
@@ -683,7 +683,7 @@
         // Use MeshPhongMaterial (per-pixel lighting) instead of Lambert (per-vertex).
         // Since these are massive planes with only 4 vertices at the corners, Lambert will ignore point lights in the middle!
         const floorMat = new THREE.MeshPhongMaterial({ map: floorTexture, shininess: 5 });
-        const ceilingMat = new THREE.MeshPhongMaterial({ map: ceilingTexture, shininess: 0 });
+        const ceilingMat = new THREE.MeshPhongMaterial({ map: ceilingTexture, shininess: 4 });
         const wallMat = new THREE.MeshPhongMaterial({ map: wallTexture, shininess: 12 });
         
         const floor = new THREE.Mesh(planeGeo, floorMat);
@@ -695,6 +695,25 @@
         ceiling.rotation.x = Math.PI / 2;
         ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
         scene.add(ceiling);
+
+        // --- CATHEDRAL-STYLE VAULT RIBS ---
+        // Transverse stone arch ribs spanning across the 9.5-meter high ceiling
+        const vaultBayCount = 20;
+        const vaultBaySpacing = (W / SCALE) / vaultBayCount;
+        const ribDepth = 80;
+        const ribGeo = new THREE.BoxGeometry(0.42, 0.38, ribDepth);
+        const ribMat = new THREE.MeshPhongMaterial({
+            map: wallTexture,
+            color: 0x1c1a17,
+            shininess: 8
+        });
+
+        for (let i = 0; i <= vaultBayCount; i++) {
+            const ribX = i * vaultBaySpacing;
+            const rib = new THREE.Mesh(ribGeo, ribMat);
+            rib.position.set(ribX, ceilingY - 0.19, -2.5 + ribDepth / 2);
+            scene.add(rib);
+        }
 
         // Add stone wall just behind the tapestry
         const wallGeo = new THREE.PlaneGeometry(length, 120);
