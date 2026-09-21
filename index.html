@@ -849,6 +849,78 @@
             shininess: 45
         });
 
+        // Architectural cantilever bracket and floor foundation under the bottom rail
+        // Simple, realistic design shared identically by the left, right, and intermediate supports
+        function createUnderSupport(xPos) {
+            const group = new THREE.Group();
+            const colWidth = 0.14;
+
+            // 1. Horizontal shelf cradling the bottom edge of the tapestry
+            const shelfDepth = 0.68;
+            const shelfHeight = 0.14;
+            const shelfGeo = new THREE.BoxGeometry(colWidth * 1.5, shelfHeight, shelfDepth);
+            const shelfMesh = new THREE.Mesh(shelfGeo, blackSteelMat);
+            shelfMesh.position.set(xPos, -5.01, -0.16);
+            group.add(shelfMesh);
+
+            // 2. Front lip on shelf preventing fabric board from sliding forward
+            const frontLipGeo = new THREE.BoxGeometry(colWidth * 1.5, 0.20, 0.06);
+            const frontLip = new THREE.Mesh(frontLipGeo, blackSteelMat);
+            frontLip.position.set(xPos, -4.89, 0.15);
+            group.add(frontLip);
+
+            // Subtle edge highlight on the front lip
+            const frontLipHlGeo = new THREE.BoxGeometry(colWidth * 1.52, 0.010, 0.010);
+            const frontLipHl = new THREE.Mesh(frontLipHlGeo, bottomEdgeHighlightMat);
+            frontLipHl.position.set(xPos, -4.79, 0.175);
+            group.add(frontLipHl);
+
+            // 3. Heavy diagonal knee-brace strut underneath the bottom shelf
+            // Connects from back wall at Y = -5.85, Z = -0.48 to shelf front at Y = -5.08, Z = 0.08
+            const strutLen = 0.98;
+            const strutGeo = new THREE.CylinderGeometry(0.065, 0.065, strutLen, 16);
+            const strutMesh = new THREE.Mesh(strutGeo, blackSteelMat);
+            const angleKnee = Math.atan2(0.56, 0.77); // Angle between Y and Z
+            strutMesh.rotation.x = angleKnee;
+            strutMesh.position.set(xPos, -5.46, -0.20);
+            group.add(strutMesh);
+
+            // 4. Knee-brace wall anchor base plate
+            const kneeBaseGeo = new THREE.BoxGeometry(colWidth * 1.4, 0.35, 0.05);
+            const kneeBase = new THREE.Mesh(kneeBaseGeo, blackSteelMat);
+            kneeBase.position.set(xPos, -5.85, -0.475);
+            group.add(kneeBase);
+
+            // Wall mounting flange disc and bolt
+            const wallFlangeGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.025, 16);
+            const wallFlange = new THREE.Mesh(wallFlangeGeo, blackOxideMat);
+            wallFlange.rotation.x = Math.PI / 2;
+            wallFlange.position.set(xPos, -5.85, -0.485);
+            group.add(wallFlange);
+
+            const wallBoltGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.02, 8);
+            const wallBolt = new THREE.Mesh(wallBoltGeo, blackOxideMat);
+            wallBolt.rotation.x = Math.PI / 2;
+            wallBolt.position.set(xPos, -5.85, -0.47);
+            group.add(wallBolt);
+
+            // 5. Vertical Foundation Column extending down to the Floor/Plinth
+            // Grounding the cantilever load into the museum floor plinth
+            const postHeight = 1.60;
+            const postGeo = new THREE.BoxGeometry(colWidth * 1.1, postHeight, 0.16);
+            const postMesh = new THREE.Mesh(postGeo, blackSteelMat);
+            postMesh.position.set(xPos, -6.65, -0.45);
+            group.add(postMesh);
+
+            // 6. Pedestal base plate on the floor
+            const pedestalBaseGeo = new THREE.BoxGeometry(colWidth * 1.8, 0.08, 0.28);
+            const pedestalBase = new THREE.Mesh(pedestalBaseGeo, blackSteelMat);
+            pedestalBase.position.set(xPos, -7.40, -0.45);
+            group.add(pedestalBase);
+
+            return group;
+        }
+
         function createSideSupport(isRightSide) {
             const supportGroup = new THREE.Group();
             const xEdge = isRightSide ? (W / SCALE) : 0;
@@ -895,52 +967,10 @@
             topBlock.position.set(colCenterX, 2.10, 0.04);
             supportGroup.add(topBlock);
             
-            // 4. Bottom Load-Bearing Shelf & Cantilever Arm
-            // Horizontal shelf cradling the bottom edge of the tilted tapestry
-            const shelfDepth = 0.68;
-            const shelfHeight = 0.14;
-            const shelfGeo = new THREE.BoxGeometry(colWidth * 1.5, shelfHeight, shelfDepth);
-            const shelfMesh = new THREE.Mesh(shelfGeo, blackSteelMat);
-            shelfMesh.position.set(colCenterX, -5.01, -0.16);
-            supportGroup.add(shelfMesh);
+            // 4. Bottom Load-Bearing Shelf & Cantilever Arm + Foundation Column
+            supportGroup.add(createUnderSupport(colCenterX));
             
-            // Front lip on shelf preventing fabric board from sliding forward
-            const frontLipGeo = new THREE.BoxGeometry(colWidth * 1.5, 0.20, 0.06);
-            const frontLip = new THREE.Mesh(frontLipGeo, blackSteelMat);
-            frontLip.position.set(colCenterX, -4.89, 0.15);
-            supportGroup.add(frontLip);
-            
-            // Heavy diagonal knee-brace strut underneath the bottom shelf
-            // Connects from back wall at Y = -5.85, Z = -0.48 to shelf front at Y = -5.08, Z = 0.08
-            const strutLen = 0.98;
-            const strutGeo = new THREE.CylinderGeometry(0.04, 0.04, strutLen, 12);
-            const strutMesh = new THREE.Mesh(strutGeo, blackSteelMat);
-            const angleKnee = Math.atan2(0.56, 0.77); // Angle between Y and Z
-            strutMesh.rotation.x = angleKnee;
-            strutMesh.position.set(colCenterX, -5.46, -0.20);
-            supportGroup.add(strutMesh);
-            
-            // Knee-brace wall anchor base plate
-            const kneeBaseGeo = new THREE.BoxGeometry(colWidth * 1.4, 0.35, 0.05);
-            const kneeBase = new THREE.Mesh(kneeBaseGeo, blackSteelMat);
-            kneeBase.position.set(colCenterX, -5.85, -0.475);
-            supportGroup.add(kneeBase);
-            
-            // 5. Vertical Foundation Column extending down to the Floor/Plinth
-            // Grounding the cantilever load into the museum floor plinth
-            const postHeight = 1.60;
-            const postGeo = new THREE.BoxGeometry(colWidth * 1.1, postHeight, 0.16);
-            const postMesh = new THREE.Mesh(postGeo, blackSteelMat);
-            postMesh.position.set(colCenterX, -6.65, -0.45);
-            supportGroup.add(postMesh);
-            
-            // Pedestal base plate on the floor
-            const pedestalBaseGeo = new THREE.BoxGeometry(colWidth * 1.8, 0.08, 0.28);
-            const pedestalBase = new THREE.Mesh(pedestalBaseGeo, blackSteelMat);
-            pedestalBase.position.set(colCenterX, -7.40, -0.45);
-            supportGroup.add(pedestalBase);
-            
-            // 6. Wall Standoff Flanges & Heavy Fastener Bolts
+            // 5. Wall Standoff Flanges & Heavy Fastener Bolts
             const standoffHeights = [1.55, -1.47, -4.20];
             standoffHeights.forEach((posY) => {
                 // Wall mounting flange (round black-oxide disc flush on stone wall)
@@ -1043,102 +1073,7 @@
         canvasGroup.add(bottomShelfHighlight);
 
         // --- PERIODIC VERTICAL SUPPORTS UNDER THE TAPESTRY ---
-        // Heavy architectural stanchions extending from the bottom vitrine rail all the way down to the stone floor
-        // Spaced every ~3.5 meters (~30 units) to provide authentic, convincing structural support
-        function createUnderSupport(xPos) {
-            const group = new THREE.Group();
-            const colWidth = 0.14;
-            const colDepth = 0.16;
-            const colCenterZ = -0.05; // Placed forward directly under the vitrine rail to catch light and provide direct support
-
-            // 1. Continuous vertical foundation column extending from underside of bottom rail (-5.04) all the way down to the floor (-7.44)
-            const postHeight = 2.40;
-            const postGeo = new THREE.BoxGeometry(colWidth, postHeight, colDepth);
-            const postMesh = new THREE.Mesh(postGeo, blackSteelMat);
-            postMesh.position.set(xPos, -6.24, colCenterZ);
-            group.add(postMesh);
-
-            // Subtle vertical edge highlights on the front corners of the column
-            const edgeHlGeo = new THREE.BoxGeometry(0.008, postHeight, 0.008);
-            const leftHl = new THREE.Mesh(edgeHlGeo, bottomEdgeHighlightMat);
-            leftHl.position.set(xPos - colWidth / 2, -6.24, colCenterZ + colDepth / 2 + 0.002);
-            group.add(leftHl);
-
-            const rightHl = new THREE.Mesh(edgeHlGeo, bottomEdgeHighlightMat);
-            rightHl.position.set(xPos + colWidth / 2, -6.24, colCenterZ + colDepth / 2 + 0.002);
-            group.add(rightHl);
-
-            // 2. Top under-shelf saddle collar (cups the underside of the bottom rail at Y = -5.04)
-            const cradleGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.08, 0.44);
-            const cradle = new THREE.Mesh(cradleGeo, blackSteelMat);
-            cradle.position.set(xPos, -5.04, -0.16);
-            group.add(cradle);
-
-            // Front retaining clip wrapping up the front lip of the rail
-            const clipGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.18, 0.04);
-            const clip = new THREE.Mesh(clipGeo, blackSteelMat);
-            clip.position.set(xPos, -4.93, 0.105);
-            group.add(clip);
-
-            // Edge highlight on the front clip
-            const clipHlGeo = new THREE.BoxGeometry(colWidth * 1.36, 0.008, 0.008);
-            const clipHl = new THREE.Mesh(clipHlGeo, bottomEdgeHighlightMat);
-            clipHl.position.set(xPos, -4.84, 0.125);
-            group.add(clipHl);
-
-            // Front clip hex fastener bolts
-            [-4.88, -4.98].forEach((bY) => {
-                const boltGeo = new THREE.CylinderGeometry(0.014, 0.014, 0.015, 8);
-                const bolt = new THREE.Mesh(boltGeo, blackOxideMat);
-                bolt.rotation.x = Math.PI / 2;
-                bolt.position.set(xPos, bY, 0.126);
-                group.add(bolt);
-            });
-
-            // 3. Wall tie-back anchor strut (stabilizes the column back to the stone wall at Z = -0.50)
-            const strutGeo = new THREE.CylinderGeometry(0.032, 0.032, 0.35, 12);
-            const strut = new THREE.Mesh(strutGeo, blackSteelMat);
-            strut.rotation.x = Math.PI / 2;
-            strut.position.set(xPos, -5.85, -0.30);
-            group.add(strut);
-
-            // Wall mounting flange against the stone wall
-            const wallFlangeGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.03, 16);
-            const wallFlange = new THREE.Mesh(wallFlangeGeo, blackOxideMat);
-            wallFlange.rotation.x = Math.PI / 2;
-            wallFlange.position.set(xPos, -5.85, -0.485);
-            group.add(wallFlange);
-
-            const wallBoltGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.02, 8);
-            const wallBolt = new THREE.Mesh(wallBoltGeo, blackOxideMat);
-            wallBolt.rotation.x = Math.PI / 2;
-            wallBolt.position.set(xPos, -5.85, -0.47);
-            group.add(wallBolt);
-
-            // 4. Ground pedestal base plate firmly planted on the stone floor at floorY = -7.44
-            const basePlinthGeo = new THREE.BoxGeometry(colWidth * 2.0, 0.08, colDepth * 1.8);
-            const basePlinth = new THREE.Mesh(basePlinthGeo, blackSteelMat);
-            basePlinth.position.set(xPos, -7.40, colCenterZ);
-            group.add(basePlinth);
-
-            const baseStepGeo = new THREE.BoxGeometry(colWidth * 1.5, 0.04, colDepth * 1.4);
-            const baseStep = new THREE.Mesh(baseStepGeo, blackSteelMat);
-            baseStep.position.set(xPos, -7.34, colCenterZ);
-            group.add(baseStep);
-
-            // Floor anchor bolts securing the base plinth to the stone floor
-            const boltOffsets = [-0.09, 0.09];
-            boltOffsets.forEach((bx) => {
-                [-0.09, 0.09].forEach((bz) => {
-                    const floorBoltGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.02, 8);
-                    const floorBolt = new THREE.Mesh(floorBoltGeo, blackOxideMat);
-                    floorBolt.position.set(xPos + bx, -7.35, colCenterZ + bz);
-                    group.add(floorBolt);
-                });
-            });
-
-            return group;
-        }
+        // Architectural cantilever knee-brace stanchions (same design as left/right endcaps)
 
         // Place periodic vertical supports every ~3.5 meters (~30.13 units) across the 70m tapestry
         const tapestryLength = W / SCALE;
