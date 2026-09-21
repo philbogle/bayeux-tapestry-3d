@@ -124,10 +124,54 @@
         #tour-stop-btn:hover {
             background: rgba(255,255,255,0.2) !important;
         }
+        #mobile-tour-btn:hover {
+            background: rgba(214,168,72,0.35) !important;
+            border-color: #f4e4bc !important;
+        }
+        @media (max-width: 900px) {
+            #context-scroll {
+                top: 10px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                padding: 8px 12px !important;
+                width: calc(100vw - 24px) !important;
+                max-width: calc(100vw - 24px) !important;
+                box-sizing: border-box !important;
+                border-radius: 6px !important;
+                box-shadow: 0 6px 25px rgba(0,0,0,0.85) !important;
+            }
+            #context-scroll div:first-child {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                margin-bottom: 4px !important;
+            }
+            #context-scroll button {
+                padding: 3px 8px !important;
+                font-size: 11px !important;
+            }
+            #context-title {
+                font-size: 13px !important;
+                margin-bottom: 4px !important;
+                padding-bottom: 3px !important;
+                line-height: 1.2 !important;
+                word-break: break-word !important;
+            }
+            #context-text {
+                font-size: 12px !important;
+                line-height: 1.3 !important;
+                max-height: 16vh !important;
+                overflow-y: auto !important;
+            }
+        }
     </style>
 </head>
 <body>
     <button id="hamburger-btn" style="position: absolute; top: 20px; right: 20px; z-index: 200; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 20px; display: none;">☰</button>
+    <button id="mobile-tour-btn" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 200; pointer-events: auto; background: rgba(20, 16, 12, 0.92); border: 1px solid #d6a848; border-radius: 30px; padding: 10px 22px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 8px; font-family: serif; color: #f4e4bc; font-size: 15px; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); user-select: none; outline: none;">
+        <span style="color: #d6a848; font-size: 13px;">▶</span> <span id="mobile-tour-label">Start Tour</span>
+    </button>
     <div id="tour-control-bar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; background: rgba(20, 16, 12, 0.92); border: 1px solid #d6a848; border-radius: 30px; padding: 6px 14px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 12px; font-family: serif; color: #f4e4bc; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); user-select: none;">
         <span style="font-size: 13px; color: #d6a848; font-weight: bold; letter-spacing: 0.5px; display: flex; align-items: center; gap: 7px;">
             <span id="tour-indicator-dot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d6a848; box-shadow: 0 0 8px #d6a848;"></span>
@@ -288,17 +332,39 @@
             uiContainer.style.left = 'auto';
             uiContainer.style.bottom = 'auto';
             uiContainer.style.transform = 'none';
-            uiContainer.style.width = 'auto';
+            uiContainer.style.width = '180px';
             uiContainer.style.background = 'rgba(20, 20, 20, 0.95)';
             uiContainer.style.padding = '15px';
             uiContainer.style.borderRadius = '8px';
             uiContainer.style.border = '1px solid #5a4a35';
+            uiContainer.style.textAlign = 'left';
+            uiContainer.style.boxSizing = 'border-box';
             
-            // Make the flex container stack vertically
+            const uiTitle = uiContainer.querySelector('h2');
+            if (uiTitle) {
+                uiTitle.style.textAlign = 'left';
+                uiTitle.style.color = '#d6a848';
+                uiTitle.style.marginBottom = '12px';
+            }
+
+            // Make the flex container stack vertically and left-align all items
             const uiFlex = uiContainer.querySelector('p');
             uiFlex.style.flexDirection = 'column';
-            uiFlex.style.alignItems = 'flex-end';
-            uiFlex.style.gap = '15px';
+            uiFlex.style.alignItems = 'stretch';
+            uiFlex.style.gap = '12px';
+            uiFlex.style.width = '100%';
+
+            // Ensure all buttons and links in the menu are left-aligned
+            uiFlex.querySelectorAll('button, a').forEach(el => {
+                el.style.textAlign = 'left';
+                el.style.justifyContent = 'flex-start';
+                el.style.width = '100%';
+                el.style.boxSizing = 'border-box';
+            });
+
+            // Show mobile tour button when on mobile
+            const mobileTourBtn = document.getElementById('mobile-tour-btn');
+            if (mobileTourBtn) mobileTourBtn.style.display = 'flex';
             
             hamburgerBtn.addEventListener('click', () => {
                 if (uiContainer.style.display === 'none') {
@@ -309,6 +375,11 @@
                     hamburgerBtn.innerText = '☰';
                 }
             });
+
+            if (new URLSearchParams(window.location.search).get('menu') === '1') {
+                uiContainer.style.display = 'block';
+                hamburgerBtn.innerText = '✕';
+            }
             
             // Auto-close menu when a UI action is selected
             uiContainer.addEventListener('click', (e) => {
@@ -328,17 +399,18 @@
         const SCALE = 100; // 100 pixels = 1 Three.js unit
         let currentLanguage = localStorage.getItem('bayeux_lang') || 'en';
         const uiDict = {
-            'en': { help: 'Help', about: 'About', titles: 'Titles', tour: 'Tour', tourStatus: 'Touring', paused: 'Paused', notes: '☰ Notes', prev: 'Prev', next: 'Next', close: 'Close' },
-            'zh': { help: '帮助', about: '关于', titles: '标题', tour: '导览', tourStatus: '导览中', paused: '已暂停', notes: '☰ 笔记', prev: '上一个', next: '下一个', close: '关闭' },
-            'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', tour: 'Recorrido', tourStatus: 'Recorrido', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Sig', close: 'Cerrar' },
-            'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', tour: 'Visite', tourStatus: 'Visite', paused: 'En pause', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' },
-            'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', tour: 'Tour', tourStatus: 'Tour', paused: 'Pausiert', notes: '☰ Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen' },
-            'nl': { help: 'Help', about: 'Over', titles: 'Titels', tour: 'Rondleiding', tourStatus: 'Rondleiding', paused: 'Gepauzeerd', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
-            'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', tour: 'Tour', tourStatus: 'Em tour', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' },
-            'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', tour: 'दौरा', tourStatus: 'दौरा जारी', paused: 'रोक दिया', notes: '☰ नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें' },
-            'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', tour: 'جولة', tourStatus: 'جولة مستمرة', paused: 'متوقف', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' },
-            'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', tour: 'পরিদর্শন', tourStatus: 'চলমান', paused: 'বিরতি', notes: '☰ নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন' }
+            'en': { help: 'Help', about: 'About', titles: 'Titles', tour: 'Tour', startTour: 'Start Tour', tourStatus: 'Touring', paused: 'Paused', notes: '☰ Notes', prev: 'Prev', next: 'Next', close: 'Close' },
+            'zh': { help: '帮助', about: '关于', titles: '标题', tour: '导览', startTour: '开始导览', tourStatus: '导览中', paused: '已暂停', notes: '☰ 笔记', prev: '上一个', next: '下一个', close: '关闭' },
+            'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', tour: 'Recorrido', startTour: 'Iniciar recorrido', tourStatus: 'Recorrido', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Sig', close: 'Cerrar' },
+            'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', tour: 'Visite', startTour: 'Commencer la visite', tourStatus: 'Visite', paused: 'En pause', notes: '☰ Notes', prev: 'Préc', next: 'Suivant', close: 'Fermer' },
+            'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', tour: 'Tour', startTour: 'Tour starten', tourStatus: 'Tour', paused: 'Pausiert', notes: '☰ Notizen', prev: 'Zurück', next: 'Weiter', close: 'Schließen' },
+            'nl': { help: 'Help', about: 'Over', titles: 'Titels', tour: 'Rondleiding', startTour: 'Start rondleiding', tourStatus: 'Rondleiding', paused: 'Gepauzeerd', notes: '☰ Notities', prev: 'Vorige', next: 'Volgende', close: 'Sluiten' },
+            'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', tour: 'Tour', startTour: 'Iniciar tour', tourStatus: 'Em tour', paused: 'Pausado', notes: '☰ Notas', prev: 'Ant', next: 'Seg', close: 'Fechar' },
+            'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', tour: 'दौरा', startTour: 'दौरा शुरू करें', tourStatus: 'दौरा जारी', paused: 'रोक दिया', notes: '☰ नोट्स', prev: 'पिछला', next: 'अगला', close: 'बंद करें' },
+            'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', tour: 'جولة', startTour: 'بدء الجولة', tourStatus: 'جولة مستمرة', paused: 'متوقف', notes: '☰ ملاحظات', prev: 'السابق', next: 'التالي', close: 'إغلاق' },
+            'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', tour: 'পরিদর্শন', startTour: 'পরিদর্শন শুরু করুন', tourStatus: 'চলমান', paused: 'বিরতি', notes: '☰ নোট', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন' }
         };
+
 
         const cols = Math.ceil(W / T);
         const rows = Math.ceil(H / T);
@@ -373,7 +445,8 @@
 
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
-        const initialZ = isPhone ? 8.0 : 12.0; // Pull back slightly more on mobile for comfortable framing
+        const isNarrowScreen = isPhone || (window.innerWidth <= 900 && !isIPad);
+        const initialZ = isNarrowScreen ? 6.0 : 12.0; // Mobile starts closer into the canvas for immersive viewing
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.0; // Tapestry lowered further
@@ -383,8 +456,9 @@
         const initialVFOV = THREE.MathUtils.degToRad(60);
         const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
         
-        // Start near the beginning of the tapestry
-        camera.position.set(initialVisibleWidth / 2 - 2.0, cameraY, initialZ);
+        // Start near the beginning of the tapestry: on mobile, start further right (x=4.8) so Scene 1 is fully visible
+        const initialX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
+        camera.position.set(initialX, cameraY, initialZ);
 
         // Enable antialiasing for smooth geometry edges
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -401,7 +475,7 @@
         
         // Strict network queue to prevent Safari/iPad from stalling when requesting many tiles
         let activeRequests = 0;
-        const MAX_CONCURRENT_REQUESTS = isPhone ? 4 : 32;
+        const MAX_CONCURRENT_REQUESTS = isPhone ? 8 : 32;
 
         // Share a single base geometry across ALL tiles to massively reduce WebGL memory overhead (prevents mobile Chrome crashes)
         const baseGeometry = new THREE.PlaneGeometry(1, 1);
@@ -1220,7 +1294,7 @@
         
         // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
         window.addEventListener('touchstart', (e) => { 
-            if (e.target.closest('#tour-control-bar')) return;
+            if (e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn')) return;
             isTouch = true; 
             hasTouchDragged = false;
             mouseScrollDir = 0; 
@@ -1382,7 +1456,7 @@
             if (isTouch) return;
             mouseStartX = e.clientX;
             mouseStartY = e.clientY;
-            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar')) return;
+            if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn')) return;
             
             if (isAuthoringMode) {
                 mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1492,7 +1566,7 @@
             }
             
             // Prevent edge-scroll if hovering over UI elements
-            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#tour-control-bar')) {
+            if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn')) {
                 mouseScrollDir = 0;
                 return;
             }
@@ -1643,6 +1717,7 @@
 
         function updateTourUI() {
             const tourBtn = document.getElementById('tour-btn');
+            const mobileTourBtn = document.getElementById('mobile-tour-btn');
             const controlBar = document.getElementById('tour-control-bar');
             const pauseBtn = document.getElementById('tour-pause-btn');
             const statusLabel = document.getElementById('tour-status-label');
@@ -1652,6 +1727,7 @@
             
             if (isTourActive) {
                 if (controlBar) controlBar.style.display = 'flex';
+                if (mobileTourBtn) mobileTourBtn.style.display = 'none';
                 if (tourBtn) {
                     tourBtn.style.background = 'rgba(214,168,72,0.3)';
                     tourBtn.style.borderColor = '#d6a848';
@@ -1679,6 +1755,9 @@
                 }
             } else {
                 if (controlBar) controlBar.style.display = 'none';
+                if (mobileTourBtn && (isPhone || (window.innerWidth <= 900 && !isIPad))) {
+                    mobileTourBtn.style.display = 'flex';
+                }
                 if (tourBtn) {
                     tourBtn.style.background = 'rgba(20,20,20,0.8)';
                     tourBtn.style.borderColor = '#5a4a35';
@@ -1716,13 +1795,14 @@
             
             // If we are already at or near the end of the tapestry, loop back to the start
             const maxX = W / SCALE;
+            const isNarrow = isPhone || (window.innerWidth <= 900 && !isIPad);
             if (camera.position.x >= maxX - 5.0) {
-                camera.position.x = Math.max(0, initialVisibleWidth / 2 - 2.0);
+                camera.position.x = isNarrow ? 4.8 : Math.max(0, initialVisibleWidth / 2 - 2.0);
             }
             
             // If camera is way too far out, gently ease to standard viewing distance
             if (camera.position.z > 22.0) {
-                camera.position.z = isPhone ? 8.0 : 12.0;
+                camera.position.z = isNarrow ? 6.0 : 12.0;
             }
 
             // Ensure supertitles are enabled so titles are displayed as we glide by
@@ -1779,6 +1859,15 @@
                 }
             });
         }
+
+        const mobileTourBtn = document.getElementById('mobile-tour-btn');
+        if (mobileTourBtn) {
+            mobileTourBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                startTour();
+            });
+        }
+
 
         const tourPauseBtn = document.getElementById('tour-pause-btn');
         if (tourPauseBtn) {
@@ -2058,7 +2147,7 @@
             const width = height * camera.aspect;
 
             // The margin acts as an off-screen buffer, forcing tiles to load just outside the camera's field of view
-            const margin = isPhone ? 20 : 60; // Much larger buffer for desktop to prevent pop-in during fast scrolls
+            const margin = isPhone ? 6 : 60; // Reasonable buffer for phones, generous for desktop
             
             let magMinX = 0, magMaxX = 0;
             if (magActive) {
@@ -2357,8 +2446,17 @@
         });
 
         const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('hold')) {
+            setTimeout(() => { console.log('Hold expired'); }, parseInt(urlParams.get('hold')));
+        }
         if (urlParams.get('adv') === '1') {
             document.getElementById('lighting-controls-link').style.display = 'inline';
+        }
+        if (urlParams.get('x')) {
+            camera.position.x = parseFloat(urlParams.get('x'));
+        }
+        if (urlParams.get('z')) {
+            camera.position.z = parseFloat(urlParams.get('z'));
         }
 
                 // --- AUTHORING MODE LOGIC ---
@@ -2410,6 +2508,8 @@
             document.querySelectorAll('#learn-more-link').forEach(el => el.innerText = dict.about);
             document.querySelectorAll('#toggle-supertitles').forEach(el => el.innerText = dict.titles);
             document.querySelectorAll('#tour-btn').forEach(el => el.innerText = dict.tour);
+            const mLabel = document.getElementById('mobile-tour-label');
+            if (mLabel) mLabel.innerText = dict.startTour || dict.tour || 'Start Tour';
             if (typeof isTourActive !== 'undefined' && isTourActive) {
                 const statusLabel = document.getElementById('tour-status-label');
                 if (statusLabel) statusLabel.innerText = isTourPaused ? (dict.paused || 'Paused') : (dict.tourStatus || 'Touring');
@@ -2525,6 +2625,9 @@
                     mesh.userData.annotation = annObj;
                     annotations.push(annObj);
                 });
+                if (urlParams.get('notes') === '1') {
+                    openNotes();
+                }
             });
         });
         
