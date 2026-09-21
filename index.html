@@ -1858,7 +1858,7 @@
             // Re-render all 3D meshes
             annotations.forEach(ann => {
                 if (ann.mesh) {
-                    scene.remove(ann.mesh);
+                    canvasGroup.remove(ann.mesh);
                     ann.mesh.geometry.dispose();
                     ann.mesh.material.map.dispose();
                     ann.mesh.material.dispose();
