@@ -354,7 +354,7 @@
         const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
         
         // Start near the beginning of the tapestry
-        camera.position.set(initialVisibleWidth / 2 + 4.0, cameraY, initialZ);
+        camera.position.set(initialVisibleWidth / 2 - 2.0, cameraY, initialZ);
 
         // Enable antialiasing for smooth geometry edges
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
