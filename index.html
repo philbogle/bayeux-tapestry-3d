@@ -742,8 +742,8 @@
             canvas.height = height;
             const ctx = canvas.getContext('2d');
             
-            // Matte charcoal base
-            ctx.fillStyle = '#161616';
+            // Matte dark charcoal / graphite base (distinguishable from the #161616 wall)
+            ctx.fillStyle = '#262422';
             ctx.fillRect(0, 0, width, height);
             
             // Directional brushed grain along extrusion axis
@@ -815,14 +815,28 @@
         const blackIronTexture = createBlackIronTexture();
         const ironBumpTexture = createIronBumpTexture();
         
-        // Matte blackened structural steel
+        // Matte blackened structural steel with subtle satin response
         const blackSteelMat = new THREE.MeshPhongMaterial({
             map: blackIronTexture,
             bumpMap: ironBumpTexture,
             bumpScale: 0.02,
-            color: 0x181818,
-            specular: 0x383838,
-            shininess: 22
+            color: 0x2a2825,
+            specular: 0x55504a,
+            shininess: 30
+        });
+
+        // Subtle burnished graphite edge-highlight material for crisp architectural rim-lighting
+        const edgeHighlightMat = new THREE.MeshPhongMaterial({
+            color: 0x2a2823,
+            specular: 0x46423c,
+            shininess: 45
+        });
+
+        // Dedicated bottom rail edge-highlight material (balanced brightness)
+        const bottomEdgeHighlightMat = new THREE.MeshPhongMaterial({
+            color: 0x1d1c17,
+            specular: 0x302d2a,
+            shininess: 45
         });
 
         // Dark black oxide / gunmetal for hardware, bolts, flanges, and tie-rods
@@ -862,6 +876,12 @@
             // Positions over the front edge of the tapestry
             bezelMesh.position.set(xEdge - dir * (bezelWidth / 2), colCenterY, 0.045);
             supportGroup.add(bezelMesh);
+
+            // Subtle vertical edge highlight on the front bezel rim
+            const sideBezelHighlightGeo = new THREE.BoxGeometry(0.014, bezelHeight, 0.014);
+            const sideBezelHighlight = new THREE.Mesh(sideBezelHighlightGeo, edgeHighlightMat);
+            sideBezelHighlight.position.set(xEdge, colCenterY, 0.07);
+            supportGroup.add(sideBezelHighlight);
             
             // 3. Top Stanchion Cap & Corner Joint
             const topCapGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.10, colDepth * 1.08);
@@ -977,9 +997,9 @@
             map: railTex,
             bumpMap: railBump,
             bumpScale: 0.02,
-            color: 0x181818,
-            specular: 0x383838,
-            shininess: 22
+            color: 0x2a2825,
+            specular: 0x55504a,
+            shininess: 30
         });
 
         // 1. TOP RAIL (caps the top edge of the tapestry and meets the stone wall)
@@ -993,6 +1013,12 @@
         topRailLip.position.set(railCenterX, 1.98, 0.05);
         canvasGroup.add(topRailLip);
 
+        // Top rail bottom edge highlight (delineates top edge of tapestry)
+        const topHighlightGeo = new THREE.BoxGeometry(railLength, 0.014, 0.014);
+        const topHighlight = new THREE.Mesh(topHighlightGeo, edgeHighlightMat);
+        topHighlight.position.set(railCenterX, 1.95, 0.07);
+        canvasGroup.add(topHighlight);
+
         // 2. BOTTOM RAIL (load-bearing shelf cradling the tilted tapestry bottom with retaining lip)
         const bottomRailShelfGeo = new THREE.BoxGeometry(railLength, 0.12, 0.60);
         const bottomRailShelf = new THREE.Mesh(bottomRailShelfGeo, railMat);
@@ -1003,6 +1029,18 @@
         const bottomRailLip = new THREE.Mesh(bottomRailLipGeo, railMat);
         bottomRailLip.position.set(railCenterX, -4.92, 0.09);
         canvasGroup.add(bottomRailLip);
+
+        // Bottom rail top edge highlight (delineates bottom edge of tapestry where it rests on the shelf)
+        const bottomHighlightGeo = new THREE.BoxGeometry(railLength, 0.010, 0.010);
+        const bottomHighlight = new THREE.Mesh(bottomHighlightGeo, bottomEdgeHighlightMat);
+        bottomHighlight.position.set(railCenterX, -4.85, 0.115);
+        canvasGroup.add(bottomHighlight);
+
+        // Bottom rail shelf bottom edge highlight (delineates bottom rail from the wall drop shadow)
+        const bottomShelfHighlightGeo = new THREE.BoxGeometry(railLength, 0.010, 0.010);
+        const bottomShelfHighlight = new THREE.Mesh(bottomShelfHighlightGeo, bottomEdgeHighlightMat);
+        bottomShelfHighlight.position.set(railCenterX, -5.06, 0.10);
+        canvasGroup.add(bottomShelfHighlight);
 
 
 
