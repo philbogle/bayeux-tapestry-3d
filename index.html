@@ -1456,7 +1456,10 @@
         scene.add(magLight.target); // Required for SpotLight target tracking
 
 
-        ambientLight.intensity = (isPhone || isIPad) ? 1.35 : 1.06;
+        ambientLight.intensity = (isPhone || isIPad) ? 1.17 : 1.06;
+        if (isPhone || isIPad) {
+            ambientLight.color.setHex(0xeeeeff);
+        }
         
         // Lighting Variables (linked to UI)
         let configTorchInt = 1.25;
@@ -1465,6 +1468,8 @@
         // Sync initial UI slider value
         document.getElementById('amb-int').value = ambientLight.intensity;
         document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
+        const ambColorInput = document.getElementById('amb-color');
+        if (ambColorInput) ambColorInput.value = '#' + ambientLight.color.getHexString();
 
         // UI Listeners
         // Update ambient light intensity in real-time from the lighting dev panel
