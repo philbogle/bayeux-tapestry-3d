@@ -319,7 +319,7 @@
             <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
                         <button id="fullscreen-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
                     <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
-            <a href="#" id="lighting-controls-link" style="display: none; color: #d6a848; text-decoration: none; pointer-events: auto;">Lighting Controls</a>
+            <button id="lighting-controls-btn" title="Lighting Controls" style="display: none; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; align-items: center; justify-content: center; outline: none;">⚙︎</button>
         </p>
     </div>
 
@@ -375,17 +375,16 @@
         <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
         
         
-        <label>Bump Scale: <span id="val-bump-scale">-0.020</span></label><br>
-        <input type="range" id="bump-scale" min="-0.25" max="0.25" step="0.001" value="-0.020" style="width: 100%; margin-bottom: 10px;"><br>
+        <label>Bump Scale: <span id="val-bump-scale">-0.006</span></label><br>
+        <input type="range" id="bump-scale" min="-0.25" max="0.25" step="0.001" value="-0.006" style="width: 100%; margin-bottom: 10px;"><br>
         <label>Ambient Color:</label><br>
         <input type="color" id="amb-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
         
         <h4 style="margin-top: 15px; margin-bottom: 5px; border-bottom: 1px solid #5a4a35; padding-bottom: 3px;">Key Light</h4>
-        <label>Intensity: <span id="val-key-int">0.85</span></label><br>
-        <input type="range" id="key-int" min="0" max="3" step="0.01" value="0.85" style="width: 100%; margin-bottom: 5px;"><br>
+        <label>Intensity: <span id="val-key-int">1.0</span></label><br>
+        <input type="range" id="key-int" min="0" max="3" step="0.01" value="1.0" style="width: 100%; margin-bottom: 5px;"><br>
         <label>Color:</label><br>
-        <input type="color" id="key-color" value="#fff0dd" style="width: 100%; margin-bottom: 10px; background: none; border: 1px solid #5a4a35;"><br>
-        
+        <input type="color" id="key-color" value="#ffffff" style="width: 100%; margin-bottom: 10px; background: none; border: 1px solid #5a4a35;"><br>        
         
         
         
@@ -1453,7 +1452,7 @@
         scene.add(ambientLight);
 
         // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
-        const dirLight = new THREE.DirectionalLight(0xfff0dd, 0.85); // Warm key light
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.0); // Neutral key light
         scene.add(dirLight);
         // Dedicated grazing light that follows the magnifying glass
         // Dedicated grazing light that follows the magnifying glass
@@ -1463,9 +1462,9 @@
         scene.add(magLight.target); // Required for SpotLight target tracking
 
 
-        ambientLight.intensity = useSimpleLighting ? 1.17 : 1.06;
+        ambientLight.intensity = 1.06;
         if (useSimpleLighting) {
-            ambientLight.color.setHex(0xeeeeff);
+            ambientLight.color.setHex(0xffffff);
         }
         
         // Lighting Variables (linked to UI)
@@ -1494,13 +1493,8 @@
                 useSimpleLighting = e.target.checked;
                 
                 // Update lighting setup
-                if (useSimpleLighting) {
-                    ambientLight.intensity = 1.17;
-                    ambientLight.color.setHex(0xeeeeff);
-                } else {
-                    ambientLight.intensity = 1.06;
-                    ambientLight.color.setHex(0xffffff);
-                }
+                ambientLight.intensity = 1.06;
+                ambientLight.color.setHex(0xffffff);
                 
                 // Sync UI
                 document.getElementById('amb-int').value = ambientLight.intensity;
@@ -2665,7 +2659,7 @@
                                     matOpts.roughness = 0.85;
                                     matOpts.metalness = 0.0;
                                     matOpts.bumpMap = texture;
-                                    matOpts.bumpScale = -0.020;
+                                    matOpts.bumpScale = -0.006;
                                     tile.mesh.material = new THREE.MeshStandardMaterial(matOpts);
                                 }
                                 tile.loaded = true;
@@ -2992,7 +2986,8 @@
             setTimeout(() => { console.log('Hold expired'); }, parseInt(urlParams.get('hold')));
         }
         if (urlParams.get('adv') === '1') {
-            document.getElementById('lighting-controls-link').style.display = 'inline';
+            const advBtn = document.getElementById('lighting-controls-btn');
+            if (advBtn) advBtn.style.display = 'flex';
         }
         if (urlParams.get('x')) {
             camera.position.x = parseFloat(urlParams.get('x'));
@@ -3283,7 +3278,7 @@
         // --------------------------------
 
         // Open the hidden lighting configuration dialog
-        document.getElementById('lighting-controls-link').addEventListener('click', (e) => {
+        document.getElementById('lighting-controls-btn').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('lighting-dialog').style.display = 'block';
         });
