@@ -367,6 +367,10 @@
 
     <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
+        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="simple-lighting-toggle">
+            <label for="simple-lighting-toggle" style="cursor: pointer; font-size: 15px;">Simple Lighting Mode (iPad/Mobile style)</label>
+        </div>
         <label>Ambient Intensity: <span id="val-amb-int">1.06</span></label><br>
         <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
         
@@ -445,6 +449,8 @@
                         (/Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent)) || 
                         (isIOS && !isIPad) ||
                         (window.innerWidth <= 600);
+        
+        let useSimpleLighting = isPhone || isIPad;
         
 
         let isTourActive = false;
@@ -1444,8 +1450,8 @@
         const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.0); // Warm key light
         scene.add(dirLight);
 
-        const dirLightFill = new THREE.DirectionalLight(0xa8c0ff, 0.4); // Cool blue fill light
-        dirLightFill.visible = !(isPhone || isIPad); // Skip secondary fill pass on mobile/tablets
+        const dirLightFill = new THREE.DirectionalLight(0xcce0ff, 0.28); // Softer cool blue fill light
+        dirLightFill.visible = !useSimpleLighting; // Skip secondary fill pass on simple lighting
         scene.add(dirLightFill);
 
         // Dedicated grazing light that follows the magnifying glass
@@ -1456,8 +1462,8 @@
         scene.add(magLight.target); // Required for SpotLight target tracking
 
 
-        ambientLight.intensity = (isPhone || isIPad) ? 1.17 : 1.06;
-        if (isPhone || isIPad) {
+        ambientLight.intensity = useSimpleLighting ? 1.17 : 1.06;
+        if (useSimpleLighting) {
             ambientLight.color.setHex(0xeeeeff);
         }
         
@@ -1466,12 +1472,60 @@
         let configTorchColor = new THREE.Color(0xffffff);
 
         // Sync initial UI slider value
+        const simpleLightToggle = document.getElementById('simple-lighting-toggle');
+        if (simpleLightToggle) simpleLightToggle.checked = useSimpleLighting;
+        
         document.getElementById('amb-int').value = ambientLight.intensity;
         document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
         const ambColorInput = document.getElementById('amb-color');
         if (ambColorInput) ambColorInput.value = '#' + ambientLight.color.getHexString();
 
         // UI Listeners
+        if (simpleLightToggle) {
+            simpleLightToggle.addEventListener('change', (e) => {
+                useSimpleLighting = e.target.checked;
+                
+                // Update lighting setup
+                dirLightFill.visible = !useSimpleLighting;
+                if (useSimpleLighting) {
+                    ambientLight.intensity = 1.17;
+                    ambientLight.color.setHex(0xeeeeff);
+                } else {
+                    ambientLight.intensity = 1.06;
+                    ambientLight.color.setHex(0xffffff);
+                }
+                
+                // Sync UI
+                document.getElementById('amb-int').value = ambientLight.intensity;
+                document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
+                if (ambColorInput) ambColorInput.value = '#' + ambientLight.color.getHexString();
+                
+                // Rebuild materials for all currently loaded tiles
+                const allTileArrays = [tiles, tilesL17, tilesL18, tilesL19];
+                allTileArrays.forEach(arr => {
+                    arr.forEach(t => {
+                        if (t.mesh && t.mesh.material && t.mesh.material.map) {
+                            const matOpts = { 
+                                map: t.mesh.material.map,
+                                transparent: true,
+                                opacity: t.mesh.material.opacity 
+                            };
+                            t.mesh.material.dispose(); // Important for memory!
+                            if (useSimpleLighting) {
+                                t.mesh.material = new THREE.MeshLambertMaterial(matOpts);
+                            } else {
+                                matOpts.roughness = 0.85;
+                                matOpts.metalness = 0.0;
+                                matOpts.bumpMap = t.mesh.material.map;
+                                matOpts.bumpScale = parseFloat(document.getElementById('bump-scale').value);
+                                t.mesh.material = new THREE.MeshStandardMaterial(matOpts);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
         // Update ambient light intensity in real-time from the lighting dev panel
         document.getElementById('amb-int').addEventListener('input', (e) => {
             ambientLight.intensity = parseFloat(e.target.value);
@@ -2590,7 +2644,7 @@
                                     opacity: isHighRes ? 1.0 : 0 // Pop in instantly for high-res to prevent fade artifacts over base
                                 };
                                 
-                                if (isPhone || isIPad) {
+                                if (useSimpleLighting) {
                                     tile.mesh.material = new THREE.MeshLambertMaterial(matOpts);
                                 } else {
                                     matOpts.roughness = 0.85;
