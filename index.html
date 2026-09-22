@@ -230,23 +230,23 @@
         
         /* iPad Specific Enlargements for Notes Panel */
         body.ipad-mode #context-scroll {
-            width: 550px !important;
+            width: 480px !important;
             max-width: 95vw !important;
-            padding: 25px 30px !important;
+            padding: 20px 25px !important;
         }
         body.ipad-mode #context-title {
-            font-size: 26px !important;
-            margin-bottom: 15px !important;
-            padding-bottom: 10px !important;
+            font-size: 22px !important;
+            margin-bottom: 12px !important;
+            padding-bottom: 8px !important;
         }
         body.ipad-mode #context-text {
-            font-size: 20px !important;
-            line-height: 1.6 !important;
-            max-height: 35vh !important;
+            font-size: 17px !important;
+            line-height: 1.5 !important;
+            max-height: 40vh !important;
         }
         body.ipad-mode #context-scroll button {
-            font-size: 18px !important;
-            padding: 8px 18px !important;
+            font-size: 15px !important;
+            padding: 6px 14px !important;
         }
     </style>
 </head>
@@ -1456,11 +1456,15 @@
         scene.add(magLight.target); // Required for SpotLight target tracking
 
 
-        ambientLight.intensity = 1.06;
+        ambientLight.intensity = (isPhone || isIPad) ? 1.35 : 1.06;
         
         // Lighting Variables (linked to UI)
         let configTorchInt = 1.25;
         let configTorchColor = new THREE.Color(0xffffff);
+
+        // Sync initial UI slider value
+        document.getElementById('amb-int').value = ambientLight.intensity;
+        document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
 
         // UI Listeners
         // Update ambient light intensity in real-time from the lighting dev panel
