@@ -380,6 +380,12 @@
         <label>Ambient Color:</label><br>
         <input type="color" id="amb-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
         
+        <h4 style="margin-top: 15px; margin-bottom: 5px; border-bottom: 1px solid #5a4a35; padding-bottom: 3px;">Key Light</h4>
+        <label>Intensity: <span id="val-key-int">0.85</span></label><br>
+        <input type="range" id="key-int" min="0" max="3" step="0.01" value="0.85" style="width: 100%; margin-bottom: 5px;"><br>
+        <label>Color:</label><br>
+        <input type="color" id="key-color" value="#fff0dd" style="width: 100%; margin-bottom: 10px; background: none; border: 1px solid #5a4a35;"><br>
+        
         
         
         
@@ -1447,13 +1453,8 @@
         scene.add(ambientLight);
 
         // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
-        const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.0); // Warm key light
+        const dirLight = new THREE.DirectionalLight(0xfff0dd, 0.85); // Warm key light
         scene.add(dirLight);
-
-        const dirLightFill = new THREE.DirectionalLight(0xcce0ff, 0.28); // Softer cool blue fill light
-        dirLightFill.visible = !useSimpleLighting; // Skip secondary fill pass on simple lighting
-        scene.add(dirLightFill);
-
         // Dedicated grazing light that follows the magnifying glass
         // Dedicated grazing light that follows the magnifying glass
         const magLight = new THREE.SpotLight(0xffb84d, 0.4, 10, 35 * Math.PI / 180, 1.0, 2);
@@ -1480,13 +1481,19 @@
         const ambColorInput = document.getElementById('amb-color');
         if (ambColorInput) ambColorInput.value = '#' + ambientLight.color.getHexString();
 
+        const keyIntInput = document.getElementById('key-int');
+        if (keyIntInput) keyIntInput.value = dirLight.intensity;
+        const valKeyInt = document.getElementById('val-key-int');
+        if (valKeyInt) valKeyInt.innerText = dirLight.intensity.toFixed(2);
+        const keyColorInput = document.getElementById('key-color');
+        if (keyColorInput) keyColorInput.value = '#' + dirLight.color.getHexString();
+
         // UI Listeners
         if (simpleLightToggle) {
             simpleLightToggle.addEventListener('change', (e) => {
                 useSimpleLighting = e.target.checked;
                 
                 // Update lighting setup
-                dirLightFill.visible = !useSimpleLighting;
                 if (useSimpleLighting) {
                     ambientLight.intensity = 1.17;
                     ambientLight.color.setHex(0xeeeeff);
@@ -1550,6 +1557,14 @@
 
         document.getElementById('amb-color').addEventListener('input', (e) => {
             ambientLight.color.set(e.target.value);
+        });
+        
+        if (keyIntInput) keyIntInput.addEventListener('input', e => {
+            dirLight.intensity = parseFloat(e.target.value);
+            if (valKeyInt) valKeyInt.innerText = dirLight.intensity.toFixed(2);
+        });
+        if (keyColorInput) keyColorInput.addEventListener('input', e => {
+            dirLight.color.set(e.target.value);
         });
         
         /**
@@ -2861,15 +2876,11 @@
 
             updateCamera();
             updateTiles();
-                        dirLight.position.set(camera.position.x - 5.0, tapestryElevation + 4.0, 2.0);
+            
+            dirLight.position.set(camera.position.x - 5.0, tapestryElevation + 4.0, 2.0);
             dirLight.target.position.set(camera.position.x + 2.0, tapestryElevation, 0);
             dirLight.target.updateMatrixWorld();
 
-            
-            // Opposing cool fill light from bottom-right
-            dirLightFill.position.set(camera.position.x + 5.0, tapestryElevation - 4.0, 1.5);
-            dirLightFill.target.position.set(camera.position.x - 2.0, tapestryElevation, 0);
-            dirLightFill.target.updateMatrixWorld();
             
             if (magActive) {
                 magLight.visible = true;
