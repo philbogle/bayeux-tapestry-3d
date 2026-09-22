@@ -1554,7 +1554,7 @@
         
         // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
         window.addEventListener('touchstart', (e) => { 
-            if (e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
+            if (e.target.closest('#ui') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
             isTouch = true; 
             hasTouchDragged = false;
             mouseScrollDir = 0; 
@@ -1591,6 +1591,7 @@
 
         // Handle 1-finger panning and 2-finger pinch-to-zoom for mobile devices.
         window.addEventListener('touchmove', (e) => {
+            if (e.target.closest('#ui') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
             hasTouchDragged = true;
             if (!isTouch) return;
             
@@ -2272,14 +2273,18 @@
             });
         }
 
-        const tourControlBar = document.getElementById('tour-control-bar');
-        if (tourControlBar) {
-            ['mousedown', 'touchstart', 'pointerdown', 'click'].forEach(evt => {
-                tourControlBar.addEventListener(evt, (e) => {
-                    e.stopPropagation();
-                }, { passive: false });
-            });
-        }
+        const uiElementsToIsolate = ['#ui', '#lighting-dialog', '#about-dialog', '#context-scroll', '#tour-control-bar', '#mobile-menu', '#mobile-tour-btn', '#hamburger-btn', '#authoring-panel'];
+        uiElementsToIsolate.forEach(selector => {
+            const el = document.querySelector(selector);
+            if (el) {
+                ['mousedown', 'touchstart', 'pointerdown', 'touchmove', 'pointermove', 'mousemove', 'wheel', 'click'].forEach(evt => {
+                    el.addEventListener(evt, (e) => {
+                        // Allow internal scrolling inside dialogs, but stop propagation so camera doesn't pan/zoom
+                        e.stopPropagation();
+                    }, { passive: false });
+                });
+            }
+        });
 
 
 
