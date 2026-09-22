@@ -227,6 +227,27 @@
                 overflow-y: auto !important;
             }
         }
+        
+        /* iPad Specific Enlargements for Notes Panel */
+        body.ipad-mode #context-scroll {
+            width: 550px !important;
+            max-width: 95vw !important;
+            padding: 25px 30px !important;
+        }
+        body.ipad-mode #context-title {
+            font-size: 26px !important;
+            margin-bottom: 15px !important;
+            padding-bottom: 10px !important;
+        }
+        body.ipad-mode #context-text {
+            font-size: 20px !important;
+            line-height: 1.6 !important;
+            max-height: 35vh !important;
+        }
+        body.ipad-mode #context-scroll button {
+            font-size: 18px !important;
+            padding: 8px 18px !important;
+        }
     </style>
 </head>
 <body>
@@ -418,6 +439,7 @@
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const isIPad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        if (isIPad) document.body.classList.add('ipad-mode');
         // Treat iPads and large tablets as desktop for full graphics/lighting, restrict simplified experience to phones
         const isPhone = (/iPhone|iPod|IEMobile|Opera Mini/.test(navigator.userAgent)) || 
                         (/Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent)) || 
@@ -688,9 +710,14 @@
         const initialX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
         camera.position.set(initialX, cameraY, initialZ);
 
-        // Enable antialiasing for smooth geometry edges
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setPixelRatio(window.devicePixelRatio); // Maximizes sharpness on Retina/High-DPI displays
+        // Disable antialiasing on mobile/tablets with high pixel ratios to save GPU fill rate
+        const isMobileOrTablet = isPhone || isIPad;
+        const useAntialias = !isMobileOrTablet || window.devicePixelRatio === 1;
+        const renderer = new THREE.WebGLRenderer({ antialias: useAntialias, alpha: false });
+        
+        // Cap pixel ratio to 1.5 on mobile/tablet devices to ensure 60fps scrolling on Retina
+        const maxPixelRatio = isMobileOrTablet ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
+        renderer.setPixelRatio(maxPixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -1418,6 +1445,7 @@
         scene.add(dirLight);
 
         const dirLightFill = new THREE.DirectionalLight(0xa8c0ff, 0.4); // Cool blue fill light
+        dirLightFill.visible = !(isPhone || isIPad); // Skip secondary fill pass on mobile/tablets
         scene.add(dirLightFill);
 
         // Dedicated grazing light that follows the magnifying glass
@@ -2548,7 +2576,7 @@
                                     opacity: isHighRes ? 1.0 : 0 // Pop in instantly for high-res to prevent fade artifacts over base
                                 };
                                 
-                                if (isPhone) {
+                                if (isPhone || isIPad) {
                                     tile.mesh.material = new THREE.MeshLambertMaterial(matOpts);
                                 } else {
                                     matOpts.roughness = 0.85;
