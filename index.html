@@ -41,21 +41,32 @@
             bottom: 10px;
             left: 10px;
             color: rgba(255, 255, 255, 0.7);
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 10px;
+            padding: 10px 15px;
             border-radius: 6px;
             pointer-events: none;
             font-size: 12px;
             transition: opacity 0.5s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         #ui h2 {
-            margin: 0 0 5px 0;
-            font-size: 14px;
+            margin: 0;
+            font-size: 16px;
+            font-family: 'MedievalSharp', serif;
+            font-weight: normal;
+            color: #d6a848;
         }
         #ui p {
-            margin: 3px 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .key {
             display: inline-block;
@@ -88,7 +99,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(20, 20, 20, 0.8);
+            background: rgba(20, 20, 20, 0.45);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             color: white;
@@ -221,7 +232,7 @@
 <body>
     <button id="hamburger-btn" aria-label="Menu" aria-expanded="false" style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.88); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
     <div id="mobile-menu-scrim" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;"></div>
-    <nav id="mobile-menu" role="menu" aria-label="Main Navigation" style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.8); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); overflow: hidden; box-sizing: border-box;">
+    <nav id="mobile-menu" role="menu" aria-label="Main Navigation" style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.45); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow: hidden; box-sizing: border-box;">
         <div style="padding: 12px 18px 8px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); display: flex; align-items: center; justify-content: space-between;">
             <span style="color: #d6a848; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">Bayeux Tapestry</span>
         </div>
@@ -267,7 +278,7 @@
     <button id="mobile-tour-btn" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 200; pointer-events: auto; background: rgba(20, 16, 12, 0.92); border: 1px solid #d6a848; border-radius: 30px; padding: 10px 22px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 8px; font-family: serif; color: #f4e4bc; font-size: 15px; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); user-select: none; outline: none;">
         <span style="color: #d6a848; font-size: 13px;">▶</span> <span id="mobile-tour-label">Start Tour</span>
     </button>
-    <div id="tour-control-bar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; background: rgba(20, 16, 12, 0.7); border: 1px solid #d6a848; border-radius: 30px; padding: 6px 14px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 12px; font-family: serif; color: #f4e4bc; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); user-select: none;">
+    <div id="tour-control-bar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; background: rgba(20, 16, 12, 0.4); border: 1px solid #d6a848; border-radius: 30px; padding: 6px 14px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); display: none; align-items: center; gap: 12px; font-family: serif; color: #f4e4bc; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); user-select: none;">
         <span style="font-size: 13px; color: #d6a848; font-weight: bold; letter-spacing: 0.5px; display: flex; align-items: center; gap: 7px;">
             <span id="tour-indicator-dot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d6a848; box-shadow: 0 0 8px #d6a848;"></span>
             <span id="tour-status-label">Touring</span>
@@ -277,11 +288,11 @@
     </div>
     <div id="ui">
         <h2>Bayeux Tapestry</h2>
-        <p style="margin-top: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <p>
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
             <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
-            <button id="tour-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Tour</button>
+            <button id="tour-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><span id="tour-btn-icon" style="font-family: sans-serif; font-size: 10px; margin-right: 5px; color: inherit;">▶︎</span><span id="tour-btn-text">Tour</span></button>
             <button id="toggle-supertitles" style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">Titles</button>
             <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Notes</button>
             <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
@@ -292,7 +303,7 @@
     </div>
 
 
-    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0;">Select Language</h3>
         <div id="lang-options" style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px; max-height: 60vh; overflow-y: auto;">
             <button class="lang-option" data-lang="en" style="padding: 6px 10px; background: #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
@@ -310,7 +321,7 @@
             <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
         </div>
     </div>
-    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
         <ul style="padding-left: 20px; line-height: 1.6;">
             <li id="help-desktop-1"><strong>Pan:</strong> Click and drag, swipe your touchpad, or push your mouse to the left/right screen edges. Keyboard arrows also work.</li>
@@ -333,7 +344,7 @@
         <button id="close-dialog">Close</button>
     </div>
 
-    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
         <label>Ambient Intensity: <span id="val-amb-int">1.06</span></label><br>
         <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
@@ -352,7 +363,7 @@
             <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
-    <div id="context-scroll" style="display: none; position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgba(244, 228, 188, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+    <div id="context-scroll" style="display: none; position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgba(244, 228, 188, 0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
             <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
             <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
@@ -416,6 +427,7 @@
 
         let isTourActive = false;
         let isTourPaused = false;
+        let tourSessionSeed = 0;
 
         function isMobileMode() {
             return isPhone || (window.innerWidth <= 900 && !isIPad);
@@ -1959,6 +1971,7 @@
         // Zoom range: how much closer/farther than the base Z each scene can be
         const tourZoomRange = 2.0;       // ± this amount from base Z
         const tourYRange = 0.3;          // ± vertical offset from center
+        const tourTiltRange = 0.12;      // ± subtle yaw tilt (radians)
         const tourCamLerpRate = 0.03;    // Per-frame smoothing for camera transitions
 
         /**
@@ -1971,16 +1984,18 @@
         }
 
         /**
-         * Returns { targetZ, targetY } for a given scene index.
+         * Returns { targetZ, targetY, targetTilt } for a given scene index.
          * Each scene gets a unique, deterministic camera framing.
          */
-        function getSceneKenBurns(index, baseZ) {
-            // Use two different seeds for Z and Y so they vary independently
-            const zHash = sceneHash(index, 1);  // 0..1
-            const yHash = sceneHash(index, 2);  // 0..1
+        function getSceneKenBurns(index, baseZ, zoomRange) {
+            // Use different seeds so they vary independently, and add the session seed to randomize per-tour
+            const zHash = sceneHash(index, 1 + tourSessionSeed);  // 0..1
+            const yHash = sceneHash(index, 2 + tourSessionSeed);  // 0..1
+            const tiltHash = sceneHash(index, 3 + tourSessionSeed); // 0..1
             return {
-                targetZ: baseZ + (zHash - 0.5) * 2 * tourZoomRange,
-                targetY: cameraY + (yHash - 0.5) * 2 * tourYRange
+                targetZ: baseZ + (zHash - 0.5) * 2 * zoomRange,
+                targetY: cameraY + (yHash - 0.5) * 2 * tourYRange,
+                targetTilt: (tiltHash - 0.5) * 2 * tourTiltRange
             };
         }
 
@@ -2041,12 +2056,21 @@
             const dict = (typeof uiDict !== 'undefined' && uiDict[currentLanguage]) ? uiDict[currentLanguage] : { tourStatus: 'Touring', paused: 'Paused' };
             
             if (isTourActive) {
-                if (controlBar) controlBar.style.display = 'flex';
+                if (controlBar) {
+                    controlBar.style.display = isMobileMode() ? 'flex' : 'none';
+                }
                 if (mobileTourBtn) mobileTourBtn.style.display = 'none';
                 if (mTextTour) mTextTour.innerText = dict.stopTour || 'Stop Tour';
                 if (tourBtn) {
                     tourBtn.style.background = 'rgba(214,168,72,0.3)';
                     tourBtn.style.borderColor = '#d6a848';
+                    const icon = tourBtn.querySelector('#tour-btn-icon');
+                    if (icon) {
+                        icon.style.display = 'inline';
+                        icon.innerText = '⏹︎';
+                    }
+                    const textEl = tourBtn.querySelector('#tour-btn-text');
+                    if (textEl) textEl.innerText = dict.stopTour || 'Stop';
                 }
                 if (isTourPaused) {
                     if (pauseBtn) {
@@ -2078,6 +2102,13 @@
                 if (tourBtn) {
                     tourBtn.style.background = 'rgba(20,20,20,0.8)';
                     tourBtn.style.borderColor = '#5a4a35';
+                    const icon = tourBtn.querySelector('#tour-btn-icon');
+                    if (icon) {
+                        icon.style.display = 'inline';
+                        icon.innerText = '▶︎';
+                    }
+                    const textEl = tourBtn.querySelector('#tour-btn-text');
+                    if (textEl) textEl.innerText = dict.tour || 'Tour';
                 }
             }
         }
@@ -2110,6 +2141,7 @@
             isTourActive = true;
             isTourPaused = false;
             tourElapsed = 0; // Reset flying camera oscillation clock
+            tourSessionSeed = Math.random() * 1000; // Randomize the tour path for this session
             
             // If we are already at or near the end of the tapestry, loop back to the start
             const maxX = W / SCALE;
@@ -2387,8 +2419,10 @@
             const tiltFactor = Math.max(0, Math.min(1, (moveHoldTime - 120) / 60)); // Fades in smoothly over 1 second after the wait
 
             // Unify tilt logic: tilt is purely based on current horizontal velocity.
-            const speedRatio = Math.max(-1, Math.min(1, velocityX / 0.15));
-            targetRotationY = -maxTilt * speedRatio * tiltFactor;
+            if (typeof isTourActive === 'undefined' || !isTourActive) {
+                const speedRatio = Math.max(-1, Math.min(1, velocityX / 0.15));
+                targetRotationY = -maxTilt * speedRatio * tiltFactor;
+            }
             
             if (keys.up || keys.down) {
                 zoomHoldTime += 1;
@@ -2427,7 +2461,7 @@
             const currentSmoothing = isUntilting ? tiltSmoothing * 2.0 : tiltSmoothing;
             camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
 
-            if (isUntilting) {
+            if (isUntilting && (typeof isTourActive === 'undefined' || !isTourActive)) {
                 const focalXBefore = camera.position.x - camera.position.z * Math.tan(previousRotationY);
                 camera.position.x = focalXBefore + camera.position.z * Math.tan(camera.rotation.y);
             }
@@ -2637,7 +2671,10 @@
                 // --- Ken Burns flying camera ---
                 // Find the two nearest scenes (before and after the camera) and interpolate
                 const isNarrow = isPhone || (window.innerWidth <= 900 && !isIPad);
-                const baseZ = isNarrow ? 6.0 : 12.0;
+                // Keep the tour consistently close and avoid large transitions between scenes
+                // Minimum Z will be baseZ - zoomRange (e.g. 5.0 - 1.5 = 3.5 on desktop)
+                const baseZ = isNarrow ? 4.5 : 5.0;
+                const zoomRange = isNarrow ? 1.0 : 1.5;
                 const cx = camera.position.x;
 
                 // Build sorted list of scene center-x positions
@@ -2647,6 +2684,7 @@
 
                 let targetZ = baseZ;
                 let targetY = cameraY;
+                let kenBurnsTilt = 0;
 
                 if (list && list.length > 0) {
                     // Get center-x for each scene
@@ -2680,28 +2718,34 @@
                         prevScene = centers[i];
                     }
 
-                    // Get Ken Burns targets for each scene
-                    const prevKB = getSceneKenBurns(prevScene.idx, baseZ);
-                    const nextKB = getSceneKenBurns(nextScene.idx, baseZ);
+                    // Get camera targets for those scenes
+                    const prevKB = getSceneKenBurns(prevScene.idx, baseZ, zoomRange);
+                    const nextKB = getSceneKenBurns(nextScene.idx, baseZ, zoomRange);
 
-                    // Interpolation factor: 0 at prevScene, 1 at nextScene
+                    // Interpolate based on our position between them
+                    let t = 0;
                     const span = nextScene.x - prevScene.x;
-                    const t = (span > 0.1) ? Math.max(0, Math.min(1, (cx - prevScene.x) / span))
-                                           : 0.5;
-                    // Smooth hermite for cinematic easing
-                    const st = t * t * (3 - 2 * t);
+                    if (span > 0.01) {
+                        t = (cx - prevScene.x) / span;
+                    }
+                    // Hermite smoothstep for cinematic easing
+                    t = t * t * (3 - 2 * t);
 
-                    targetZ = prevKB.targetZ + (nextKB.targetZ - prevKB.targetZ) * st;
-                    targetY = prevKB.targetY + (nextKB.targetY - prevKB.targetY) * st;
+                    targetZ = prevKB.targetZ + (nextKB.targetZ - prevKB.targetZ) * t;
+                    targetY = prevKB.targetY + (nextKB.targetY - prevKB.targetY) * t;
+                    kenBurnsTilt = prevKB.targetTilt + (nextKB.targetTilt - prevKB.targetTilt) * t;
                 }
 
-                // Smooth startup: ease from current camera to targets over the first 2 seconds
-                const startupEase = Math.min(1, tourElapsed / 2.0);
-                const lerpRate = tourCamLerpRate * startupEase;
+                // Smoothly ease the camera toward the interpolated target
+                // Scale lerp rate down during the first 2 seconds so it doesn't jerk on startup
+                const startupEase = Math.min(1.0, tourElapsed / 2.0);
+                const currentLerp = tourCamLerpRate * startupEase;
 
-                camera.position.z += (targetZ - camera.position.z) * lerpRate;
-                camera.position.y += (targetY - camera.position.y) * lerpRate;
-                targetRotationY = 0; // Ken Burns effect is zoom+pan, no yaw sway
+                camera.position.z += (targetZ - camera.position.z) * currentLerp;
+                camera.position.y += (targetY - camera.position.y) * currentLerp;
+                
+                // Apply the Ken Burns tilt to the camera's target yaw
+                targetRotationY = kenBurnsTilt * startupEase;
 
                 const maxX = W / SCALE;
                 if (camera.position.x >= maxX) {
@@ -2898,7 +2942,13 @@
             document.querySelectorAll('#help-link').forEach(el => el.innerText = dict.help);
             document.querySelectorAll('#learn-more-link').forEach(el => el.innerText = dict.about);
             document.querySelectorAll('#toggle-supertitles').forEach(el => el.innerText = dict.titles);
-            document.querySelectorAll('#tour-btn').forEach(el => el.innerText = dict.tour);
+            document.querySelectorAll('#tour-btn-text').forEach(el => {
+                if (typeof isTourActive !== 'undefined' && isTourActive) {
+                    el.innerText = dict.stopTour || 'Stop Tour';
+                } else {
+                    el.innerText = dict.tour;
+                }
+            });
             const mLabel = document.getElementById('mobile-tour-label');
             if (mLabel) mLabel.innerText = dict.startTour || dict.tour || 'Start Tour';
             if (typeof isTourActive !== 'undefined' && isTourActive) {
