@@ -438,7 +438,7 @@ window.addEventListener("error", function(e) {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         <span id="notes-btn-text">Tour</span>
     </button>
-    <div id="context-scroll" style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+    <div id="context-scroll" style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 672px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
             <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
             <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
@@ -2229,7 +2229,7 @@ window.addEventListener("error", function(e) {
                 tiles: ["0_0.webp", "1_0.webp"],
                 bounds: { xMin: 0.4, xMax: 7.0, yMin: -3.90, yMax: -0.43 },
                 centerX: 3.7,
-                centerY: -2.16,
+                centerY: -1.76,
                 targetZ: 3.35,
                 inspectDuration: 8.0,
                 description: s1.context,
@@ -2744,7 +2744,7 @@ window.addEventListener("error", function(e) {
                         }
                         
                         // Shift the viewport up by 0.1 world units per user request
-                        autoScrollTargetY += 0.1;
+                        autoScrollTargetY += 0.4;
                         
                         // Prevent Y from exceeding bounds, which would cause an infinite auto-scroll lock
                         if (autoScrollTargetY > 2.0) autoScrollTargetY = 2.0;
@@ -3612,7 +3612,10 @@ window.addEventListener("error", function(e) {
             annotations.forEach((ann, index) => {
                 if (!ann.mesh) return;
                 
-                if (!showSupertitles || ann.data.x === undefined) {
+                const isNotesOpen = document.getElementById('context-scroll') && document.getElementById('context-scroll').style.display === 'block';
+                const isTourRunning = typeof isTourActive !== 'undefined' && isTourActive;
+                
+                if (!showSupertitles || ann.data.x === undefined || isNotesOpen || isTourRunning) {
                     ann.mesh.visible = false;
                     return;
                 }
