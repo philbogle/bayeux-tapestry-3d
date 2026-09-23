@@ -1657,7 +1657,7 @@
             hasTouchDragged = false;
             mouseScrollDir = 0;
             autoScrollTargetX = null;
-            autoScrollTargetZ = null;
+            autoScrollTargetZ = null; autoScrollTargetY = null;
             
             if (e.touches.length === 1) {
                 if (isAuthoringMode) {
@@ -1818,7 +1818,7 @@
             mouseStartX = e.clientX;
             mouseStartY = e.clientY;
             autoScrollTargetX = null;
-            autoScrollTargetZ = null;
+            autoScrollTargetZ = null; autoScrollTargetY = null;
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
             
             if (isAuthoringMode) {
@@ -2713,6 +2713,7 @@
                 }
                 
                 // Calculate target zoom based on bounding box
+                autoScrollTargetY = camera.position.y;
                 autoScrollTargetZ = isPhone || (window.innerWidth <= 900 && !isIPad) ? 6.5 : 8.5; // fallback baseZ
                 if (typeof tourPOIs !== 'undefined' && tourPOIs) {
                     const targetPOI = tourPOIs.find(p => p.scene === annoData.scene);
@@ -2720,10 +2721,23 @@
                         const padding = 1.25;
                         const w = Math.max(0.6, targetPOI.bounds.xMax - targetPOI.bounds.xMin) + 0.50;
                         const h = Math.max(0.6, targetPOI.bounds.yMax - targetPOI.bounds.yMin) + 0.50;
+                        
+                        autoScrollTargetX = (targetPOI.bounds.xMin + targetPOI.bounds.xMax) / 2;
+                        autoScrollTargetY = (targetPOI.bounds.yMin + targetPOI.bounds.yMax) / 2;
+                        
                         const zFov = Math.tan((camera.fov * Math.PI) / 360);
                         const zHeight = (h * padding / 2) / zFov;
                         const zWidth = (w * padding / 2) / (zFov * camera.aspect);
+                        
                         autoScrollTargetZ = Math.max(zHeight, zWidth, 2.5); // Clamp closest zoom
+                        
+                        // For mobile phones, get close enough to the canvas so that the canvas at least fills the vertical viewport
+                        if (isPhone || (window.innerWidth <= 900 && !isIPad)) {
+                            const maxMobileZ = (6.94 / 2) / zFov;
+                            if (autoScrollTargetZ > maxMobileZ) {
+                                autoScrollTargetZ = maxMobileZ;
+                            }
+                        }
                     }
                 }
             }
@@ -2786,7 +2800,7 @@
         window.addEventListener('wheel', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-menu') || e.target.closest('#hamburger-btn') || e.target.closest('#mobile-tour-btn')) return;
             e.preventDefault();
-            autoScrollTargetX = null; autoScrollTargetZ = null;
+            autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
             lastWheelTime = Date.now();
             
             // Normalize scroll distance
@@ -3078,7 +3092,8 @@
          * Updates physics, animations, dynamic lighting, and triggers the renderer.
          */
         let autoScrollTargetX = null;
-        let autoScrollTargetZ = null;
+        let autoScrollTargetY = null;
+        let autoScrollTargetZ = null; autoScrollTargetY = null;
         let activePulsePOIIndex = -1;
         let pulseTimer = 0;
         
@@ -3170,6 +3185,17 @@
             if (autoScrollTargetX !== null) {
                 camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
                 let zReached = true;
+                let yReached = true;
+                
+                if (autoScrollTargetY !== null) {
+                    camera.position.y += (autoScrollTargetY - camera.position.y) * 0.1;
+                    if (Math.abs(camera.position.y - autoScrollTargetY) > 0.01) {
+                        yReached = false;
+                    } else {
+                        camera.position.y = autoScrollTargetY;
+                    }
+                }
+                
                 if (autoScrollTargetZ !== null) {
                     camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.1;
                     if (Math.abs(camera.position.z - autoScrollTargetZ) > 0.01) {
@@ -3178,10 +3204,11 @@
                         camera.position.z = autoScrollTargetZ;
                     }
                 }
-                if (Math.abs(camera.position.x - autoScrollTargetX) < 0.01 && zReached) {
+                
+                if (Math.abs(camera.position.x - autoScrollTargetX) < 0.01 && zReached && yReached) {
                     camera.position.x = autoScrollTargetX;
-                    autoScrollTargetX = null; autoScrollTargetZ = null;
-                    autoScrollTargetZ = null;
+                    autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
+                    autoScrollTargetZ = null; autoScrollTargetY = null;
                     if (typeof tituliData !== 'undefined' && tituliData.length > 0) {
                         const targetScene = tituliData[currentPopupSceneIndex];
                         if (targetScene && typeof tourPOIs !== 'undefined') {
