@@ -336,54 +336,6 @@
         }
     },
     {
-        "scene": "11",
-        "latin": "NUNTII WILLELMI",
-        "x": 91.94509869644526,
-        "y": 0.9443112116039732,
-        "translations": {
-            "en": {
-                "text": "The messengers of William",
-                "context": "The messengers arrive. Note the aggressive posture and the dwarf holding the horses, often identified as Turold."
-            },
-            "zh": {
-                "text": "威廉的使者",
-                "context": "使者来了。注意攻击性的姿势和牵着马匹的矮人，通常被认为是图罗德。"
-            },
-            "fr": {
-                "text": "Les messagers de Guillaume",
-                "context": "Les messagers arrivent. Notez la posture agressive et le nain tenant les chevaux, souvent identifié comme étant Turold."
-            },
-            "de": {
-                "text": "Die Boten von William",
-                "context": "Die Boten treffen ein. Beachten Sie die aggressive Haltung und den Zwerg, der die Pferde hält und oft als Turold bezeichnet wird."
-            },
-            "es": {
-                "text": "Los mensajeros de William",
-                "context": "Llegan los mensajeros. Nótese la postura agresiva y el enano que sostiene los caballos, a menudo identificado como Turold."
-            },
-            "nl": {
-                "text": "De boodschappers van Willem",
-                "context": "De boodschappers arriveren. Let op de agressieve houding en de dwerg die de paarden vasthoudt, vaak geïdentificeerd als Turold."
-            },
-            "pt": {
-                "text": "Os mensageiros de William",
-                "context": "Os mensageiros chegam. Observe a postura agressiva e o anão segurando os cavalos, muitas vezes identificado como Turold."
-            },
-            "hi": {
-                "text": "विलियम के दूत",
-                "context": "दूत आते हैं. आक्रामक मुद्रा और घोड़ों को पकड़ने वाले बौने पर ध्यान दें, जिसे अक्सर ट्यूरोल्ड के रूप में पहचाना जाता है।"
-            },
-            "ar": {
-                "text": "رسل ويليام",
-                "context": "وصول الرسل. لاحظ الموقف العدواني والقزم الذي يحمل الخيول، والذي يُعرف غالبًا باسم تورولد."
-            },
-            "bn": {
-                "text": "উইলিয়ামের দূত",
-                "context": "বার্তাবাহক আসছেন। আক্রমনাত্মক ভঙ্গি এবং ঘোড়া ধরে থাকা বামন, প্রায়শই টুরোল্ড হিসাবে চিহ্নিত করা নোট করুন।"
-            }
-        }
-    },
-    {
         "scene": "12",
         "latin": "HIC VENIT NUNTIUS AD WILGELMUM DUCEM",
         "x": 96.94651288268368,
