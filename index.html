@@ -2742,6 +2742,13 @@ window.addEventListener("error", function(e) {
                                 autoScrollTargetZ = maxMobileZ;
                             }
                         }
+                        
+                        // Shift the viewport up by 0.1 world units per user request
+                        autoScrollTargetY += 0.1;
+                        
+                        // Prevent Y from exceeding bounds, which would cause an infinite auto-scroll lock
+                        if (autoScrollTargetY > 2.0) autoScrollTargetY = 2.0;
+                        if (autoScrollTargetY < -4.94) autoScrollTargetY = -4.94;
                     }
                 }
             }
