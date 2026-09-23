@@ -11,8 +11,13 @@
 -->
 <html lang="en">
 <head>
+<script>
+window.addEventListener("error", function(e) {
+  alert("Error: " + e.message + " at " + e.filename + ":" + e.lineno);
+});
+</script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="no-referrer">
     <title>Bayeux Tapestry 3D Walkthrough</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
@@ -190,9 +195,15 @@
             background: rgba(139, 115, 85, 0.25);
             margin: 5px 14px;
         }
-        @media (max-width: 900px) {
+                @media (max-width: 900px) {
+            #notes-btn-top {
+                top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+                padding: 8px 24px !important;
+                font-size: 18px !important;
+                border-radius: 25px !important;
+            }
             #context-scroll {
-                top: 4px !important;
+                top: calc(env(safe-area-inset-top, 0px) + 4px) !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
                 padding: 8px 12px !important;
@@ -345,7 +356,7 @@
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
             <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
-            <button id="notes-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px;">☰ Tour</button>
+            
             <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
                         <button id="fullscreen-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
                     <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
@@ -423,7 +434,11 @@
             <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
-    <div id="context-scroll" style="display: none; position: fixed; top: 4px; left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+    <button id="notes-btn-top" style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; pointer-events: auto; background: rgba(20,20,20,0.85); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+        <span id="notes-btn-text">Tour</span>
+    </button>
+    <div id="context-scroll" style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
             <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
             <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
@@ -2459,9 +2474,9 @@
 
         function closeNotes() {
             const popup = document.getElementById('context-scroll');
-            const notesBtn = document.getElementById('notes-btn');
+            const notesBtnTop = document.getElementById('notes-btn-top');
             if (popup) popup.style.display = 'none';
-            if (notesBtn) notesBtn.style.background = 'rgba(20,20,20,0.8)';
+            if (notesBtnTop) notesBtnTop.style.display = 'flex';
             
             const baseZ = 6.5;
             autoScrollTargetZ = baseZ;
@@ -2470,9 +2485,9 @@
 
         function openNotes(shouldAutoScroll = false) {
             const popup = document.getElementById('context-scroll');
-            const notesBtn = document.getElementById('notes-btn');
+            const notesBtnTop = document.getElementById('notes-btn-top');
             if (popup) popup.style.display = 'block';
-            if (notesBtn) notesBtn.style.background = 'rgba(214,168,72,0.3)';
+            if (notesBtnTop) notesBtnTop.style.display = 'none';
             
             // User requested that the tour always starts at the first POI
             if (tituliData && tituliData.length > 0) {
@@ -2662,6 +2677,7 @@
         let currentPopupSceneIndex = 0;
 
         function updatePopupUI(index, shouldAutoScroll = true) {
+            index = parseInt(index, 10);
             if (index < 0 || index >= tituliData.length) return;
             currentPopupSceneIndex = index;
             const annoData = tituliData[index];
@@ -3264,18 +3280,10 @@
 
         // UI Dialog Listeners
         
-        const notesBtn = document.getElementById('notes-btn');
-        if (notesBtn) {
-            notesBtn.addEventListener('click', (e) => {
+        const notesBtnTop = document.getElementById('notes-btn-top');
+        if (notesBtnTop) {
+            notesBtnTop.addEventListener('click', (e) => {
                 e.preventDefault();
-                const popup = document.getElementById('context-scroll');
-                
-                // Toggle logic
-                if (popup && popup.style.display !== 'none') {
-                    closeNotes();
-                    return;
-                }
-                
                 openNotes(true);
             });
         }
@@ -3409,7 +3417,7 @@
                 const statusLabel = document.getElementById('tour-status-label');
                 if (statusLabel) statusLabel.innerText = isTourPaused ? (dict.paused || 'Paused') : (dict.tourStatus || 'Touring');
             }
-            document.querySelectorAll('#notes-btn').forEach(el => el.innerText = dict.notes);
+            document.querySelectorAll('#notes-btn-text').forEach(el => el.innerText = dict.tour);
 
             // Translate mobile menu elements
             const mTextTour = document.getElementById('m-text-tour');
