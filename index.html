@@ -192,7 +192,7 @@
         }
         @media (max-width: 900px) {
             #context-scroll {
-                top: 10px !important;
+                top: 4px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
                 padding: 8px 12px !important;
@@ -423,7 +423,7 @@
             <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
-    <div id="context-scroll" style="display: none; position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+    <div id="context-scroll" style="display: none; position: fixed; top: 4px; left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 420px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
             <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
             <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
@@ -735,7 +735,7 @@
         
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
         const isNarrowScreen = isPhone || (window.innerWidth <= 900 && !isIPad);
-        const initialZ = isNarrowScreen ? 6.0 : 12.0; // Mobile starts closer into the canvas for immersive viewing
+        const initialZ = isNarrowScreen ? 10.0 : 12.0;
         // Coordinate system layout
         const floorY = -H / SCALE - 0.5;
         const tapestryElevation = 2.0; // Tapestry lowered further
@@ -2463,7 +2463,7 @@
             if (popup) popup.style.display = 'none';
             if (notesBtn) notesBtn.style.background = 'rgba(20,20,20,0.8)';
             
-            const baseZ = isPhone || (window.innerWidth <= 900 && !isIPad) ? 6.5 : 8.5;
+            const baseZ = 6.5;
             autoScrollTargetZ = baseZ;
             autoScrollTargetX = camera.position.x;
         }
@@ -2474,21 +2474,9 @@
             if (popup) popup.style.display = 'block';
             if (notesBtn) notesBtn.style.background = 'rgba(214,168,72,0.3)';
             
-            let closestIndex = -1;
-            let minDistance = Infinity;
-            for (let i = 0; i < annotations.length; i++) {
-                const ann = annotations[i];
-                if (!ann || !ann.mesh || !ann.data) continue;
-                const width = ann.mesh.geometry.parameters.width;
-                const centerPoint = ann.data.x + width / 2.0;
-                const dist = Math.abs(camera.position.x - centerPoint);
-                if (dist < minDistance) {
-                    minDistance = dist;
-                    closestIndex = tituliData.indexOf(ann.data);
-                }
-            }
-            if (closestIndex !== -1) {
-                updatePopupUI(closestIndex, shouldAutoScroll);
+            // User requested that the tour always starts at the first POI
+            if (tituliData && tituliData.length > 0) {
+                updatePopupUI(0, shouldAutoScroll);
             }
         }
 
@@ -2714,7 +2702,7 @@
                 
                 // Calculate target zoom based on bounding box
                 autoScrollTargetY = camera.position.y;
-                autoScrollTargetZ = isPhone || (window.innerWidth <= 900 && !isIPad) ? 6.5 : 8.5; // fallback baseZ
+                autoScrollTargetZ = 6.5; // fallback baseZ
                 if (typeof tourPOIs !== 'undefined' && tourPOIs) {
                     const targetPOI = tourPOIs.find(p => p.scene === annoData.scene);
                     if (targetPOI && targetPOI.bounds) {
@@ -3093,8 +3081,13 @@
          */
         let autoScrollTargetX = null;
         let autoScrollTargetY = null;
-        let autoScrollTargetZ = null; autoScrollTargetY = null;
+        let autoScrollTargetZ = null;
         let activePulsePOIIndex = -1;
+        let initialSlowZoom = true;
+
+        // Schedule an initial slow zoom in for both desktop and mobile
+        // "Have the initial slow zoom get closer to the canvas." -> Z=6.5
+        autoScrollTargetZ = 6.5;
         let pulseTimer = 0;
         
         function triggerPOIPulse(index) {
@@ -3182,6 +3175,16 @@
                     }
                 }
             }
+            // Initial slow zoom
+            if (initialSlowZoom && autoScrollTargetZ !== null && autoScrollTargetX === null) {
+                camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.005;
+                if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02) {
+                    camera.position.z = autoScrollTargetZ;
+                    autoScrollTargetZ = null;
+                    initialSlowZoom = false;
+                }
+            }
+
             if (autoScrollTargetX !== null) {
                 camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
                 let zReached = true;
