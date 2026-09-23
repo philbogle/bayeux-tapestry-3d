@@ -104,7 +104,7 @@ window.addEventListener("error", function(e) {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(20, 20, 20, 0.45);
+            background: rgba(20, 20, 20, 0.30);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             color: white;
@@ -225,7 +225,7 @@ window.addEventListener("error", function(e) {
                 font-size: 11px !important;
             }
             #context-title {
-                font-size: 13px !important;
+                font-size: 18px !important;
                 margin-bottom: 4px !important;
                 padding-bottom: 3px !important;
                 line-height: 1.2 !important;
@@ -306,9 +306,9 @@ window.addEventListener("error", function(e) {
     </style>
 </head>
 <body>
-    <button id="hamburger-btn" aria-label="Menu" aria-expanded="false" style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.88); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
+    <button id="hamburger-btn" aria-label="Menu" aria-expanded="false" style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.70); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
     <div id="mobile-menu-scrim" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;"></div>
-    <nav id="mobile-menu" role="menu" aria-label="Main Navigation" style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.45); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow: hidden; box-sizing: border-box;">
+    <nav id="mobile-menu" role="menu" aria-label="Main Navigation" style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.30); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow: hidden; box-sizing: border-box;">
         <div style="padding: 12px 18px 8px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); display: flex; align-items: center; justify-content: space-between;">
             <span style="color: #d6a848; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">Bayeux Tapestry</span>
         </div>
@@ -355,20 +355,20 @@ window.addEventListener("error", function(e) {
         <p>
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
             <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-            <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
+            <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
             
-            <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
-                        <button id="fullscreen-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
-                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
-            <button id="lighting-controls-btn" title="Lighting Controls" style="display: none; pointer-events: auto; background: rgba(20,20,20,0.8); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; align-items: center; justify-content: center; outline: none;">⚙︎</button>
+            <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
+                        <button id="fullscreen-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
+                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
+            <button id="lighting-controls-btn" title="Lighting Controls" style="display: none; pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; align-items: center; justify-content: center; outline: none;">⚙︎</button>
         </p>
     </div>
 
 
-    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0;">Select Language</h3>
         <div id="lang-options" style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px; max-height: 60vh; overflow-y: auto;">
-            <button class="lang-option" data-lang="en" style="padding: 6px 10px; background: #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
+            <button class="lang-option" data-lang="en" style="padding: 6px 10px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
             <button class="lang-option" data-lang="zh" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">中文 (Chinese)</button>
             <button class="lang-option" data-lang="hi" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">हिन्दी (Hindi)</button>
             <button class="lang-option" data-lang="es" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Español (Spanish)</button>
@@ -383,7 +383,7 @@ window.addEventListener("error", function(e) {
             <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
         </div>
     </div>
-    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
         <ul style="padding-left: 20px; line-height: 1.6;">
             <li id="help-desktop-1"><strong>Pan:</strong> Click and drag, swipe your touchpad, or push your mouse to the left/right screen edges. Keyboard arrows also work.</li>
@@ -393,7 +393,7 @@ window.addEventListener("error", function(e) {
             <li>Zoom in closely on a specific scene to automatically load ultra-high resolution textures.</li>
         </ul>
         <div style="text-align: right; margin-top: 20px;">
-            <button id="close-help" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+            <button id="close-help" style="padding: 5px 15px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
 
@@ -406,7 +406,7 @@ window.addEventListener("error", function(e) {
         <button id="close-dialog">Close</button>
     </div>
 
-    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
         <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" id="simple-lighting-toggle">
@@ -431,20 +431,20 @@ window.addEventListener("error", function(e) {
         
         
         <div style="text-align: right; margin-top: 20px;">
-            <button id="close-lighting" style="padding: 5px 15px; background: #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+            <button id="close-lighting" style="padding: 5px 15px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
-    <button id="notes-btn-top" style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; pointer-events: auto; background: rgba(20,20,20,0.85); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+    <button id="notes-btn-top" style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; pointer-events: auto; background: rgba(20,20,20,0.70); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         <span id="notes-btn-text">Tour</span>
     </button>
-    <div id="context-scroll" style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgb(244, 228, 188); color: #3a2a1a; padding: 15px 20px; border-radius: 4px; border: 2px solid rgba(139, 115, 85, 0.8); z-index: 2000; width: 672px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.2); font-family: 'MedievalSharp', serif;">
+    <div id="context-scroll" style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgba(20, 20, 20, 0.50); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: #f4e4bc; padding: 15px 20px; border-radius: 8px; border: 1px solid #5a4a35; z-index: 2000; width: 672px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-            <button id="prev-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
-            <button id="close-context" style="padding: 5px 16px; background: #5a4a35; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
-            <button id="next-scene" style="padding: 5px 12px; background: #8b7355; color: #f4e4bc; border: none; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Next &raquo;</button>
+            <button id="prev-scene" style="padding: 5px 12px; background: rgba(214, 168, 72, 0.2); border: 1px solid #d6a848; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
+            <button id="close-context" style="padding: 5px 16px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
+            <button id="next-scene" style="padding: 5px 12px; background: rgba(214, 168, 72, 0.2); border: 1px solid #d6a848; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Next &raquo;</button>
         </div>
-        <h3 id="context-title" style="margin-top: 0; font-size: 19px; border-bottom: 1px solid #8b7355; padding-bottom: 8px;">Scene Context</h3>
+        <h3 id="context-title" style="margin-top: 0; font-size: 24px; margin-bottom: 12px;">Scene Context</h3>
         <p id="context-text" style="font-size: 18px; line-height: 1.6; text-align: left; font-family: serif; margin-bottom: 0;"></p>
     </div>
 
