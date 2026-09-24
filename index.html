@@ -1531,7 +1531,7 @@ window.addEventListener("error", function(e) {
 
 
 
-        // Lighting: Ambient light + 4 Dynamic Torches
+        // Lighting: Ambient light + Key Light
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.73);
         scene.add(ambientLight);
 
@@ -1553,10 +1553,6 @@ window.addEventListener("error", function(e) {
             ambientLight.color.setHex(0xffffff);
         }
         
-        // Lighting Variables (linked to UI)
-        let configTorchInt = 1.25;
-        let configTorchColor = new THREE.Color(0xffffff);
-
         // Sync initial UI slider value
         const simpleLightToggle = document.getElementById('simple-lighting-toggle');
         if (simpleLightToggle) simpleLightToggle.checked = useSimpleLighting;
