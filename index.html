@@ -2392,18 +2392,7 @@
                 const locText = (t.translations && t.translations[currentLanguage]) ? t.translations[currentLanguage].text : (t.translations && t.translations.en ? t.translations.en.text : t.latin);
                 let locDesc = (t.translations && t.translations[currentLanguage]) ? t.translations[currentLanguage].context : (t.translations && t.translations.en ? t.translations.en.context : "");
 
-                // Special enhanced descriptions for climactic battle milestones
-                if (currentLanguage === "en") {
-                    if (t.scene === "53") {
-                        locDesc = "Intense combat ensues as the English forces fiercely defend a hill, successfully pulling several Norman cavalrymen and their horses down into the deadly marsh.";
-                    } else if (t.scene === "55" || t.scene === "54") {
-                        locDesc = "Bishop Odo wields a club to rally the troops, while Duke William tilts back his helmet to show his face to his soldiers, dispelling rumors of his death and leading a renewed cavalry charge.";
-                    } else if (t.scene === "57") {
-                        locDesc = "The climatic death of King Harold Godwinson, depicted both as a figure pulling an arrow from his eye and subsequently being struck down by a Norman knight's sword.";
-                    } else if (t.scene === "58") {
-                        locDesc = "With their king dead, the remaining English soldiers break rank and flee the battlefield on foot, ruthlessly pursued by the victorious Norman cavalry.";
-                    }
-                }
+
 
                 const prevPOI = list[list.length - 1];
                 const nextScene = sorted[i + 1];
