@@ -8,6 +8,31 @@
   immersive, interactive walkthrough.
 
   Original Tile Source: https://www.britishmuseum.org/bayeux-tapestry-online-experience
+  
+  --- Architecture & Best Practices ---
+  1. CORE 3D SCENE (Three.js)
+     - Camera setup: Orthographic/Perspective hybrid. The camera uses a Perspective projection 
+       to allow for cinematic zooming and parallax effects.
+     - Controls: Custom momentum-based panning and zooming (rather than standard OrbitControls) 
+       to provide a 2D-like sliding experience optimized for this extremely wide, flat canvas.
+       
+  2. TEXTURES & MEMORY MANAGEMENT (Deep Zoom Image - DZI)
+     - Due to the massive resolution of the tapestry, tiles are loaded dynamically on demand.
+     - A custom bounding-box visibility check unloads tiles that are off-screen to preserve memory.
+     - Mobile platforms load fewer/lower-res tiles aggressively to prevent GPU crashes.
+     
+  3. ANNOTATIONS & SCENE TOUR
+     - Translates historical scenes into English/Chinese/French/etc dynamically.
+     - 3D Text Meshes (supertitles) are generated using troika-three-text (or Three.js geometry) 
+       and overlaid onto the 3D plane.
+     - The Tour mode dynamically shifts autoScrollTarget (X, Y, Z) and uses an ease-in/ease-out
+       animation loop to create cinematic camera movements between POIs.
+       
+  4. RESPONSIVE & ACCESSIBLE UI
+     - Uses CSS variables and media queries to switch between Desktop, iPad, and Mobile layouts.
+     - iOS safe-area handling `env(safe-area-inset-top)` is used to prevent the dynamic island/notch 
+       from overlapping critical UI components.
+     - Hardware acceleration (backdrop-filter) used sparingly for translucent theme elements.
 -->
 <html lang="en">
 <head>
@@ -311,6 +336,16 @@ window.addEventListener("error", function(e) {
     </style>
 </head>
 <body>
+    <!-- 
+      BEST PRACTICE: UI Layering & Z-Index Management
+      All UI overlays are placed outside the Three.js canvas container.
+      Z-indices are strictly layered:
+      - 3000+: Cinematic overlays (titles that take full precedence)
+      - 2000+: High-priority interaction panels (Tour context scroll, floating buttons)
+      - 1000+: Modals & Dialogs (Settings, Languages)
+      - 400-500: Mobile navigation elements
+      - 10-100: Persistent bottom UI controls
+    -->
     <h1 id="cinematic-title" style="position: fixed; top: 12%; left: 50%; transform: translateX(-50%); font-family: 'MedievalSharp', serif; color: #d6a848; font-size: 54px; letter-spacing: 4px; text-shadow: 0 5px 25px rgba(0,0,0,1), 0 0 10px rgba(214,168,72,0.4); opacity: 0; transition: opacity 2s ease-in-out; pointer-events: none; z-index: 3000; text-align: center; margin: 0; width: 100%;">Bayeux Tapestry Tour</h1>
     <button id="hamburger-btn" aria-label="Menu" aria-expanded="false" style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.70); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
     <div id="mobile-menu-scrim" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;"></div>
