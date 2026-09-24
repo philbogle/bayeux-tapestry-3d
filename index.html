@@ -2900,6 +2900,28 @@ window.addEventListener("error", function(e) {
                 const speedRatio = Math.max(-1, Math.min(1, velocityX / 0.15));
                 targetRotationY = -maxTilt * speedRatio * tiltFactor;
             }
+
+            // Cinematic initial sequence: tilt right to reveal expanse, then gracefully fly in
+            if (initialSlowZoom) {
+                if (autoScrollTargetZ === null || autoScrollTargetX !== null) {
+                    initialSlowZoom = false; // User interrupted or a specific scene was triggered
+                } else {
+                    const elapsed = Date.now() - cinematicStartTime;
+                    if (elapsed < 2000) {
+                        targetRotationY = -0.45; // gently tilt right
+                    } else {
+                        targetRotationY = 0; // gracefully straighten out
+                        // Wait another 500ms before zooming, or just start zooming
+                        camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.008;
+                        if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
+                            camera.position.z = autoScrollTargetZ;
+                            camera.rotation.y = 0;
+                            autoScrollTargetZ = null;
+                            initialSlowZoom = false;
+                        }
+                    }
+                }
+            }
             
             if (keys.up || keys.down) {
                 zoomHoldTime += 1;
@@ -3107,6 +3129,7 @@ window.addEventListener("error", function(e) {
         let autoScrollTargetZ = null;
         let activePulsePOIIndex = -1;
         let initialSlowZoom = true;
+        let cinematicStartTime = Date.now();
 
         // Schedule an initial slow zoom in for both desktop and mobile
         // "Have the initial slow zoom get closer to the canvas." -> Z=6.5
@@ -3198,15 +3221,7 @@ window.addEventListener("error", function(e) {
                     }
                 }
             }
-            // Initial slow zoom
-            if (initialSlowZoom && autoScrollTargetZ !== null && autoScrollTargetX === null) {
-                camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.005;
-                if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02) {
-                    camera.position.z = autoScrollTargetZ;
-                    autoScrollTargetZ = null;
-                    initialSlowZoom = false;
-                }
-            }
+
 
             if (autoScrollTargetX !== null) {
                 camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
