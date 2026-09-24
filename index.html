@@ -9,7 +9,6 @@
 
   Original Tile Source: https://www.britishmuseum.org/bayeux-tapestry-online-experience
   
-  --- Architecture & Best Practices ---
   1. CORE 3D SCENE (Three.js)
      - Camera setup: Orthographic/Perspective hybrid. The camera uses a Perspective projection 
        to allow for cinematic zooming and parallax effects.
@@ -35,29 +34,35 @@
      - Hardware acceleration (backdrop-filter) used sparingly for translucent theme elements.
 -->
 <html lang="en">
+
 <head>
-<script>
-window.addEventListener("error", function(e) {
-  alert("Error: " + e.message + " at " + e.filename + ":" + e.lineno);
-});
-</script>
+    <script>
+        window.addEventListener("error", function (e) {
+            alert("Error: " + e.message + " at " + e.filename + ":" + e.lineno);
+        });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="no-referrer">
     <title>Bayeux Tapestry 3D Walkthrough</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
-        .lang-option, #close-lang {
+        .lang-option,
+        #close-lang {
             transition: all 0.2s ease;
         }
+
         .lang-option:hover {
             background-color: #5a4a35 !important;
             border-color: #d6a848 !important;
         }
+
         #close-lang:hover {
             background-color: #666 !important;
         }
-        html, body {
+
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -66,6 +71,7 @@ window.addEventListener("error", function(e) {
             background-color: #111;
             font-family: sans-serif;
         }
+
         #ui {
             position: absolute;
             bottom: 10px;
@@ -84,6 +90,7 @@ window.addEventListener("error", function(e) {
             gap: 15px;
             flex-wrap: wrap;
         }
+
         #ui h2 {
             margin: 0;
             font-size: 16px;
@@ -91,6 +98,7 @@ window.addEventListener("error", function(e) {
             font-weight: normal;
             color: #d6a848;
         }
+
         #ui p {
             margin: 0;
             display: flex;
@@ -98,6 +106,7 @@ window.addEventListener("error", function(e) {
             flex-wrap: wrap;
             gap: 10px;
         }
+
         .key {
             display: inline-block;
             background: #333;
@@ -108,21 +117,25 @@ window.addEventListener("error", function(e) {
             border: 1px solid #444;
             color: white;
         }
+
         button.key {
             pointer-events: auto;
             cursor: pointer;
             transition: all 0.1s;
             user-select: none;
         }
+
         button.key:hover {
             background: #555;
             border-color: #d6a848;
         }
+
         button.key:active {
             background: #d6a848;
             color: black;
             border-color: #d6a848;
         }
+
         #about-dialog {
             display: none;
             position: fixed;
@@ -139,15 +152,18 @@ window.addEventListener("error", function(e) {
             z-index: 1000;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
+
         #about-dialog a {
             color: #d6a848;
             text-decoration: none;
         }
+
         #about-dialog a:hover {
             text-decoration: underline;
         }
+
         #close-dialog {
             margin-top: 15px;
             padding: 8px 15px;
@@ -157,26 +173,34 @@ window.addEventListener("error", function(e) {
             border-radius: 4px;
             cursor: pointer;
         }
+
         #close-dialog:hover {
             background: #555;
         }
+
         #tour-btn:hover {
-            background: rgba(214,168,72,0.2) !important;
+            background: rgba(214, 168, 72, 0.2) !important;
         }
+
         #tour-pause-btn:hover {
-            background: rgba(214,168,72,0.45) !important;
+            background: rgba(214, 168, 72, 0.45) !important;
         }
+
         #tour-stop-btn:hover {
-            background: rgba(255,255,255,0.2) !important;
+            background: rgba(255, 255, 255, 0.2) !important;
         }
+
         #mobile-tour-btn:hover {
-            background: rgba(214,168,72,0.35) !important;
+            background: rgba(214, 168, 72, 0.35) !important;
             border-color: #f4e4bc !important;
         }
-        #hamburger-btn:hover, #hamburger-btn:active {
+
+        #hamburger-btn:hover,
+        #hamburger-btn:active {
             background: rgba(45, 36, 26, 0.95) !important;
             border-color: #d6a848 !important;
         }
+
         .menu-row {
             display: flex;
             align-items: center;
@@ -195,14 +219,18 @@ window.addEventListener("error", function(e) {
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
-        .menu-row:hover, .menu-row:active {
+
+        .menu-row:hover,
+        .menu-row:active {
             background: rgba(214, 168, 72, 0.16);
             color: #fff;
         }
+
         .menu-text {
             flex-grow: 1;
             white-space: nowrap;
         }
+
         .menu-badge {
             font-size: 11px;
             font-weight: bold;
@@ -215,23 +243,27 @@ window.addEventListener("error", function(e) {
             flex-shrink: 0;
             margin-left: 12px;
         }
+
         .menu-divider {
             height: 1px;
             background: rgba(139, 115, 85, 0.25);
             margin: 5px 14px;
         }
-                @media (max-width: 900px) {
+
+        @media (max-width: 900px) {
             #cinematic-title {
                 font-size: 28px !important;
                 letter-spacing: 2px !important;
                 top: 15% !important;
             }
+
             #notes-btn-top {
                 top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
                 padding: 8px 24px !important;
                 font-size: 18px !important;
                 border-radius: 25px !important;
             }
+
             #context-scroll {
                 top: calc(env(safe-area-inset-top, 0px) + 4px) !important;
                 left: 50% !important;
@@ -241,8 +273,9 @@ window.addEventListener("error", function(e) {
                 max-width: calc(100vw - 24px) !important;
                 box-sizing: border-box !important;
                 border-radius: 6px !important;
-                box-shadow: 0 6px 25px rgba(0,0,0,0.85) !important;
+                box-shadow: 0 6px 25px rgba(0, 0, 0, 0.85) !important;
             }
+
             #context-scroll div:first-child {
                 display: flex !important;
                 justify-content: space-between !important;
@@ -250,10 +283,12 @@ window.addEventListener("error", function(e) {
                 width: 100% !important;
                 margin-bottom: 4px !important;
             }
+
             #context-scroll button {
                 padding: 3px 8px !important;
                 font-size: 11px !important;
             }
+
             #context-title {
                 font-size: 18px !important;
                 margin-bottom: 4px !important;
@@ -261,6 +296,7 @@ window.addEventListener("error", function(e) {
                 line-height: 1.2 !important;
                 word-break: break-word !important;
             }
+
             #context-text {
                 font-size: 15px !important;
                 line-height: 1.3 !important;
@@ -268,23 +304,26 @@ window.addEventListener("error", function(e) {
                 overflow-y: auto !important;
             }
         }
-        
+
         /* iPad Specific Enlargements for Notes Panel */
         body.ipad-mode #context-scroll {
             width: 480px !important;
             max-width: 95vw !important;
             padding: 20px 25px !important;
         }
+
         body.ipad-mode #context-title {
             font-size: 22px !important;
             margin-bottom: 12px !important;
             padding-bottom: 8px !important;
         }
+
         body.ipad-mode #context-text {
             font-size: 17px !important;
             line-height: 1.5 !important;
             max-height: 40vh !important;
         }
+
         body.ipad-mode #context-scroll button {
             font-size: 15px !important;
             padding: 6px 14px !important;
@@ -304,7 +343,7 @@ window.addEventListener("error", function(e) {
             padding: 12px 20px;
             width: 580px;
             max-width: calc(100vw - 32px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.85);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
             z-index: 2500;
             font-family: serif;
             backdrop-filter: blur(16px);
@@ -322,10 +361,12 @@ window.addEventListener("error", function(e) {
                 max-width: calc(100vw - 20px) !important;
                 border-radius: 8px !important;
             }
+
             #drone-poi-title {
                 font-size: 15px !important;
                 margin-bottom: 4px !important;
             }
+
             #drone-poi-desc {
                 font-size: 12px !important;
                 line-height: 1.35 !important;
@@ -335,6 +376,7 @@ window.addEventListener("error", function(e) {
         }
     </style>
 </head>
+
 <body>
     <!-- 
       BEST PRACTICE: UI Layering & Z-Index Management
@@ -346,12 +388,20 @@ window.addEventListener("error", function(e) {
       - 400-500: Mobile navigation elements
       - 10-100: Persistent bottom UI controls
     -->
-    <h1 id="cinematic-title" style="position: fixed; top: 12%; left: 50%; transform: translateX(-50%); font-family: 'MedievalSharp', serif; color: #d6a848; font-size: 54px; letter-spacing: 4px; text-shadow: 0 5px 25px rgba(0,0,0,1), 0 0 10px rgba(214,168,72,0.4); opacity: 0; transition: opacity 2s ease-in-out; pointer-events: none; z-index: 3000; text-align: center; margin: 0; width: 100%;">Bayeux Tapestry Tour</h1>
-    <button id="hamburger-btn" aria-label="Menu" aria-expanded="false" style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.70); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
-    <div id="mobile-menu-scrim" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;"></div>
-    <nav id="mobile-menu" role="menu" aria-label="Main Navigation" style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.30); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow: hidden; box-sizing: border-box;">
-        <div style="padding: 12px 18px 8px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); display: flex; align-items: center; justify-content: space-between;">
-            <span style="color: #d6a848; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">Bayeux Tapestry</span>
+    <h1 id="cinematic-title"
+        style="position: fixed; top: 12%; left: 50%; transform: translateX(-50%); font-family: 'MedievalSharp', serif; color: #d6a848; font-size: 54px; letter-spacing: 4px; text-shadow: 0 5px 25px rgba(0,0,0,1), 0 0 10px rgba(214,168,72,0.4); opacity: 0; transition: opacity 2s ease-in-out; pointer-events: none; z-index: 3000; text-align: center; margin: 0; width: 100%;">
+        Bayeux Tapestry Tour</h1>
+    <button id="hamburger-btn" aria-label="Menu" aria-expanded="false"
+        style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.70); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
+    <div id="mobile-menu-scrim"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;">
+    </div>
+    <nav id="mobile-menu" role="menu" aria-label="Main Navigation"
+        style="display: none; position: fixed; top: 68px; right: 16px; width: 215px; max-width: calc(100vw - 32px); background: rgba(22, 18, 14, 0.30); border: 1px solid rgba(214, 168, 72, 0.4); border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,0.85); z-index: 500; font-family: serif; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow: hidden; box-sizing: border-box;">
+        <div
+            style="padding: 12px 18px 8px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); display: flex; align-items: center; justify-content: space-between;">
+            <span style="color: #d6a848; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;">Bayeux
+                Tapestry</span>
         </div>
         <div style="padding: 6px 0;">
             <button class="menu-row" id="m-menu-notes" role="menuitem">
@@ -395,105 +445,187 @@ window.addEventListener("error", function(e) {
         <h2>Bayeux Tapestry</h2>
         <p>
             <a href="#" id="help-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">Help</a>
-            <a href="#" id="learn-more-link" style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
-            <button id="lang-btn" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
-            
-            <button id="mag-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
-                        <button id="fullscreen-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
-                    <button id="music-toggle" style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
-            <button id="lighting-controls-btn" title="Lighting Controls" style="display: none; pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; align-items: center; justify-content: center; outline: none;">⚙︎</button>
+            <a href="#" id="learn-more-link"
+                style="color: #d6a848; text-decoration: none; pointer-events: auto;">About</a>
+            <button id="lang-btn"
+                style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg
+                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                </svg></button>
+
+            <button id="mag-toggle"
+                style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 13px; display: flex; align-items: center; justify-content: center;"><svg
+                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="10" cy="10" r="7"></circle>
+                    <line x1="21" y1="21" x2="15" y2="15"></line>
+                </svg></button>
+            <button id="fullscreen-toggle"
+                style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; align-items: center; justify-content: center;"><svg
+                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                    </path>
+                </svg></button>
+            <button id="music-toggle"
+                style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
+            <button id="lighting-controls-btn" title="Lighting Controls"
+                style="display: none; pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; align-items: center; justify-content: center; outline: none;">⚙︎</button>
         </p>
     </div>
 
 
-    <div id="lang-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lang-dialog"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0;">Select Language</h3>
-        <div id="lang-options" style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px; max-height: 60vh; overflow-y: auto;">
-            <button class="lang-option" data-lang="en" style="padding: 6px 10px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
-            <button class="lang-option" data-lang="zh" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">中文 (Chinese)</button>
-            <button class="lang-option" data-lang="hi" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">हिन्दी (Hindi)</button>
-            <button class="lang-option" data-lang="es" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Español (Spanish)</button>
-            <button class="lang-option" data-lang="fr" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Français (French)</button>
-            <button class="lang-option" data-lang="ar" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">العربية (Arabic)</button>
-            <button class="lang-option" data-lang="bn" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">বাংলা (Bengali)</button>
-            <button class="lang-option" data-lang="pt" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Português (Portuguese)</button>
-            <button class="lang-option" data-lang="de" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Deutsch (German)</button>
-            <button class="lang-option" data-lang="nl" style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Nederlands (Dutch)</button>
+        <div id="lang-options"
+            style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px; max-height: 60vh; overflow-y: auto;">
+            <button class="lang-option" data-lang="en"
+                style="padding: 6px 10px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: 1px solid #d6a848; border-radius: 4px; cursor: pointer; font-size: 16px;">English</button>
+            <button class="lang-option" data-lang="zh"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">中文
+                (Chinese)</button>
+            <button class="lang-option" data-lang="hi"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">हिन्दी
+                (Hindi)</button>
+            <button class="lang-option" data-lang="es"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Español
+                (Spanish)</button>
+            <button class="lang-option" data-lang="fr"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Français
+                (French)</button>
+            <button class="lang-option" data-lang="ar"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">العربية
+                (Arabic)</button>
+            <button class="lang-option" data-lang="bn"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">বাংলা
+                (Bengali)</button>
+            <button class="lang-option" data-lang="pt"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Português
+                (Portuguese)</button>
+            <button class="lang-option" data-lang="de"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Deutsch
+                (German)</button>
+            <button class="lang-option" data-lang="nl"
+                style="padding: 6px 10px; background: #2c221a; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-size: 16px;">Nederlands
+                (Dutch)</button>
         </div>
         <div style="text-align: right; margin-top: 20px;">
-            <button id="close-lang" style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+            <button id="close-lang"
+                style="padding: 5px 15px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
         </div>
     </div>
-    <div id="help-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="help-dialog"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 300px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Navigation Controls</h3>
         <ul style="padding-left: 20px; line-height: 1.6;">
-            <li id="help-desktop-1"><strong>Pan:</strong> Click and drag, swipe your touchpad, or push your mouse to the left/right screen edges. Keyboard arrows also work.</li>
-            <li id="help-desktop-2"><strong>Zoom:</strong> Use your mouse scroll wheel or two-finger touchpad swipe.<br><strong>Read:</strong> Click any English translation to open its historical context.</li>
-            <li id="help-mobile-1" style="display: none;"><strong>Pan:</strong> 1-finger swipe to pan horizontally. 2-finger swipe to pan freely.<br><strong>Zoom:</strong> 2-finger pinch.</li>
-            <li id="help-mobile-2" style="display: none;"><strong>Read:</strong> Tap on any English translation to open its historical context.</li>
+            <li id="help-desktop-1"><strong>Pan:</strong> Click and drag, swipe your touchpad, or push your mouse to the
+                left/right screen edges. Keyboard arrows also work.</li>
+            <li id="help-desktop-2"><strong>Zoom:</strong> Use your mouse scroll wheel or two-finger touchpad
+                swipe.<br><strong>Read:</strong> Click any English translation to open its historical context.</li>
+            <li id="help-mobile-1" style="display: none;"><strong>Pan:</strong> 1-finger swipe to pan horizontally.
+                2-finger swipe to pan freely.<br><strong>Zoom:</strong> 2-finger pinch.</li>
+            <li id="help-mobile-2" style="display: none;"><strong>Read:</strong> Tap on any English translation to open
+                its historical context.</li>
             <li>Zoom in closely on a specific scene to automatically load ultra-high resolution textures.</li>
         </ul>
         <div style="text-align: right; margin-top: 20px;">
-            <button id="close-help" style="padding: 5px 15px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+            <button id="close-help"
+                style="padding: 5px 15px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
 
     <div id="about-dialog">
         <h3>About this Visualization</h3>
-        <p>Special thanks to the British Museum for making their high-resolution Bayeux Tapestry image tiles available for public exploration.</p>
+        <p>Special thanks to the British Museum for making their high-resolution Bayeux Tapestry image tiles available
+            for public exploration.</p>
         <p>You can view the original experience here:<br>
-        <a href="https://www.britishmuseum.org/collection/bayeux-tapestry" target="_blank">British Museum: Bayeux Tapestry</a></p>
-        <p>Background music provided by: <br><a href="https://www.youtube.com/watch?v=d6KTJpMLe1g&list=PLoqoYP_8M-olqCZGLjQqtg8EEwxM0HTMb&index=40" target="_blank">Ensemble Gilles Binchois</a></p>
+            <a href="https://www.britishmuseum.org/collection/bayeux-tapestry" target="_blank">British Museum: Bayeux
+                Tapestry</a>
+        </p>
+        <p>Background music provided by: <br><a
+                href="https://www.youtube.com/watch?v=d6KTJpMLe1g&list=PLoqoYP_8M-olqCZGLjQqtg8EEwxM0HTMb&index=40"
+                target="_blank">Ensemble Gilles Binchois</a></p>
         <button id="close-dialog">Close</button>
     </div>
 
-    <div id="lighting-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
+    <div id="lighting-dialog"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 20, 20, 0.30); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: white; padding: 15px 25px; border-radius: 8px; border: 1px solid #444; z-index: 1000; min-width: 250px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: serif;">
         <h3 style="margin-top: 0; text-align: center;">Lighting Controls</h3>
         <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" id="simple-lighting-toggle">
-            <label for="simple-lighting-toggle" style="cursor: pointer; font-size: 15px;">Simple Lighting Mode (iPad/Mobile style)</label>
+            <label for="simple-lighting-toggle" style="cursor: pointer; font-size: 15px;">Simple Lighting Mode
+                (iPad/Mobile style)</label>
         </div>
         <label>Ambient Intensity: <span id="val-amb-int">1.06</span></label><br>
-        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06" style="width: 100%; margin-bottom: 10px;"><br>
-        
-        
+        <input type="range" id="amb-int" min="0" max="2" step="0.01" value="1.06"
+            style="width: 100%; margin-bottom: 10px;"><br>
+
+
         <label>Bump Scale: <span id="val-bump-scale">-0.006</span></label><br>
-        <input type="range" id="bump-scale" min="-0.25" max="0.25" step="0.001" value="-0.006" style="width: 100%; margin-bottom: 10px;"><br>
+        <input type="range" id="bump-scale" min="-0.25" max="0.25" step="0.001" value="-0.006"
+            style="width: 100%; margin-bottom: 10px;"><br>
         <label>Ambient Color:</label><br>
-        <input type="color" id="amb-color" value="#ffffff" style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
-        
-        <h4 style="margin-top: 15px; margin-bottom: 5px; border-bottom: 1px solid #5a4a35; padding-bottom: 3px;">Key Light</h4>
+        <input type="color" id="amb-color" value="#ffffff"
+            style="width: 100%; margin-bottom: 15px; background: none; border: 1px solid #5a4a35;"><br>
+
+        <h4 style="margin-top: 15px; margin-bottom: 5px; border-bottom: 1px solid #5a4a35; padding-bottom: 3px;">Key
+            Light</h4>
         <label>Intensity: <span id="val-key-int">1.0</span></label><br>
-        <input type="range" id="key-int" min="0" max="3" step="0.01" value="1.0" style="width: 100%; margin-bottom: 5px;"><br>
+        <input type="range" id="key-int" min="0" max="3" step="0.01" value="1.0"
+            style="width: 100%; margin-bottom: 5px;"><br>
         <label>Color:</label><br>
-        <input type="color" id="key-color" value="#ffffff" style="width: 100%; margin-bottom: 10px; background: none; border: 1px solid #5a4a35;"><br>        
-        
-        
-        
-        
+        <input type="color" id="key-color" value="#ffffff"
+            style="width: 100%; margin-bottom: 10px; background: none; border: 1px solid #5a4a35;"><br>
+
+
+
+
         <div style="text-align: right; margin-top: 20px;">
-            <button id="close-lighting" style="padding: 5px 15px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+            <button id="close-lighting"
+                style="padding: 5px 15px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
         </div>
     </div>
-    <button id="notes-btn-top" style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; pointer-events: auto; background: rgba(20,20,20,0.70); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+    <button id="notes-btn-top"
+        style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; pointer-events: auto; background: rgba(20,20,20,0.70); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+        </svg>
         <span id="notes-btn-text">Tour</span>
     </button>
-    <div id="context-scroll" style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgba(20, 20, 20, 0.50); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: #f4e4bc; padding: 15px 20px; border-radius: 8px; border: 1px solid #5a4a35; z-index: 2000; width: 672px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); font-family: 'MedievalSharp', serif;">
+    <div id="context-scroll"
+        style="display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); background: rgba(20, 20, 20, 0.50); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: #f4e4bc; padding: 15px 20px; border-radius: 8px; border: 1px solid #5a4a35; z-index: 2000; width: 672px; max-width: 90vw; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); font-family: 'MedievalSharp', serif;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-            <button id="prev-scene" style="padding: 5px 12px; background: rgba(214, 168, 72, 0.2); border: 1px solid #d6a848; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo; Prev</button>
-            <button id="close-context" style="padding: 5px 16px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
-            <button id="next-scene" style="padding: 5px 12px; background: rgba(214, 168, 72, 0.2); border: 1px solid #d6a848; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Next &raquo;</button>
+            <button id="prev-scene"
+                style="padding: 5px 12px; background: rgba(214, 168, 72, 0.2); border: 1px solid #d6a848; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">&laquo;
+                Prev</button>
+            <button id="close-context"
+                style="padding: 5px 16px; background: rgba(45, 36, 26, 0.8); border: 1px solid #5a4a35; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Close</button>
+            <button id="next-scene"
+                style="padding: 5px 12px; background: rgba(214, 168, 72, 0.2); border: 1px solid #d6a848; color: #f4e4bc; border-radius: 4px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 14px;">Next
+                &raquo;</button>
         </div>
         <h3 id="context-title" style="margin-top: 0; font-size: 24px; margin-bottom: 12px;">Scene Context</h3>
-        <p id="context-text" style="font-size: 18px; line-height: 1.6; text-align: left; font-family: serif; margin-bottom: 0;"></p>
+        <p id="context-text"
+            style="font-size: 18px; line-height: 1.6; text-align: left; font-family: serif; margin-bottom: 0;"></p>
     </div>
 
     <!-- Authoring Panel -->
-    <div id="authoring-panel" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 20px; border: 2px solid #d6a848; z-index: 1000; font-family: monospace; max-width: 500px; text-align: center; pointer-events: none;">
+    <div id="authoring-panel"
+        style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 20px; border: 2px solid #d6a848; z-index: 1000; font-family: monospace; max-width: 500px; text-align: center; pointer-events: none;">
         <h3 style="margin-top:0; color: #d6a848; pointer-events: auto;">Text Authoring Mode</h3>
-        <p style="color: #aaa; font-size: 12px; margin-bottom: 10px; pointer-events: auto;"><em>Drag any text label to reposition it. Changes save locally.</em></p>
-        <div id="auth-info" style="margin-bottom: 15px; text-align: left; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 4px; display: none; pointer-events: auto;">
+        <p style="color: #aaa; font-size: 12px; margin-bottom: 10px; pointer-events: auto;"><em>Drag any text label to
+                reposition it. Changes save locally.</em></p>
+        <div id="auth-info"
+            style="margin-bottom: 15px; text-align: left; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 4px; display: none; pointer-events: auto;">
             <p style="margin: 0 0 5px 0;"><strong>Scene:</strong> <span id="auth-scene"></span></p>
             <p style="margin: 0 0 5px 0; color: #d6a848;"><strong>Latin:</strong> <span id="auth-latin"></span></p>
             <p style="margin: 0;"><strong>English:</strong> <span id="auth-english"></span></p>
@@ -525,7 +657,7 @@ window.addEventListener("error", function(e) {
                 }
             });
         }
-    
+
     </script>
 
     <!-- Load Three.js from CDN -->
@@ -536,13 +668,13 @@ window.addEventListener("error", function(e) {
         const isIPad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         if (isIPad) document.body.classList.add('ipad-mode');
         // Treat iPads and large tablets as desktop for full graphics/lighting, restrict simplified experience to phones
-        const isPhone = (/iPhone|iPod|IEMobile|Opera Mini/.test(navigator.userAgent)) || 
-                        (/Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent)) || 
-                        (isIOS && !isIPad) ||
-                        (window.innerWidth <= 600);
-        
+        const isPhone = (/iPhone|iPod|IEMobile|Opera Mini/.test(navigator.userAgent)) ||
+            (/Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent)) ||
+            (isIOS && !isIPad) ||
+            (window.innerWidth <= 600);
+
         let useSimpleLighting = isPhone || isIPad;
-        
+
 
         let isTourActive = false;
         let isTourPaused = false;
@@ -735,8 +867,6 @@ window.addEventListener("error", function(e) {
             setTimeout(openMobileMenu, 250);
         }
 
-        // WebGL memory blocks for specific browsers have been lifted now that tiles use Weserv caching
-
         const T = 254; // Tile size without overlap
         const LEVEL = 16; // 16 provides a very high resolution while being manageable
         const W = 60262;
@@ -771,24 +901,24 @@ window.addEventListener("error", function(e) {
         const magRenderTarget = new THREE.WebGLRenderTarget(512, 512);
         const magCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
         magCamera.position.z = 2.5; // Zoomed in tight for maximum detail
-        
+
         const uiScene = new THREE.Scene();
         const uiCamera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 10);
         uiCamera.position.z = 5;
-        
+
         const lensGeo = new THREE.CircleGeometry(150, 64);
         const lensMat = new THREE.MeshBasicMaterial({ map: magRenderTarget.texture });
         const lensMesh = new THREE.Mesh(lensGeo, lensMat);
-        
+
         const lensBorderGeo = new THREE.RingGeometry(150, 153, 64);
         const lensBorderMat = new THREE.MeshBasicMaterial({ color: 0xd6a848 });
         const lensBorder = new THREE.Mesh(lensBorderGeo, lensBorderMat);
-        
+
         lensMesh.add(lensBorder);
         lensMesh.position.set(-9999, -9999, 0);
         uiScene.add(lensMesh);
 
-        
+
         // Calculate the visible width at our starting Z distance to align the left edge of the tapestry with the left of the viewport
         const isNarrowScreen = isPhone || (window.innerWidth <= 900 && !isIPad);
         const initialZ = isNarrowScreen ? 10.0 : 12.0;
@@ -800,7 +930,7 @@ window.addEventListener("error", function(e) {
         // Initial setup to frame the start of the tapestry
         const initialVFOV = THREE.MathUtils.degToRad(60);
         const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
-        
+
         // Start near the beginning of the tapestry: on mobile, start further right (x=4.8) so Scene 1 is fully visible
         const initialX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
         camera.position.set(initialX, cameraY, initialZ);
@@ -809,7 +939,7 @@ window.addEventListener("error", function(e) {
         const isMobileOrTablet = isPhone || isIPad;
         const useAntialias = !isMobileOrTablet || window.devicePixelRatio === 1;
         const renderer = new THREE.WebGLRenderer({ antialias: useAntialias, alpha: false });
-        
+
         // Cap pixel ratio to 1.5 on mobile/tablet devices to ensure 60fps scrolling on Retina
         const maxPixelRatio = isMobileOrTablet ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
         renderer.setPixelRatio(maxPixelRatio);
@@ -819,10 +949,10 @@ window.addEventListener("error", function(e) {
         const textureLoader = new THREE.TextureLoader();
         textureLoader.setCrossOrigin('anonymous');
         const tiles = [];
-        
+
         // Use visible: false instead of transparent/opacity to prevent mobile WebGL from trying to depth-sort 700 transparent planes
         const emptyMaterial = new THREE.MeshLambertMaterial({ visible: false });
-        
+
         // Strict network queue to prevent Safari/iPad from stalling when requesting many tiles
         let activeRequests = 0;
         const MAX_CONCURRENT_REQUESTS = isPhone ? 8 : 32;
@@ -841,7 +971,7 @@ window.addEventListener("error", function(e) {
 
                 const widthUnits = w / SCALE;
                 const heightUnits = h / SCALE;
-                
+
                 const xCenter = (x_topLeft + w / 2) / SCALE;
                 const yCenter = -(y_topLeft + h / 2) / SCALE + tapestryElevation;
 
@@ -864,124 +994,122 @@ window.addEventListener("error", function(e) {
                 });
             }
         }
-        
+
         const tilesL17 = [];
         const W17 = W * 2;
         const H17 = H * 2;
         const cols17 = Math.ceil(W17 / T);
         const rows17 = Math.ceil(H17 / T);
 
-            for (let r = 0; r < rows17; r++) {
-                for (let c = 0; c < cols17; c++) {
-                    const x_topLeft = c === 0 ? 0 : c * T - 1;
-                    const y_topLeft = r === 0 ? 0 : r * T - 1;
+        for (let r = 0; r < rows17; r++) {
+            for (let c = 0; c < cols17; c++) {
+                const x_topLeft = c === 0 ? 0 : c * T - 1;
+                const y_topLeft = r === 0 ? 0 : r * T - 1;
 
-                    const w = (c === cols17 - 1) ? (W17 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
-                    const h = (r === rows17 - 1) ? (H17 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+                const w = (c === cols17 - 1) ? (W17 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                const h = (r === rows17 - 1) ? (H17 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
 
-                    const widthUnits = (w / SCALE) / 2; 
-                    const heightUnits = (h / SCALE) / 2;
-                    
-                    const xCenter = (x_topLeft + w / 2) / (SCALE * 2);
-                    const yCenter = -(y_topLeft + h / 2) / (SCALE * 2) + tapestryElevation;
+                const widthUnits = (w / SCALE) / 2;
+                const heightUnits = (h / SCALE) / 2;
 
-                    const zOffset = 0.01 + (c % 2) * 0.001 + (r % 2) * 0.002;
+                const xCenter = (x_topLeft + w / 2) / (SCALE * 2);
+                const yCenter = -(y_topLeft + h / 2) / (SCALE * 2) + tapestryElevation;
 
-                    const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
-                    mesh.scale.set(widthUnits, heightUnits, 1);
-                    mesh.position.set(xCenter, yCenter, zOffset);
-                    
-                    canvasGroup.add(mesh);
-                    
-                    tilesL17.push({
-                        c, r,
-                        xCenter,
-                        mesh: mesh,
-                        loaded: false,
-                        loading: false,
-                        failed: false
-                    });
-                }
+                const zOffset = 0.01 + (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                mesh.scale.set(widthUnits, heightUnits, 1);
+                mesh.position.set(xCenter, yCenter, zOffset);
+
+                canvasGroup.add(mesh);
+
+                tilesL17.push({
+                    c, r,
+                    xCenter,
+                    mesh: mesh,
+                    loaded: false,
+                    loading: false,
+                    failed: false
+                });
             }
-        
+        }
+
         const tilesL18 = [];
         const W18 = W * 4;
         const H18 = H * 4;
         const cols18 = Math.ceil(W18 / T);
         const rows18 = Math.ceil(H18 / T);
 
-            for (let r = 0; r < rows18; r++) {
-                for (let c = 0; c < cols18; c++) {
-                    const x_topLeft = c === 0 ? 0 : c * T - 1;
-                    const y_topLeft = r === 0 ? 0 : r * T - 1;
+        for (let r = 0; r < rows18; r++) {
+            for (let c = 0; c < cols18; c++) {
+                const x_topLeft = c === 0 ? 0 : c * T - 1;
+                const y_topLeft = r === 0 ? 0 : r * T - 1;
 
-                    const w = (c === cols18 - 1) ? (W18 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
-                    const h = (r === rows18 - 1) ? (H18 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+                const w = (c === cols18 - 1) ? (W18 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                const h = (r === rows18 - 1) ? (H18 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
 
-                    const widthUnits = (w / SCALE) / 4; 
-                    const heightUnits = (h / SCALE) / 4;
-                    
-                    const xCenter = (x_topLeft + w / 2) / (SCALE * 4);
-                    const yCenter = -(y_topLeft + h / 2) / (SCALE * 4) + tapestryElevation;
+                const widthUnits = (w / SCALE) / 4;
+                const heightUnits = (h / SCALE) / 4;
 
-                    const zOffset = 0.02 + (c % 2) * 0.001 + (r % 2) * 0.002;
+                const xCenter = (x_topLeft + w / 2) / (SCALE * 4);
+                const yCenter = -(y_topLeft + h / 2) / (SCALE * 4) + tapestryElevation;
 
-                    const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
-                    mesh.scale.set(widthUnits, heightUnits, 1);
-                    mesh.position.set(xCenter, yCenter, zOffset);
-                    
-                    canvasGroup.add(mesh);
-                    
-                    tilesL18.push({
-                        c, r,
-                        xCenter,
-                        mesh: mesh,
-                        loaded: false,
-                        loading: false,
-                        failed: false
-                    });
-                }
+                const zOffset = 0.02 + (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                mesh.scale.set(widthUnits, heightUnits, 1);
+                mesh.position.set(xCenter, yCenter, zOffset);
+
+                canvasGroup.add(mesh);
+
+                tilesL18.push({
+                    c, r,
+                    xCenter,
+                    mesh: mesh,
+                    loaded: false,
+                    loading: false,
+                    failed: false
+                });
             }
+        }
         const tilesL19 = [];
         const W19 = W * 8;
         const H19 = H * 8;
         const cols19 = Math.ceil(W19 / T);
         const rows19 = Math.ceil(H19 / T);
 
-            for (let r = 0; r < rows19; r++) {
-                for (let c = 0; c < cols19; c++) {
-                    const x_topLeft = c === 0 ? 0 : c * T - 1;
-                    const y_topLeft = r === 0 ? 0 : r * T - 1;
+        for (let r = 0; r < rows19; r++) {
+            for (let c = 0; c < cols19; c++) {
+                const x_topLeft = c === 0 ? 0 : c * T - 1;
+                const y_topLeft = r === 0 ? 0 : r * T - 1;
 
-                    const w = (c === cols19 - 1) ? (W19 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
-                    const h = (r === rows19 - 1) ? (H19 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
+                const w = (c === cols19 - 1) ? (W19 - x_topLeft) : (T + (c === 0 ? 0 : 1) + 1);
+                const h = (r === rows19 - 1) ? (H19 - y_topLeft) : (T + (r === 0 ? 0 : 1) + 1);
 
-                    const widthUnits = (w / SCALE) / 8; 
-                    const heightUnits = (h / SCALE) / 8;
-                    
-                    const xCenter = (x_topLeft + w / 2) / (SCALE * 8);
-                    const yCenter = -(y_topLeft + h / 2) / (SCALE * 8) + tapestryElevation;
+                const widthUnits = (w / SCALE) / 8;
+                const heightUnits = (h / SCALE) / 8;
 
-                    const zOffset = 0.03 + (c % 2) * 0.001 + (r % 2) * 0.002;
+                const xCenter = (x_topLeft + w / 2) / (SCALE * 8);
+                const yCenter = -(y_topLeft + h / 2) / (SCALE * 8) + tapestryElevation;
 
-                    const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
-                    mesh.scale.set(widthUnits, heightUnits, 1);
-                    mesh.position.set(xCenter, yCenter, zOffset);
-                    
-                    // Optional: only add to scene when mag is active to save 40k meshes in frustum culler?
-                    // Frustum culling 40k invisible meshes is fast enough in ThreeJS.
-                    canvasGroup.add(mesh);
-                    
-                    tilesL19.push({
-                        c, r,
-                        xCenter,
-                        mesh: mesh,
-                        loaded: false,
-                        loading: false,
-                        failed: false
-                    });
-                }
+                const zOffset = 0.03 + (c % 2) * 0.001 + (r % 2) * 0.002;
+
+                const mesh = new THREE.Mesh(baseGeometry, emptyMaterial);
+                mesh.scale.set(widthUnits, heightUnits, 1);
+                mesh.position.set(xCenter, yCenter, zOffset);
+
+                canvasGroup.add(mesh);
+
+                tilesL19.push({
+                    c, r,
+                    xCenter,
+                    mesh: mesh,
+                    loaded: false,
+                    loading: false,
+                    failed: false
+                });
             }
+        }
         // Scene background and fog for depth (dark earthy tone)
         const fogColor = new THREE.Color(0x161310);
         scene.background = fogColor;
@@ -1005,7 +1133,7 @@ window.addEventListener("error", function(e) {
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
-            
+
             ctx.fillStyle = baseColor;
             ctx.fillRect(0, 0, width, height);
 
@@ -1018,7 +1146,7 @@ window.addEventListener("error", function(e) {
                     ctx.fill();
                 }
             }
-            
+
             // Grainy noise, increased density and opacity for visible texture
             const noiseCount = (width * height) * 0.8;
             for (let i = 0; i < noiseCount; i++) {
@@ -1026,7 +1154,7 @@ window.addEventListener("error", function(e) {
                 ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.4)';
                 ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1); // Strictly 1px
             }
-            
+
             const texture = new THREE.CanvasTexture(canvas);
             return texture;
         }
@@ -1036,7 +1164,7 @@ window.addEventListener("error", function(e) {
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
-            
+
             ctx.fillStyle = baseColor;
             ctx.fillRect(0, 0, width, height);
 
@@ -1044,7 +1172,7 @@ window.addEventListener("error", function(e) {
             const gridSize = 4;
             const tileW = width / gridSize;
             const tileH = height / gridSize;
-            
+
             for (let r = 0; r < gridSize; r++) {
                 for (let c = 0; c < gridSize; c++) {
                     // Random subtle brightness variation per tile for natural slate look
@@ -1053,34 +1181,34 @@ window.addEventListener("error", function(e) {
                     ctx.fillRect(c * tileW, r * tileH, tileW, tileH);
                 }
             }
-            
+
             // Draw Grout Lines
             ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Pitch black grout
             const groutThickness = 3;
-            
+
             for (let i = 0; i <= gridSize; i++) {
                 // Horizontal grout
-                ctx.fillRect(0, i * tileH - groutThickness/2, width, groutThickness);
+                ctx.fillRect(0, i * tileH - groutThickness / 2, width, groutThickness);
                 // Vertical grout
-                ctx.fillRect(i * tileW - groutThickness/2, 0, groutThickness, height);
+                ctx.fillRect(i * tileW - groutThickness / 2, 0, groutThickness, height);
             }
-            
+
             // Subtle highlight edge on the tiles for 3D depth
             ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
             for (let i = 0; i < gridSize; i++) {
                 // Top highlight
-                ctx.fillRect(0, i * tileH + groutThickness/2, width, 1);
+                ctx.fillRect(0, i * tileH + groutThickness / 2, width, 1);
                 // Left highlight
-                ctx.fillRect(i * tileW + groutThickness/2, 0, 1, height);
+                ctx.fillRect(i * tileW + groutThickness / 2, 0, 1, height);
             }
-            
+
             // Grainy noise over everything
             const noiseCount = (width * height) * 0.3;
             for (let i = 0; i < noiseCount; i++) {
                 ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.015)' : 'rgba(0,0,0,0.5)';
                 ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
             }
-            
+
             return new THREE.CanvasTexture(canvas);
         }
 
@@ -1089,12 +1217,12 @@ window.addEventListener("error", function(e) {
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(length / 24, 120 / 24);
-        
+
         const ceilingTexture = createOrganicTexture(512, 512, '#121212', false);
         ceilingTexture.wrapS = THREE.RepeatWrapping;
         ceilingTexture.wrapT = THREE.RepeatWrapping;
-        ceilingTexture.repeat.set(length / 5, 120 / 5); 
-        
+        ceilingTexture.repeat.set(length / 5, 120 / 5);
+
         // Dark base wall color creates a dramatic contrast with the illuminated tapestry
         const wallTexture = createOrganicTexture(512, 512, '#161616', true);
         wallTexture.wrapS = THREE.RepeatWrapping;
@@ -1103,13 +1231,13 @@ window.addEventListener("error", function(e) {
 
         // Depth set to 120 so the floor and ceiling don't clip when the camera zooms out to Z=40
         const planeGeo = new THREE.PlaneGeometry(length, 120);
-        
+
         // Use MeshPhongMaterial (per-pixel lighting) instead of Lambert (per-vertex).
         // Since these are massive planes with only 4 vertices at the corners, Lambert will ignore point lights in the middle!
         const floorMat = new THREE.MeshPhongMaterial({ map: floorTexture, shininess: 5 });
         const ceilingMat = new THREE.MeshPhongMaterial({ map: ceilingTexture, shininess: 4 });
         const wallMat = new THREE.MeshPhongMaterial({ map: wallTexture, shininess: 12 });
-        
+
         const floor = new THREE.Mesh(planeGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
         floor.position.set((W / SCALE) / 2, floorY, 0);
@@ -1120,25 +1248,6 @@ window.addEventListener("error", function(e) {
         ceiling.position.set((W / SCALE) / 2, ceilingY, 0);
         scene.add(ceiling);
 
-        // --- CATHEDRAL-STYLE VAULT RIBS ---
-        // Transverse stone arch ribs spanning across the 9.5-meter high ceiling
-        const vaultBayCount = 20;
-        const vaultBaySpacing = (W / SCALE) / vaultBayCount;
-        const ribDepth = 80;
-        const ribGeo = new THREE.BoxGeometry(0.42, 0.38, ribDepth);
-        const ribMat = new THREE.MeshPhongMaterial({
-            map: wallTexture,
-            color: 0x1c1a17,
-            shininess: 8
-        });
-
-        for (let i = 0; i <= vaultBayCount; i++) {
-            const ribX = i * vaultBaySpacing;
-            const rib = new THREE.Mesh(ribGeo, ribMat);
-            rib.position.set(ribX, ceilingY - 0.19, -2.5 + ribDepth / 2);
-            scene.add(rib);
-        }
-
         // Add stone wall just behind the tapestry
         const wallGeo = new THREE.PlaneGeometry(length, 120);
         const backWall = new THREE.Mesh(wallGeo, wallMat);
@@ -1146,10 +1255,10 @@ window.addEventListener("error", function(e) {
         canvasGroup.add(backWall);
 
         // Add a chamfered plinth course at the base of the wall
-        const plinthHeight = 0.4; 
-        const plinthDepth = 0.2; 
-        const chamferSize = 0.075; 
-        
+        const plinthHeight = 0.4;
+        const plinthDepth = 0.2;
+        const chamferSize = 0.075;
+
         const plinthShape = new THREE.Shape();
         plinthShape.moveTo(0, 0);
         plinthShape.lineTo(0, plinthHeight);
@@ -1157,18 +1266,18 @@ window.addEventListener("error", function(e) {
         plinthShape.lineTo(-plinthDepth, plinthHeight - chamferSize); // Chamfer slope
         plinthShape.lineTo(-plinthDepth, 0); // Front face down
         plinthShape.lineTo(0, 0);
-        
-        const plinthGeo = new THREE.ExtrudeGeometry(plinthShape, { 
-            depth: length, 
-            bevelEnabled: false 
+
+        const plinthGeo = new THREE.ExtrudeGeometry(plinthShape, {
+            depth: length,
+            bevelEnabled: false
         });
-        
+
         // Clone the texture to fix the UV scaling on the small profile
         const plinthTexture = wallTexture.clone();
         plinthTexture.needsUpdate = true;
-        plinthTexture.repeat.set(length / 2, 2); 
+        plinthTexture.repeat.set(length / 2, 2);
         const plinthMat = new THREE.MeshLambertMaterial({ map: plinthTexture });
-        
+
         const plinth = new THREE.Mesh(plinthGeo, plinthMat);
         // Rotate 90 degrees around Y so the extrusion goes along the X axis
         plinth.rotation.y = Math.PI / 2;
@@ -1184,11 +1293,11 @@ window.addEventListener("error", function(e) {
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
-            
+
             // Matte dark charcoal / graphite base (distinguishable from the #161616 wall)
             ctx.fillStyle = '#262422';
             ctx.fillRect(0, 0, width, height);
-            
+
             // Directional brushed grain along extrusion axis
             for (let i = 0; i < 700; i++) {
                 const x = Math.random() * width;
@@ -1203,7 +1312,7 @@ window.addEventListener("error", function(e) {
                 ctx.lineTo(x, y + len);
                 ctx.stroke();
             }
-            
+
             // Fine cast-iron stippling / micro-pitting
             const count = (width * height) * 0.3;
             for (let i = 0; i < count; i++) {
@@ -1211,7 +1320,7 @@ window.addEventListener("error", function(e) {
                 ctx.fillStyle = val;
                 ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
             }
-            
+
             const tex = new THREE.CanvasTexture(canvas);
             tex.wrapS = THREE.RepeatWrapping;
             tex.wrapT = THREE.RepeatWrapping;
@@ -1224,10 +1333,10 @@ window.addEventListener("error", function(e) {
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
-            
+
             ctx.fillStyle = '#808080';
             ctx.fillRect(0, 0, width, height);
-            
+
             // Striations for micro-relief
             for (let i = 0; i < 400; i++) {
                 const x = Math.random() * width;
@@ -1241,13 +1350,13 @@ window.addEventListener("error", function(e) {
                 ctx.lineTo(x, y + len);
                 ctx.stroke();
             }
-            
+
             // Roughness noise
             for (let i = 0; i < (width * height) * 0.3; i++) {
                 ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
                 ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
             }
-            
+
             const tex = new THREE.CanvasTexture(canvas);
             tex.wrapS = THREE.RepeatWrapping;
             tex.wrapT = THREE.RepeatWrapping;
@@ -1257,7 +1366,7 @@ window.addEventListener("error", function(e) {
 
         const blackIronTexture = createBlackIronTexture();
         const ironBumpTexture = createIronBumpTexture();
-        
+
         // Matte blackened structural steel with subtle satin response
         const blackSteelMat = new THREE.MeshPhongMaterial({
             map: blackIronTexture,
@@ -1368,20 +1477,20 @@ window.addEventListener("error", function(e) {
             const supportGroup = new THREE.Group();
             const xEdge = isRightSide ? (W / SCALE) : 0;
             const dir = isRightSide ? 1 : -1; // Outward direction: +1 on right, -1 on left
-            
+
             const colWidth = 0.14;
             const colHeight = 7.18; // Covers the full height plus top/bottom overlaps
             const colDepth = 0.58;  // Spans from back wall (Z = -0.50) to slightly past tapestry (Z = +0.08)
             const colCenterX = xEdge + dir * (colWidth / 2);
             const colCenterY = -1.47;
             const colCenterZ = -0.21; // Midpoint between -0.50 and +0.08
-            
+
             // 1. Heavy Vertical Stanchion Channel (Side Beam)
             const colGeo = new THREE.BoxGeometry(colWidth, colHeight, colDepth);
             const colMesh = new THREE.Mesh(colGeo, blackSteelMat);
             colMesh.position.set(colCenterX, colCenterY, colCenterZ);
             supportGroup.add(colMesh);
-            
+
             // 2. Front Retaining Bezel / Edge Clamp (physically overlaps front of tapestry)
             const bezelWidth = 0.09;
             const bezelHeight = colHeight;
@@ -1397,22 +1506,22 @@ window.addEventListener("error", function(e) {
             const sideBezelHighlight = new THREE.Mesh(sideBezelHighlightGeo, edgeHighlightMat);
             sideBezelHighlight.position.set(xEdge, colCenterY, 0.07);
             supportGroup.add(sideBezelHighlight);
-            
+
             // 3. Top Stanchion Cap & Corner Joint
             const topCapGeo = new THREE.BoxGeometry(colWidth * 1.35, 0.10, colDepth * 1.08);
             const topCap = new THREE.Mesh(topCapGeo, blackSteelMat);
             topCap.position.set(colCenterX, 2.16, colCenterZ);
             supportGroup.add(topCap);
-            
+
             // Black oxide corner reinforcement block on top
             const topBlockGeo = new THREE.BoxGeometry(0.12, 0.12, 0.14);
             const topBlock = new THREE.Mesh(topBlockGeo, blackOxideMat);
             topBlock.position.set(colCenterX, 2.10, 0.04);
             supportGroup.add(topBlock);
-            
+
             // 4. Bottom Load-Bearing Shelf & Cantilever Arm + Foundation Column
             supportGroup.add(createUnderSupport(colCenterX));
-            
+
             // 5. Wall Standoff Flanges & Heavy Fastener Bolts
             const standoffHeights = [1.55, -1.47, -4.20];
             standoffHeights.forEach((posY) => {
@@ -1422,27 +1531,27 @@ window.addEventListener("error", function(e) {
                 flange.rotation.x = Math.PI / 2;
                 flange.position.set(colCenterX, posY, -0.485);
                 supportGroup.add(flange);
-                
+
                 // Connecting standoff boss/hub
                 const hubGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.12, 12);
                 const hub = new THREE.Mesh(hubGeo, blackSteelMat);
                 hub.rotation.x = Math.PI / 2;
                 hub.position.set(colCenterX, posY, -0.42);
                 supportGroup.add(hub);
-                
+
                 // Outer side clamping bolts on the stanchion face
                 const sideBoltGeo = new THREE.CylinderGeometry(0.022, 0.022, 0.03, 8);
                 const sideBolt = new THREE.Mesh(sideBoltGeo, blackOxideMat);
                 sideBolt.rotation.z = Math.PI / 2;
                 sideBolt.position.set(xEdge + dir * (colWidth + 0.01), posY, -0.15);
                 supportGroup.add(sideBolt);
-                
+
                 const sideBolt2 = new THREE.Mesh(sideBoltGeo, blackOxideMat);
                 sideBolt2.rotation.z = Math.PI / 2;
                 sideBolt2.position.set(xEdge + dir * (colWidth + 0.01), posY, -0.32);
                 supportGroup.add(sideBolt2);
             });
-            
+
 
             return supportGroup;
         }
@@ -1535,7 +1644,7 @@ window.addEventListener("error", function(e) {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.73);
         scene.add(ambientLight);
 
-        // We use 4 lights to avoid WebGL max-light limits, dynamically moving them as the camera scrolls
+
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.0); // Neutral key light
         scene.add(dirLight);
         // Dedicated grazing light that follows the magnifying glass
@@ -1552,11 +1661,11 @@ window.addEventListener("error", function(e) {
         if (useSimpleLighting) {
             ambientLight.color.setHex(0xffffff);
         }
-        
+
         // Sync initial UI slider value
         const simpleLightToggle = document.getElementById('simple-lighting-toggle');
         if (simpleLightToggle) simpleLightToggle.checked = useSimpleLighting;
-        
+
         document.getElementById('amb-int').value = ambientLight.intensity;
         document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
         const ambColorInput = document.getElementById('amb-color');
@@ -1573,25 +1682,25 @@ window.addEventListener("error", function(e) {
         if (simpleLightToggle) {
             simpleLightToggle.addEventListener('change', (e) => {
                 useSimpleLighting = e.target.checked;
-                
+
                 // Update lighting setup
                 ambientLight.intensity = 1.06;
                 ambientLight.color.setHex(0xffffff);
-                
+
                 // Sync UI
                 document.getElementById('amb-int').value = ambientLight.intensity;
                 document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
                 if (ambColorInput) ambColorInput.value = '#' + ambientLight.color.getHexString();
-                
+
                 // Rebuild materials for all currently loaded tiles
                 const allTileArrays = [tiles, tilesL17, tilesL18, tilesL19];
                 allTileArrays.forEach(arr => {
                     arr.forEach(t => {
                         if (t.mesh && t.mesh.material && t.mesh.material.map) {
-                            const matOpts = { 
+                            const matOpts = {
                                 map: t.mesh.material.map,
                                 transparent: true,
-                                opacity: t.mesh.material.opacity 
+                                opacity: t.mesh.material.opacity
                             };
                             t.mesh.material.dispose(); // Important for memory!
                             if (useSimpleLighting) {
@@ -1614,9 +1723,9 @@ window.addEventListener("error", function(e) {
             ambientLight.intensity = parseFloat(e.target.value);
             document.getElementById('val-amb-int').innerText = ambientLight.intensity.toFixed(2);
         });
-        
+
         // Update ambient light color in real-time from the lighting dev panel
-        
+
         document.getElementById('bump-scale').addEventListener('input', (e) => {
             const val = parseFloat(e.target.value);
             document.getElementById('val-bump-scale').innerText = val.toFixed(3);
@@ -1634,7 +1743,7 @@ window.addEventListener("error", function(e) {
         document.getElementById('amb-color').addEventListener('input', (e) => {
             ambientLight.color.set(e.target.value);
         });
-        
+
         if (keyIntInput) keyIntInput.addEventListener('input', e => {
             dirLight.intensity = parseFloat(e.target.value);
             if (valKeyInt) valKeyInt.innerText = dirLight.intensity.toFixed(2);
@@ -1642,7 +1751,7 @@ window.addEventListener("error", function(e) {
         if (keyColorInput) keyColorInput.addEventListener('input', e => {
             dirLight.color.set(e.target.value);
         });
-        
+
         /**
          * Creates a subtle linear gradient texture to simulate ambient occlusion / shadow
          * beneath the 3D tapestry mesh.
@@ -1653,30 +1762,30 @@ window.addEventListener("error", function(e) {
             canvas.width = 1;
             canvas.height = 64;
             const ctx = canvas.getContext('2d');
-            
+
             const gradient = ctx.createLinearGradient(0, 0, 0, 64);
             gradient.addColorStop(0, 'rgba(0,0,0,0.6)'); // Much darker core shadow to anchor it
             gradient.addColorStop(0.2, 'rgba(0,0,0,0.6)');
             gradient.addColorStop(1, 'rgba(0,0,0,0)');
-            
+
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, 1, 64);
-            
+
             return new THREE.CanvasTexture(canvas);
         }
 
         const shadowHeight = 1.1; // Reduced drop shadow height slightly
         const shadowGeo = new THREE.PlaneGeometry(W / SCALE, shadowHeight);
-        const shadowMat = new THREE.MeshBasicMaterial({ 
-            map: createShadowTexture(), 
+        const shadowMat = new THREE.MeshBasicMaterial({
+            map: createShadowTexture(),
             transparent: true,
-            depthWrite: false 
+            depthWrite: false
         });
         const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
         // Position it so its top edge touches the bottom of the tapestry, but pushed back onto the wall
         shadowMesh.position.set((W / SCALE) / 2, -H / SCALE - (shadowHeight / 2) + tapestryElevation, -0.48);
         canvasGroup.add(shadowMesh);
-        
+
         // Add a top shadow to simulate ambient occlusion / thickness where it meets the wall
         const topShadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
         topShadowMesh.rotation.z = Math.PI; // Flip it upside down
@@ -1691,7 +1800,7 @@ window.addEventListener("error", function(e) {
         };
         let mouseScrollDir = 0;
         let isTouch = false;
-        
+
         let lastTouchX = 0;
         let lastTouchY = 0;
         let isDragging = false;
@@ -1701,16 +1810,16 @@ window.addEventListener("error", function(e) {
         let lastPinchMidY = 0;
 
         let hasTouchDragged = false;
-        
+
         // Initialize touch tracking, halt any existing momentum, and handle raycasting for Authoring mode drags.
-        window.addEventListener('touchstart', (e) => { 
+        window.addEventListener('touchstart', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
-            isTouch = true; 
+            isTouch = true;
             hasTouchDragged = false;
             mouseScrollDir = 0;
             autoScrollTargetX = null;
             autoScrollTargetZ = null; autoScrollTargetY = null;
-            
+
             if (e.touches.length === 1) {
                 if (isAuthoringMode) {
                     mouseCoords.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
@@ -1732,21 +1841,21 @@ window.addEventListener("error", function(e) {
                 isDragging = false;
                 const dx = e.touches[0].clientX - e.touches[1].clientX;
                 const dy = e.touches[0].clientY - e.touches[1].clientY;
-                initialPinchDistance = Math.sqrt(dx*dx + dy*dy);
+                initialPinchDistance = Math.sqrt(dx * dx + dy * dy);
                 initialPinchCamZ = camera.position.z;
                 lastPinchMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
                 lastPinchMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
                 velocityZ = 0;
                 velocityY = 0;
             }
-        }, {passive: false});
+        }, { passive: false });
 
         // Handle 1-finger panning and 2-finger pinch-to-zoom for mobile devices.
         window.addEventListener('touchmove', (e) => {
             if (e.target.closest('#ui') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
             hasTouchDragged = true;
             if (!isTouch) return;
-            
+
             if (draggedAnnotation && e.touches.length === 1) {
                 e.preventDefault();
                 mouseCoords.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
@@ -1764,7 +1873,7 @@ window.addEventListener("error", function(e) {
 
             if (e.touches.length === 1 && isDragging) {
                 e.preventDefault(); // Prevent native browser scrolling/bounce
-                
+
                 const currentTouchX = e.touches[0].clientX;
                 const currentTouchY = e.touches[0].clientY;
                 const dx = currentTouchX - lastTouchX;
@@ -1772,35 +1881,35 @@ window.addEventListener("error", function(e) {
                 if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused && Math.abs(dx) > 6) {
                     pauseTour();
                 }
-                
+
                 // 1:1 pixel-to-world drag ratio based on current camera Z distance and 45deg FOV
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
                 const moveWorldX = -dx * pixelToWorld;
-                
+
                 // Vertical dragging is disabled on mobile devices for stability
                 camera.position.x += moveWorldX;
-                
+
                 // Store recent movement as velocity for native-feeling momentum on release
                 // Apply heavy smoothing (0.5 blend) to prevent touch-polling rate jitter from causing twitchy spikes
-                velocityX = velocityX * 0.5 + (moveWorldX * 0.8) * 0.5; 
+                velocityX = velocityX * 0.5 + (moveWorldX * 0.8) * 0.5;
                 velocityY = 0; // No vertical velocity on mobile
-                
+
                 lastTouchX = currentTouchX;
                 lastTouchY = currentTouchY;
             } else if (e.touches.length === 2) {
                 e.preventDefault(); // Prevent native browser pinch-to-zoom
-                
+
                 const dx = e.touches[0].clientX - e.touches[1].clientX;
                 const dy = e.touches[0].clientY - e.touches[1].clientY;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
                 if (initialPinchDistance > 0) {
                     const scale = initialPinchDistance / dist;
                     camera.position.z = initialPinchCamZ * scale;
                     // Keep camera Z bounded between 0.8 and 60 to prevent zooming out past the floor
                     camera.position.z = Math.max(0.9, Math.min(60, camera.position.z));
                 }
-                
+
                 // 2-finger omnidirectional panning
                 const currentMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
                 const currentMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
@@ -1808,13 +1917,13 @@ window.addEventListener("error", function(e) {
                     const dxMid = currentMidX - lastPinchMidX;
                     const dyMid = currentMidY - lastPinchMidY;
                     const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
-                    
+
                     const moveWorldX = -dxMid * pixelToWorld;
                     const moveWorldY = dyMid * pixelToWorld;
-                    
+
                     camera.position.x += moveWorldX;
                     camera.position.y += moveWorldY;
-                    
+
                     // Add smooth inertia for omnidirectional panning
                     velocityX = velocityX * 0.5 + (moveWorldX * 0.8) * 0.5;
                     velocityY = velocityY * 0.5 + (moveWorldY * 0.8) * 0.5;
@@ -1822,16 +1931,16 @@ window.addEventListener("error", function(e) {
                 lastPinchMidX = currentMidX;
                 lastPinchMidY = currentMidY;
             }
-        }, {passive: false});
+        }, { passive: false });
 
         // Handle touch release to smoothly transition back to 1-finger drag or apply release momentum.
-        window.addEventListener('touchend', (e) => { 
+        window.addEventListener('touchend', (e) => {
             if (draggedAnnotation) {
                 draggedAnnotation = null;
                 localStorage.setItem('bayeux-tituli', JSON.stringify(annotations.map(a => a.data)));
                 return;
             }
-            mouseScrollDir = 0; 
+            mouseScrollDir = 0;
             if (e.touches.length < 2) {
                 initialPinchDistance = 0;
                 lastPinchMidX = 0;
@@ -1850,7 +1959,7 @@ window.addEventListener("error", function(e) {
                 }
             }
         });
-        
+
         // Reset touch states if the browser cancels the touch event (e.g., system swipe gesture)
         window.addEventListener('touchcancel', () => {
             isDragging = false;
@@ -1864,7 +1973,7 @@ window.addEventListener("error", function(e) {
         // Initialize mouse drag tracking, halt momentum, and handle raycasting for Authoring mode.
         let mouseStartX = 0;
         let mouseStartY = 0;
-        
+
         window.addEventListener('mousedown', (e) => {
             if (isTouch) return;
             mouseStartX = e.clientX;
@@ -1872,7 +1981,7 @@ window.addEventListener("error", function(e) {
             autoScrollTargetX = null;
             autoScrollTargetZ = null; autoScrollTargetY = null;
             if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
-            
+
             if (isAuthoringMode) {
                 mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
                 mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -1910,7 +2019,7 @@ window.addEventListener("error", function(e) {
                 }
             }
         });
-        
+
         // Reset mouse dragging state if the cursor leaves the browser window entirely
         window.addEventListener('mouseleave', () => {
             if (!isTouch && isMouseDown) {
@@ -1920,20 +2029,20 @@ window.addEventListener("error", function(e) {
         });
 
         const mouseCoords = new THREE.Vector2(-9999, -9999);
-        
+
         // Handle desktop mouse dragging (panning) and update normalized mouse coordinates for 3D hover detection.
         window.addEventListener('mousemove', (e) => {
-            if (isTouch) return; 
-            
+            if (isTouch) return;
+
             // Normalized Device Coordinates (-1 to +1) required by Three.js Raycaster to map 2D screen touches into the 3D scene
             mouseCoords.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouseCoords.y = -(e.clientY / window.innerHeight) * 2 + 1;
-            
+
             // Update magnifying glass position and camera
             if (magActive) {
                 lensMesh.position.x = e.clientX - window.innerWidth / 2;
                 lensMesh.position.y = - (e.clientY - window.innerHeight / 2);
-                
+
                 dragRaycaster.setFromCamera(mouseCoords, camera);
                 const planeNormal = new THREE.Vector3(0, 0, 1).applyEuler(canvasGroup.rotation);
                 const planeZ0 = new THREE.Plane(planeNormal, 0);
@@ -1943,7 +2052,7 @@ window.addEventListener("error", function(e) {
                     magCamera.position.y = target.y;
                 }
             }
-            
+
             if (draggedAnnotation) {
                 dragRaycaster.setFromCamera(mouseCoords, camera);
                 const intersects = dragRaycaster.intersectObjects(scene.children, true);
@@ -1955,7 +2064,7 @@ window.addEventListener("error", function(e) {
                 }
                 return;
             }
-            
+
             if (isMouseDown) {
                 e.preventDefault();
                 const dx = e.clientX - lastTouchX;
@@ -1963,29 +2072,29 @@ window.addEventListener("error", function(e) {
                 if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused && Math.abs(dx) > 6) {
                     pauseTour();
                 }
-                
+
                 const pixelToWorld = (0.828 * camera.position.z) / window.innerHeight;
                 const moveWorldX = -dx * pixelToWorld;
                 const moveWorldY = dy * pixelToWorld;
-                
+
                 camera.position.x += moveWorldX;
                 camera.position.y += moveWorldY;
-                
-                velocityX = moveWorldX * 1.5; 
+
+                velocityX = moveWorldX * 1.5;
                 velocityY = moveWorldY * 1.5;
-                
+
                 lastTouchX = e.clientX;
                 lastTouchY = e.clientY;
-                mouseScrollDir = 0; 
+                mouseScrollDir = 0;
                 return;
             }
-            
+
             // Prevent edge-scroll if hovering over UI elements
             if (e.target.closest('#ui') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) {
                 mouseScrollDir = 0;
                 return;
             }
-            
+
             const edgeThreshold = window.innerWidth * 0.15; // 15% of screen edge triggers scroll
             if (e.clientX < edgeThreshold) {
                 const intensity = 1 - (e.clientX / edgeThreshold);
@@ -2019,7 +2128,7 @@ window.addEventListener("error", function(e) {
                 }
             }
         }
-        
+
         const fullscreenBtn = document.getElementById('fullscreen-toggle');
         if (fullscreenBtn) {
             fullscreenBtn.addEventListener('click', toggleFullscreen);
@@ -2034,7 +2143,7 @@ window.addEventListener("error", function(e) {
 
         const magToggleBtn = document.getElementById('mag-toggle');
         const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-        
+
         // Dynamically toggle help dialog instructions based on device type
         if (isPhone || isTouchDevice) {
             document.getElementById('help-desktop-1').style.display = 'none';
@@ -2042,7 +2151,7 @@ window.addEventListener("error", function(e) {
             document.getElementById('help-mobile-1').style.display = 'list-item';
             if (!isPhone) document.getElementById('help-mobile-2').style.display = 'list-item'; // iPad supports popups
         }
-        
+
         if (magToggleBtn && (isPhone || isTouchDevice)) {
             magToggleBtn.style.display = 'none';
         } else if (magToggleBtn) {
@@ -2052,7 +2161,7 @@ window.addEventListener("error", function(e) {
                 if (!magActive) lensMesh.position.set(-9999, -9999, 0);
             });
         }
-        
+
         // Handle keyboard navigation (arrow keys/WASD) and prevent default scrolling behavior.
         window.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 'm' && !isPhone) {
@@ -2097,22 +2206,22 @@ window.addEventListener("error", function(e) {
             if (!btn) return;
             const start = (e) => { e.preventDefault(); keys[keyName] = true; };
             const stop = (e) => { e.preventDefault(); keys[keyName] = false; };
-            
+
             // Bind mouse/touch events to trigger the directional navigation impulse
             btn.addEventListener('mousedown', start);
-            btn.addEventListener('touchstart', start, {passive: false});
-            
+            btn.addEventListener('touchstart', start, { passive: false });
+
             window.addEventListener('mouseup', stop); // Use window so it stops even if mouse is released outside
             btn.addEventListener('mouseleave', stop);
             btn.addEventListener('touchend', stop);
             btn.addEventListener('touchcancel', stop);
         };
-        
+
         setupButton('btn-left', 'left');
         setupButton('btn-right', 'right');
         setupButton('btn-up', 'up');
         setupButton('btn-down', 'down');
-        
+
         function updateTitlesUI() {
             const toggleSupertitles = document.getElementById('toggle-supertitles');
             if (toggleSupertitles) {
@@ -2132,7 +2241,7 @@ window.addEventListener("error", function(e) {
         }
 
         const toggleSupertitles = document.getElementById('toggle-supertitles');
-        
+
         if (toggleSupertitles) {
             // Toggle the visibility of all loaded English text meshes
             toggleSupertitles.addEventListener('click', (e) => {
@@ -2158,7 +2267,7 @@ window.addEventListener("error", function(e) {
             group.position.set(cx, cy, 0.042);
 
             const thickness = 0.04; // Half thickness picture frame border
-            
+
             // Shared material for the frame
             const frameMat = new THREE.MeshBasicMaterial({
                 color: 0x221100, // Dark wood / dark brown frame
@@ -2207,7 +2316,7 @@ window.addEventListener("error", function(e) {
             fillMesh.userData = { poiIndex: index };
             group.add(fillMesh);
 
-            group.updateHighlight = function(isActive, isVisible) {
+            group.updateHighlight = function (isActive, isVisible) {
                 if (isActive) {
                     frameMat.color.setHex(0x654321); // Brown when active
                     frameMat.opacity = 1.0;
@@ -2248,7 +2357,7 @@ window.addEventListener("error", function(e) {
             if (!data || !Array.isArray(data) || data.length === 0) return;
             // Sort strictly monotonically by x so the camera only flows forward from west to east
             const sorted = [...data].sort((a, b) => a.x - b.x);
-            
+
             const list = [];
             // Scene 1: Opening at Westminster Palace
             const scene1Titles = {
@@ -2298,7 +2407,7 @@ window.addEventListener("error", function(e) {
 
                 const prevPOI = list[list.length - 1];
                 const nextScene = sorted[i + 1];
-                
+
                 // Latin inscription text width: ~0.175 Three.js units per char (80px font * 0.004433 scale)
                 const textW = (t.latin && t.latin.length) ? (t.latin.length * 0.175) : 5.0;
                 const desiredW = Math.max(5.5, textW + 1.2);
@@ -2382,7 +2491,7 @@ window.addEventListener("error", function(e) {
         function updateDroneHUD() {
             const card = document.getElementById('drone-poi-card');
             if (!card || !tourPOIs || tourPOIs.length === 0) return;
-            
+
             const poi = tourPOIs[currentPOIIndex];
             if (!poi) return;
 
@@ -2391,7 +2500,7 @@ window.addEventListener("error", function(e) {
             const titleEl = document.getElementById('drone-poi-title');
             const descEl = document.getElementById('drone-poi-desc');
             const statusEl = document.getElementById('drone-flight-status');
-            
+
             if (tagEl) tagEl.innerText = `POINT OF INTEREST ${currentPOIIndex + 1} OF ${tourPOIs.length}`;
             if (statusEl) {
                 if (isTourPaused) {
@@ -2405,11 +2514,11 @@ window.addEventListener("error", function(e) {
                     statusEl.style.color = '#ffd57e';
                 }
             }
-            
+
             if (tilesEl) tilesEl.innerText = `Tiles: ${poi.tiles.join(' · ')}`;
             if (titleEl) titleEl.innerText = poi.title;
             if (descEl) descEl.innerText = poi.description;
-            
+
             // Also sync notes dialog if opened
             const contextTitle = document.getElementById('context-title');
             const contextText = document.getElementById('context-text');
@@ -2417,7 +2526,7 @@ window.addEventListener("error", function(e) {
                 contextTitle.innerText = `POI ${currentPOIIndex + 1}: ${poi.title}`;
                 contextText.innerText = poi.description;
             }
-            
+
             const statusLabel = document.getElementById('tour-status-label');
             if (statusLabel) {
                 statusLabel.innerText = `POI ${currentPOIIndex + 1}/${tourPOIs.length}: ${poi.title}`;
@@ -2446,9 +2555,9 @@ window.addEventListener("error", function(e) {
             const pauseBtn = document.getElementById('tour-pause-btn');
             const statusLabel = document.getElementById('tour-status-label');
             const dot = document.getElementById('tour-indicator-dot');
-            
+
             const dict = (typeof uiDict !== 'undefined' && uiDict[currentLanguage]) ? uiDict[currentLanguage] : { tourStatus: 'Touring', paused: 'Paused' };
-            
+
             if (isTourActive) {
                 if (controlBar) {
                     controlBar.style.display = 'none'; // drone HUD card handles controls at bottom
@@ -2514,7 +2623,7 @@ window.addEventListener("error", function(e) {
             const notesBtnTop = document.getElementById('notes-btn-top');
             if (popup) popup.style.display = 'none';
             if (notesBtnTop) notesBtnTop.style.display = 'flex';
-            
+
             const baseZ = 6.5;
             autoScrollTargetZ = baseZ;
             autoScrollTargetX = camera.position.x;
@@ -2525,7 +2634,7 @@ window.addEventListener("error", function(e) {
             const notesBtnTop = document.getElementById('notes-btn-top');
             if (popup) popup.style.display = 'block';
             if (notesBtnTop) notesBtnTop.style.display = 'none';
-            
+
             // User requested that the tour always starts at the first POI
             if (tituliData && tituliData.length > 0) {
                 updatePopupUI(0, shouldAutoScroll);
@@ -2537,7 +2646,7 @@ window.addEventListener("error", function(e) {
             isTourPaused = false;
             tourElapsed = 0;
             tourSessionSeed = Math.random() * 1000;
-            
+
             if ((!tourPOIs || tourPOIs.length === 0) && typeof tituliData !== 'undefined' && tituliData && tituliData.length > 0) {
                 buildTourPOIs(tituliData);
             }
@@ -2570,11 +2679,11 @@ window.addEventListener("error", function(e) {
             } else {
                 camera.position.x = isNarrow ? 3.5 : 2.5;
             }
-            
+
             isPoiDwell = true;
             poiDwellTimer = 0;
             isPOIVisibleOnScreen = true;
-            
+
             camera.position.y = -2.16;
             if (camera.position.z > 14.0 || camera.position.z < 2.5) {
                 camera.position.z = isNarrow ? 6.5 : 8.5;
@@ -2630,7 +2739,7 @@ window.addEventListener("error", function(e) {
             poiDwellTimer = 0;
             isPOIVisibleOnScreen = false;
             tourElapsed = 0;
-            
+
             if (poiBoundingBoxesGroup) {
                 poiBoundingBoxesGroup.visible = true;
             }
@@ -2710,7 +2819,7 @@ window.addEventListener("error", function(e) {
 
 
 
-        
+
         let currentPopupSceneIndex = 0;
 
         function updatePopupUI(index, shouldAutoScroll = true) {
@@ -2718,11 +2827,11 @@ window.addEventListener("error", function(e) {
             if (index < 0 || index >= tituliData.length) return;
             currentPopupSceneIndex = index;
             const annoData = tituliData[index];
-            
+
             const localizedText = (annoData.translations && annoData.translations[currentLanguage]) ? annoData.translations[currentLanguage].text : annoData.translations['en'].text;
             document.getElementById('context-title').innerText = `"${localizedText}"`;
             document.getElementById('context-title').style.fontStyle = 'italic';
-            
+
             let contextText = "No historical context available for this scene.";
             if (annoData.translations && annoData.translations[currentLanguage] && annoData.translations[currentLanguage].context) {
                 contextText = annoData.translations[currentLanguage].context;
@@ -2730,19 +2839,19 @@ window.addEventListener("error", function(e) {
                 contextText = annoData.translations['en'].context;
             }
             document.getElementById('context-text').innerText = contextText;
-            
+
             document.getElementById('prev-scene').style.opacity = (index === 0) ? '0.5' : '1.0';
             document.getElementById('prev-scene').style.pointerEvents = (index === 0) ? 'none' : 'auto';
-            
+
             document.getElementById('next-scene').style.opacity = (index === tituliData.length - 1) ? '0.5' : '1.0';
             document.getElementById('next-scene').style.pointerEvents = (index === tituliData.length - 1) ? 'none' : 'auto';
-            
+
             // Restore static center positioning
             const popup = document.getElementById('context-scroll');
             popup.style.left = '50%';
             popup.style.transform = 'translateX(-50%)';
             popup.style.display = 'block';
-            
+
             if (shouldAutoScroll && annoData.x !== undefined) {
                 // Find the mesh to calculate its width so we can center on it perfectly
                 const annObj = annotations.find(a => a.data === annoData);
@@ -2752,7 +2861,7 @@ window.addEventListener("error", function(e) {
                 } else {
                     autoScrollTargetX = annoData.x;
                 }
-                
+
                 // Calculate target zoom based on bounding box
                 autoScrollTargetY = camera.position.y;
                 autoScrollTargetZ = 6.5; // fallback baseZ
@@ -2762,16 +2871,16 @@ window.addEventListener("error", function(e) {
                         const padding = 1.25;
                         const w = Math.max(0.6, targetPOI.bounds.xMax - targetPOI.bounds.xMin) + 0.50;
                         const h = Math.max(0.6, targetPOI.bounds.yMax - targetPOI.bounds.yMin) + 0.50;
-                        
+
                         autoScrollTargetX = (targetPOI.bounds.xMin + targetPOI.bounds.xMax) / 2;
                         autoScrollTargetY = (targetPOI.bounds.yMin + targetPOI.bounds.yMax) / 2;
-                        
+
                         const zFov = Math.tan((camera.fov * Math.PI) / 360);
                         const zHeight = (h * padding / 2) / zFov;
                         const zWidth = (w * padding / 2) / (zFov * camera.aspect);
-                        
+
                         autoScrollTargetZ = Math.max(zHeight, zWidth, 2.5); // Clamp closest zoom
-                        
+
                         // For mobile phones, get close enough to the canvas so that the canvas at least fills the vertical viewport
                         if (isPhone || (window.innerWidth <= 900 && !isIPad)) {
                             const maxMobileZ = (6.94 / 2) / zFov;
@@ -2779,10 +2888,10 @@ window.addEventListener("error", function(e) {
                                 autoScrollTargetZ = maxMobileZ;
                             }
                         }
-                        
+
                         // Shift the viewport up by 0.1 world units per user request
                         autoScrollTargetY += 0.4;
-                        
+
                         // Prevent Y from exceeding bounds, which would cause an infinite auto-scroll lock
                         if (autoScrollTargetY > 2.0) autoScrollTargetY = 2.0;
                         if (autoScrollTargetY < -4.94) autoScrollTargetY = -4.94;
@@ -2804,7 +2913,7 @@ window.addEventListener("error", function(e) {
             if (target && target.closest && (target.closest('#ui') || target.closest('#authoring-panel') || target.closest('#about-dialog') || target.closest('#lighting-dialog') || target.closest('#help-dialog') || target.closest('#context-scroll') || target.closest('#mobile-menu') || target.closest('#mobile-menu-scrim') || target.closest('#hamburger-btn') || target.closest('#mobile-tour-btn') || target.closest('#tour-control-bar') || target.closest('#drone-poi-card'))) {
                 return;
             }
-            
+
             mouseCoords.x = (clientX / window.innerWidth) * 2 - 1;
             mouseCoords.y = -(clientY / window.innerHeight) * 2 + 1;
             dragRaycaster.setFromCamera(mouseCoords, camera);
@@ -2826,17 +2935,17 @@ window.addEventListener("error", function(e) {
                     }
                 }
             }
-            
+
             // Raycast against all visible annotations
             const annMeshes = annotations.map(a => a.mesh).filter(m => m && m.visible);
-            
+
             const intersects = dragRaycaster.intersectObjects(annMeshes, false);
-            
+
             if (intersects.length > 0) {
                 const clickedMesh = intersects[0].object;
                 const annoObj = clickedMesh.userData.annotation;
                 const annoData = annoObj ? annoObj.data : null;
-                
+
                 if (annoData) {
                     const index = tituliData.indexOf(annoData);
                     updatePopupUI(index);
@@ -2850,20 +2959,20 @@ window.addEventListener("error", function(e) {
             e.preventDefault();
             autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
             lastWheelTime = Date.now();
-            
+
             // Normalize scroll distance
             let deltaY = e.deltaY;
             let deltaX = e.deltaX;
             if (e.deltaMode === 1) { deltaY *= 33; deltaX *= 33; } // Line mode
             else if (e.deltaMode === 2) { deltaY *= window.innerHeight; deltaX *= window.innerWidth; } // Page mode
-            
+
             // Apply zoom impulse (scales with distance so zooming is consistent at all depths)
             if (Math.abs(deltaY) > 0) {
                 const distanceMultiplier = Math.max(0.02, Math.pow(camera.position.z / 10, 1.5));
                 const zoomImpulse = (deltaY * 0.0012) * distanceMultiplier;
                 velocityZ += zoomImpulse;
             }
-            
+
             // Apply horizontal pan impulse (scales with distance so panning feels consistent)
             if (Math.abs(deltaX) > 0) {
                 // Panning sensitivity multiplier tuned for typical mouse wheel / trackpad gestures
@@ -2907,9 +3016,9 @@ window.addEventListener("error", function(e) {
          */
         function updateCamera() {
             let currentAccel = 0;
-            
+
             const isActivelyPanning = keys.right || keys.left || mouseScrollDir !== 0 || isDragging || isMouseDown || (Date.now() - lastWheelTime < 100);
-            
+
             if (isActivelyPanning) {
                 moveHoldTime += 1;
             } else {
@@ -2945,7 +3054,7 @@ window.addEventListener("error", function(e) {
                 } else {
                     const elapsed = Date.now() - cinematicStartTime;
                     const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.40 : -0.65;
-                    
+
                     if (elapsed < 4000) {
                         // Phase 1: Tilt right further down the canvas, starting slowly
                         targetRotationY = targetTilt;
@@ -2960,15 +3069,15 @@ window.addEventListener("error", function(e) {
                     } else {
                         // Phase 3: Slowly accelerate in the opposite direction while zooming
                         targetRotationY = 0;
-                        
+
                         const phase3Elapsed = elapsed - 5000;
                         // Quadratic ease-in for the speed over 2.0 seconds
                         const rawFactor = Math.min(1.0, phase3Elapsed / 2000.0);
-                        const accelFactor = rawFactor * rawFactor; 
-                        
+                        const accelFactor = rawFactor * rawFactor;
+
                         cinematicRate = 0.0002 + (0.012 * accelFactor);
                         camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
-                        
+
                         if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
                             camera.position.z = autoScrollTargetZ;
                             camera.rotation.y = 0;
@@ -2978,7 +3087,7 @@ window.addEventListener("error", function(e) {
                     }
                 }
             }
-            
+
             if (keys.up || keys.down) {
                 zoomHoldTime += 1;
             } else {
@@ -2987,7 +3096,7 @@ window.addEventListener("error", function(e) {
 
             // Modest acceleration curve: start at base speed and gradually double it over 2 seconds
             let currentZoomAccel = fixedZoomAccel * (1.0 + Math.min(1.0, zoomHoldTime / 120) * 1.0);
-            
+
             // Further scale zoom acceleration by current Z distance so it doesn't crawl when fully zoomed out
             currentZoomAccel *= Math.max(0.02, Math.pow(camera.position.z / 10, 1.5));
 
@@ -3011,7 +3120,7 @@ window.addEventListener("error", function(e) {
             // Prevent the view from drifting backwards when the camera straightens out (untilt compensation)
             const previousRotationY = camera.rotation.y;
             const isUntilting = Math.abs(targetRotationY) < Math.abs(previousRotationY);
-            
+
             // Use a 2.0x multiplier for returning to straight-on view to balance snappiness with smooth easing
             let currentSmoothing = isUntilting ? tiltSmoothing * 2.0 : tiltSmoothing;
             if (initialSlowZoom) currentSmoothing = cinematicRate; // Use dynamic cinematic rate to ease-in the untiliting
@@ -3046,7 +3155,7 @@ window.addEventListener("error", function(e) {
 
             if (camera.position.z < 0.9) camera.position.z = 0.9; // Allow close inspection for max L19 LOD detail
             if (camera.position.z > 60) camera.position.z = 60;
-            
+
             if (magActive) {
                 magCamera.position.z = Math.max(0.3, camera.position.z * 0.25);
             }
@@ -3064,7 +3173,7 @@ window.addEventListener("error", function(e) {
 
             // The margin acts as an off-screen buffer, forcing tiles to load just outside the camera's field of view
             const margin = isPhone ? 6 : 60; // Reasonable buffer for phones, generous for desktop
-            
+
             let magMinX = 0, magMaxX = 0;
             if (magActive) {
                 const magVisibleHeight = 2 * Math.tan(vFOV / 2) * magCamera.position.z;
@@ -3072,7 +3181,7 @@ window.addEventListener("error", function(e) {
                 magMinX = magCamera.position.x - magVisibleWidth / 2;
                 magMaxX = magCamera.position.x + magVisibleWidth / 2;
             }
-            
+
             // LOD Tile Manager: Evaluates which tiles intersect the camera frustum and handles async texture loading/unloading to preserve memory
             const processTiles = (tileArray, levelStr, isHighRes, unloadZ) => {
                 // For high-res tiles, we use a tighter margin so we don't spam requests for tiles slightly off screen
@@ -3085,7 +3194,7 @@ window.addEventListener("error", function(e) {
                     const isMainVisible = (camera.position.z <= unloadZ) && (tile.xCenter >= minX && tile.xCenter <= maxX);
                     const isMagVisible = magActive && isHighRes && (tile.xCenter >= magMinX - actualMargin && tile.xCenter <= magMaxX + actualMargin);
                     const isVisible = isMainVisible || isMagVisible;
-                    
+
                     if (isVisible) {
                         const canLoadNewTile = !isHighRes || (smoothedCameraSpeed < 0.015);
 
@@ -3095,20 +3204,20 @@ window.addEventListener("error", function(e) {
 
                             const baseUrl = `btstorage.britishmuseum.org/bayeux-tapestry/image_files/${levelStr}/${tile.c}_${tile.r}.webp`;
                             const url = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}`;
-                            
+
                             textureLoader.load(url, (texture) => {
                                 activeRequests--;
                                 texture.generateMipmaps = true;
                                 texture.minFilter = THREE.LinearMipmapLinearFilter;
                                 texture.magFilter = THREE.LinearFilter;
                                 texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-                                
-                                const matOpts = { 
+
+                                const matOpts = {
                                     map: texture,
                                     transparent: true,
                                     opacity: isHighRes ? 1.0 : 0 // Pop in instantly for high-res to prevent fade artifacts over base
                                 };
-                                
+
                                 if (useSimpleLighting) {
                                     tile.mesh.material = new THREE.MeshLambertMaterial(matOpts);
                                 } else {
@@ -3119,7 +3228,7 @@ window.addEventListener("error", function(e) {
                                     tile.mesh.material = new THREE.MeshStandardMaterial(matOpts);
                                 }
                                 tile.loaded = true;
-                                
+
                                 if (!isHighRes) {
                                     let op = 0;
                                     const fade = setInterval(() => {
@@ -3155,10 +3264,10 @@ window.addEventListener("error", function(e) {
                     }
                 }
             };
-            
+
             // Prioritize processing based on zoom level to manage activeRequests cap
             const effectiveZ = magActive ? Math.min(camera.position.z, magCamera.position.z) : camera.position.z;
-            
+
             if (effectiveZ <= 1.2) {
                 processTiles(tilesL19, '19', true, 1.2);
                 processTiles(tilesL18, '18', true, 2.5);
@@ -3204,7 +3313,7 @@ window.addEventListener("error", function(e) {
             }
         }, 100);
         let pulseTimer = 0;
-        
+
         function triggerPOIPulse(index) {
             // Pulse logic disabled per user request to "eliminate the rectangle"
             activePulsePOIIndex = -1;
@@ -3217,24 +3326,24 @@ window.addEventListener("error", function(e) {
             const popup = document.getElementById('context-scroll');
             if (!popup || popup.style.display === 'none') return;
             if (autoScrollTargetX !== null) return; // Don't interfere with auto-scrolling
-            
+
             let closestIndex = -1;
             let minDistance = Infinity;
-            
+
             for (let i = 0; i < annotations.length; i++) {
                 const ann = annotations[i];
                 if (!ann || !ann.mesh || !ann.data) continue;
-                
+
                 const width = ann.mesh.geometry.parameters.width;
                 const centerPoint = ann.data.x + width / 2.0;
-                
+
                 const dist = Math.abs(camera.position.x - centerPoint);
                 if (dist < minDistance) {
                     minDistance = dist;
                     closestIndex = tituliData.indexOf(ann.data);
                 }
             }
-            
+
             if (closestIndex !== -1 && closestIndex !== currentPopupSceneIndex) {
                 // Only update if it's reasonably close to the center of the screen (within 10 units of distance)
                 // This prevents the popup from jumping to a scene that is completely off-screen
@@ -3249,11 +3358,11 @@ window.addEventListener("error", function(e) {
             requestAnimationFrame(animate);
             const dt = Math.min(tourClock.getDelta(), 0.1);
             updateDynamicPopup();
-            
+
             // --- POI PULSE LOGIC ---
             if (activePulsePOIIndex >= 0) {
                 pulseTimer -= dt;
-                
+
                 if (typeof tourPOIs !== 'undefined' && tourPOIs) {
                     for (let i = 0; i < tourPOIs.length; i++) {
                         const p = tourPOIs[i];
@@ -3269,7 +3378,7 @@ window.addEventListener("error", function(e) {
                                         child.material.opacity = intensity * maxOp;
                                         child.material.transparent = true;
                                     }
-                                }); 
+                                });
                                 p.boxMesh.visible = true;
                             } else {
                                 p.boxMesh.visible = false;
@@ -3277,7 +3386,7 @@ window.addEventListener("error", function(e) {
                         }
                     }
                 }
-                
+
                 if (pulseTimer <= 0) {
                     activePulsePOIIndex = -1;
                     if (typeof tourPOIs !== 'undefined' && tourPOIs) {
@@ -3296,7 +3405,7 @@ window.addEventListener("error", function(e) {
                 camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
                 let zReached = true;
                 let yReached = true;
-                
+
                 if (autoScrollTargetY !== null) {
                     camera.position.y += (autoScrollTargetY - camera.position.y) * 0.1;
                     if (Math.abs(camera.position.y - autoScrollTargetY) > 0.01) {
@@ -3305,7 +3414,7 @@ window.addEventListener("error", function(e) {
                         camera.position.y = autoScrollTargetY;
                     }
                 }
-                
+
                 if (autoScrollTargetZ !== null) {
                     camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.1;
                     if (Math.abs(camera.position.z - autoScrollTargetZ) > 0.01) {
@@ -3314,7 +3423,7 @@ window.addEventListener("error", function(e) {
                         camera.position.z = autoScrollTargetZ;
                     }
                 }
-                
+
                 if (Math.abs(camera.position.x - autoScrollTargetX) < 0.01 && zReached && yReached) {
                     camera.position.x = autoScrollTargetX;
                     autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
@@ -3332,12 +3441,12 @@ window.addEventListener("error", function(e) {
             }
             updateCamera();
             updateTiles();
-            
+
             dirLight.position.set(camera.position.x - 5.0, tapestryElevation + 4.0, 2.0);
             dirLight.target.position.set(camera.position.x + 2.0, tapestryElevation, 0);
             dirLight.target.updateMatrixWorld();
 
-            
+
             if (magActive) {
                 magLight.visible = true;
                 // Position the light closely and slightly offset from the lens center for extreme grazing
@@ -3345,12 +3454,12 @@ window.addEventListener("error", function(e) {
                 // Point the spotlight directly at the canvas center of the lens
                 magLight.target.position.set(magCamera.position.x, magCamera.position.y, 0);
                 magLight.target.updateMatrixWorld();
-                
+
                 magCamera.position.z = Math.max(0.3, camera.position.z * 0.25);
                 renderer.setRenderTarget(magRenderTarget);
                 renderer.render(scene, magCamera);
                 renderer.setRenderTarget(null);
-                
+
                 // Hide it for the main render if we don't want the flashlight visible globally, 
                 // but keeping it visible globally creates a cool flashlight effect!
                 // Let's keep it visible globally since it simulates holding a magnifying glass with a built in light.
@@ -3370,7 +3479,7 @@ window.addEventListener("error", function(e) {
         animate();
 
         // UI Dialog Listeners
-        
+
         const notesBtnTop = document.getElementById('notes-btn-top');
         if (notesBtnTop) {
             notesBtnTop.addEventListener('click', (e) => {
@@ -3447,7 +3556,7 @@ window.addEventListener("error", function(e) {
             camera.position.z = parseFloat(urlParams.get('z'));
         }
 
-                // --- AUTHORING MODE LOGIC ---
+        // --- AUTHORING MODE LOGIC ---
         // Authoring mode allows editors to visually drag and drop text annotations over the tapestry.
         // It bypasses the standard UI and enables raycasting-based 3D mesh dragging, saving directly to localStorage.
         let tituliData = [];
@@ -3455,7 +3564,7 @@ window.addEventListener("error", function(e) {
 
         if (isAuthoringMode) {
             document.getElementById('authoring-panel').style.display = 'block';
-            
+
             // Export the current layout of 3D text meshes to the console as formatted JSON
             document.getElementById('auth-export').addEventListener('click', () => {
                 const exportData = annotations.map(a => a.data);
@@ -3467,18 +3576,18 @@ window.addEventListener("error", function(e) {
 
         // --- ANNOTATION DISPLAY LOGIC ---
         let annotations = [];
-        
+
         /**
          * Renders English translation text to a 2D canvas and maps it onto a 3D PlaneGeometry.
          * @param {string} text - The English string to render
          * @param {boolean} isPlaced - In authoring mode, unplaced text is rendered in red
          * @returns {THREE.Mesh}
          */
-        
+
         function changeLanguage(lang) {
             currentLanguage = lang;
             localStorage.setItem('bayeux_lang', currentLanguage);
-            
+
             // Update UI buttons
             document.querySelectorAll('.lang-option').forEach(btn => {
                 if (btn.getAttribute('data-lang') === currentLanguage) {
@@ -3489,7 +3598,7 @@ window.addEventListener("error", function(e) {
                     btn.style.border = '1px solid #444';
                 }
             });
-            
+
             // Translate static UI elements
             const dict = uiDict[currentLanguage] || uiDict['en'];
             document.querySelectorAll('#help-link').forEach(el => el.innerText = dict.help);
@@ -3531,16 +3640,16 @@ window.addEventListener("error", function(e) {
             if (mTextMusic) mTextMusic.innerText = dict.music || 'Music';
             const mTextFullscreen = document.getElementById('m-text-fullscreen');
             if (mTextFullscreen) mTextFullscreen.innerText = dict.fullscreen || 'Fullscreen';
-            
+
             const prevBtn = document.getElementById('prev-scene');
             const nextBtn = document.getElementById('next-scene');
             const closeBtn = document.getElementById('close-context');
             if (prevBtn) prevBtn.innerText = dict.prev;
             if (nextBtn) nextBtn.innerText = dict.next;
             if (closeBtn) closeBtn.innerText = dict.close;
-            
+
             document.getElementById('lang-dialog').style.display = 'none';
-            
+
             // Re-render all 3D meshes
             annotations.forEach(ann => {
                 if (ann.mesh) {
@@ -3583,26 +3692,26 @@ window.addEventListener("error", function(e) {
             const metrics = ctx.measureText(renderText);
             canvas.width = Math.ceil(metrics.width) + 20;
             canvas.height = fontSize * 1.5;
-            
+
             // Re-apply context styles after canvas resize clears them
             ctx.font = fontStr;
             ctx.letterSpacing = '3px';
             ctx.fillStyle = (!isPlaced && isAuthoringMode) ? '#aa0000' : '#5b5349';
             ctx.textBaseline = 'top';
             ctx.fillText(renderText, 10, 10);
-            
+
             const texture = new THREE.CanvasTexture(canvas);
             texture.minFilter = THREE.LinearMipmapLinearFilter;
-            
+
             // Convert raw canvas pixels into 3D world space coordinates
             const scale = 0.004433; // Base scale factor applied to text meshes for legibility
             const worldWidth = canvas.width * scale;
             const worldHeight = canvas.height * scale;
-            
+
             const geometry = new THREE.PlaneGeometry(worldWidth, worldHeight);
             // Re-anchor the mesh origin to its top-left corner to align cleanly with the parsed JSON coordinates
             geometry.translate(worldWidth / 2, -worldHeight, 0);
-            
+
             const material = new THREE.MeshBasicMaterial({
                 map: texture,
                 transparent: true,
@@ -3633,17 +3742,17 @@ window.addEventListener("error", function(e) {
                     } catch (e) { console.error("Error parsing local storage", e); }
                 }
             }
-            
+
             tituliData = data;
             buildTourPOIs(tituliData);
-            
+
             // Force the browser to download the custom font (since it's not used in standard DOM) before rendering
             document.fonts.load('80px "MedievalSharp"').then(() => {
                 data.forEach(t => {
                     const textStr = (t.translations && t.translations[currentLanguage]) ? t.translations[currentLanguage].text : t.translations['en'].text;
                     const mesh = createTextMesh(textStr, t.x !== undefined);
                     mesh.visible = false;
-                    
+
                     const annObj = { data: t, mesh: mesh, isHovered: false, currentHover: 0 };
                     mesh.userData.annotation = annObj;
                     annotations.push(annObj);
@@ -3659,20 +3768,20 @@ window.addEventListener("error", function(e) {
                 }
             });
         });
-        
+
         const hoverRaycaster = new THREE.Raycaster();
         let lastCameraXForFading = 0;
         let smoothedCameraSpeed = 0;
-        
-        window.updateAnnotations = function() {
+
+        window.updateAnnotations = function () {
             // Calculate true camera speed
             const currentSpeed = Math.abs(camera.position.x - lastCameraXForFading);
-            smoothedCameraSpeed = smoothedCameraSpeed * 0.8 + currentSpeed * 0.2; 
+            smoothedCameraSpeed = smoothedCameraSpeed * 0.8 + currentSpeed * 0.2;
             lastCameraXForFading = camera.position.x;
 
             let scrollOpacityMult = 1.0;
-            if (isAuthoringMode) scrollOpacityMult = 1.0; 
-            
+            if (isAuthoringMode) scrollOpacityMult = 1.0;
+
             // Perform raycasting for hover detection if we have valid mouse coordinates
             let hoveredMesh = null;
             if (mouseCoords.x !== -9999 && !isDragging && !isMouseDown) {
@@ -3683,42 +3792,42 @@ window.addEventListener("error", function(e) {
                 if (intersects.length > 0) {
                     hoveredMesh = intersects[0].object;
                 }
-                
+
                 // Change mouse cursor to indicate clickability
                 if (!isAuthoringMode) {
                     document.body.style.cursor = hoveredMesh ? 'pointer' : 'default';
                 }
             }
-            
+
             // UI button state controls visibility
             // (showSupertitles is now a global variable updated by the click listener)
-            
+
             annotations.forEach((ann, index) => {
                 if (!ann.mesh) return;
-                
+
                 const isNotesOpen = document.getElementById('context-scroll') && document.getElementById('context-scroll').style.display === 'block';
                 const isTourRunning = typeof isTourActive !== 'undefined' && isTourActive;
-                
+
                 if (!showSupertitles || ann.data.x === undefined || isNotesOpen || isTourRunning) {
                     ann.mesh.visible = false;
                     return;
                 }
-                
+
                 // We rely on Three.js native frustum culling rather than hardcoded distance checks
-                
+
                 ann.mesh.visible = true;
                 ann.mesh.position.x = ann.data.x;
                 ann.mesh.position.y = ann.data.y;
-                
+
                 // Smoothly transition opacity to 1.0 when hovered, 0.50 normally (or 0.85 when touring)
                 if (ann.currentOpacity === undefined) ann.currentOpacity = 0.50;
-                
+
                 const baseOpacity = (typeof isTourActive !== 'undefined' && isTourActive) ? 0.85 : 0.50;
                 const targetOpacity = (hoveredMesh === ann.mesh || isAuthoringMode) ? 1.0 : baseOpacity;
                 ann.currentOpacity += (targetOpacity - ann.currentOpacity) * 0.2; // Smooth lerp
-                
+
                 ann.mesh.material.opacity = ann.currentOpacity * scrollOpacityMult;
-                
+
                 // Add a subtle scale effect on hover as well
                 const targetScale = (hoveredMesh === ann.mesh) ? 1.002 : 1.0; // Drastically reduced hover scale to prevent perceived horizontal shifting
                 if (ann.currentScale === undefined) ann.currentScale = 1.0;
@@ -3754,11 +3863,11 @@ window.addEventListener("error", function(e) {
 
         function toggleMusic() {
             if (!ytPlayer || !ytPlayer.getPlayerState) return; // Not loaded yet
-            
+
             const btn = document.getElementById('music-toggle');
             const badge = document.getElementById('m-badge-music');
             const state = ytPlayer.getPlayerState();
-            
+
             if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
                 ytPlayer.pauseVideo();
                 if (btn) {
@@ -3796,4 +3905,5 @@ window.addEventListener("error", function(e) {
         changeLanguage(currentLanguage);
     </script>
 </body>
+
 </html>
