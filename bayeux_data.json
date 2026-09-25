@@ -1,0 +1,2634 @@
+{
+  "ui": {
+    "en": {
+      "help": "Help",
+      "about": "About",
+      "titles": "Titles",
+      "tour": "Tour",
+      "startTour": "Start Tour",
+      "stopTour": "Stop Tour",
+      "tourStatus": "Touring",
+      "paused": "Paused",
+      "notes": "☰ Tour",
+      "sceneNotes": "Tour",
+      "prev": "Prev",
+      "next": "Next",
+      "close": "Close",
+      "language": "Language",
+      "music": "Music",
+      "fullscreen": "Fullscreen"
+    },
+    "zh": {
+      "help": "帮助",
+      "about": "关于",
+      "titles": "标题",
+      "tour": "导览",
+      "startTour": "开始导览",
+      "stopTour": "停止导览",
+      "tourStatus": "导览中",
+      "paused": "已暂停",
+      "notes": "☰ 导览",
+      "sceneNotes": "导览",
+      "prev": "上一个",
+      "next": "下一个",
+      "close": "关闭",
+      "language": "语言",
+      "music": "音乐",
+      "fullscreen": "全屏"
+    },
+    "es": {
+      "help": "Ayuda",
+      "about": "Acerca de",
+      "titles": "Títulos",
+      "tour": "Recorrido",
+      "startTour": "Iniciar recorrido",
+      "stopTour": "Detener recorrido",
+      "tourStatus": "Recorrido",
+      "paused": "Pausado",
+      "notes": "☰ Recorrido",
+      "sceneNotes": "Recorrido",
+      "prev": "Ant",
+      "next": "Sig",
+      "close": "Cerrar",
+      "language": "Idioma",
+      "music": "Música",
+      "fullscreen": "Pantalla completa"
+    },
+    "fr": {
+      "help": "Aide",
+      "about": "À propos",
+      "titles": "Titres",
+      "tour": "Visite",
+      "startTour": "Commencer la visite",
+      "stopTour": "Arrêter la visite",
+      "tourStatus": "Visite",
+      "paused": "En pause",
+      "notes": "☰ Visite",
+      "sceneNotes": "Visite",
+      "prev": "Préc",
+      "next": "Suivant",
+      "close": "Fermer",
+      "language": "Langue",
+      "music": "Musique",
+      "fullscreen": "Plein écran"
+    },
+    "de": {
+      "help": "Hilfe",
+      "about": "Über",
+      "titles": "Titel",
+      "tour": "Tour",
+      "startTour": "Tour starten",
+      "stopTour": "Tour beenden",
+      "tourStatus": "Tour",
+      "paused": "Pausiert",
+      "notes": "☰ Tour",
+      "sceneNotes": "Tour",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "close": "Schließen",
+      "language": "Sprache",
+      "music": "Musik",
+      "fullscreen": "Vollbild"
+    },
+    "nl": {
+      "help": "Help",
+      "about": "Over",
+      "titles": "Titels",
+      "tour": "Rondleiding",
+      "startTour": "Start rondleiding",
+      "stopTour": "Stop rondleiding",
+      "tourStatus": "Rondleiding",
+      "paused": "Gepauzeerd",
+      "notes": "☰ Rondleiding",
+      "sceneNotes": "Rondleiding",
+      "prev": "Vorige",
+      "next": "Volgende",
+      "close": "Sluiten",
+      "language": "Taal",
+      "music": "Muziek",
+      "fullscreen": "Volledig scherm"
+    },
+    "pt": {
+      "help": "Ajuda",
+      "about": "Sobre",
+      "titles": "Títulos",
+      "tour": "Tour",
+      "startTour": "Iniciar tour",
+      "stopTour": "Parar tour",
+      "tourStatus": "Em tour",
+      "paused": "Pausado",
+      "notes": "☰ Tour",
+      "sceneNotes": "Tour",
+      "prev": "Ant",
+      "next": "Seg",
+      "close": "Fechar",
+      "language": "Idioma",
+      "music": "Música",
+      "fullscreen": "Tela cheia"
+    },
+    "hi": {
+      "help": "मदद",
+      "about": "के बारे में",
+      "titles": "शीर्षक",
+      "tour": "दौरा",
+      "startTour": "दौरा शुरू करें",
+      "stopTour": "दौरा रोकें",
+      "tourStatus": "दौरा जारी",
+      "paused": "रोक दिया",
+      "notes": "☰ दौरा",
+      "sceneNotes": "दौरा",
+      "prev": "पिछला",
+      "next": "अगला",
+      "close": "बंद करें",
+      "language": "भाषा",
+      "music": "संगीत",
+      "fullscreen": "पूर्ण स्क्रीन"
+    },
+    "ar": {
+      "help": "مساعدة",
+      "about": "حول",
+      "titles": "العناوين",
+      "tour": "جولة",
+      "startTour": "بدء الجولة",
+      "stopTour": "إيقاف الجولة",
+      "tourStatus": "جولة مستمرة",
+      "paused": "متوقف",
+      "notes": "☰ جولة",
+      "sceneNotes": "جولة",
+      "prev": "السابق",
+      "next": "التالي",
+      "close": "إغلاق",
+      "language": "اللغة",
+      "music": "الموسيقى",
+      "fullscreen": "ملء الشاشة"
+    },
+    "bn": {
+      "help": "সাহায্য",
+      "about": "সম্পর্কে",
+      "titles": "শিরোনাম",
+      "tour": "পরিদর্শন",
+      "startTour": "পরিদর্শন শুরু করুন",
+      "stopTour": "পরিদর্শন বন্ধ",
+      "tourStatus": "চলমান",
+      "paused": "বিরতি",
+      "notes": "☰ পরিদর্শন",
+      "sceneNotes": "পরিদর্শন",
+      "prev": "পূর্ববর্তী",
+      "next": "পরবর্তী",
+      "close": "বন্ধ করুন",
+      "language": "ভাষা",
+      "music": "সঙ্গীত",
+      "fullscreen": "পূর্ণ পর্দা"
+    }
+  },
+  "tituli": [
+    {
+      "scene": "1",
+      "latin": "",
+      "x": 3.7,
+      "y": -1.76,
+      "translations": {
+        "en": {
+          "text": "",
+          "context": "The tapestry begins in 1064. King Edward the Confessor, enthroned in his palace at Westminster, instructs Harold Godwinson, Earl of Wessex, to travel to Normandy on a diplomatic mission."
+        },
+        "zh": {
+          "text": "",
+          "context": "故事开始于 1064 年。忏悔者爱德华国王在威斯敏斯特宫即位，指示哈罗德·戈德温森前往诺曼底执行外交任务。"
+        },
+        "fr": {
+          "text": "",
+          "context": "La tapisserie commence en 1064. Le roi Édouard le Confesseur, intronisé dans son palais de Westminster, charge Harold Godwinson d'une mission diplomatique en Normandie."
+        },
+        "de": {
+          "text": "",
+          "context": "Der Wandteppich beginnt im Jahr 1064. König Eduard der Bekenner, auf seinem Thron im Palast von Westminster, beauftragt Harold Godwinson mit einer diplomatischen Mission in die Normandie."
+        },
+        "es": {
+          "text": "",
+          "context": "El tapiz comienza en 1064. El rey Eduardo el Confesor, entronizado en su palacio de Westminster, encomienda a Harold Godwinson una misión diplomática a Normandía."
+        },
+        "nl": {
+          "text": "",
+          "context": "Het tapijt begint in 1064. Koning Edward de Belijder, op de troon in zijn paleis in Westminster, geeft Harold Godwinson de opdracht om op diplomatieke missie naar Normandië te reizen."
+        },
+        "pt": {
+          "text": "",
+          "context": "A tapeçaria começa em 1064. O rei Eduardo, o Confessor, entronizado em seu palácio em Westminster, instrui Harold Godwinson a viajar para a Normandia em uma missão diplomática."
+        },
+        "hi": {
+          "text": "",
+          "context": "टेपेस्ट्री 1064 में शुरू होती है। राजा एडवर्ड द कन्फेसर हेरोल्ड गॉडविंसन को एक राजनयिक मिशन पर नॉर्मंडी की यात्रा करने का निर्देश देते हैं।"
+        },
+        "ar": {
+          "text": "",
+          "context": "يبدأ النسيج في عام 1064. يوجه الملك إدوارد المعترف هارولد جودوينسون للسفر إلى نورماندي في مهمة دبلوماسية."
+        },
+        "bn": {
+          "text": "",
+          "context": "টেপেস্ট্রি 1064 সালে শুরু হয়। রাজা এডওয়ার্ড কনফেসার হ্যারল্ড গডউইনসনকে একটি কূটনৈতিক মিশনে নরম্যান্ডিতে ভ্রমণ করার নির্দেশ দেন।"
+        }
+      }
+    },
+    {
+      "scene": "2",
+      "latin": "UBI HAROLD DUX ANGLORUM ET SUI MILITES EQUITANT AD BOSHAM ECCLESIA",
+      "x": 7.684453159185632,
+      "y": 0.971151872475677,
+      "translations": {
+        "en": {
+          "text": "Where Harold, Duke of the English, and his knights ride to Bosham Church",
+          "context": "Harold rides to his coastal estate at Bosham and prays at the local church before setting sail."
+        },
+        "zh": {
+          "text": "英国公爵哈罗德和他的骑士们骑马前往博舍姆教堂的地方",
+          "context": "哈罗德骑马前往他位于博舍姆的沿海庄园，在启航前在当地教堂祈祷。"
+        },
+        "fr": {
+          "text": "Où Harold, duc des Anglais, et ses chevaliers se rendent à l'église de Bosham",
+          "context": "Harold se rend à son domaine côtier de Bosham et prie à l'église locale avant de mettre les voiles."
+        },
+        "de": {
+          "text": "Wo Harold, Herzog der Engländer, und seine Ritter zur Bosham Church reiten",
+          "context": "Harold reitet zu seinem Küstenanwesen in Bosham und betet in der örtlichen Kirche, bevor er in See sticht."
+        },
+        "es": {
+          "text": "Donde Harold, duque de los ingleses, y sus caballeros cabalgan hacia la iglesia de Bosham",
+          "context": "Harold viaja hasta su finca costera en Bosham y reza en la iglesia local antes de zarpar."
+        },
+        "nl": {
+          "text": "Waar Harold, hertog van de Engelsen, en zijn ridders naar de Bosham-kerk rijden",
+          "context": "Harold rijdt naar zijn landgoed aan de kust in Bosham en bidt in de plaatselijke kerk voordat hij vertrekt."
+        },
+        "pt": {
+          "text": "Onde Haroldo, Duque dos Ingleses, e seus cavaleiros cavalgam até a Igreja Bosham",
+          "context": "Harold cavalga até sua propriedade costeira em Bosham e ora na igreja local antes de zarpar."
+        },
+        "hi": {
+          "text": "जहां अंग्रेजी के ड्यूक हेरोल्ड और उनके शूरवीर बोशम चर्च की ओर जाते हैं",
+          "context": "हेरोल्ड बोशम में अपनी तटीय संपत्ति की ओर जाता है और यात्रा शुरू करने से पहले स्थानीय चर्च में प्रार्थना करता है।"
+        },
+        "ar": {
+          "text": "حيث يركب هارولد دوق الإنجليز وفرسانه إلى كنيسة بوشام",
+          "context": "يركب هارولد إلى مزرعته الساحلية في بوشام ويصلي في الكنيسة المحلية قبل الإبحار."
+        },
+        "bn": {
+          "text": "যেখানে হ্যারল্ড, ইংরেজের ডিউক এবং তার নাইটরা বোশাম চার্চে চড়ে",
+          "context": "হ্যারল্ড বোশামে তার উপকূলীয় এস্টেটে চড়ে এবং যাত্রা করার আগে স্থানীয় চার্চে প্রার্থনা করে।"
+        }
+      }
+    },
+    {
+      "scene": "3",
+      "latin": "HIC HAROLD MARE NAVIGAVIT",
+      "x": 27.084350475061495,
+      "y": 0.8167441958568001,
+      "translations": {
+        "en": {
+          "text": "Here Harold sailed by sea",
+          "context": "Harold and his men board their ships with hunting dogs and falcons. These animals signal that this is a peaceful diplomatic mission, not a military expedition."
+        },
+        "zh": {
+          "text": "哈罗德在这里航行",
+          "context": "哈罗德和他的手下带着猎犬和猎鹰登船。这些动物表明这是一次和平的外交使命，而不是军事远征。"
+        },
+        "fr": {
+          "text": "Ici, Harold a navigué sur la mer",
+          "context": "Harold et ses hommes montent à bord de leurs navires avec des chiens de chasse et des faucons. Ces animaux indiquent qu’il s’agit d’une mission diplomatique pacifique et non d’une expédition militaire."
+        },
+        "de": {
+          "text": "Hier segelte Harold auf dem Seeweg",
+          "context": "Harold und seine Männer entern ihre Schiffe mit Jagdhunden und Falken. Diese Tiere signalisieren, dass es sich um eine friedliche diplomatische Mission und nicht um eine Militärexpedition handelt."
+        },
+        "es": {
+          "text": "Aquí Harold navegó por mar.",
+          "context": "Harold y sus hombres abordan sus barcos con perros de caza y halcones. Estos animales indican que se trata de una misión diplomática pacífica, no de una expedición militar."
+        },
+        "nl": {
+          "text": "Hier zeilde Harold over zee",
+          "context": "Harold en zijn mannen gaan aan boord van hun schepen met jachthonden en valken. Deze dieren geven aan dat dit een vreedzame diplomatieke missie is, en geen militaire expeditie."
+        },
+        "pt": {
+          "text": "Aqui Harold navegou por mar",
+          "context": "Haroldo e seus homens embarcam em seus navios com cães de caça e falcões. Estes animais sinalizam que se trata de uma missão diplomática pacífica e não de uma expedição militar."
+        },
+        "hi": {
+          "text": "यहाँ हेरोल्ड समुद्र के रास्ते रवाना हुआ",
+          "context": "हेरोल्ड और उसके आदमी शिकारी कुत्तों और बाज़ों के साथ अपने जहाजों पर चढ़ते हैं। ये जानवर संकेत देते हैं कि यह एक शांतिपूर्ण राजनयिक मिशन है, कोई सैन्य अभियान नहीं।"
+        },
+        "ar": {
+          "text": "هنا أبحر هارولد عن طريق البحر",
+          "context": "هارولد ورجاله يصعدون على متن سفنهم مع كلاب الصيد والصقور. تشير هذه الحيوانات إلى أن هذه مهمة دبلوماسية سلمية، وليست رحلة عسكرية."
+        },
+        "bn": {
+          "text": "এখানে হ্যারল্ড সমুদ্রপথে যাত্রা করেছিলেন",
+          "context": "হ্যারল্ড এবং তার লোকেরা শিকারী কুকুর এবং বাজপাখি নিয়ে তাদের জাহাজে চড়ে। এই প্রাণীগুলি ইঙ্গিত দেয় যে এটি একটি শান্তিপূর্ণ কূটনৈতিক মিশন, সামরিক অভিযান নয়।"
+        }
+      }
+    },
+    {
+      "scene": "4",
+      "latin": "ET VELIS VENTO PLENIS VENIT IN TERRAM WIDONIS COMITIS",
+      "x": 33.568751751268046,
+      "y": 0.8082830035025065,
+      "translations": {
+        "en": {
+          "text": "and with sails filled with wind came to the land of Count Wido",
+          "context": "A storm blows Harold's fleet off course across the English Channel. They land in Ponthieu, where Count Guy (Wido) immediately seizes Harold in hopes of demanding a massive ransom."
+        },
+        "zh": {
+          "text": "驾着满载风的船帆来到了维多伯爵的土地",
+          "context": "一场暴风雨将哈罗德的舰队吹离航线横渡英吉利海峡。他们降落在蓬蒂厄，盖伊伯爵（维多饰）立即抓住了哈罗德，希望索要巨额赎金。"
+        },
+        "fr": {
+          "text": "et avec les voiles pleines de vent, je suis arrivé au pays du comte Wido",
+          "context": "Une tempête fait dévier la flotte d'Harold de l'autre côté de la Manche. Ils débarquent à Ponthieu, où le comte Guy (Wido) s'empare immédiatement d'Harold dans l'espoir d'exiger une rançon massive."
+        },
+        "de": {
+          "text": "und mit vom Wind erfüllten Segeln kamen sie in das Land des Grafen Wido",
+          "context": "Ein Sturm bringt Harolds Flotte über den Ärmelkanal vom Kurs ab. Sie landen in Ponthieu, wo Graf Guy (Wido) Harold sofort festnimmt, in der Hoffnung, ein riesiges Lösegeld zu fordern."
+        },
+        "es": {
+          "text": "y con velas llenas de viento llegó a la tierra del Conde Wido",
+          "context": "Una tormenta desvía la flota de Harold a través del Canal de la Mancha. Aterrizan en Ponthieu, donde el Conde Guy (Wido) inmediatamente se apodera de Harold con la esperanza de exigir un rescate masivo."
+        },
+        "nl": {
+          "text": "en met zeilen gevuld met wind kwam het land van graaf Wido aan",
+          "context": "Een storm blaast de vloot van Harold uit koers over het Engelse Kanaal. Ze landen in Ponthieu, waar graaf Guy (Wido) Harold onmiddellijk gevangen neemt in de hoop een groot losgeld te eisen."
+        },
+        "pt": {
+          "text": "e com velas cheias de vento chegou à terra do Conde Wido",
+          "context": "Uma tempestade desvia a frota de Harold do curso através do Canal da Mancha. Eles pousam em Ponthieu, onde o Conde Guy (Wido) imediatamente captura Harold na esperança de exigir um grande resgate."
+        },
+        "hi": {
+          "text": "और हवा से भरे पालों के साथ काउंट विडो की भूमि पर आए",
+          "context": "एक तूफ़ान ने इंग्लिश चैनल के पार हेरोल्ड के बेड़े को रास्ते से भटका दिया। वे पोंथिउ में उतरते हैं, जहां काउंट गाइ (विडो) भारी फिरौती मांगने की उम्मीद में तुरंत हेरोल्ड को पकड़ लेता है।"
+        },
+        "ar": {
+          "text": "وبأشرعة مملوءة بالرياح وصلت إلى أرض الكونت ويدو",
+          "context": "عاصفة تضرب أسطول هارولد خارج مساره عبر القناة الإنجليزية. هبطوا في بونثيو، حيث قام الكونت جاي (ويدو) على الفور بالقبض على هارولد على أمل المطالبة بفدية ضخمة."
+        },
+        "bn": {
+          "text": "এবং বাতাসে ভরা পাল নিয়ে কাউন্ট উইডোর দেশে এসেছিল",
+          "context": "একটি ঝড় ইংলিশ চ্যানেল জুড়ে হ্যারল্ডের বহরকে উড়িয়ে দেয়। তারা পন্থিউতে অবতরণ করে, যেখানে কাউন্ট গাই (উইডো) একটি বিশাল মুক্তিপণ দাবি করার আশায় হ্যারল্ডকে অবিলম্বে ধরে ফেলে।"
+        }
+      }
+    },
+    {
+      "scene": "6",
+      "latin": "HIC APPREHENDIT WIDO HAROLDU",
+      "x": 50.128263002438565,
+      "y": 0.8729133741881965,
+      "translations": {
+        "en": {
+          "text": "Here Wido seized Harold",
+          "context": "Guy (Wido) of Ponthieu captures Harold. Shipwrecked travelers were often held for ransom in the Middle Ages. Harold is taken prisoner."
+        },
+        "zh": {
+          "text": "维多在这里抓住了哈罗德",
+          "context": "蓬蒂厄的盖伊（维多）俘虏了哈罗德。在中世纪，遭遇海难的旅行者经常被勒索赎金。哈罗德被俘。"
+        },
+        "fr": {
+          "text": "Ici Wido a saisi Harold",
+          "context": "Guy (Wido) de Ponthieu capture Harold. Au Moyen Âge, les naufragés étaient souvent détenus contre rançon. Harold est fait prisonnier."
+        },
+        "de": {
+          "text": "Hier ergriff Wido Harold",
+          "context": "Guy (Wido) von Ponthieu nimmt Harold gefangen. Schiffbrüchige Reisende wurden im Mittelalter häufig als Lösegelder festgehalten. Harold wird gefangen genommen."
+        },
+        "es": {
+          "text": "Aquí Wido se apoderó de Harold",
+          "context": "Guy (Wido) de Ponthieu captura a Harold. En la Edad Media, a los viajeros náufragos se les retenía a menudo para pedir rescate. Harold es hecho prisionero."
+        },
+        "nl": {
+          "text": "Hier greep Wido Harold",
+          "context": "Guy (Wido) van Ponthieu neemt Harold gevangen. In de middeleeuwen werden schipbreukelingen vaak vastgehouden voor losgeld. Harold wordt gevangengenomen."
+        },
+        "pt": {
+          "text": "Aqui Wido agarrou Harold",
+          "context": "Guy (Wido) de Ponthieu captura Harold. Viajantes náufragos eram frequentemente detidos para resgate na Idade Média. Harold é feito prisioneiro."
+        },
+        "hi": {
+          "text": "यहां विडो ने हेरोल्ड को पकड़ लिया",
+          "context": "पोंथियू के गाइ (विडो) ने हेरोल्ड को पकड़ लिया। मध्य युग में जहाज़ के क्षतिग्रस्त यात्रियों को अक्सर फिरौती के लिए पकड़ लिया जाता था। हेरोल्ड को बंदी बना लिया गया है।"
+        },
+        "ar": {
+          "text": "هنا استولى ويدو على هارولد",
+          "context": "غي (ويدو) من بونثيو يلتقط هارولد. غالبًا ما كان يتم احتجاز المسافرين الغرقى للحصول على فدية في العصور الوسطى. تم أسر هارولد."
+        },
+        "bn": {
+          "text": "এখানে উইডো হ্যারল্ডকে ধরে ফেলে",
+          "context": "পন্থিউয়ের গাই (উইডো) হ্যারল্ডকে বন্দী করে। মধ্যযুগে জাহাজ ভাঙা যাত্রীদের প্রায়ই মুক্তিপণের জন্য আটক করা হত। হ্যারল্ডকে বন্দী করা হয়।"
+        }
+      }
+    },
+    {
+      "scene": "7",
+      "latin": "ET DUXIT EUM AD BELREM ET IBI EUM TENUIT",
+      "x": 56.73182257149524,
+      "y": 1.0516181046972501,
+      "translations": {
+        "en": {
+          "text": "and led him to Beaurain and held him there",
+          "context": "Harold is taken to Guy's stronghold at Beaurain. He is treated as a high-value prisoner rather than a common captive."
+        },
+        "zh": {
+          "text": "带他到博兰并把他扣留在那里",
+          "context": "哈罗德被带到盖伊在博兰的据点。他被视为一个高价值的囚犯，而不是一个普通的俘虏。"
+        },
+        "fr": {
+          "text": "et l'a conduit à Beaurain et l'y a retenu",
+          "context": "Harold est emmené au fief de Guy à Beaurain. Il est traité comme un prisonnier de grande valeur plutôt que comme un simple captif."
+        },
+        "de": {
+          "text": "und führte ihn nach Beaurain und hielt ihn dort fest",
+          "context": "Harold wird zu Guys Festung Beaurain gebracht. Er wird als hochrangiger Gefangener und nicht als gewöhnlicher Gefangener behandelt."
+        },
+        "es": {
+          "text": "y lo llevó a Beaurain y lo retuvo allí",
+          "context": "Harold es llevado a la fortaleza de Guy en Beaurain. Se le trata como a un prisionero de gran valor y no como a un cautivo común."
+        },
+        "nl": {
+          "text": "en leidde hem naar Beaurain en hield hem daar vast",
+          "context": "Harold wordt naar Guy's bolwerk in Beaurain gebracht. Hij wordt behandeld als een waardevolle gevangene in plaats van als een gewone gevangene."
+        },
+        "pt": {
+          "text": "e o levou até Beaurain e o segurou lá",
+          "context": "Harold é levado para a fortaleza de Guy em Beaurain. Ele é tratado como um prisioneiro de alto valor, e não como um cativo comum."
+        },
+        "hi": {
+          "text": "और उसे ब्यूरेन के पास ले गए और उसे वहां रखा",
+          "context": "हेरोल्ड को ब्यूरेन में गाइ के गढ़ में ले जाया गया। उसके साथ एक सामान्य बंदी के बजाय एक उच्च मूल्य वाले कैदी के रूप में व्यवहार किया जाता है।"
+        },
+        "ar": {
+          "text": "وقاده إلى بورين واحتجزه هناك",
+          "context": "تم نقل هارولد إلى معقل جاي في بورين. يتم معاملته باعتباره سجينًا ذا قيمة عالية وليس أسيرًا عاديًا."
+        },
+        "bn": {
+          "text": "এবং তাকে বউরাইন নিয়ে গেল এবং সেখানে তাকে ধরে রাখল",
+          "context": "হ্যারল্ডকে বিউরাইন-এ গাইয়ের দুর্গে নিয়ে যাওয়া হয়। তাকে সাধারণ বন্দী না করে উচ্চ-মূল্যের বন্দী হিসাবে বিবেচনা করা হয়।"
+        }
+      }
+    },
+    {
+      "scene": "8",
+      "latin": "UBI HAROLD ET WIDO PARABOLANT",
+      "x": 71.6062399585941,
+      "y": 0.9801913375283208,
+      "translations": {
+        "en": {
+          "text": "Where Harold and Wido converse",
+          "context": "Guy and Harold converse. Guy is likely demanding a ransom or setting terms for Harold's captivity."
+        },
+        "zh": {
+          "text": "哈罗德和维多交谈的地方",
+          "context": "盖伊和哈罗德交谈。盖伊可能会索要赎金或为哈罗德的囚禁设定条件。"
+        },
+        "fr": {
+          "text": "Où Harold et Wido discutent",
+          "context": "Guy et Harold discutent. Guy exige probablement une rançon ou fixe les conditions de la captivité d'Harold."
+        },
+        "de": {
+          "text": "Wo Harold und Wido sich unterhalten",
+          "context": "Guy und Harold unterhalten sich. Guy verlangt wahrscheinlich ein Lösegeld oder legt Bedingungen für Harolds Gefangenschaft fest."
+        },
+        "es": {
+          "text": "Donde Harold y Wido conversan",
+          "context": "Guy y Harold conversan. Es probable que Guy exija un rescate o establezca condiciones para el cautiverio de Harold."
+        },
+        "nl": {
+          "text": "Waar Harold en Wido praten",
+          "context": "Guy en Harold praten. Guy eist waarschijnlijk losgeld of stelt voorwaarden voor de gevangenschap van Harold."
+        },
+        "pt": {
+          "text": "Onde Harold e Wido conversam",
+          "context": "Guy e Harold conversam. Guy provavelmente está exigindo um resgate ou estabelecendo termos para o cativeiro de Harold."
+        },
+        "hi": {
+          "text": "जहां हेरोल्ड और विडो बातचीत करते हैं",
+          "context": "गाइ और हेरोल्ड बातचीत करते हैं। गाइ संभवतः फिरौती की मांग कर रहा है या हेरोल्ड की कैद के लिए शर्तें तय कर रहा है।"
+        },
+        "ar": {
+          "text": "حيث يتحدث هارولد وويدو",
+          "context": "يتحدث جاي وهارولد. من المحتمل أن يطلب الرجل فدية أو يحدد شروط أسر هارولد."
+        },
+        "bn": {
+          "text": "যেখানে হ্যারল্ড এবং উইডো কথোপকথন করেন",
+          "context": "গাই এবং হ্যারল্ড কথা বলছেন। গাই সম্ভবত মুক্তিপণ দাবি করছে বা হ্যারল্ডের বন্দিত্বের শর্ত নির্ধারণ করছে।"
+        }
+      }
+    },
+    {
+      "scene": "9",
+      "latin": "UBI NUNTII WILLELMI DUCIS VENERUNT AD WIDONU",
+      "x": 80.38334087906543,
+      "y": 1.0142420538136014,
+      "translations": {
+        "en": {
+          "text": "Where the messengers of Duke William came to Wido",
+          "context": "Duke William of Normandy hears of Harold's capture and sends messengers to Guy of Ponthieu. William demands that Guy hand Harold over to him, as Guy is William's vassal."
+        },
+        "zh": {
+          "text": "威廉公爵的使者来到维多的地方",
+          "context": "诺曼底公爵威廉得知哈罗德被捕的消息后，派使者去见蓬蒂约的居伊。威廉要求盖伊将哈罗德交给他，因为盖伊是威廉的封臣。"
+        },
+        "fr": {
+          "text": "Où les messagers du duc William sont venus à Wido",
+          "context": "Le duc Guillaume de Normandie apprend la capture d'Harold et envoie des messagers à Guy de Ponthieu. William exige que Guy lui remette Harold, car Guy est le vassal de William."
+        },
+        "de": {
+          "text": "Wo die Boten Herzog Wilhelms nach Wido kamen",
+          "context": "Herzog Wilhelm von der Normandie erfährt von Harolds Gefangennahme und schickt Boten zu Guy von Ponthieu. William fordert Guy auf, Harold ihm auszuliefern, da Guy Williams Vasall ist."
+        },
+        "es": {
+          "text": "De dónde llegaron los mensajeros del duque William a Wido",
+          "context": "El duque Guillermo de Normandía se entera de la captura de Harold y envía mensajeros a Guy de Ponthieu. William exige que Guy le entregue a Harold, ya que Guy es vasallo de William."
+        },
+        "nl": {
+          "text": "Waar de boodschappers van hertog Willem naar Wido kwamen",
+          "context": "Hertog Willem van Normandië hoort van de gevangenneming van Harold en stuurt boodschappers naar Gwijde van Ponthieu. William eist dat Guy Harold aan hem overhandigt, aangezien Guy de vazal van William is."
+        },
+        "pt": {
+          "text": "Onde os mensageiros do duque William vieram para Wido",
+          "context": "O duque Guilherme da Normandia fica sabendo da captura de Haroldo e envia mensageiros a Guy de Ponthieu. William exige que Guy entregue Harold a ele, já que Guy é vassalo de William."
+        },
+        "hi": {
+          "text": "जहां ड्यूक विलियम के दूत विडो आये",
+          "context": "नॉर्मंडी के ड्यूक विलियम ने हेरोल्ड के पकड़े जाने के बारे में सुना और गाइ ऑफ पोंथियू के पास दूत भेजे। विलियम मांग करता है कि गाइ हेरोल्ड को उसे सौंप दे, क्योंकि गाइ विलियम का जागीरदार है।"
+        },
+        "ar": {
+          "text": "حيث جاء رسل الدوق ويليام إلى ويدو",
+          "context": "يسمع دوق نورماندي ويليام عن القبض على هارولد ويرسل رسلًا إلى جاي أوف بونثيو. يطلب ويليام من جاي تسليم هارولد إليه، لأن جاي هو تابع لوليام."
+        },
+        "bn": {
+          "text": "যেখানে উইডোর কাছে ডিউক উইলিয়ামের দূতরা এসেছিলেন",
+          "context": "নরম্যান্ডির ডিউক উইলিয়াম হ্যারল্ডের ক্যাপচারের কথা শুনেন এবং গাই অফ পন্থিউয়ের কাছে বার্তাবাহক পাঠান। উইলিয়াম দাবি করেন যে গাই হ্যারল্ডকে তার হাতে তুলে দেবেন, কারণ গাই উইলিয়ামের ভাসাল।"
+        }
+      }
+    },
+    {
+      "scene": "12",
+      "latin": "HIC VENIT NUNTIUS AD WILGELMUM DUCEM",
+      "x": 96.94651288268368,
+      "y": 1.4086119529922,
+      "translations": {
+        "en": {
+          "text": "Here the messenger came to Duke William",
+          "context": "A messenger returns to William to report on the situation with Count Guy."
+        },
+        "zh": {
+          "text": "使者来到威廉公爵那里",
+          "context": "一名信使返回威廉，向盖伊伯爵汇报情况。"
+        },
+        "fr": {
+          "text": "Ici, le messager est venu au duc William",
+          "context": "Un messager revient vers William pour lui rendre compte de la situation avec le comte Guy."
+        },
+        "de": {
+          "text": "Hier kam der Bote zu Herzog Wilhelm",
+          "context": "Ein Bote kehrt zu William zurück, um ihm von der Situation mit Graf Guy zu berichten."
+        },
+        "es": {
+          "text": "Aquí llegó el mensajero al duque William.",
+          "context": "Un mensajero regresa con William para informarle sobre la situación con el Conde Guy."
+        },
+        "nl": {
+          "text": "Hier kwam de boodschapper naar hertog Willem",
+          "context": "Een boodschapper keert terug naar William om verslag uit te brengen over de situatie met graaf Guy."
+        },
+        "pt": {
+          "text": "Aqui o mensageiro veio ao duque William",
+          "context": "Um mensageiro retorna a William para relatar a situação com o conde Guy."
+        },
+        "hi": {
+          "text": "इधर दूत ड्यूक विलियम के पास आया",
+          "context": "काउंट गाइ की स्थिति के बारे में रिपोर्ट करने के लिए एक दूत विलियम के पास लौटता है।"
+        },
+        "ar": {
+          "text": "هنا جاء الرسول إلى الدوق ويليام",
+          "context": "يعود الرسول إلى ويليام للإبلاغ عن الموقف مع الكونت جاي."
+        },
+        "bn": {
+          "text": "এখানে দূত এসেছিলেন ডিউক উইলিয়ামের কাছে",
+          "context": "একজন বার্তাবাহক কাউন্ট গাইয়ের সাথে পরিস্থিতি সম্পর্কে রিপোর্ট করতে উইলিয়ামের কাছে ফিরে আসেন।"
+        }
+      }
+    },
+    {
+      "scene": "13",
+      "latin": "HIC WIDO ADDUXIT HAROLDUM AD WILGELMUM NORMANNORUM DUCEM",
+      "x": 104.92262353308344,
+      "y": 0.8119941007706337,
+      "translations": {
+        "en": {
+          "text": "Here Wido brought Harold to William, Duke of the Normans",
+          "context": "Guy complies with William's demands and hands Harold over. This shifts Harold from being Guy's prisoner to William's 'guest' (and political pawn)."
+        },
+        "zh": {
+          "text": "维多在这里将哈罗德带到诺曼公爵威廉",
+          "context": "盖伊遵守了威廉的要求，将哈罗德交给了他。这使得哈罗德从盖伊的囚犯变成了威廉的“客人”（和政治棋子）。"
+        },
+        "fr": {
+          "text": "Ici Wido a amené Harold à Guillaume, duc des Normands",
+          "context": "Guy se conforme aux demandes de William et remet Harold. Cela fait passer Harold du statut de prisonnier de Guy à celui d'« invité » de William (et de pion politique)."
+        },
+        "de": {
+          "text": "Hier brachte Wido Harold zu Wilhelm, dem Herzog der Normannen",
+          "context": "Guy kommt Williams Forderungen nach und übergibt Harold. Dadurch wird Harold von Guys Gefangenem zu Williams „Gast“ (und politischer Schachfigur)."
+        },
+        "es": {
+          "text": "Aquí Wido llevó a Harold a William, duque de los normandos.",
+          "context": "Guy cumple con las demandas de William y entrega a Harold. Esto hace que Harold pase de ser el prisionero de Guy a ser el \"invitado\" (y peón político) de William."
+        },
+        "nl": {
+          "text": "Hier bracht Wido Harold naar William, hertog van de Noormannen",
+          "context": "Guy voldoet aan de eisen van William en overhandigt Harold. Hierdoor verandert Harold van Guy's gevangene in William's 'gast' (en politieke pion)."
+        },
+        "pt": {
+          "text": "Aqui Wido trouxe Harold para William, duque dos normandos",
+          "context": "Guy cumpre as exigências de William e entrega Harold. Isso muda Harold de prisioneiro de Guy para 'convidado' de William (e peão político)."
+        },
+        "hi": {
+          "text": "यहां विडो हेरोल्ड को नॉर्मन्स के ड्यूक विलियम के पास ले आया",
+          "context": "गाइ विलियम की मांगों का अनुपालन करता है और हेरोल्ड को सौंप देता है। यह हेरोल्ड को गाइ के कैदी से विलियम के 'अतिथि' (और राजनीतिक मोहरे) में बदल देता है।"
+        },
+        "ar": {
+          "text": "هنا أحضر ويدو هارولد إلى ويليام، دوق النورمان",
+          "context": "يمتثل الرجل لمطالب ويليام ويسلم هارولد. هذا يحول هارولد من كونه سجين جاي إلى \"ضيف\" ويليام (والبيدق السياسي)."
+        },
+        "bn": {
+          "text": "এখানে উইডো হ্যারল্ডকে উইলিয়াম, ডিউক অফ নর্মানসের কাছে নিয়ে আসেন",
+          "context": "গাই উইলিয়ামের দাবি মেনে চলে এবং হ্যারল্ডের হাতে তুলে দেয়। এটি হ্যারল্ডকে গাইয়ের বন্দী থেকে উইলিয়ামের 'অতিথি' (এবং রাজনৈতিক প্যান) এ স্থানান্তরিত করে।"
+        }
+      }
+    },
+    {
+      "scene": "14",
+      "latin": "HIC DUX WILGELM CUM HAROLDO VENIT AD PALATIUM SUUM",
+      "x": 122.57572476460798,
+      "y": 0.8318549147706894,
+      "translations": {
+        "en": {
+          "text": "Here Duke William came to his palace with Harold",
+          "context": "William takes Harold back to his palace at Rouen. This begins Harold's time accompanying William on campaigns in Normandy."
+        },
+        "zh": {
+          "text": "威廉公爵与哈罗德一起来到他的宫殿",
+          "context": "威廉将哈罗德带回他位于鲁昂的宫殿。哈罗德陪伴威廉参加诺曼底战役的时间由此开始。"
+        },
+        "fr": {
+          "text": "Ici, le duc William est venu à son palais avec Harold",
+          "context": "William ramène Harold dans son palais de Rouen. C'est ainsi que commence le temps d'Harold qui accompagne William lors des campagnes en Normandie."
+        },
+        "de": {
+          "text": "Hier kam Herzog Wilhelm mit Harold in seinen Palast",
+          "context": "William bringt Harold zurück in seinen Palast in Rouen. Damit beginnt Harolds Zeit, William auf Feldzügen in der Normandie zu begleiten."
+        },
+        "es": {
+          "text": "Aquí el duque William llegó a su palacio con Harold.",
+          "context": "William lleva a Harold de regreso a su palacio en Rouen. Esto comienza el tiempo que Harold acompaña a William en las campañas en Normandía."
+        },
+        "nl": {
+          "text": "Hier kwam hertog Willem met Harold naar zijn paleis",
+          "context": "William neemt Harold mee terug naar zijn paleis in Rouen. Dit begint de tijd dat Harold William begeleidt op campagnes in Normandië."
+        },
+        "pt": {
+          "text": "Aqui o duque William veio ao seu palácio com Harold",
+          "context": "William leva Harold de volta ao seu palácio em Rouen. Isso dá início ao tempo de Harold acompanhando William em campanhas na Normandia."
+        },
+        "hi": {
+          "text": "इधर ड्यूक विलियम हेरोल्ड के साथ अपने महल में आये",
+          "context": "विलियम हेरोल्ड को रूएन स्थित अपने महल में वापस ले जाता है। यह नॉर्मंडी में अभियानों पर विलियम के साथ हेरोल्ड के समय की शुरुआत करता है।"
+        },
+        "ar": {
+          "text": "هنا جاء الدوق ويليام إلى قصره مع هارولد",
+          "context": "ويليام يعيد هارولد إلى قصره في روان. يبدأ هذا وقت هارولد في مرافقة ويليام في الحملات في نورماندي."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়াম হ্যারল্ডের সাথে তার প্রাসাদে আসেন",
+          "context": "উইলিয়াম হ্যারল্ডকে রুয়েনে তার প্রাসাদে ফিরিয়ে নিয়ে যায়। এটি নরম্যান্ডিতে প্রচারে উইলিয়ামের সাথে হ্যারল্ডের সময় শুরু করে।"
+        }
+      }
+    },
+    {
+      "scene": "15",
+      "latin": "UBI UNUS CLERICUS ET AELFGYVA",
+      "x": 136.23820368821472,
+      "y": 0.7743740758593036,
+      "translations": {
+        "en": {
+          "text": "Where a certain cleric and Aelfgyva",
+          "context": "This is one of the most mysterious scenes in the tapestry. Aelfgyva is an English name, and a cleric is touching her face or striking her. Its exact meaning has been lost to history, but it likely refers to a scandal familiar to contemporary audiences."
+        },
+        "zh": {
+          "text": "某个牧师和 Aelfgyva 所在的地方",
+          "context": "这是挂毯中最神秘的场景之一。 Aelfgyva 是一个英文名字，一名牧师正在触摸她的脸或殴打她。它的确切含义已被历史遗忘，但它可能指的是当代观众熟悉的丑闻。"
+        },
+        "fr": {
+          "text": "Où un certain clerc et Aelfgyva",
+          "context": "C'est l'une des scènes les plus mystérieuses de la tapisserie. Aelfgyva est un nom anglais et un clerc lui touche le visage ou la frappe. Sa signification exacte a été perdue dans l’histoire, mais il fait probablement référence à un scandale familier au public contemporain."
+        },
+        "de": {
+          "text": "Wo ein gewisser Geistlicher und Aelfgyva",
+          "context": "Dies ist eine der geheimnisvollsten Szenen im Wandteppich. Aelfgyva ist ein englischer Name und ein Geistlicher berührt ihr Gesicht oder schlägt sie. Die genaue Bedeutung ist in der Geschichte verloren gegangen, aber es bezieht sich wahrscheinlich auf einen Skandal, der dem heutigen Publikum bekannt ist."
+        },
+        "es": {
+          "text": "Donde cierto clérigo y Aelfgyva",
+          "context": "Esta es una de las escenas más misteriosas del tapiz. Aelfgyva es un nombre inglés y un clérigo le toca la cara o la golpea. Su significado exacto se ha perdido en la historia, pero probablemente se refiere a un escándalo familiar para el público contemporáneo."
+        },
+        "nl": {
+          "text": "Waar een bepaalde geestelijke en Aelfgyva",
+          "context": "Dit is een van de meest mysterieuze scènes op het tapijt. Aelfgyva is een Engelse naam en een geestelijke raakt haar gezicht aan of slaat haar. De exacte betekenis ervan is in de geschiedenis verloren gegaan, maar verwijst waarschijnlijk naar een schandaal dat bekend is bij het hedendaagse publiek."
+        },
+        "pt": {
+          "text": "Onde um certo clérigo e Aelfgyva",
+          "context": "Esta é uma das cenas mais misteriosas da tapeçaria. Aelfgyva é um nome inglês, e um clérigo está tocando seu rosto ou batendo nela. Seu significado exato se perdeu na história, mas provavelmente se refere a um escândalo familiar ao público contemporâneo."
+        },
+        "hi": {
+          "text": "जहां एक निश्चित मौलवी और एल्फग्यवा",
+          "context": "यह टेपेस्ट्री के सबसे रहस्यमय दृश्यों में से एक है। एल्फग्यवा एक अंग्रेजी नाम है, और एक मौलवी उसके चेहरे को छू रहा है या उस पर प्रहार कर रहा है। इसका सटीक अर्थ इतिहास में खो गया है, लेकिन संभवतः यह समकालीन दर्शकों से परिचित एक घोटाले को संदर्भित करता है।"
+        },
+        "ar": {
+          "text": "حيث يوجد رجل دين معين وألفجيفا",
+          "context": "هذا هو واحد من أكثر المشاهد الغامضة في النسيج. Aelfgyva هو اسم إنجليزي، ورجل الدين يلمس وجهها أو يضربها. لقد فقد التاريخ معناه الدقيق، لكنه يشير على الأرجح إلى فضيحة مألوفة لدى الجماهير المعاصرة."
+        },
+        "bn": {
+          "text": "যেখানে একটি নির্দিষ্ট আলেম এবং Aelfgyva",
+          "context": "এটি ট্যাপেস্ট্রির সবচেয়ে রহস্যময় দৃশ্যগুলির মধ্যে একটি। Aelfgyva একটি ইংরেজি নাম, এবং একজন ধর্মগুরু তার মুখ স্পর্শ করছেন বা তাকে আঘাত করছেন। এর সঠিক অর্থ ইতিহাসে হারিয়ে গেছে, তবে এটি সম্ভবত সমসাময়িক দর্শকদের কাছে পরিচিত একটি কেলেঙ্কারিকে বোঝায়।"
+        }
+      }
+    },
+    {
+      "scene": "16",
+      "latin": "HIC WILLELM DUX ET EXERCITUS EIUS VENERUNT AD MONTEM MICHAELIS",
+      "x": 140.0509868552144,
+      "y": 1.0729571090662988,
+      "translations": {
+        "en": {
+          "text": "Here Duke William and his army came to Mont Saint-Michel",
+          "context": "William and Harold go on a military campaign against Conan II, Duke of Brittany. They pass Mont Saint-Michel, a famous abbey on a tidal island."
+        },
+        "zh": {
+          "text": "威廉公爵和他的军队来到了圣米歇尔山",
+          "context": "威廉和哈罗德对布列塔尼公爵柯南二世发动军事行动。他们经过圣米歇尔山，一座位于潮汐岛上的著名修道院。"
+        },
+        "fr": {
+          "text": "Ici le duc Guillaume et son armée sont venus au Mont Saint-Michel",
+          "context": "William et Harold partent en campagne militaire contre Conan II, duc de Bretagne. Ils passent devant le Mont Saint-Michel, une célèbre abbaye située sur une île à marée."
+        },
+        "de": {
+          "text": "Hier kamen Herzog Wilhelm und seine Armee zum Mont Saint-Michel",
+          "context": "William und Harold unternehmen einen Feldzug gegen Conan II., Herzog der Bretagne. Sie passieren Mont Saint-Michel, eine berühmte Abtei auf einer Gezeiteninsel."
+        },
+        "es": {
+          "text": "Aquí el duque William y su ejército llegaron al Mont Saint-Michel.",
+          "context": "William y Harold emprenden una campaña militar contra Conan II, duque de Bretaña. Pasan por el Mont Saint-Michel, una famosa abadía en una isla mareal."
+        },
+        "nl": {
+          "text": "Hier kwamen hertog Willem en zijn leger naar Mont Saint-Michel",
+          "context": "William en Harold gaan op een militaire campagne tegen Conan II, hertog van Bretagne. Ze passeren Mont Saint-Michel, een beroemde abdij op een getijdeneiland."
+        },
+        "pt": {
+          "text": "Aqui o duque William e seu exército chegaram ao Mont Saint-Michel",
+          "context": "Guilherme e Haroldo iniciam uma campanha militar contra Conan II, duque da Bretanha. Eles passam pelo Mont Saint-Michel, uma famosa abadia em uma ilha de maré."
+        },
+        "hi": {
+          "text": "यहां ड्यूक विलियम और उनकी सेना मॉन्ट सेंट-मिशेल आए",
+          "context": "विलियम और हेरोल्ड कॉनन द्वितीय, ड्यूक ऑफ ब्रिटनी के खिलाफ एक सैन्य अभियान पर जाते हैं। वे मोंट सेंट-मिशेल से गुजरते हैं, जो एक ज्वारीय द्वीप पर एक प्रसिद्ध मठ है।"
+        },
+        "ar": {
+          "text": "هنا وصل الدوق ويليام وجيشه إلى جبل القديس ميشيل",
+          "context": "يذهب ويليام وهارولد في حملة عسكرية ضد كونان الثاني، دوق بريتاني. يمرون بجبل القديس ميشيل، وهو دير شهير يقع على جزيرة مدية."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়াম এবং তার বাহিনী মন্ট সেন্ট-মিশেল আসেন",
+          "context": "উইলিয়াম এবং হ্যারল্ড ব্রিটানির ডিউক দ্বিতীয় কোনানের বিরুদ্ধে সামরিক অভিযানে যান। তারা মন্ট সেন্ট-মিশেল, একটি জোয়ার দ্বীপের একটি বিখ্যাত অ্যাবে অতিক্রম করে।"
+        }
+      }
+    },
+    {
+      "scene": "17",
+      "latin": "ET HIC TRANSIERUNT FLUMEN COSNONIS",
+      "x": 152.26111085177152,
+      "y": 1.4489788385071898,
+      "translations": {
+        "en": {
+          "text": "and here they crossed the river Couesnon",
+          "context": "The army crosses the river Couesnon, the border between Normandy and Brittany. The shifting sands of the river mouth were incredibly dangerous."
+        },
+        "zh": {
+          "text": "他们在这里渡过库埃农河",
+          "context": "军队渡过诺曼底和布列塔尼的边界库埃农河。河口的流沙极其危险。"
+        },
+        "fr": {
+          "text": "et ici ils traversèrent la rivière Couesnon",
+          "context": "L'armée traverse la rivière Couesnon, frontière entre la Normandie et la Bretagne. Les sables mouvants de l’embouchure de la rivière étaient incroyablement dangereux."
+        },
+        "de": {
+          "text": "und hier überquerten sie den Fluss Couesnon",
+          "context": "Die Armee überquert den Fluss Couesnon, die Grenze zwischen der Normandie und der Bretagne. Der Flugsand an der Flussmündung war unglaublich gefährlich."
+        },
+        "es": {
+          "text": "y aquí cruzaron el río Couesnon",
+          "context": "El ejército cruza el río Couesnon, frontera entre Normandía y Bretaña. Las arenas movedizas de la desembocadura del río eran increíblemente peligrosas."
+        },
+        "nl": {
+          "text": "en hier staken ze de rivier de Couesnon over",
+          "context": "Het leger steekt de rivier de Couesnon over, de grens tussen Normandië en Bretagne. Het stuifzand van de riviermonding was ongelooflijk gevaarlijk."
+        },
+        "pt": {
+          "text": "e aqui eles cruzaram o rio Couesnon",
+          "context": "O exército atravessa o rio Couesnon, fronteira entre a Normandia e a Bretanha. As areias movediças da foz do rio eram incrivelmente perigosas."
+        },
+        "hi": {
+          "text": "और यहां उन्होंने कुएस्नोन नदी पार की",
+          "context": "सेना नॉर्मंडी और ब्रिटनी के बीच की सीमा, कुएस्नोन नदी को पार करती है। नदी के मुहाने की बदलती रेत अविश्वसनीय रूप से खतरनाक थी।"
+        },
+        "ar": {
+          "text": "وهنا عبروا نهر كويسون",
+          "context": "يعبر الجيش نهر كويسنون، الحدود بين نورماندي وبريتاني. كانت الرمال المتحركة عند مصب النهر خطيرة بشكل لا يصدق."
+        },
+        "bn": {
+          "text": "এবং এখানে তারা Couesnon নদী পার হয়",
+          "context": "সেনাবাহিনী নর্মান্ডি এবং ব্রিটানির মধ্যবর্তী সীমানা কুয়েসনন নদী অতিক্রম করে। নদীর মুখের নাড়াচাড়া বালি ছিল অবিশ্বাস্যভাবে বিপজ্জনক।"
+        }
+      }
+    },
+    {
+      "scene": "18",
+      "latin": "HIC HAROLD DUX TRAHEBAT EOS DE ARENA",
+      "x": 154.5951294170799,
+      "y": 1,
+      "translations": {
+        "en": {
+          "text": "Here Duke Harold pulled them from the sand",
+          "context": "Several Norman soldiers sink into the quicksand. Harold, shown displaying great physical strength, rescues two Norman soldiers from drowning."
+        },
+        "zh": {
+          "text": "哈罗德公爵在这里把他们从沙子里拉出来",
+          "context": "几名诺曼士兵陷入流沙之中。哈罗德展现出强大的体力，救起了两名落水的诺曼士兵。"
+        },
+        "fr": {
+          "text": "Ici, le duc Harold les a retirés du sable",
+          "context": "Plusieurs soldats normands s'enfoncent dans les sables mouvants. Harold, montré faisant preuve d'une grande force physique, sauve deux soldats normands de la noyade."
+        },
+        "de": {
+          "text": "Hier zog Herzog Harold sie aus dem Sand",
+          "context": "Mehrere normannische Soldaten versinken im Treibsand. Harold zeigt große körperliche Stärke und rettet zwei normannische Soldaten vor dem Ertrinken."
+        },
+        "es": {
+          "text": "Aquí el Duque Harold los sacó de la arena.",
+          "context": "Varios soldados normandos se hunden en las arenas movedizas. Harold, que muestra una gran fuerza física, rescata a dos soldados normandos de ahogarse."
+        },
+        "nl": {
+          "text": "Hier trok hertog Harold ze uit het zand",
+          "context": "Verschillende Normandische soldaten zinken in het drijfzand. Harold, getoond met grote fysieke kracht, redt twee Normandische soldaten van de verdrinkingsdood."
+        },
+        "pt": {
+          "text": "Aqui o duque Harold os tirou da areia",
+          "context": "Vários soldados normandos afundam na areia movediça. Harold, mostrado exibindo grande força física, resgata dois soldados normandos do afogamento."
+        },
+        "hi": {
+          "text": "यहां ड्यूक हेरोल्ड ने उन्हें रेत से निकाला",
+          "context": "कई नॉर्मन सैनिक रेत में डूब गए। हेरोल्ड को महान शारीरिक शक्ति का प्रदर्शन करते हुए दो नॉर्मन सैनिकों को डूबने से बचाया गया।"
+        },
+        "ar": {
+          "text": "هنا أخرجهم الدوق هارولد من الرمال",
+          "context": "يغرق العديد من الجنود النورمانديين في الرمال المتحركة. هارولد، الذي يظهر وهو يظهر قوة بدنية كبيرة، ينقذ جنديين نورمانديين من الغرق."
+        },
+        "bn": {
+          "text": "এখানে ডিউক হ্যারল্ড তাদের বালি থেকে টানলেন",
+          "context": "বেশ কিছু নরম্যান সৈন্য কুইকস্যান্ডে ডুবে যায়। হ্যারল্ড, দুর্দান্ত শারীরিক শক্তি প্রদর্শন করে, দুই নর্মান সৈন্যকে ডুবে যাওয়া থেকে উদ্ধার করে।"
+        }
+      }
+    },
+    {
+      "scene": "19",
+      "latin": "ET VENERUNT AD DOL ET CONAN FUGA VERTIT",
+      "x": 160.88000357387793,
+      "y": 1.4396478055897146,
+      "translations": {
+        "en": {
+          "text": "and they came to Dol and Conan fled",
+          "context": "The army arrives at Dol, forcing Conan to flee down a rope from his castle."
+        },
+        "zh": {
+          "text": "他们来到了多尔，柯南逃走了",
+          "context": "军队到达多尔，迫使柯南从城堡里用绳子逃走。"
+        },
+        "fr": {
+          "text": "et ils sont venus à Dol et Conan s'est enfui",
+          "context": "L'armée arrive à Dol, forçant Conan à fuir son château en empruntant une corde."
+        },
+        "de": {
+          "text": "und sie kamen nach Dol und Conan floh",
+          "context": "Die Armee erreicht Dol und zwingt Conan, an einem Seil aus seiner Burg zu fliehen."
+        },
+        "es": {
+          "text": "y llegaron a Dol y Conan huyó",
+          "context": "El ejército llega a Dol, lo que obliga a Conan a huir por una cuerda desde su castillo."
+        },
+        "nl": {
+          "text": "en ze kwamen bij Dol en Conan vluchtte",
+          "context": "Het leger arriveert bij Dol en dwingt Conan via een touw uit zijn kasteel te vluchten."
+        },
+        "pt": {
+          "text": "e eles vieram para Dol e Conan fugiram",
+          "context": "O exército chega a Dol, forçando Conan a fugir de seu castelo por uma corda."
+        },
+        "hi": {
+          "text": "और वे डोल के पास आये और कॉनन भाग गये",
+          "context": "सेना डोल पर पहुंचती है, जिससे कॉनन को अपने महल से रस्सी के सहारे भागने पर मजबूर होना पड़ता है।"
+        },
+        "ar": {
+          "text": "وجاءوا إلى دول وهرب كونان",
+          "context": "يصل الجيش إلى دول، مما يجبر كونان على الفرار بحبل من قلعته."
+        },
+        "bn": {
+          "text": "এবং তারা ডলের কাছে আসে এবং কানন পালিয়ে যায়",
+          "context": "সেনাবাহিনী ডলে পৌঁছে, কাননকে তার দুর্গ থেকে একটি দড়ি নামিয়ে পালিয়ে যেতে বাধ্য করে।"
+        }
+      }
+    },
+    {
+      "scene": "19.1",
+      "latin": "HIC MILITES WILLELMI DUCIS PUGNANT CONTRA DINANTES",
+      "x": 173.54291971048562,
+      "y": 1.2318878233993094,
+      "translations": {
+        "en": {
+          "text": "Here the knights of Duke William fight against the men of Dinan",
+          "context": "The Norman army lays siege to the town of Dinan, fighting the Bretons."
+        },
+        "zh": {
+          "text": "威廉公爵的骑士在这里与迪南的人作战",
+          "context": "诺曼军队围攻迪南镇，与布列塔尼人作战。"
+        },
+        "fr": {
+          "text": "Ici les chevaliers du duc Guillaume combattent les hommes de Dinan",
+          "context": "L'armée normande assiège la ville de Dinan et combat les Bretons."
+        },
+        "de": {
+          "text": "Hier kämpfen die Ritter von Herzog Wilhelm gegen die Männer von Dinan",
+          "context": "Die normannische Armee belagert die Stadt Dinan und kämpft gegen die Bretonen."
+        },
+        "es": {
+          "text": "Aquí los caballeros del duque Guillermo luchan contra los hombres de Dinan.",
+          "context": "El ejército normando sitia la ciudad de Dinan, luchando contra los bretones."
+        },
+        "nl": {
+          "text": "Hier vechten de ridders van hertog Willem tegen de mannen van Dinan",
+          "context": "Het Normandische leger belegert de stad Dinan en vecht tegen de Bretons."
+        },
+        "pt": {
+          "text": "Aqui os cavaleiros do duque William lutam contra os homens de Dinan",
+          "context": "O exército normando sitia a cidade de Dinan, lutando contra os bretões."
+        },
+        "hi": {
+          "text": "यहां ड्यूक विलियम के शूरवीर दीनान के लोगों के खिलाफ लड़ते हैं",
+          "context": "नॉर्मन सेना ने ब्रेटन से लड़ते हुए दीनान शहर की घेराबंदी कर दी।"
+        },
+        "ar": {
+          "text": "هنا يقاتل فرسان الدوق ويليام ضد رجال دينان",
+          "context": "يحاصر الجيش النورماندي بلدة دينان ويقاتل البريتونيين."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়ামের নাইটরা দিনানের পুরুষদের বিরুদ্ধে লড়াই করে",
+          "context": "নর্মান সেনাবাহিনী ব্রেটনদের সাথে যুদ্ধ করে দিনান শহর অবরোধ করে।"
+        }
+      }
+    },
+    {
+      "scene": "19.2",
+      "latin": "ET CUNAN CLAVES PORREXIT",
+      "x": 186.23909696347258,
+      "y": 1.269606159125943,
+      "translations": {
+        "en": {
+          "text": "and Conan surrendered the keys",
+          "context": "Conan II surrenders Dinan to William, passing the keys to the castle on the tip of a lance."
+        },
+        "zh": {
+          "text": "柯南交出了钥匙",
+          "context": "柯南二世将迪南交给威廉，并用长矛尖传递了城堡的钥匙。"
+        },
+        "fr": {
+          "text": "et Conan a rendu les clés",
+          "context": "Conan II rend Dinan à Guillaume, lui transmettant les clés du château au bout d'une lance."
+        },
+        "de": {
+          "text": "und Conan gab die Schlüssel ab",
+          "context": "Conan II. übergibt Dinan an William und reicht ihm mit einer Lanzenspitze die Schlüssel zum Schloss."
+        },
+        "es": {
+          "text": "y Conan entregó las llaves",
+          "context": "Conan II entrega Dinan a William y le pasa las llaves del castillo en la punta de una lanza."
+        },
+        "nl": {
+          "text": "en Conan gaf de sleutels in",
+          "context": "Conan II geeft Dinan over aan William en geeft de sleutels van het kasteel door met de punt van een lans."
+        },
+        "pt": {
+          "text": "e Conan entregou as chaves",
+          "context": "Conan II entrega Dinan a William, passando as chaves do castelo na ponta de uma lança."
+        },
+        "hi": {
+          "text": "और कॉनन ने चाबियाँ सरेंडर कर दीं",
+          "context": "कॉनन II ने भाले की नोक पर महल की चाबियाँ सौंपते हुए दीनान को विलियम को सौंप दिया।"
+        },
+        "ar": {
+          "text": "وسلم كونان المفاتيح",
+          "context": "يسلم كونان الثاني دينان إلى ويليام، ويمرر مفاتيح القلعة على طرف رمح."
+        },
+        "bn": {
+          "text": "এবং কোনান চাবি সমর্পণ",
+          "context": "দ্বিতীয় কোনান দিনানকে উইলিয়ামের কাছে আত্মসমর্পণ করেন, একটি ল্যান্সের ডগায় দুর্গের চাবি দিয়ে যান।"
+        }
+      }
+    },
+    {
+      "scene": "21",
+      "latin": "HIC WILLELM DEDIT ARMA HAROLDO",
+      "x": 188.3908042624155,
+      "y": 0.8442762156566235,
+      "translations": {
+        "en": {
+          "text": "Here William gave arms to Harold",
+          "context": "William rewards Harold for his bravery in the campaign by giving him arms (knighting him). This cements a feudal bond where Harold becomes William's subordinate in the Norman tradition."
+        },
+        "zh": {
+          "text": "威廉在这里向哈罗德伸出了武器",
+          "context": "威廉授予哈罗德武器（授予他爵位），以表彰他在战役中的勇敢。这巩固了封建纽带，哈罗德在诺曼传统中成为威廉的下属。"
+        },
+        "fr": {
+          "text": "Ici, William a donné des armes à Harold",
+          "context": "William récompense Harold pour sa bravoure dans la campagne en lui donnant des armes (en le faisant chevalier). Cela cimente un lien féodal où Harold devient le subordonné de William dans la tradition normande."
+        },
+        "de": {
+          "text": "Hier gab William Harold die Waffen",
+          "context": "William belohnt Harold für seine Tapferkeit im Feldzug, indem er ihm Waffen schenkt (ihn zum Ritter schlägt). Dies festigt eine feudale Bindung, in der Harold in der normannischen Tradition Williams Untergebener wird."
+        },
+        "es": {
+          "text": "Aquí William le dio armas a Harold.",
+          "context": "William recompensa a Harold por su valentía en la campaña dándole armas (nombrandole caballero). Esto consolida un vínculo feudal en el que Harold se convierte en subordinado de William en la tradición normanda."
+        },
+        "nl": {
+          "text": "Hier gaf William de wapens aan Harold",
+          "context": "William beloont Harold voor zijn moed in de campagne door hem wapens te geven (hem tot ridder te slaan). Dit versterkt een feodale band waarbij Harold William's ondergeschikte wordt in de Normandische traditie."
+        },
+        "pt": {
+          "text": "Aqui William deu armas a Harold",
+          "context": "William recompensa Harold por sua bravura na campanha, dando-lhe armas (tornando-o cavaleiro). Isto cimenta um vínculo feudal onde Haroldo se torna subordinado de Guilherme na tradição normanda."
+        },
+        "hi": {
+          "text": "यहां विलियम ने हेरोल्ड को हथियार दिये",
+          "context": "विलियम ने अभियान में हेरोल्ड को उसकी बहादुरी के लिए हथियार देकर (उसे नाइट की उपाधि देकर) पुरस्कृत किया। यह एक सामंती बंधन को मजबूत करता है जहां हेरोल्ड नॉर्मन परंपरा में विलियम का अधीनस्थ बन जाता है।"
+        },
+        "ar": {
+          "text": "هنا أعطى ويليام الأسلحة لهارولد",
+          "context": "يكافئ ويليام هارولد على شجاعته في الحملة بمنحه الأسلحة (منحه لقب فارس). يؤدي هذا إلى ترسيخ الرابطة الإقطاعية حيث يصبح هارولد تابعًا لويليام في التقليد النورماندي."
+        },
+        "bn": {
+          "text": "এখানে উইলিয়াম হ্যারল্ডকে অস্ত্র দেন",
+          "context": "উইলিয়াম হ্যারল্ডকে অস্ত্র দিয়ে অভিযানে তার সাহসিকতার জন্য পুরস্কৃত করেন (তাকে নাইট করে)। এটি একটি সামন্ততান্ত্রিক বন্ধনকে দৃঢ় করে যেখানে হ্যারল্ড নরম্যান ঐতিহ্যে উইলিয়ামের অধস্তন হন।"
+        }
+      }
+    },
+    {
+      "scene": "22",
+      "latin": "HIE",
+      "x": 195.39875799705865,
+      "y": 0.848426818398365,
+      "translations": {
+        "en": {
+          "text": "Here William came to Bayeux",
+          "context": "The army arrives in Bayeux, the seat of Bishop Odo (William's half-brother), who likely commissioned this tapestry."
+        },
+        "zh": {
+          "text": "威廉来到了巴约",
+          "context": "军队抵达巴约，这是奥多主教（威廉同父异母的兄弟）的所在地，这幅挂毯很可能是他委托制作的。"
+        },
+        "fr": {
+          "text": "Ici William est venu à Bayeux",
+          "context": "L'armée arrive à Bayeux, siège de Mgr Odo (demi-frère de Guillaume), qui a probablement commandé cette tapisserie."
+        },
+        "de": {
+          "text": "Hier kam Wilhelm nach Bayeux",
+          "context": "Die Armee trifft in Bayeux ein, dem Sitz von Bischof Odo (Wilhelms Halbbruder), der diesen Wandteppich wahrscheinlich in Auftrag gegeben hat."
+        },
+        "es": {
+          "text": "Aquí William llegó a Bayeux.",
+          "context": "El ejército llega a Bayeux, la sede del obispo Odo (medio hermano de William), quien probablemente encargó este tapiz."
+        },
+        "nl": {
+          "text": "Hier kwam William naar Bayeux",
+          "context": "Het leger arriveert in Bayeux, de zetel van bisschop Odo (de halfbroer van Willem), die waarschijnlijk opdracht heeft gegeven voor dit wandtapijt."
+        },
+        "pt": {
+          "text": "Aqui William veio para Bayeux",
+          "context": "O exército chega a Bayeux, residência do bispo Odo (meio-irmão de Guilherme), que provavelmente encomendou esta tapeçaria."
+        },
+        "hi": {
+          "text": "इधर विलियम बायेक्स आये",
+          "context": "सेना बिशप ओडो (विलियम के सौतेले भाई) की सीट बेयक्स में पहुंचती है, जिसने संभवतः इस टेपेस्ट्री को चालू किया था।"
+        },
+        "ar": {
+          "text": "هنا جاء ويليام إلى بايو",
+          "context": "يصل الجيش إلى بايو، مقر الأسقف أودو (الأخ غير الشقيق لوليام)، الذي من المحتمل أن يكون هو من أمر بهذا النسيج."
+        },
+        "bn": {
+          "text": "এখানে উইলিয়াম Bayeux আসেন",
+          "context": "সেনাবাহিনী বিশপ ওডো (উইলিয়ামের সৎ ভাই) এর আসন বেয়েক্সে পৌঁছেছে, যিনি সম্ভবত এই ট্যাপেস্ট্রিটি কমিশন করেছিলেন।"
+        }
+      }
+    },
+    {
+      "scene": "23",
+      "latin": "UBI HAROLD SACRAMENTUM FECIT WILLELMO DUCI",
+      "x": 202.54337663935826,
+      "y": 1.4674639628106203,
+      "translations": {
+        "en": {
+          "text": "Where Harold made an oath to Duke William",
+          "context": "The climax of the Norman narrative: Harold swears a sacred oath on holy relics to support William's claim to the English throne. By later breaking this oath, Harold is cast as a perjurer, justifying William's invasion."
+        },
+        "zh": {
+          "text": "哈罗德向威廉公爵宣誓的地方",
+          "context": "诺曼叙事的高潮：哈罗德对着圣物宣誓支持威廉继承英国王位。后来哈罗德违背了这个誓言，被认定为伪证者，为威廉的入侵辩护。"
+        },
+        "fr": {
+          "text": "Où Harold a prêté serment au duc William",
+          "context": "Le point culminant du récit normand : Harold prête un serment sacré sur des reliques sacrées pour soutenir la prétention de Guillaume au trône d'Angleterre. En rompant plus tard ce serment, Harold est présenté comme un parjure, justifiant l'invasion de William."
+        },
+        "de": {
+          "text": "Wo Harold Herzog Wilhelm einen Eid leistete",
+          "context": "Der Höhepunkt der normannischen Erzählung: Harold schwört einen heiligen Eid auf heilige Reliquien, um Williams Anspruch auf den englischen Thron zu unterstützen. Durch den späteren Bruch dieses Eides wird Harold als Meineidiger dargestellt, was Williams Invasion rechtfertigt."
+        },
+        "es": {
+          "text": "Donde Harold le hizo un juramento al duque William",
+          "context": "El clímax de la narrativa normanda: Harold hace un juramento sagrado sobre reliquias sagradas para apoyar el reclamo de William al trono inglés. Al romper más tarde este juramento, Harold es considerado un perjuro, lo que justifica la invasión de William."
+        },
+        "nl": {
+          "text": "Waar Harold een eed aflegde aan hertog Willem",
+          "context": "Het hoogtepunt van het Normandische verhaal: Harold zweert een heilige eed op heilige relikwieën om William's aanspraak op de Engelse troon te ondersteunen. Door deze eed later te breken, wordt Harold als meineed gecast, wat William's invasie rechtvaardigt."
+        },
+        "pt": {
+          "text": "Onde Harold fez um juramento ao duque William",
+          "context": "O clímax da narrativa normanda: Haroldo faz um juramento sagrado sobre relíquias sagradas para apoiar a reivindicação de Guilherme ao trono inglês. Ao quebrar posteriormente esse juramento, Haroldo é considerado um perjúrio, justificando a invasão de Guilherme."
+        },
+        "hi": {
+          "text": "जहां हेरोल्ड ने ड्यूक विलियम को शपथ दिलाई",
+          "context": "नॉर्मन कथा का चरमोत्कर्ष: हेरोल्ड ने विलियम के अंग्रेजी सिंहासन के दावे का समर्थन करने के लिए पवित्र अवशेषों पर एक पवित्र शपथ ली। बाद में इस शपथ को तोड़कर, हेरोल्ड को विलियम के आक्रमण को उचित ठहराते हुए, झूठी गवाही देने वाले के रूप में दोषी ठहराया गया।"
+        },
+        "ar": {
+          "text": "حيث أقسم هارولد القسم للدوق ويليام",
+          "context": "ذروة السرد النورماندي: هارولد يقسم قسمًا مقدسًا على الآثار المقدسة لدعم مطالبة ويليام بالعرش الإنجليزي. من خلال كسر هذا القسم لاحقًا، تم تصوير هارولد باعتباره حنثًا باليمين، ويبرر غزو ويليام."
+        },
+        "bn": {
+          "text": "যেখানে হ্যারল্ড ডিউক উইলিয়ামের কাছে শপথ করেছিলেন",
+          "context": "নরম্যান আখ্যানের ক্লাইম্যাক্স: হ্যারল্ড ইংরেজ সিংহাসনে উইলিয়ামের দাবিকে সমর্থন করার জন্য পবিত্র অবশেষের উপর একটি পবিত্র শপথ করেন। পরে এই শপথ ভঙ্গ করে, উইলিয়ামের আক্রমণকে ন্যায্যতা দিয়ে হ্যারল্ডকে মিথ্যাবাদী হিসেবে নিক্ষেপ করা হয়।"
+        }
+      }
+    },
+    {
+      "scene": "24",
+      "latin": "HIC HAROLD DUX REVERSUS EST AD ANGLICAM TERRAM",
+      "x": 208.28752451898413,
+      "y": 0.8899045056303095,
+      "translations": {
+        "en": {
+          "text": "Here Duke Harold returned to English land",
+          "context": "Harold is released and sails back to England."
+        },
+        "zh": {
+          "text": "哈罗德公爵在这里回到了英国土地",
+          "context": "哈罗德获释并乘船返回英国。"
+        },
+        "fr": {
+          "text": "Ici, le duc Harold est revenu en terre anglaise",
+          "context": "Harold est libéré et retourne en Angleterre."
+        },
+        "de": {
+          "text": "Hier kehrte Herzog Harold in englisches Land zurück",
+          "context": "Harold wird freigelassen und segelt zurück nach England."
+        },
+        "es": {
+          "text": "Aquí el duque Harold regresó a tierras inglesas.",
+          "context": "Harold es liberado y navega de regreso a Inglaterra."
+        },
+        "nl": {
+          "text": "Hier keerde hertog Harold terug naar Engels land",
+          "context": "Harold wordt vrijgelaten en vaart terug naar Engeland."
+        },
+        "pt": {
+          "text": "Aqui o duque Harold retornou às terras inglesas",
+          "context": "Harold é libertado e embarca de volta para a Inglaterra."
+        },
+        "hi": {
+          "text": "इधर ड्यूक हेरोल्ड अंग्रेजी भूमि पर लौट आये",
+          "context": "हेरोल्ड को रिहा कर दिया गया और वह वापस इंग्लैंड चला गया।"
+        },
+        "ar": {
+          "text": "هنا عاد الدوق هارولد إلى الأراضي الإنجليزية",
+          "context": "تم إطلاق سراح هارولد وأبحر عائداً إلى إنجلترا."
+        },
+        "bn": {
+          "text": "এখানে ডিউক হ্যারল্ড ইংরেজ ভূমিতে ফিরে আসেন",
+          "context": "হ্যারল্ড মুক্তি পায় এবং ইংল্যান্ডে ফিরে যায়।"
+        }
+      }
+    },
+    {
+      "scene": "25",
+      "latin": "ET VENIT AD EDWARDU REGEM",
+      "x": 224.1563374789928,
+      "y": 0.863982969862745,
+      "translations": {
+        "en": {
+          "text": "and he came to King Edward",
+          "context": "Harold reports back to King Edward the Confessor. Edward appears frail and aged, foreshadowing his impending death."
+        },
+        "zh": {
+          "text": "他来到爱德华国王身边",
+          "context": "哈罗德向忏悔者爱德华国王汇报。爱德华显得虚弱而苍老，预示着他即将死亡。"
+        },
+        "fr": {
+          "text": "et il est venu voir le roi Édouard",
+          "context": "Harold fait rapport au roi Édouard le Confesseur. Edward semble fragile et âgé, préfigurant sa mort imminente."
+        },
+        "de": {
+          "text": "und er kam zu König Edward",
+          "context": "Harold erstattet König Edward dem Bekenner Bericht. Edward erscheint gebrechlich und gealtert, was seinen bevorstehenden Tod erahnen lässt."
+        },
+        "es": {
+          "text": "y vino al rey Eduardo",
+          "context": "Harold informa al rey Eduardo el Confesor. Edward parece frágil y envejecido, presagiando su muerte inminente."
+        },
+        "nl": {
+          "text": "en hij kwam bij koning Edward",
+          "context": "Harold rapporteert aan koning Edward de Belijder. Edward lijkt zwak en oud, wat een voorafschaduwing is van zijn naderende dood."
+        },
+        "pt": {
+          "text": "e ele veio para o rei Eduardo",
+          "context": "Harold reporta ao Rei Eduardo, o Confessor. Edward parece frágil e envelhecido, prenunciando sua morte iminente."
+        },
+        "hi": {
+          "text": "और वह किंग एडवर्ड के पास आया",
+          "context": "हेरोल्ड किंग एडवर्ड द कन्फेसर को वापस रिपोर्ट करता है। एडवर्ड कमज़ोर और वृद्ध प्रतीत होता है, जो उसकी आसन्न मृत्यु का पूर्वाभास देता है।"
+        },
+        "ar": {
+          "text": "وجاء إلى الملك إدوارد",
+          "context": "يعود هارولد إلى الملك إدوارد المعترف. يبدو إدوارد ضعيفًا وكبيرًا في السن، مما ينذر بموته الوشيك."
+        },
+        "bn": {
+          "text": "এবং তিনি রাজা এডওয়ার্ডের কাছে এলেন",
+          "context": "হ্যারল্ড রাজা এডওয়ার্ড দ্য কনফেসারের কাছে রিপোর্ট করেন। এডওয়ার্ড দুর্বল এবং বয়স্ক দেখায়, তার আসন্ন মৃত্যুর পূর্বাভাস দেয়।"
+        }
+      }
+    },
+    {
+      "scene": "26",
+      "latin": "HIC PORTATUR CORPUS EADWARDI REGIS AD ECCLESIAM SCI PETRI APLI",
+      "x": 230.55691573793672,
+      "y": 0.950192558208848,
+      "translations": {
+        "en": {
+          "text": "Here the body of King Edward is carried to the Church of Saint Peter the Apostle",
+          "context": "King Edward dies. The tapestry uses non-linear storytelling here: his body is carried to Westminster Abbey, the great church he just finished building, before his death bed scene is shown."
+        },
+        "zh": {
+          "text": "爱德华国王的遗体在这里被运往使徒圣彼得教堂",
+          "context": "爱德华国王去世。挂毯在这里使用了非线性的故事讲述：他的尸体被带到威斯敏斯特教堂，这是他刚刚完成的伟大教堂，然后展示了他临终前的床戏。"
+        },
+        "fr": {
+          "text": "Ici, le corps du roi Édouard est transporté à l'église Saint-Pierre-Apôtre",
+          "context": "Le roi Édouard meurt. La tapisserie utilise ici une narration non linéaire : son corps est transporté à l'abbaye de Westminster, la grande église qu'il vient de terminer de construire, avant que la scène de son lit de mort ne soit montrée."
+        },
+        "de": {
+          "text": "Hier wird der Leichnam von König Edward zur Kirche des Heiligen Apostels Petrus getragen",
+          "context": "König Edward stirbt. Der Wandteppich verwendet hier eine nichtlineare Erzählweise: Sein Körper wird zur Westminster Abbey getragen, der großen Kirche, die er gerade fertiggestellt hat, bevor seine Sterbebettszene gezeigt wird."
+        },
+        "es": {
+          "text": "Aquí el cuerpo del Rey Eduardo es llevado a la Iglesia de San Pedro Apóstol.",
+          "context": "Muere el rey Eduardo. El tapiz utiliza aquí una narración no lineal: su cuerpo es llevado a la Abadía de Westminster, la gran iglesia que acaba de terminar de construir, antes de que se muestre la escena de su lecho de muerte."
+        },
+        "nl": {
+          "text": "Hier wordt het lichaam van koning Edward naar de kerk van Sint-Petrus de Apostel gedragen",
+          "context": "Koning Edward sterft. Het tapijt maakt hier gebruik van niet-lineaire verhalen: zijn lichaam wordt naar Westminster Abbey gedragen, de grote kerk die hij zojuist heeft gebouwd, voordat zijn sterfbedscène wordt getoond."
+        },
+        "pt": {
+          "text": "Aqui o corpo do Rei Eduardo é transportado para a Igreja de São Pedro Apóstolo",
+          "context": "O rei Eduardo morre. A tapeçaria usa uma narrativa não linear aqui: seu corpo é levado para a Abadia de Westminster, a grande igreja que ele acabou de construir, antes de sua cena no leito de morte ser mostrada."
+        },
+        "hi": {
+          "text": "यहां किंग एडवर्ड के पार्थिव शरीर को सेंट पीटर द एपोस्टल के चर्च में ले जाया जाता है",
+          "context": "किंग एडवर्ड मर जाता है. टेपेस्ट्री यहां गैर-रैखिक कहानी कहने का उपयोग करती है: उनकी मृत्यु शय्या का दृश्य दिखाए जाने से पहले, उनके शरीर को वेस्टमिंस्टर एबे में ले जाया जाता है, जिस महान चर्च का निर्माण उन्होंने अभी-अभी पूरा किया है।"
+        },
+        "ar": {
+          "text": "هنا يُنقل جثمان الملك إدوارد إلى كنيسة القديس بطرس الرسول",
+          "context": "وفاة الملك إدوارد. يستخدم النسيج السرد القصصي غير الخطي هنا: يتم نقل جسده إلى كنيسة وستمنستر، الكنيسة العظيمة التي انتهى للتو من بنائها، قبل أن يظهر مشهد فراش الموت."
+        },
+        "bn": {
+          "text": "এখানে রাজা এডওয়ার্ডের মৃতদেহ সেন্ট পিটার দ্য এপোস্টেলের চার্চে নিয়ে যাওয়া হয়",
+          "context": "রাজা এডওয়ার্ড মারা যান। টেপেস্ট্রি এখানে অ-রৈখিক গল্প বলার ব্যবহার করে: তার মৃতদেহ ওয়েস্টমিনিস্টার অ্যাবেতে নিয়ে যাওয়া হয়, তার মৃত্যু শয্যার দৃশ্য দেখানোর আগে তিনি যে মহান চার্চটি নির্মাণ শেষ করেছেন।"
+        }
+      }
+    },
+    {
+      "scene": "27",
+      "latin": "HIC EADWARDUS REX IN LECTO ALLOQUIT FIDELES",
+      "x": 239.1178258674381,
+      "y": 1.3480669420148255,
+      "translations": {
+        "en": {
+          "text": "Here King Edward in bed speaks to his faithful followers",
+          "context": "On his deathbed, Edward speaks to his followers. English tradition claims he appointed Harold as his successor with his dying breath, complicating William's claim."
+        },
+        "zh": {
+          "text": "爱德华国王在床上向他忠实的追随者讲话",
+          "context": "爱德华临终前对他的追随者讲话。英国传统称，他在临终前任命哈罗德为继承人，这使威廉的主张变得更加复杂。"
+        },
+        "fr": {
+          "text": "Ici, le roi Édouard au lit parle à ses fidèles disciples",
+          "context": "Sur son lit de mort, Edward parle à ses partisans. La tradition anglaise prétend qu'il a nommé Harold comme son successeur avec son dernier souffle, ce qui complique la revendication de William."
+        },
+        "de": {
+          "text": "Hier spricht König Edward im Bett zu seinen treuen Anhängern",
+          "context": "Auf seinem Sterbebett spricht Edward zu seinen Anhängern. Die englische Überlieferung besagt, dass er Harold in seinem letzten Atemzug zu seinem Nachfolger ernannte, was Williams Anspruch erschwerte."
+        },
+        "es": {
+          "text": "Aquí el rey Eduardo en la cama habla con sus fieles seguidores.",
+          "context": "En su lecho de muerte, Edward habla con sus seguidores. La tradición inglesa afirma que nombró a Harold como su sucesor en su último aliento, lo que complica la afirmación de William."
+        },
+        "nl": {
+          "text": "Hier spreekt koning Edward in bed met zijn trouwe volgelingen",
+          "context": "Op zijn sterfbed spreekt Edward met zijn volgelingen. De Engelse traditie beweert dat hij Harold op zijn laatste adem tot zijn opvolger benoemde, wat William's claim ingewikkelder maakte."
+        },
+        "pt": {
+          "text": "Aqui o Rei Eduardo na cama fala com seus fiéis seguidores",
+          "context": "Em seu leito de morte, Eduardo fala com seus seguidores. A tradição inglesa afirma que ele nomeou Haroldo como seu sucessor em seu último suspiro, complicando a afirmação de Guilherme."
+        },
+        "hi": {
+          "text": "यहां किंग एडवर्ड बिस्तर पर अपने वफादार अनुयायियों से बात करते हैं",
+          "context": "अपनी मृत्यु शय्या पर एडवर्ड अपने अनुयायियों से बात करते हैं। अंग्रेजी परंपरा का दावा है कि उन्होंने अपनी मरणासन्न स्थिति में हेरोल्ड को अपना उत्तराधिकारी नियुक्त किया, जिससे विलियम का दावा जटिल हो गया।"
+        },
+        "ar": {
+          "text": "هنا يتحدث الملك إدوارد في السرير إلى أتباعه المخلصين",
+          "context": "على فراش الموت، إدوارد يتحدث إلى أتباعه. يزعم التقليد الإنجليزي أنه عين هارولد خلفًا له وهو على وشك الموت، مما أدى إلى تعقيد مطالبة ويليام."
+        },
+        "bn": {
+          "text": "এখানে রাজা এডওয়ার্ড বিছানায় তার বিশ্বস্ত অনুসারীদের সাথে কথা বলছেন",
+          "context": "মৃত্যুশয্যায় এডওয়ার্ড তার অনুসারীদের সাথে কথা বলেন। ইংরেজি ঐতিহ্য দাবি করে যে তিনি হ্যারল্ডকে তার উত্তরাধিকারী হিসেবে নিযুক্ত করেছিলেন তার মৃত্যু শ্বাসের সাথে, উইলিয়ামের দাবিকে জটিল করে তোলে।"
+        }
+      }
+    },
+    {
+      "scene": "28",
+      "latin": "ET HIC DEFUNCTUS EST",
+      "x": 246.6903542726936,
+      "y": 0.9625574262405838,
+      "translations": {
+        "en": {
+          "text": "and here he died",
+          "context": "Edward passes away on January 5, 1066."
+        },
+        "zh": {
+          "text": "他就在这里死了",
+          "context": "爱德华于 1066 年 1 月 5 日去世。"
+        },
+        "fr": {
+          "text": "et ici il est mort",
+          "context": "Édouard décède le 5 janvier 1066."
+        },
+        "de": {
+          "text": "und hier ist er gestorben",
+          "context": "Edward stirbt am 5. Januar 1066."
+        },
+        "es": {
+          "text": "y aquí murió",
+          "context": "Eduardo fallece el 5 de enero de 1066."
+        },
+        "nl": {
+          "text": "en hier stierf hij",
+          "context": "Edward overlijdt op 5 januari 1066."
+        },
+        "pt": {
+          "text": "e aqui ele morreu",
+          "context": "Eduardo falece em 5 de janeiro de 1066."
+        },
+        "hi": {
+          "text": "और यहीं उनकी मृत्यु हो गई",
+          "context": "5 जनवरी, 1066 को एडवर्ड का निधन हो गया।"
+        },
+        "ar": {
+          "text": "وهنا مات",
+          "context": "توفي إدوارد في 5 يناير 1066."
+        },
+        "bn": {
+          "text": "এবং এখানে তিনি মারা যান",
+          "context": "এডওয়ার্ড 5 জানুয়ারী, 1066-এ মারা যান।"
+        }
+      }
+    },
+    {
+      "scene": "29",
+      "latin": "HIC DEDERUNT HAROLDO CORONA REGIS",
+      "x": 250.5990509660769,
+      "y": 1.3715212857504633,
+      "translations": {
+        "en": {
+          "text": "Here they gave the king's crown to Harold",
+          "context": "The English nobles offer the crown to Harold. He accepts, breaking the oath he made to William in Bayeux."
+        },
+        "zh": {
+          "text": "他们在这里将国王的王冠授予哈罗德",
+          "context": "英国贵族将王冠授予哈罗德。他接受了，打破了他在巴约向威廉发的誓言。"
+        },
+        "fr": {
+          "text": "Ici, ils ont donné la couronne du roi à Harold",
+          "context": "Les nobles anglais offrent la couronne à Harold. Il accepte, rompant le serment qu'il a prêté à Guillaume à Bayeux."
+        },
+        "de": {
+          "text": "Hier gaben sie Harold die Königskrone",
+          "context": "Die englischen Adligen bieten Harold die Krone an. Er akzeptiert und bricht damit den Eid, den er William in Bayeux geleistet hatte."
+        },
+        "es": {
+          "text": "Aquí le dieron la corona del rey a Harold.",
+          "context": "Los nobles ingleses ofrecen la corona a Harold. Acepta, rompiendo el juramento que le hizo a William en Bayeux."
+        },
+        "nl": {
+          "text": "Hier gaven ze de koningskroon aan Harold",
+          "context": "De Engelse edelen bieden de kroon aan Harold aan. Hij accepteert en verbreekt de eed die hij in Bayeux aan William heeft afgelegd."
+        },
+        "pt": {
+          "text": "Aqui eles deram a coroa do rei a Harold",
+          "context": "Os nobres ingleses oferecem a coroa a Haroldo. Ele aceita, quebrando o juramento que fez a Guilherme em Bayeux."
+        },
+        "hi": {
+          "text": "यहां उन्होंने हेरोल्ड को राजा का ताज दिया",
+          "context": "अंग्रेज सरदार हेरोल्ड को ताज प्रदान करते हैं। वह बेयुक्स में विलियम को दी गई शपथ को तोड़ते हुए स्वीकार करता है।"
+        },
+        "ar": {
+          "text": "هنا أعطوا تاج الملك لهارولد",
+          "context": "النبلاء الإنجليز يقدمون التاج لهارولد. يقبل، ويكسر القسم الذي قطعه لوليام في بايو."
+        },
+        "bn": {
+          "text": "এখানে তারা হ্যারল্ডকে রাজার মুকুট দিয়েছিল",
+          "context": "ইংরেজ অভিজাতরা হ্যারল্ডকে মুকুট অফার করে। তিনি স্বীকার করেন, বেয়েক্সে উইলিয়ামের কাছে করা শপথ ভঙ্গ করেন।"
+        }
+      }
+    },
+    {
+      "scene": "30",
+      "latin": "HIC RESIDET HAROLD REX ANGLORUM",
+      "x": 250.86503579944963,
+      "y": 0.983911365531573,
+      "translations": {
+        "en": {
+          "text": "Here sits Harold King of the English",
+          "context": "Harold is crowned King of England. He is shown holding the orb and sceptre, symbols of royal authority, with Archbishop Stigand nearby."
+        },
+        "zh": {
+          "text": "英国国王哈罗德坐在这里",
+          "context": "哈罗德加冕为英格兰国王。他手握王权象征的球体和权杖，斯蒂甘德大主教就在附近。"
+        },
+        "fr": {
+          "text": "Ici est assis Harold King des Anglais",
+          "context": "Harold est couronné roi d'Angleterre. Il est représenté tenant l'orbe et le sceptre, symboles de l'autorité royale, avec l'archevêque Stigand à proximité."
+        },
+        "de": {
+          "text": "Hier sitzt Harold King of the English",
+          "context": "Harold wird zum König von England gekrönt. Er wird mit Reichsapfel und Zepter, Symbolen königlicher Autorität, in der Nähe von Erzbischof Stigand dargestellt."
+        },
+        "es": {
+          "text": "Aquí se sienta Harold Rey de los ingleses",
+          "context": "Harold es coronado rey de Inglaterra. Se le muestra sosteniendo el orbe y el cetro, símbolos de la autoridad real, con el arzobispo Stigand cerca."
+        },
+        "nl": {
+          "text": "Hier zit Harold King van de Engelsen",
+          "context": "Harold wordt tot koning van Engeland gekroond. Hij wordt afgebeeld met de bol en de scepter in zijn hand, symbolen van koninklijk gezag, met aartsbisschop Stigand vlakbij."
+        },
+        "pt": {
+          "text": "Aqui está Harold King dos Ingleses",
+          "context": "Haroldo é coroado Rei da Inglaterra. Ele é mostrado segurando o orbe e o cetro, símbolos da autoridade real, com o Arcebispo Stigand por perto."
+        },
+        "hi": {
+          "text": "यहाँ अंग्रेज़ों का हेरोल्ड राजा बैठता है",
+          "context": "हेरोल्ड को इंग्लैंड के राजा का ताज पहनाया गया। उन्हें शाही अधिकार के प्रतीक, गोला और राजदंड पकड़े हुए दिखाया गया है, पास में आर्कबिशप स्टिगैंड भी हैं।"
+        },
+        "ar": {
+          "text": "هنا يجلس هارولد ملك الإنجليز",
+          "context": "تتويج هارولد ملكاً على إنجلترا. يظهر وهو يحمل الجرم السماوي والصولجان، رموز السلطة الملكية، مع رئيس الأساقفة ستيجاند في مكان قريب."
+        },
+        "bn": {
+          "text": "এখানে বসে আছেন ইংরেজদের হ্যারল্ড কিং",
+          "context": "হ্যারল্ডকে ইংল্যান্ডের রাজার মুকুট দেওয়া হয়। তাকে কাছাকাছি আর্চবিশপ স্টিগ্যান্ডের সাথে রাজকীয় কর্তৃত্বের প্রতীক অরব এবং রাজদণ্ড ধারণ করা দেখানো হয়েছে।"
+        }
+      }
+    },
+    {
+      "scene": "32",
+      "latin": "ISTI MIRANT STELLA",
+      "x": 258.4928722875172,
+      "y": 0.9621465921985917,
+      "translations": {
+        "en": {
+          "text": "These people marvel at the star",
+          "context": "Halley's Comet appears in the sky in April 1066. The Anglo-Saxons view it as a terrible omen of doom, pointing at the comet in fear while a spectral invasion fleet is hinted at below."
+        },
+        "zh": {
+          "text": "这些人惊叹于明星",
+          "context": "1066 年 4 月，哈雷彗星出现在天空中。盎格鲁撒克逊人将其视为可怕的厄运预兆，他们恐惧地指着彗星，而下方则暗示着一支幽灵入侵舰队。"
+        },
+        "fr": {
+          "text": "Ces gens s'émerveillent devant l'étoile",
+          "context": "La comète de Halley apparaît dans le ciel en avril 1066. Les Anglo-Saxons y voient un terrible présage de malheur, pointant la comète avec peur tandis qu'une flotte d'invasion spectrale est évoquée ci-dessous."
+        },
+        "de": {
+          "text": "Diese Leute bestaunen den Stern",
+          "context": "Der Halleysche Komet erscheint im April 1066 am Himmel. Die Angelsachsen betrachten ihn als schreckliches Omen des Untergangs und zeigen voller Angst auf den Kometen, während unten eine gespenstische Invasionsflotte angedeutet wird."
+        },
+        "es": {
+          "text": "Esta gente se maravilla con la estrella.",
+          "context": "El cometa Halley aparece en el cielo en abril de 1066. Los anglosajones lo ven como un terrible presagio de fatalidad, apuntando al cometa con miedo mientras se insinúa una flota espectral de invasión debajo."
+        },
+        "nl": {
+          "text": "Deze mensen verwonderen zich over de ster",
+          "context": "De komeet van Halley verschijnt in april 1066 aan de hemel. De Angelsaksen beschouwen het als een verschrikkelijk voorteken van onheil, waarbij ze angstig naar de komeet wijzen, terwijl hieronder wordt gezinspeeld op een spectrale invasievloot."
+        },
+        "pt": {
+          "text": "Essas pessoas ficam maravilhadas com a estrela",
+          "context": "O cometa Halley aparece no céu em abril de 1066. Os anglo-saxões veem isso como um terrível presságio de destruição, apontando para o cometa com medo enquanto uma frota de invasão espectral é sugerida abaixo."
+        },
+        "hi": {
+          "text": "ये लोग तारे को देखकर आश्चर्यचकित हो जाते हैं",
+          "context": "हैली का धूमकेतु अप्रैल 1066 में आकाश में दिखाई देता है। एंग्लो-सैक्सन इसे विनाश के एक भयानक शगुन के रूप में देखते हैं, जो डर के साथ धूमकेतु की ओर इशारा करते हैं जबकि नीचे एक वर्णक्रमीय आक्रमण बेड़े का संकेत दिया गया है।"
+        },
+        "ar": {
+          "text": "هؤلاء الناس يتعجبون من النجم",
+          "context": "ظهر مذنب هالي في السماء في أبريل 1066. وينظر إليه الأنجلوسكسونيون على أنه فأل رهيب من الهلاك، ويشيرون إلى المذنب في خوف بينما يتم التلميح إلى أسطول الغزو الطيفي أدناه."
+        },
+        "bn": {
+          "text": "এই লোকেরা তারা দেখে বিস্মিত হয়",
+          "context": "হ্যালির ধূমকেতুটি 1066 সালের এপ্রিল মাসে আকাশে আবির্ভূত হয়। অ্যাংলো-স্যাক্সনরা এটিকে ধ্বংসের একটি ভয়ঙ্কর লক্ষণ হিসাবে দেখে, ভয়ে ধূমকেতুটির দিকে ইশারা করে যখন একটি বর্ণালী আক্রমণ বহর নীচে ইঙ্গিত করে।"
+        }
+      }
+    },
+    {
+      "scene": "34",
+      "latin": "HIC NAVIS ANGLICA VENIT IN TERRAM WILLELMI DUCIS",
+      "x": 266.27748327395534,
+      "y": 0.9497971893097029,
+      "translations": {
+        "en": {
+          "text": "Here an English ship came to the land of Duke William",
+          "context": "News of Harold's coronation and the breaking of the oath reaches Duke William in Normandy. An English ship arrives with the message."
+        },
+        "zh": {
+          "text": "一艘英国船来到了威廉公爵的土地",
+          "context": "哈罗德加冕和违背誓言的消息传到了诺曼底的威廉公爵那里。一艘英国船带着消息抵达。"
+        },
+        "fr": {
+          "text": "Ici, un navire anglais est arrivé au pays du duc William",
+          "context": "La nouvelle du couronnement d'Harold et de la rupture du serment parvient au duc Guillaume en Normandie. Un navire anglais arrive avec le message."
+        },
+        "de": {
+          "text": "Hier kam ein englisches Schiff in das Land des Herzogs Wilhelm",
+          "context": "Die Nachricht von Harolds Krönung und dem Bruch des Eides erreicht Herzog Wilhelm in der Normandie. Ein englisches Schiff kommt mit der Nachricht an."
+        },
+        "es": {
+          "text": "Aquí llegó un barco inglés a la tierra del duque William.",
+          "context": "La noticia de la coronación de Harold y la ruptura del juramento llega al duque William en Normandía. Llega un barco inglés con el mensaje."
+        },
+        "nl": {
+          "text": "Hier kwam een ​​Engels schip naar het land van hertog Willem",
+          "context": "Het nieuws over de kroning van Harold en het breken van de eed bereikt hertog Willem in Normandië. Een Engels schip arriveert met de boodschap."
+        },
+        "pt": {
+          "text": "Aqui um navio inglês chegou à terra do duque William",
+          "context": "A notícia da coroação de Haroldo e da quebra do juramento chega ao duque Guilherme na Normandia. Um navio inglês chega com a mensagem."
+        },
+        "hi": {
+          "text": "इधर ड्यूक विलियम की भूमि पर एक अंग्रेजी जहाज आया",
+          "context": "हेरोल्ड के राज्याभिषेक और शपथ तोड़ने की खबर नॉर्मंडी में ड्यूक विलियम तक पहुंचती है। एक अंग्रेजी जहाज संदेश लेकर आता है।"
+        },
+        "ar": {
+          "text": "هنا وصلت سفينة إنجليزية إلى أرض الدوق ويليام",
+          "context": "أخبار تتويج هارولد وكسر القسم تصل إلى الدوق ويليام في نورماندي. وصول سفينة إنجليزية ومعها الرسالة."
+        },
+        "bn": {
+          "text": "এখানে একটি ইংরেজ জাহাজ ডিউক উইলিয়ামের দেশে এসেছিল",
+          "context": "হ্যারল্ডের রাজ্যাভিষেক এবং শপথ ​​ভঙ্গের খবর নরম্যান্ডির ডিউক উইলিয়ামের কাছে পৌঁছায়। একটি ইংরেজ জাহাজ বার্তা নিয়ে আসে।"
+        }
+      }
+    },
+    {
+      "scene": "35",
+      "latin": "HIC WILLELM DUX JUSSIT NAVES EDIFICARE",
+      "x": 277.34460906078675,
+      "y": 0.92597560523291,
+      "translations": {
+        "en": {
+          "text": "Here Duke William ordered ships to be built",
+          "context": "William decides to invade England to claim the throne. He orders a massive fleet of transport ships to be built."
+        },
+        "zh": {
+          "text": "威廉公爵在这里下令建造船只",
+          "context": "威廉决定入侵英格兰夺取王位。他下令建造一支庞大的运输船队。"
+        },
+        "fr": {
+          "text": "Ici, le duc William a ordonné la construction de navires",
+          "context": "Guillaume décide d'envahir l'Angleterre pour réclamer le trône. Il ordonne la construction d’une flotte massive de navires de transport."
+        },
+        "de": {
+          "text": "Hier ließ Herzog Wilhelm Schiffe bauen",
+          "context": "William beschließt, in England einzumarschieren, um den Thron zu erobern. Er befiehlt den Bau einer riesigen Flotte von Transportschiffen."
+        },
+        "es": {
+          "text": "Aquí el duque William ordenó que se construyeran barcos.",
+          "context": "William decide invadir Inglaterra para reclamar el trono. Ordena que se construya una enorme flota de barcos de transporte."
+        },
+        "nl": {
+          "text": "Hier gaf hertog Willem opdracht schepen te bouwen",
+          "context": "William besluit Engeland binnen te vallen om de troon op te eisen. Hij geeft opdracht om een ​​enorme vloot transportschepen te bouwen."
+        },
+        "pt": {
+          "text": "Aqui o duque Guilherme ordenou a construção de navios",
+          "context": "William decide invadir a Inglaterra para reivindicar o trono. Ele ordena a construção de uma enorme frota de navios de transporte."
+        },
+        "hi": {
+          "text": "यहां ड्यूक विलियम ने जहाज बनाने का आदेश दिया",
+          "context": "विलियम ने सिंहासन पर दावा करने के लिए इंग्लैंड पर आक्रमण करने का फैसला किया। वह परिवहन जहाजों का एक विशाल बेड़ा बनाने का आदेश देता है।"
+        },
+        "ar": {
+          "text": "هنا أمر الدوق ويليام ببناء السفن",
+          "context": "يقرر ويليام غزو إنجلترا للمطالبة بالعرش. أمر ببناء أسطول ضخم من سفن النقل."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়াম জাহাজ তৈরির নির্দেশ দেন",
+          "context": "উইলিয়াম সিংহাসন দাবি করার জন্য ইংল্যান্ড আক্রমণ করার সিদ্ধান্ত নেন। তিনি পরিবহন জাহাজের একটি বিশাল বহর তৈরি করার নির্দেশ দেন।"
+        }
+      }
+    },
+    {
+      "scene": "36",
+      "latin": "HIC TRAHUNT NAVES AD MARE",
+      "x": 295.09944150549427,
+      "y": 0.8511563983757735,
+      "translations": {
+        "en": {
+          "text": "Here they drag the ships to the sea",
+          "context": "The Normans cut down trees and construct ships, dragging them to the sea in preparation for the invasion."
+        },
+        "zh": {
+          "text": "他们在这里把船拖到海里",
+          "context": "诺曼人砍伐树木并建造船只，将它们拖到海上，为入侵做准备。"
+        },
+        "fr": {
+          "text": "Ici, ils traînent les navires vers la mer",
+          "context": "Les Normands abattent des arbres et construisent des navires qu'ils traînent jusqu'à la mer en prévision de l'invasion."
+        },
+        "de": {
+          "text": "Hier ziehen sie die Schiffe zum Meer",
+          "context": "Die Normannen fällten Bäume, bauten Schiffe und schleppten sie zur Vorbereitung der Invasion ins Meer."
+        },
+        "es": {
+          "text": "Aquí arrastran los barcos al mar.",
+          "context": "Los normandos talaron árboles y construyeron barcos, arrastrándolos hasta el mar en preparación para la invasión."
+        },
+        "nl": {
+          "text": "Hier slepen ze de schepen naar zee",
+          "context": "De Noormannen hakten bomen om, bouwden schepen en sleepten ze naar zee ter voorbereiding op de invasie."
+        },
+        "pt": {
+          "text": "Aqui eles arrastam os navios para o mar",
+          "context": "Os normandos cortam árvores e constroem navios, arrastando-os para o mar em preparação para a invasão."
+        },
+        "hi": {
+          "text": "यहां वे जहाजों को समुद्र में खींच ले जाते हैं",
+          "context": "नॉर्मन्स ने आक्रमण की तैयारी के लिए पेड़ों को काटा और जहाजों का निर्माण किया और उन्हें समुद्र में खींच लिया।"
+        },
+        "ar": {
+          "text": "هنا يسحبون السفن إلى البحر",
+          "context": "قام النورمانديون بقطع الأشجار وبناء السفن وسحبها إلى البحر استعدادًا للغزو."
+        },
+        "bn": {
+          "text": "এখানে তারা জাহাজগুলোকে সমুদ্রে টেনে নিয়ে যায়",
+          "context": "নরমানরা গাছ কেটে জাহাজ তৈরি করে, আক্রমণের প্রস্তুতি হিসেবে সমুদ্রে টেনে নিয়ে যায়।"
+        }
+      }
+    },
+    {
+      "scene": "37",
+      "latin": "ISTI PORTANT ARMAS AD NAVES ET HIC TRAHUNT CARRUM CUM VINO ET ARMIS",
+      "x": 306.43738162347444,
+      "y": 1.3788280224510097,
+      "translations": {
+        "en": {
+          "text": "These men carry arms to the ships and here they drag a cart (laden) with wine and arms",
+          "context": "Weapons, armor, and supplies (including large casks of wine) are loaded onto the ships."
+        },
+        "zh": {
+          "text": "这些人携带武器到船上，在这里他们拖着一辆装满酒和武器的车",
+          "context": "武器、盔甲和补给品（包括大桶酒）被装载到船上。"
+        },
+        "fr": {
+          "text": "Ces hommes portent des armes jusqu'aux navires et ici ils traînent une charrette (chargée) de vin et d'armes.",
+          "context": "Les armes, armures et fournitures (y compris de grands tonneaux de vin) sont chargées sur les navires."
+        },
+        "de": {
+          "text": "Diese Männer tragen Waffen zu den Schiffen und ziehen hier einen mit Wein und Waffen beladenen Karren",
+          "context": "Waffen, Rüstungen und Vorräte (einschließlich großer Weinfässer) werden auf die Schiffe geladen."
+        },
+        "es": {
+          "text": "Estos hombres llevan armas a los barcos y aquí arrastran un carro (cargado) con vino y armas.",
+          "context": "En los barcos se cargan armas, armaduras y suministros (incluidos grandes barriles de vino)."
+        },
+        "nl": {
+          "text": "Deze mannen dragen wapens naar de schepen en hier slepen ze een kar (beladen) met wijn en wapens",
+          "context": "Wapens, bepantsering en voorraden (inclusief grote vaten wijn) worden op de schepen geladen."
+        },
+        "pt": {
+          "text": "Estes homens levam armas para os navios e aqui arrastam uma carroça (carregada) com vinho e armas",
+          "context": "Armas, armaduras e suprimentos (incluindo grandes barris de vinho) são carregados nos navios."
+        },
+        "hi": {
+          "text": "ये लोग जहाजों तक हथियार ले जाते हैं और यहां वे शराब और हथियारों से भरी एक गाड़ी खींचते हैं",
+          "context": "हथियार, कवच और आपूर्ति (शराब के बड़े पीपों सहित) जहाजों पर लादी जाती हैं।"
+        },
+        "ar": {
+          "text": "يحمل هؤلاء الرجال الأسلحة إلى السفن وهنا يجرون عربة (محملة) بالنبيذ والأذرع",
+          "context": "يتم تحميل الأسلحة والدروع والإمدادات (بما في ذلك براميل النبيذ الكبيرة) على السفن."
+        },
+        "bn": {
+          "text": "এই লোকেরা জাহাজে অস্ত্র বহন করে এবং এখানে তারা মদ এবং অস্ত্র সহ একটি কার্ট (বোঝাই) টেনে নিয়ে যায়",
+          "context": "অস্ত্র, বর্ম, এবং সরবরাহ (মদের বড় পিপা সহ) জাহাজে লোড করা হয়।"
+        }
+      }
+    },
+    {
+      "scene": "38",
+      "latin": "† HIC WILLELM DUX IN MAGNO NAVIGIO MARE TRANSIVIT ET VENIT AD PEVENESÆ",
+      "x": 314.15396900829165,
+      "y": 0.9234693661297796,
+      "translations": {
+        "en": {
+          "text": "† Here Duke William in a great ship crossed the sea and came to Pevensey",
+          "context": "The Norman fleet crosses the English Channel. William's flagship, the Mora, was a gift from his wife Matilda. They land at Pevensey in Sussex on September 28, 1066."
+        },
+        "zh": {
+          "text": "† 威廉公爵驾着一艘大船横渡大海来到佩文西",
+          "context": "诺曼舰队横渡英吉利海峡。威廉的旗舰莫拉号是他的妻子玛蒂尔达送给他的礼物。 1066 年 9 月 28 日，他们在苏塞克斯的佩文西登陆。"
+        },
+        "fr": {
+          "text": "† Ici, le duc William a traversé la mer à bord d'un grand navire et est arrivé à Pevensey.",
+          "context": "La flotte normande traverse la Manche. Le vaisseau amiral de William, le Mora, était un cadeau de sa femme Matilda. Ils atterrissent à Pevensey dans le Sussex le 28 septembre 1066."
+        },
+        "de": {
+          "text": "† Hier überquerte Herzog William in einem großen Schiff das Meer und kam nach Pevensey",
+          "context": "Die normannische Flotte überquert den Ärmelkanal. Williams Flaggschiff, die Mora, war ein Geschenk seiner Frau Matilda. Sie landen am 28. September 1066 in Pevensey in Sussex."
+        },
+        "es": {
+          "text": "† Aquí el duque William en un gran barco cruzó el mar y llegó a Pevensey.",
+          "context": "La flota normanda cruza el Canal de la Mancha. El buque insignia de William, el Mora, fue un regalo de su esposa Matilda. Aterrizan en Pevensey en Sussex el 28 de septiembre de 1066."
+        },
+        "nl": {
+          "text": "† Hier stak hertog William in een groot schip de zee over en kwam naar Pevensey",
+          "context": "De Normandische vloot steekt het Engelse Kanaal over. William's vlaggenschip, de Mora, was een geschenk van zijn vrouw Matilda. Ze landen op 28 september 1066 in Pevensey in Sussex."
+        },
+        "pt": {
+          "text": "† Aqui o duque William em um grande navio cruzou o mar e chegou a Pevensey",
+          "context": "A frota normanda atravessa o Canal da Mancha. A nau capitânia de William, a Mora, foi um presente de sua esposa Matilda. Eles desembarcam em Pevensey, em Sussex, em 28 de setembro de 1066."
+        },
+        "hi": {
+          "text": "† यहां ड्यूक विलियम एक बड़े जहाज से समुद्र पार कर पेवेन्सी आये",
+          "context": "नॉर्मन बेड़ा इंग्लिश चैनल को पार करता है। विलियम का फ्लैगशिप, मोरा, उनकी पत्नी मटिल्डा का एक उपहार था। वे 28 सितंबर, 1066 को ससेक्स के पेवेन्सी में उतरे।"
+        },
+        "ar": {
+          "text": "† هنا عبر الدوق ويليام البحر في سفينة كبيرة وجاء إلى بيفينسي",
+          "context": "يعبر الأسطول النورماندي القناة الإنجليزية. سفينة ويليام الرئيسية، مورا، كانت هدية من زوجته ماتيلدا. هبطوا في بيفينسي في ساسكس في 28 سبتمبر 1066."
+        },
+        "bn": {
+          "text": "†এখানে ডিউক উইলিয়াম একটি বড় জাহাজে করে সাগর পাড়ি দিয়ে পেভেনসে এলেন",
+          "context": "নরম্যান নৌবহরটি ইংলিশ চ্যানেল অতিক্রম করে। উইলিয়ামের ফ্ল্যাগশিপ, দ্য মোরা, তার স্ত্রী মাতিল্ডার কাছ থেকে একটি উপহার ছিল। তারা 28 সেপ্টেম্বর, 1066-এ সাসেক্সের পেভেনসিতে অবতরণ করে।"
+        }
+      }
+    },
+    {
+      "scene": "39",
+      "latin": "HIC EXEUNT CABALLI DE NAVIBUS",
+      "x": 347.7838205635219,
+      "y": 0.9988807786515501,
+      "translations": {
+        "en": {
+          "text": "Here the horses leave the ships",
+          "context": "The valuable warhorses are unloaded from the ships. The Norman use of cavalry would prove decisive in the coming battle."
+        },
+        "zh": {
+          "text": "马匹在这里离开船只",
+          "context": "珍贵的战马从船上卸下来。诺曼人对骑兵的使用将在即将到来的战斗中发挥决定性作用。"
+        },
+        "fr": {
+          "text": "Ici les chevaux quittent les bateaux",
+          "context": "Les précieux chevaux de guerre sont déchargés des navires. L'utilisation normande de la cavalerie s'avérerait décisive dans la bataille à venir."
+        },
+        "de": {
+          "text": "Hier verlassen die Pferde die Schiffe",
+          "context": "Die wertvollen Schlachtrösser werden von den Schiffen entladen. Der Einsatz der normannischen Kavallerie würde sich in der kommenden Schlacht als entscheidend erweisen."
+        },
+        "es": {
+          "text": "Aquí los caballos salen de los barcos.",
+          "context": "Los valiosos caballos de guerra se descargan de los barcos. El uso normando de la caballería resultaría decisivo en la batalla que se avecinaba."
+        },
+        "nl": {
+          "text": "Hier verlaten de paarden de schepen",
+          "context": "De waardevolle strijdpaarden worden van de schepen gelost. Het Normandische gebruik van cavalerie zou beslissend blijken in de komende strijd."
+        },
+        "pt": {
+          "text": "Aqui os cavalos saem dos navios",
+          "context": "Os valiosos cavalos de guerra são descarregados dos navios. O uso normando da cavalaria seria decisivo na batalha que se aproximava."
+        },
+        "hi": {
+          "text": "यहां जहाज़ों से घोड़े निकलते हैं",
+          "context": "बहुमूल्य युद्धघोड़े जहाज़ों से उतारे जाते हैं। घुड़सवार सेना का नॉर्मन उपयोग आने वाली लड़ाई में निर्णायक साबित होगा।"
+        },
+        "ar": {
+          "text": "هنا تغادر الخيول السفن",
+          "context": "يتم تفريغ خيول الحرب القيمة من السفن. سيكون استخدام النورماندي لسلاح الفرسان حاسماً في المعركة القادمة."
+        },
+        "bn": {
+          "text": "এখানে ঘোড়াগুলো জাহাজ ছেড়ে যায়",
+          "context": "জাহাজ থেকে মূল্যবান যুদ্ধ ঘোড়াগুলো খালাস করা হয়। অশ্বারোহী বাহিনীর নরম্যান ব্যবহার আসন্ন যুদ্ধে নির্ণায়ক প্রমাণিত হবে।"
+        }
+      }
+    },
+    {
+      "scene": "40",
+      "latin": "ET HIC MILITES FESTINAVERUNT HESTINGA UT CIBUM RAPERENTUR",
+      "x": 354.5069392226753,
+      "y": 1.0237143640365116,
+      "translations": {
+        "en": {
+          "text": "and here the knights have hurried to Hastings to seize food",
+          "context": "The Norman army moves to Hastings and begins foraging for supplies, which involved pillaging the local English countryside to provoke Harold into battle."
+        },
+        "zh": {
+          "text": "骑士们已经赶往黑斯廷斯抢夺食物",
+          "context": "诺曼军队转移到黑斯廷斯并开始搜寻补给，其中包括掠夺当地的英国乡村以挑衅哈罗德参战。"
+        },
+        "fr": {
+          "text": "et ici les chevaliers se sont précipités à Hastings pour saisir de la nourriture",
+          "context": "L'armée normande se déplace vers Hastings et commence à chercher des fournitures, ce qui impliquait de piller la campagne anglaise locale pour provoquer Harold au combat."
+        },
+        "de": {
+          "text": "und hier sind die Ritter nach Hastings geeilt, um Lebensmittel zu beschlagnahmen",
+          "context": "Die normannische Armee rückt nach Hastings vor und beginnt mit der Suche nach Vorräten. Dazu gehört auch die Plünderung der umliegenden englischen Landschaft, um Harold zum Kampf zu provozieren."
+        },
+        "es": {
+          "text": "y aquí los caballeros se han apresurado a Hastings para apoderarse de comida.",
+          "context": "El ejército normando se traslada a Hastings y comienza a buscar suministros, lo que implicó saquear la campiña inglesa local para provocar a Harold a la batalla."
+        },
+        "nl": {
+          "text": "en hier zijn de ridders naar Hastings gehaast om voedsel in beslag te nemen",
+          "context": "Het Normandische leger trekt naar Hastings en begint voorraden te zoeken, waarbij het plaatselijke Engelse platteland wordt geplunderd om Harold tot de strijd uit te lokken."
+        },
+        "pt": {
+          "text": "e aqui os cavaleiros correram para Hastings para pegar comida",
+          "context": "O exército normando se move para Hastings e começa a buscar suprimentos, o que envolveu pilhar o interior inglês local para provocar Haroldo na batalha."
+        },
+        "hi": {
+          "text": "और यहाँ शूरवीरों ने भोजन जब्त करने के लिए हेस्टिंग्स की ओर जल्दबाजी की है",
+          "context": "नॉर्मन सेना हेस्टिंग्स की ओर बढ़ती है और आपूर्ति की तलाश शुरू कर देती है, जिसमें हेरोल्ड को युद्ध के लिए उकसाने के लिए स्थानीय अंग्रेजी ग्रामीण इलाकों में लूटपाट शामिल थी।"
+        },
+        "ar": {
+          "text": "وهنا سارع الفرسان إلى هاستنجز للاستيلاء على الطعام",
+          "context": "ينتقل الجيش النورماندي إلى هاستينغز ويبدأ في البحث عن الإمدادات، والتي تضمنت نهب الريف الإنجليزي المحلي لاستفزاز هارولد للدخول في المعركة."
+        },
+        "bn": {
+          "text": "এবং এখানে নাইটরা খাবার বাজেয়াপ্ত করার জন্য হেস্টিংসে ছুটে গেছে",
+          "context": "নরম্যান বাহিনী হেস্টিংসে চলে যায় এবং সরবরাহের জন্য চরা শুরু করে, যার মধ্যে হ্যারল্ডকে যুদ্ধে উত্তেজিত করার জন্য স্থানীয় ইংরেজ গ্রামাঞ্চলে লুটপাট করা জড়িত ছিল।"
+        }
+      }
+    },
+    {
+      "scene": "42",
+      "latin": "HIC COQUITUR CARO ET HIC MINISTRAVERUNT MINISTRI",
+      "x": 375.25947363017747,
+      "y": 1.3396286175442302,
+      "translations": {
+        "en": {
+          "text": "Here the meat is being cooked and here the servants have served (it)",
+          "context": "A feast is prepared. Meat is boiled and roasted on spits. This highlights the logistics of feeding a medieval army on campaign."
+        },
+        "zh": {
+          "text": "这里正在煮肉，这里仆人已经上菜了（它）",
+          "context": "一场盛宴已准备就绪。肉被煮沸并在烤叉上烤。这凸显了中世纪军队在战役中的后勤保障。"
+        },
+        "fr": {
+          "text": "Ici la viande est cuite et ici les domestiques l'ont servie.",
+          "context": "Un festin est préparé. La viande est bouillie et rôtie à la broche. Cela met en évidence la logistique nécessaire pour nourrir une armée médiévale en campagne."
+        },
+        "de": {
+          "text": "Hier wird das Fleisch gekocht und hier haben die Diener es serviert",
+          "context": "Ein Fest wird vorbereitet. Fleisch wird am Spieß gekocht und gebraten. Dies unterstreicht die Logistik der Versorgung einer mittelalterlichen Armee im Feldzug."
+        },
+        "es": {
+          "text": "Aquí se está cocinando la carne y aquí los sirvientes la han servido.",
+          "context": "Se prepara un banquete. La carne se hierve y se asa en asadores. Esto pone de relieve la logística de alimentar a un ejército medieval en campaña."
+        },
+        "nl": {
+          "text": "Hier wordt het vlees gekookt en hier hebben de bedienden het geserveerd",
+          "context": "Er wordt een feestmaal voorbereid. Het vlees wordt gekookt en geroosterd aan het spit. Dit benadrukt de logistiek van het voeden van een middeleeuws leger op campagne."
+        },
+        "pt": {
+          "text": "Aqui a carne está sendo cozida e aqui os criados a serviram",
+          "context": "Um banquete está preparado. A carne é cozida e assada no espeto. Isto destaca a logística de alimentar um exército medieval em campanha."
+        },
+        "hi": {
+          "text": "इधर मांस पक रहा है और इधर नौकरों ने उसे परोस दिया है।",
+          "context": "एक दावत तैयार की जाती है. मांस को उबालकर थूक पर भूना जाता है। यह अभियान पर मध्ययुगीन सेना को भोजन उपलब्ध कराने की व्यवस्था पर प्रकाश डालता है।"
+        },
+        "ar": {
+          "text": "هنا ينضج اللحم وهنا يقدم الخدم",
+          "context": "يتم إعداد وليمة. يُسلق اللحم ويُشوى على البصاق. وهذا يسلط الضوء على الخدمات اللوجستية لإطعام جيش العصور الوسطى في الحملة."
+        },
+        "bn": {
+          "text": "এখানে মাংস রান্না করা হচ্ছে এবং এখানে চাকররা পরিবেশন করেছে (এটি)",
+          "context": "একটি ভোজ প্রস্তুত করা হয়। মাংস সিদ্ধ করে থুতুতে ভাজা হয়। এটি প্রচারে মধ্যযুগীয় সেনাবাহিনীকে খাওয়ানোর রসদ তুলে ধরে।"
+        }
+      }
+    },
+    {
+      "scene": "43",
+      "latin": "HIC FECERUN PRANDIUM",
+      "x": 382.38208680873464,
+      "y": 0.8570234631713545,
+      "translations": {
+        "en": {
+          "text": "Here they have a meal",
+          "context": "Bishop Odo blesses the food at a banquet. The semicircular table resembles depictions of the Last Supper."
+        },
+        "zh": {
+          "text": "他们在这里吃饭",
+          "context": "奥多主教在宴会上祝福食物。半圆形的桌子类似于《最后的晚餐》的描绘。"
+        },
+        "fr": {
+          "text": "Ici, ils prennent un repas",
+          "context": "L'évêque Odo bénit la nourriture lors d'un banquet. La table semi-circulaire ressemble à des représentations de la Dernière Cène."
+        },
+        "de": {
+          "text": "Hier essen sie",
+          "context": "Bischof Odo segnet das Essen bei einem Bankett. Der halbrunde Tisch ähnelt Darstellungen des Letzten Abendmahls."
+        },
+        "es": {
+          "text": "Aqui tienen una comida",
+          "context": "El obispo Odo bendice la comida en un banquete. La mesa semicircular recuerda a representaciones de la Última Cena."
+        },
+        "nl": {
+          "text": "Hier eten ze",
+          "context": "Bisschop Odo zegent het eten tijdens een banket. De halfronde tafel lijkt op afbeeldingen van het Laatste Avondmaal."
+        },
+        "pt": {
+          "text": "Aqui eles fazem uma refeição",
+          "context": "O Bispo Odo abençoa a comida num banquete. A mesa semicircular lembra representações da Última Ceia."
+        },
+        "hi": {
+          "text": "यहां उन्होंने भोजन किया",
+          "context": "बिशप ओडो एक भोज में भोजन पर आशीर्वाद देते हैं। अर्धवृत्ताकार तालिका अंतिम भोज के चित्रण से मिलती जुलती है।"
+        },
+        "ar": {
+          "text": "هنا لديهم وجبة",
+          "context": "الأسقف أودو يبارك الطعام في مأدبة. يشبه الجدول نصف الدائري صور العشاء الأخير."
+        },
+        "bn": {
+          "text": "এখানে তারা খাবার খেয়েছে",
+          "context": "বিশপ ওডো একটি ভোজসভায় খাবারকে আশীর্বাদ করেন। অর্ধবৃত্তাকার টেবিলটি লাস্ট সাপারের চিত্রের সাথে সাদৃশ্যপূর্ণ।"
+        }
+      }
+    },
+    {
+      "scene": "45",
+      "latin": "ISTE JUSSIT UT FODERETUR CASTELLUM AT HESTENGA",
+      "x": 393.7496594505392,
+      "y": 1.3323911773084578,
+      "translations": {
+        "en": {
+          "text": "He ordered that a motte should be dug at Hastings",
+          "context": "William orders the construction of a motte-and-bailey castle at Hastings to secure his beachhead and protect his forces."
+        },
+        "zh": {
+          "text": "他下令在黑斯廷斯挖一个土丘",
+          "context": "威廉下令在黑斯廷斯建造一座莫特贝利城堡，以确保他的滩头阵地并保护他的部队。"
+        },
+        "fr": {
+          "text": "Il ordonna qu'une motte soit creusée à Hastings",
+          "context": "William ordonne la construction d'un château de motte-et-bailey à Hastings pour sécuriser sa tête de pont et protéger ses forces."
+        },
+        "de": {
+          "text": "Er befahl, in Hastings eine Motte zu graben",
+          "context": "William befiehlt den Bau einer Motte-and-Bailey-Burg in Hastings, um seinen Brückenkopf zu sichern und seine Streitkräfte zu schützen."
+        },
+        "es": {
+          "text": "Ordenó que se cavara una mota en Hastings.",
+          "context": "William ordena la construcción de un castillo motte-and-bailey en Hastings para asegurar su cabeza de playa y proteger sus fuerzas."
+        },
+        "nl": {
+          "text": "Hij beval dat er bij Hastings een motte moest worden gegraven",
+          "context": "William geeft opdracht tot de bouw van een mottekasteel in Hastings om zijn bruggenhoofd veilig te stellen en zijn troepen te beschermen."
+        },
+        "pt": {
+          "text": "Ele ordenou que um motte fosse cavado em Hastings",
+          "context": "William ordena a construção de um castelo motte-and-bailey em Hastings para garantir sua cabeça de ponte e proteger suas forças."
+        },
+        "hi": {
+          "text": "उन्होंने आदेश दिया कि हेस्टिंग्स में एक गड्ढा खोदा जाए",
+          "context": "विलियम ने अपने समुद्र तट को सुरक्षित करने और अपनी सेना की सुरक्षा के लिए हेस्टिंग्स में एक मोट्टे-एंड-बेली महल के निर्माण का आदेश दिया।"
+        },
+        "ar": {
+          "text": "وأمر بحفر موتي في هاستينغز",
+          "context": "أمر ويليام ببناء قلعة موتي وبيلي في هاستينغز لتأمين رأس جسره وحماية قواته."
+        },
+        "bn": {
+          "text": "তিনি আদেশ দেন যে হেস্টিংসে একটি মট খনন করা উচিত",
+          "context": "উইলিয়াম তার সমুদ্র সৈকতকে সুরক্ষিত রাখতে এবং তার বাহিনীকে রক্ষা করার জন্য হেস্টিংসে একটি মট-এন্ড-বেইলি দুর্গ নির্মাণের আদেশ দেন।"
+        }
+      }
+    },
+    {
+      "scene": "46",
+      "latin": "HIC NUNTIATUM EST WILLELM DE HAROLD",
+      "x": 404.0876618916677,
+      "y": 1.0477157405346134,
+      "translations": {
+        "en": {
+          "text": "Here William was told about Harold",
+          "context": "A messenger informs William that Harold's army is approaching. Harold had just defeated a Norwegian invasion in the north and marched his army rapidly south to meet William."
+        },
+        "zh": {
+          "text": "威廉在这里得知了哈罗德的事迹",
+          "context": "一名信使通知威廉，哈罗德的军队正在逼近。哈罗德刚刚击败了北方的挪威入侵，并率军迅速南下迎战威廉。"
+        },
+        "fr": {
+          "text": "Ici, William a été informé de Harold",
+          "context": "Un messager informe William que l'armée d'Harold approche. Harold venait de vaincre une invasion norvégienne dans le nord et fit marcher rapidement son armée vers le sud pour rencontrer William."
+        },
+        "de": {
+          "text": "Hier wurde William von Harold erzählt",
+          "context": "Ein Bote informiert William, dass Harolds Armee im Anmarsch ist. Harold hatte gerade eine norwegische Invasion im Norden besiegt und marschierte mit seiner Armee schnell nach Süden, um Wilhelm zu begegnen."
+        },
+        "es": {
+          "text": "Aquí a William le contaron sobre Harold.",
+          "context": "Un mensajero informa a William que el ejército de Harold se acerca. Harold acababa de derrotar una invasión noruega en el norte y marchó rápidamente con su ejército hacia el sur para encontrarse con William."
+        },
+        "nl": {
+          "text": "Hier werd William over Harold verteld",
+          "context": "Een boodschapper informeert William dat het leger van Harold nadert. Harold had zojuist een Noorse invasie in het noorden verslagen en marcheerde met zijn leger snel naar het zuiden om William te ontmoeten."
+        },
+        "pt": {
+          "text": "Aqui William foi informado sobre Harold",
+          "context": "Um mensageiro informa William que o exército de Haroldo está se aproximando. Haroldo acabara de derrotar uma invasão norueguesa no norte e marchou rapidamente com seu exército para o sul para encontrar Guilherme."
+        },
+        "hi": {
+          "text": "यहां विलियम को हेरोल्ड के बारे में बताया गया",
+          "context": "एक दूत ने विलियम को सूचित किया कि हेरोल्ड की सेना आ रही है। हेरोल्ड ने हाल ही में उत्तर में नॉर्वेजियन आक्रमण को हराया था और विलियम से मिलने के लिए अपनी सेना को तेजी से दक्षिण की ओर बढ़ाया था।"
+        },
+        "ar": {
+          "text": "هنا تم إخبار ويليام عن هارولد",
+          "context": "يخبر الرسول ويليام أن جيش هارولد يقترب. كان هارولد قد هزم للتو الغزو النرويجي في الشمال وسار بجيشه بسرعة جنوبًا للقاء ويليام."
+        },
+        "bn": {
+          "text": "এখানে উইলিয়াম হ্যারল্ড সম্পর্কে বলা হয়েছিল",
+          "context": "একজন বার্তাবাহক উইলিয়ামকে জানান যে হ্যারল্ডের সেনাবাহিনী এগিয়ে আসছে। হ্যারল্ড সবেমাত্র উত্তরে একটি নরওয়েজিয়ান আক্রমণকে পরাজিত করেছিলেন এবং উইলিয়ামের সাথে দেখা করার জন্য তার সেনাবাহিনীকে দ্রুত দক্ষিণে অগ্রসর করেছিলেন।"
+        }
+      }
+    },
+    {
+      "scene": "47",
+      "latin": "HIC DOMUS INCENDITUR",
+      "x": 410.1184489831617,
+      "y": 1.4578653338629735,
+      "translations": {
+        "en": {
+          "text": "Here a house is burned",
+          "context": "The Normans burn a local house, terrorizing the population. A woman and child flee the burning building."
+        },
+        "zh": {
+          "text": "这里有一座房子被烧毁",
+          "context": "诺曼人烧毁了当地的一座房屋，恐吓民众。一名妇女和儿童逃离着火的大楼。"
+        },
+        "fr": {
+          "text": "Ici une maison est incendiée",
+          "context": "Les Normands brûlent une maison locale, terrorisant la population. Une femme et un enfant fuient le bâtiment en feu."
+        },
+        "de": {
+          "text": "Hier ist ein Haus niedergebrannt",
+          "context": "Die Normannen brennen ein lokales Haus nieder und terrorisieren die Bevölkerung. Eine Frau und ein Kind fliehen aus dem brennenden Gebäude."
+        },
+        "es": {
+          "text": "Aquí se quema una casa",
+          "context": "Los normandos queman una casa local, aterrorizando a la población. Una mujer y un niño huyen del edificio en llamas."
+        },
+        "nl": {
+          "text": "Hier wordt een huis verbrand",
+          "context": "De Noormannen steken een plaatselijk huis in brand en terroriseren de bevolking. Een vrouw en kind ontvluchten het brandende gebouw."
+        },
+        "pt": {
+          "text": "Aqui uma casa está queimada",
+          "context": "Os normandos queimam uma casa local, aterrorizando a população. Uma mulher e uma criança fogem do prédio em chamas."
+        },
+        "hi": {
+          "text": "यहां एक घर जला दिया गया है",
+          "context": "नॉर्मन्स ने आबादी को आतंकित करते हुए एक स्थानीय घर को जला दिया। एक महिला और बच्चा जलती हुई इमारत से भाग गए।"
+        },
+        "ar": {
+          "text": "هنا يتم حرق المنزل",
+          "context": "النورمانديون يحرقون منزلًا محليًا ويرعبون السكان. امرأة وطفل يفرون من المبنى المحترق."
+        },
+        "bn": {
+          "text": "এখানে একটি বাড়ি পুড়িয়ে দেওয়া হয়",
+          "context": "নর্মানরা একটি স্থানীয় বাড়ি পুড়িয়ে দেয়, জনসংখ্যাকে আতঙ্কিত করে। এক নারী ও শিশু জ্বলন্ত ভবন থেকে পালিয়েছে।"
+        }
+      }
+    },
+    {
+      "scene": "48",
+      "latin": "HIC MILITES EXIERUNT DE HESTENGA ET VENERUNT AD PRELIUM CONTRA HAROLDUM REGE",
+      "x": 413.38888472025246,
+      "y": 1.0082878181095611,
+      "translations": {
+        "en": {
+          "text": "Here the knights have left Hastings and have come to the battle against King Harold",
+          "context": "The Norman cavalry rides out from Hastings on the morning of October 14, 1066, to meet the English army in battle."
+        },
+        "zh": {
+          "text": "在这里，骑士们离开了黑斯廷斯，来到了与哈罗德国王的战斗中",
+          "context": "1066 年 10 月 14 日早晨，诺曼骑兵从黑斯廷斯出发，与英国军队交战。"
+        },
+        "fr": {
+          "text": "Ici, les chevaliers ont quitté Hastings et sont venus à la bataille contre le roi Harold.",
+          "context": "La cavalerie normande quitte Hastings le matin du 14 octobre 1066 pour rencontrer l'armée anglaise au combat."
+        },
+        "de": {
+          "text": "Hier haben die Ritter Hastings verlassen und sind zum Kampf gegen König Harold gekommen",
+          "context": "Die normannische Kavallerie reitet am Morgen des 14. Oktober 1066 von Hastings aus, um der englischen Armee im Kampf zu begegnen."
+        },
+        "es": {
+          "text": "Aquí los caballeros han abandonado Hastings y han venido a la batalla contra el rey Harold.",
+          "context": "La caballería normanda sale de Hastings en la mañana del 14 de octubre de 1066 para enfrentarse al ejército inglés en la batalla."
+        },
+        "nl": {
+          "text": "Hier hebben de ridders Hastings verlaten en zijn ze ten strijde getrokken tegen koning Harold",
+          "context": "De Normandische cavalerie vertrekt op de ochtend van 14 oktober 1066 vanuit Hastings om het Engelse leger in de strijd te ontmoeten."
+        },
+        "pt": {
+          "text": "Aqui os cavaleiros deixaram Hastings e vieram para a batalha contra o rei Haroldo.",
+          "context": "A cavalaria normanda sai de Hastings na manhã de 14 de outubro de 1066, para enfrentar o exército inglês na batalha."
+        },
+        "hi": {
+          "text": "यहां शूरवीरों ने हेस्टिंग्स को छोड़ दिया है और राजा हेरोल्ड के खिलाफ लड़ाई में आ गए हैं",
+          "context": "युद्ध में अंग्रेजी सेना से मुकाबला करने के लिए नॉर्मन घुड़सवार सेना 14 अक्टूबर, 1066 की सुबह हेस्टिंग्स से निकली।"
+        },
+        "ar": {
+          "text": "هنا غادر الفرسان هاستينغز وجاءوا للمعركة ضد الملك هارولد",
+          "context": "انطلق سلاح الفرسان النورماندي من هاستينغز في صباح يوم 14 أكتوبر 1066 لمقابلة الجيش الإنجليزي في المعركة."
+        },
+        "bn": {
+          "text": "এখানে নাইটরা হেস্টিংস ছেড়ে রাজা হ্যারল্ডের বিরুদ্ধে যুদ্ধে নেমেছে",
+          "context": "নর্মান অশ্বারোহী বাহিনী 14 অক্টোবর, 1066-এর সকালে হেস্টিংস থেকে যুদ্ধে ইংরেজ সেনাবাহিনীর সাথে দেখা করার জন্য বেরিয়েছিল।"
+        }
+      }
+    },
+    {
+      "scene": "49",
+      "latin": "HIC WILLELM DUX INTERROGAT VITAL SI VIDISSET HAROLDI EXERCITU",
+      "x": 436.27281559498437,
+      "y": 0.8903798204673934,
+      "translations": {
+        "en": {
+          "text": "Here Duke William asks Vital if he has seen Harold's army",
+          "context": "William asks his scout, Vital, if he has spotted Harold's forces."
+        },
+        "zh": {
+          "text": "威廉公爵询问维塔尔是否见过哈罗德的军队",
+          "context": "威廉询问他的侦察兵维塔尔是否发现了哈罗德的部队。"
+        },
+        "fr": {
+          "text": "Ici, le duc William demande à Vital s'il a vu l'armée d'Harold",
+          "context": "William demande à son éclaireur, Vital, s'il a repéré les forces d'Harold."
+        },
+        "de": {
+          "text": "Hier fragt Herzog William Vital, ob er Harolds Armee gesehen hat",
+          "context": "William fragt seinen Späher Vital, ob er Harolds Truppen entdeckt hat."
+        },
+        "es": {
+          "text": "Aquí el duque William le pregunta a Vital si ha visto el ejército de Harold.",
+          "context": "William le pregunta a su explorador, Vital, si ha visto las fuerzas de Harold."
+        },
+        "nl": {
+          "text": "Hier vraagt ​​hertog William aan Vital of hij het leger van Harold heeft gezien",
+          "context": "William vraagt ​​zijn verkenner Vital of hij de troepen van Harold heeft gezien."
+        },
+        "pt": {
+          "text": "Aqui o duque William pergunta a Vital se ele viu o exército de Haroldo",
+          "context": "William pergunta ao seu batedor, Vital, se ele avistou as forças de Harold."
+        },
+        "hi": {
+          "text": "यहां ड्यूक विलियम ने वाइटल से पूछा कि क्या उसने हेरोल्ड की सेना देखी है",
+          "context": "विलियम अपने स्काउट वाइटल से पूछता है कि क्या उसने हेरोल्ड की सेना को देखा है।"
+        },
+        "ar": {
+          "text": "هنا يسأل الدوق ويليام فيتال إذا كان قد رأى جيش هارولد",
+          "context": "يسأل ويليام مستكشفه، فيتال، إذا كان قد اكتشف قوات هارولد."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়াম ভাইটালকে জিজ্ঞাসা করেন তিনি হ্যারল্ডের সেনাবাহিনী দেখেছেন কিনা",
+          "context": "উইলিয়াম তার স্কাউট ভাইটালকে জিজ্ঞেস করলেন, সে হ্যারল্ডের বাহিনী দেখেছে কিনা।"
+        }
+      }
+    },
+    {
+      "scene": "50",
+      "latin": "ISTE NUNTIAT HAROLDUM REGE DE EXERCITU WILLELMI DUCIS",
+      "x": 454.16631336323684,
+      "y": 0.8178003311617209,
+      "translations": {
+        "en": {
+          "text": "This messenger tells King Harold about Duke William's army",
+          "context": "An English scout spots the Norman army and reports back to King Harold."
+        },
+        "zh": {
+          "text": "这位信使告诉哈罗德国王威廉公爵的军队",
+          "context": "一名英国侦察兵发现了诺曼军队并向哈罗德国王报告。"
+        },
+        "fr": {
+          "text": "Ce messager parle au roi Harold de l'armée du duc William.",
+          "context": "Un éclaireur anglais repère l'armée normande et fait son rapport au roi Harold."
+        },
+        "de": {
+          "text": "Dieser Bote erzählt König Harold von der Armee Herzog Wilhelms",
+          "context": "Ein englischer Späher entdeckt die normannische Armee und erstattet König Harold Bericht."
+        },
+        "es": {
+          "text": "Este mensajero le cuenta al rey Harold sobre el ejército del duque William.",
+          "context": "Un explorador inglés ve al ejército normando e informa al rey Harold."
+        },
+        "nl": {
+          "text": "Deze boodschapper vertelt koning Harold over het leger van hertog Willem",
+          "context": "Een Engelse verkenner ziet het Normandische leger en rapporteert aan koning Harold."
+        },
+        "pt": {
+          "text": "Este mensageiro conta ao rei Haroldo sobre o exército do duque William",
+          "context": "Um batedor inglês avista o exército normando e reporta ao rei Haroldo."
+        },
+        "hi": {
+          "text": "यह दूत राजा हेरोल्ड को ड्यूक विलियम की सेना के बारे में बताता है",
+          "context": "एक अंग्रेजी स्काउट नॉर्मन सेना को देखता है और राजा हेरोल्ड को रिपोर्ट करता है।"
+        },
+        "ar": {
+          "text": "يخبر هذا الرسول الملك هارولد عن جيش الدوق ويليام",
+          "context": "يكتشف كشاف إنجليزي الجيش النورماندي ويقدم تقاريره إلى الملك هارولد."
+        },
+        "bn": {
+          "text": "এই বার্তাবাহক রাজা হ্যারল্ডকে ডিউক উইলিয়ামের সেনাবাহিনী সম্পর্কে বলেন",
+          "context": "একজন ইংরেজ স্কাউট নরম্যান বাহিনীকে দেখে এবং রাজা হ্যারল্ডের কাছে রিপোর্ট করে।"
+        }
+      }
+    },
+    {
+      "scene": "51",
+      "latin": "HIC WILLELM DUX ALLOQUITUR SUIS MILITIBUS UT PREPARAREN SE VIRILITER ET SAPIENTER AD PRELIUM CONTRA ANGLORUM EXERCITU",
+      "x": 460.9476589963693,
+      "y": 1.4945471210416144,
+      "translations": {
+        "en": {
+          "text": "Here Duke William speaks to his knights to prepare themselves manfully and wisely for the battle against the army of the English",
+          "context": "Duke William delivers a pre-battle speech to rally his troops, urging them to fight bravely."
+        },
+        "zh": {
+          "text": "威廉公爵在这里向他的骑士们讲话，让他们勇敢而明智地做好与英国军队的战斗的准备",
+          "context": "威廉公爵发表战前讲话，集结部队，鼓励他们勇敢战斗。"
+        },
+        "fr": {
+          "text": "Ici, le duc William s'adresse à ses chevaliers pour qu'ils se préparent vaillamment et sagement à la bataille contre l'armée anglaise.",
+          "context": "Le duc William prononce un discours d'avant-bataille pour rallier ses troupes, les exhortant à se battre avec courage."
+        },
+        "de": {
+          "text": "Hier fordert Herzog Wilhelm seine Ritter auf, sich mannhaft und klug auf den Kampf gegen die Armee der Engländer vorzubereiten",
+          "context": "Herzog Wilhelm hält vor der Schlacht eine Rede, in der er seine Truppen zu einem mutigen Kampf aufruft."
+        },
+        "es": {
+          "text": "Aquí el duque William habla a sus caballeros para que se preparen valiente y sabiamente para la batalla contra el ejército inglés.",
+          "context": "El duque William pronuncia un discurso previo a la batalla para reunir a sus tropas, instándolas a luchar con valentía."
+        },
+        "nl": {
+          "text": "Hier spreekt hertog Willem zijn ridders toe om zich manmoedig en wijs voor te bereiden op de strijd tegen het leger van de Engelsen",
+          "context": "Hertog William houdt een toespraak vóór de strijd om zijn troepen te verzamelen en hen aan te sporen moedig te vechten."
+        },
+        "pt": {
+          "text": "Aqui o duque Guilherme fala aos seus cavaleiros para se prepararem com coragem e sabedoria para a batalha contra o exército inglês.",
+          "context": "O duque William faz um discurso pré-batalha para reunir suas tropas, instando-as a lutar bravamente."
+        },
+        "hi": {
+          "text": "यहां ड्यूक विलियम अपने शूरवीरों से अंग्रेजी सेना के खिलाफ लड़ाई के लिए खुद को मर्दाना और बुद्धिमानी से तैयार करने के लिए कहते हैं",
+          "context": "ड्यूक विलियम अपने सैनिकों को एकजुट करने के लिए युद्ध-पूर्व भाषण देते हैं और उनसे बहादुरी से लड़ने का आग्रह करते हैं।"
+        },
+        "ar": {
+          "text": "هنا يتحدث الدوق ويليام إلى فرسانه ليجهزوا أنفسهم بكل قوة وحكمة للمعركة ضد جيش الإنجليز",
+          "context": "يلقي الدوق ويليام خطابًا قبل المعركة لحشد قواته وحثهم على القتال بشجاعة."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়াম তার নাইটদের সাথে কথা বলেছেন ইংরেজদের সেনাবাহিনীর বিরুদ্ধে যুদ্ধের জন্য নিজেদেরকে বুদ্ধিমত্তার সাথে প্রস্তুত করার জন্য",
+          "context": "ডিউক উইলিয়াম তার সৈন্যদের সমাবেশ করার জন্য একটি প্রাক-যুদ্ধ বক্তৃতা দেন, তাদের সাহসিকতার সাথে লড়াই করার আহ্বান জানান।"
+        }
+      }
+    },
+    {
+      "scene": "52",
+      "latin": "HIC CECIDERUNT LEWINE ET GYRÐ FRATRES HAROLDI REGIS",
+      "x": 509.8099302095928,
+      "y": 0.8705123333840765,
+      "translations": {
+        "en": {
+          "text": "Here fell Leofwine and Gyrth , brothers of King Harold",
+          "context": "The Battle of Hastings begins. The English form a shield wall on Senlac Hill. Harold's brothers, Leofwine and Gyrth, are killed early in the brutal fighting."
+        },
+        "zh": {
+          "text": "哈罗德国王的兄弟利奥夫温和吉尔斯就死在了这里",
+          "context": "黑斯廷斯战役开始。英国人在森拉克山上筑起了盾墙。哈罗德的兄弟利奥夫温和吉尔斯在残酷的战斗中早早阵亡。"
+        },
+        "fr": {
+          "text": "Ici tombèrent Leofwine et Gyrth, frères du roi Harold",
+          "context": "La bataille d'Hastings commence. Les Anglais forment un mur de bouclier sur la colline de Senlac. Les frères d'Harold, Leofwine et Gyrth, sont tués au début des combats brutaux."
+        },
+        "de": {
+          "text": "Hier fielen Leofwine und Gyrth, die Brüder von König Harold",
+          "context": "Die Schlacht von Hastings beginnt. Die Engländer bilden einen Schildwall auf dem Senlac Hill. Harolds Brüder Leofwine und Gyrth werden zu Beginn der brutalen Kämpfe getötet."
+        },
+        "es": {
+          "text": "Aquí cayeron Leofwine y Gyrth, hermanos del rey Harold.",
+          "context": "Comienza la batalla de Hastings. Los ingleses forman un muro de escudos en Senlac Hill. Los hermanos de Harold, Leofwine y Gyrth, mueren al comienzo del brutal combate."
+        },
+        "nl": {
+          "text": "Hier vielen Leofwine en Gyrth, broers van koning Harold",
+          "context": "De slag om Hastings begint. De Engelsen vormen een schildmuur op Senlac Hill. Harolds broers, Leofwine en Gyrth, worden vroeg in de brute gevechten gedood."
+        },
+        "pt": {
+          "text": "Aqui caíram Leofwine e Gyrth, irmãos do rei Haroldo",
+          "context": "A Batalha de Hastings começa. Os ingleses formam uma parede de escudos na colina Senlac. Os irmãos de Harold, Leofwine e Gyrth, são mortos no início da luta brutal."
+        },
+        "hi": {
+          "text": "यहां राजा हेरोल्ड के भाई लिओफवाइन और गिरथ गिर गए",
+          "context": "हेस्टिंग्स की लड़ाई शुरू होती है. अंग्रेज़ सेनलाक पहाड़ी पर एक ढाल की दीवार बनाते हैं। हेरोल्ड के भाई, लिओफ़वाइन और गिरथ, क्रूर लड़ाई में जल्दी ही मारे गए।"
+        },
+        "ar": {
+          "text": "هنا سقط ليوفوين وجيرث، إخوة الملك هارولد",
+          "context": "تبدأ معركة هاستينغز. يشكل الإنجليز جدارًا درعيًا على تل سينلاك. قُتل أخوة هارولد، ليوفوين وجيرث، في وقت مبكر من القتال الوحشي."
+        },
+        "bn": {
+          "text": "এখানে পড়েছিলেন রাজা হ্যারল্ডের ভাই লিওফওয়াইন এবং গির্থ",
+          "context": "হেস্টিংসের যুদ্ধ শুরু হয়। ইংরেজরা সেনলাক পাহাড়ে একটি ঢাল প্রাচীর তৈরি করে। হ্যারল্ডের ভাই, লিওফওয়াইন এবং গির্থ, নৃশংস লড়াইয়ের প্রথম দিকে নিহত হয়।"
+        }
+      }
+    },
+    {
+      "scene": "53",
+      "latin": "HIC CECIDERUNT SIMUL ANGLI ET FRANCI IN PRELIO",
+      "x": 527.2844936135477,
+      "y": 0.9441755074915352,
+      "translations": {
+        "en": {
+          "text": "Here English and French fell at the same time in battle",
+          "context": "Intense combat ensues as the English forces fiercely defend a hill, successfully pulling several Norman cavalrymen and their horses down into the deadly marsh."
+        },
+        "zh": {
+          "text": "在这里，英语和法语在战斗中同时倒下",
+          "context": "随着英军在一座小山上顽强抵抗，激烈的战斗爆发了，他们成功地将几名诺曼骑兵及其马匹拉入了致命的沼泽中。"
+        },
+        "fr": {
+          "text": "Ici, les Anglais et les Français tombèrent en même temps au combat",
+          "context": "De violents combats s'engagent alors que les forces anglaises défendent farouchement une colline, parvenant à entraîner plusieurs cavaliers normands et leurs chevaux dans un marais mortel."
+        },
+        "de": {
+          "text": "Hier fielen gleichzeitig Engländer und Franzosen im Kampf",
+          "context": "Es kommt zu heftigen Kämpfen, als die englischen Truppen erbittert einen Hügel verteidigen und dabei erfolgreich mehrere normannische Kavalleristen und ihre Pferde in den tödlichen Sumpf ziehen."
+        },
+        "es": {
+          "text": "Aquí ingleses y franceses cayeron al mismo tiempo en batalla.",
+          "context": "Se produce un intenso combate cuando las fuerzas inglesas defienden ferozmente una colina, logrando arrastrar a varios jinetes normandos y a sus caballos a un pantano mortal."
+        },
+        "nl": {
+          "text": "Hier vielen Engelsen en Fransen tegelijkertijd in de strijd",
+          "context": "Er ontstaat een hevige strijd wanneer de Engelse troepen fel een heuvel verdedigen en erin slagen verschillende Normandische cavaleristen en hun paarden het dodelijke moeras in te trekken."
+        },
+        "pt": {
+          "text": "Aqui ingleses e franceses caíram ao mesmo tempo em batalha",
+          "context": "Um combate intenso acontece quando as forças inglesas defendem ferozmente uma colina, puxando com sucesso vários cavaleiros normandos e seus cavalos para o pântano mortal."
+        },
+        "hi": {
+          "text": "यहां अंग्रेज और फ्रांसीसी एक ही समय युद्ध में गिरे",
+          "context": "भयंकर युद्ध छिड़ जाता है क्योंकि अंग्रेजी सेना एक पहाड़ी की बहादुरी से रक्षा करती है, और कई नॉर्मन घुड़सवारों और उनके घोड़ों को एक घातक दलदल में खींचने में सफल होती है।"
+        },
+        "ar": {
+          "text": "هنا سقطت الإنجليزية والفرنسية في نفس الوقت في المعركة",
+          "context": "تندلع معارك عنيفة بينما تدافع القوات الإنجليزية بشراسة عن تلة، وتنجح في سحب العديد من فرسان النورمان وخيولهم إلى مستنقع مميت."
+        },
+        "bn": {
+          "text": "এখানে ইংরেজ এবং ফরাসি একই সাথে যুদ্ধে পড়েছিল",
+          "context": "ইংরেজ বাহিনী প্রচণ্ডভাবে একটি পাহাড় রক্ষা করার সময় তীব্র লড়াই শুরু হয়, সফলভাবে বেশ কয়েকজন নরম্যান অশ্বারোহী সৈন্য এবং তাদের ঘোড়াকে একটি মারাত্মক জলাভূমিতে টেনে নিয়ে যায়।"
+        }
+      }
+    },
+    {
+      "scene": "54",
+      "latin": "HIC ODO EPS BACULU TENENS CONFORTAT PUEROS",
+      "x": 542.1194574186238,
+      "y": 0.833244314555426,
+      "translations": {
+        "en": {
+          "text": "Here Bishop Odo, holding a club, gives strength to the boys",
+          "context": "Bishop Odo wields a club to rally the troops, while Duke William tilts back his helmet to show his face to his soldiers, dispelling rumors of his death and leading a renewed cavalry charge."
+        },
+        "zh": {
+          "text": "奥多主教手持球杆，为孩子们提供力量",
+          "context": "奥多主教挥舞棍棒来鼓舞军队，而威廉公爵则向后倾斜头盔，向士兵露出他的脸，打破了他已阵亡的谣言，并领导了新一轮的骑兵冲锋。"
+        },
+        "fr": {
+          "text": "Ici, Mgr Odo, tenant un club, donne de la force aux garçons",
+          "context": "L'évêque Odon brandit une massue pour rallier les troupes, tandis que le duc Guillaume rejette son casque en arrière pour montrer son visage à ses soldats, dissipant ainsi les rumeurs de sa mort et menant une nouvelle charge de cavalerie."
+        },
+        "de": {
+          "text": "Hier gibt Bischof Odo mit einer Keule den Jungen Kraft",
+          "context": "Bischof Odo schwingt eine Keule, um die Truppen zu sammeln, während Herzog Wilhelm seinen Helm zurückkippt, um seinen Soldaten sein Gesicht zu zeigen, womit er Gerüchte über seinen Tod zerstreut und einen erneuten Kavallerieangriff anführt."
+        },
+        "es": {
+          "text": "Aquí el obispo Odo, sosteniendo un garrote, da fuerza a los niños.",
+          "context": "El obispo Odo empuña un garrote para reunir a las tropas, mientras que el duque Guillermo inclina su casco hacia atrás para mostrar su rostro a sus soldados, disipando los rumores de su muerte y liderando una nueva carga de caballería."
+        },
+        "nl": {
+          "text": "Hier geeft bisschop Odo, met een knuppel in zijn hand, kracht aan de jongens",
+          "context": "Bisschop Odo zwaait met een knuppel om de troepen te verzamelen, terwijl hertog Willem zijn helm naar achteren kantelt om zijn gezicht aan zijn soldaten te laten zien, waarmee hij geruchten over zijn dood ontzenuwt en een nieuwe cavalerie-aanval leidt."
+        },
+        "pt": {
+          "text": "Aqui o bispo Odo, segurando uma clava, dá força aos meninos",
+          "context": "O bispo Odo empunha uma clava para reunir as tropas, enquanto o duque Guilherme inclina o capacete para trás para mostrar o rosto aos soldados, dissipando os rumores de sua morte e liderando um ataque renovado da cavalaria."
+        },
+        "hi": {
+          "text": "यहां बिशप ओडो क्लब पकड़कर लड़कों को ताकत देते हैं",
+          "context": "बिशप ओडो सैनिकों को इकट्ठा करने के लिए एक गदा घुमाते हैं, जबकि ड्यूक विलियम अपने सैनिकों को अपना चेहरा दिखाने के लिए अपने हेलमेट को पीछे झुकाते हैं, अपनी मौत की अफवाहों को दूर करते हुए और घुड़सवार सेना के एक नए हमले का नेतृत्व करते हैं।"
+        },
+        "ar": {
+          "text": "هنا الأسقف أودو، يحمل هراوة، يمنح القوة للأولاد",
+          "context": "يلوح الأسقف أودو بهراوة لحشد القوات، بينما يميل الدوق ويليام خوذته للخلف ليظهر وجهه لجنوده، ويبدد الشائعات حول وفاته ويقود هجومًا جديدًا لسلاح الفرسان."
+        },
+        "bn": {
+          "text": "এখানে বিশপ ওডো, একটি ক্লাব ধরে, ছেলেদের শক্তি দেয়",
+          "context": "বিশপ ওডো সৈন্যদের একত্রিত করার জন্য একটি গদা ঘোরান, যখন ডিউক উইলিয়াম তার সৈন্যদের নিজের মুখ দেখানোর জন্য তার হেলমেট পিছনের দিকে কাত করেন, তার মৃত্যুর গুজব দূর করেন এবং একটি নতুন অশ্বারোহী আক্রমণের নেতৃত্ব দেন।"
+        }
+      }
+    },
+    {
+      "scene": "55",
+      "latin": "HIC EST WILLEL DUX",
+      "x": 534.3209794417476,
+      "y": 0.5855181355429755,
+      "translations": {
+        "en": {
+          "text": "Here is Duke William",
+          "context": "Bishop Odo wields a club to rally the troops, while Duke William tilts back his helmet to show his face to his soldiers, dispelling rumors of his death and leading a renewed cavalry charge."
+        },
+        "zh": {
+          "text": "这是威廉公爵",
+          "context": "奥多主教挥舞棍棒来鼓舞军队，而威廉公爵则向后倾斜头盔，向士兵露出他的脸，打破了他已阵亡的谣言，并领导了新一轮的骑兵冲锋。"
+        },
+        "fr": {
+          "text": "Voici le duc William",
+          "context": "L'évêque Odon brandit une massue pour rallier les troupes, tandis que le duc Guillaume rejette son casque en arrière pour montrer son visage à ses soldats, dissipant ainsi les rumeurs de sa mort et menant une nouvelle charge de cavalerie."
+        },
+        "de": {
+          "text": "Hier ist Herzog William",
+          "context": "Bischof Odo schwingt eine Keule, um die Truppen zu sammeln, während Herzog Wilhelm seinen Helm zurückkippt, um seinen Soldaten sein Gesicht zu zeigen, womit er Gerüchte über seinen Tod zerstreut und einen erneuten Kavallerieangriff anführt."
+        },
+        "es": {
+          "text": "Aquí está el duque William.",
+          "context": "El obispo Odo empuña un garrote para reunir a las tropas, mientras que el duque Guillermo inclina su casco hacia atrás para mostrar su rostro a sus soldados, disipando los rumores de su muerte y liderando una nueva carga de caballería."
+        },
+        "nl": {
+          "text": "Hier is hertog Willem",
+          "context": "Bisschop Odo zwaait met een knuppel om de troepen te verzamelen, terwijl hertog Willem zijn helm naar achteren kantelt om zijn gezicht aan zijn soldaten te laten zien, waarmee hij geruchten over zijn dood ontzenuwt en een nieuwe cavalerie-aanval leidt."
+        },
+        "pt": {
+          "text": "Aqui está o duque William",
+          "context": "O bispo Odo empunha uma clava para reunir as tropas, enquanto o duque Guilherme inclina o capacete para trás para mostrar o rosto aos soldados, dissipando os rumores de sua morte e liderando um ataque renovado da cavalaria."
+        },
+        "hi": {
+          "text": "यहाँ ड्यूक विलियम है",
+          "context": "बिशप ओडो सैनिकों को इकट्ठा करने के लिए एक गदा घुमाते हैं, जबकि ड्यूक विलियम अपने सैनिकों को अपना चेहरा दिखाने के लिए अपने हेलमेट को पीछे झुकाते हैं, अपनी मौत की अफवाहों को दूर करते हुए और घुड़सवार सेना के एक नए हमले का नेतृत्व करते हैं।"
+        },
+        "ar": {
+          "text": "هنا الدوق ويليام",
+          "context": "يلوح الأسقف أودو بهراوة لحشد القوات، بينما يميل الدوق ويليام خوذته للخلف ليظهر وجهه لجنوده، ويبدد الشائعات حول وفاته ويقود هجومًا جديدًا لسلاح الفرسان."
+        },
+        "bn": {
+          "text": "এখানে ডিউক উইলিয়াম",
+          "context": "বিশপ ওডো সৈন্যদের একত্রিত করার জন্য একটি গদা ঘোরান, যখন ডিউক উইলিয়াম তার সৈন্যদের নিজের মুখ দেখানোর জন্য তার হেলমেট পিছনের দিকে কাত করেন, তার মৃত্যুর গুজব দূর করেন এবং একটি নতুন অশ্বারোহী আক্রমণের নেতৃত্ব দেন।"
+        }
+      }
+    },
+    {
+      "scene": "57",
+      "latin": "HIC HAROLD REX INTERFECTUS EST",
+      "x": 577.5083342988927,
+      "y": 0.9318633028070245,
+      "translations": {
+        "en": {
+          "text": "Here King Harold was slain",
+          "context": "The climatic death of King Harold Godwinson, depicted both as a figure pulling an arrow from his eye and subsequently being struck down by a Norman knight's sword."
+        },
+        "zh": {
+          "text": "哈罗德国王在这里被杀",
+          "context": "哈罗德·戈德温森国王的高潮性死亡，描绘了一个人从眼睛里拔出箭，随后被诺曼骑士的剑击倒的场景。"
+        },
+        "fr": {
+          "text": "Ici le roi Harold a été tué",
+          "context": "La mort culminante du roi Harold Godwinson, représentée à la fois comme un personnage arrachant une flèche de son œil et ensuite frappé par l'épée d'un chevalier normand."
+        },
+        "de": {
+          "text": "Hier wurde König Harold getötet",
+          "context": "Der dramatische Tod von König Harold Godwinson, dargestellt sowohl als Figur, die sich einen Pfeil aus dem Auge zieht, als auch als jemand, der anschließend vom Schwert eines normannischen Ritters niedergestreckt wird."
+        },
+        "es": {
+          "text": "Aquí el rey Harold fue asesinado",
+          "context": "La muerte culminante del rey Harold Godwinson, representada tanto como una figura sacándose una flecha del ojo como siendo derribada por la espada de un caballero normando."
+        },
+        "nl": {
+          "text": "Hier werd koning Harold gedood",
+          "context": "De climax van de dood van koning Harold Godwinson, afgebeeld als een figuur die een pijl uit zijn oog trekt en vervolgens wordt neergeslagen door het zwaard van een Normandische ridder."
+        },
+        "pt": {
+          "text": "Aqui o rei Haroldo foi morto",
+          "context": "A morte culminante do rei Haroldo Godwinson, retratada como uma figura puxando uma flecha do olho e posteriormente sendo derrubada pela espada de um cavaleiro normando."
+        },
+        "hi": {
+          "text": "यहाँ राजा हेरोल्ड की हत्या कर दी गई",
+          "context": "राजा हेरोल्ड गॉडविन्सन की चरम मौत, जिसे एक ऐसी आकृति के रूप में दर्शाया गया है जो अपनी आंख से तीर निकाल रही है और बाद में एक नॉर्मन नाइट की तलवार से मारी जा रही है।"
+        },
+        "ar": {
+          "text": "هنا قُتل الملك هارولد",
+          "context": "الموت الدرامي للملك هارولد جودوينسون، والذي تم تصويره كشخصية تسحب سهمًا من عينها ثم تُضرب بسيف فارس نورماندي."
+        },
+        "bn": {
+          "text": "এখানে রাজা হ্যারল্ডকে হত্যা করা হয়েছিল",
+          "context": "রাজা হ্যারল্ড গডউইনসনের চরম মৃত্যু, যাকে নিজের চোখ থেকে তীর টেনে বের করা এবং পরে একজন নরম্যান নাইটের তরোয়াল দ্বারা আঘাত করা উভয় রূপেই চিত্রিত করা হয়েছে।"
+        }
+      }
+    },
+    {
+      "scene": "58",
+      "latin": "ET FUGA VERTERUNT ANGLI",
+      "x": 587.5585481956152,
+      "y": 0.8105844737429088,
+      "translations": {
+        "en": {
+          "text": "and the English have turned in flight",
+          "context": "With their king dead, the remaining English soldiers break rank and flee the battlefield on foot, ruthlessly pursued by the victorious Norman cavalry."
+        },
+        "zh": {
+          "text": "英国人已经转身逃跑",
+          "context": "随着他们的国王死去，剩余的英格兰士兵破坏阵型，步行逃离战场，遭到胜利的诺曼骑兵无情的追击。"
+        },
+        "fr": {
+          "text": "et les Anglais se sont retournés en fuite",
+          "context": "Avec la mort de leur roi, les soldats anglais restants rompent les rangs et fuient le champ de bataille à pied, impitoyablement poursuivis par la cavalerie normande victorieuse."
+        },
+        "de": {
+          "text": "und die Engländer sind auf der Flucht",
+          "context": "Nach dem Tod ihres Königs brechen die verbliebenen englischen Soldaten die Reihen und fliehen zu Fuß vom Schlachtfeld, unerbittlich verfolgt von der siegreichen normannischen Kavallerie."
+        },
+        "es": {
+          "text": "y los ingleses se han dado la vuelta en fuga",
+          "context": "Con su rey muerto, los soldados ingleses restantes rompen filas y huyen a pie del campo de batalla, perseguidos implacablemente por la victoriosa caballería normanda."
+        },
+        "nl": {
+          "text": "en de Engelsen zijn op de vlucht gekeerd",
+          "context": "Nu hun koning dood is, doorbreken de overgebleven Engelse soldaten de gelederen en vluchten te voet van het slagveld, meedogenloos achtervolgd door de zegevierende Normandische cavalerie."
+        },
+        "pt": {
+          "text": "e os ingleses fugiram",
+          "context": "Com seu rei morto, os soldados ingleses restantes rompem a formação e fogem a pé do campo de batalha, sendo implacavelmente perseguidos pela vitoriosa cavalaria normanda."
+        },
+        "hi": {
+          "text": "और अंग्रेज भाग गये",
+          "context": "अपने राजा की मृत्यु के बाद, शेष अंग्रेजी सैनिक अपनी कतारें तोड़ देते हैं और पैदल ही युद्ध के मैदान से भाग जाते हैं, जिनका विजयी नॉर्मन घुड़सवारों द्वारा बेरहमी से पीछा किया जाता है।"
+        },
+        "ar": {
+          "text": "وقد تحول الإنجليز إلى الطيران",
+          "context": "بعد وفاة ملكهم، يكسر الجنود الإنجليز المتبقون صفوفهم ويفرون من ساحة المعركة سيرًا على الأقدام، ويلاحقهم فرسان النورمان المنتصرون بلا رحمة."
+        },
+        "bn": {
+          "text": "এবং ইংরেজরা উড়ে গেছে",
+          "context": "তাদের রাজা নিহত হওয়ার পর, অবশিষ্ট ইংরেজ সৈন্যরা দল ভেঙে পায়ে হেঁটে যুদ্ধক্ষেত্র থেকে পালিয়ে যায়, বিজয়ী নরম্যান অশ্বারোহীদের দ্বারা নির্দয়ভাবে অনুসৃত হয়।"
+        }
+      }
+    }
+  ]
+}

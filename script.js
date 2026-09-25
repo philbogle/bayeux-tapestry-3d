@@ -218,18 +218,7 @@ const W = 60262;
 const H = 694;
 const SCALE = 100; // 100 pixels = 1 Three.js unit
 let currentLanguage = localStorage.getItem('bayeux_lang') || 'en';
-const uiDict = {
-    'en': { help: 'Help', about: 'About', titles: 'Titles', tour: 'Tour', startTour: 'Start Tour', stopTour: 'Stop Tour', tourStatus: 'Touring', paused: 'Paused', notes: '☰ Tour', sceneNotes: 'Tour', prev: 'Prev', next: 'Next', close: 'Close', language: 'Language', music: 'Music', fullscreen: 'Fullscreen' },
-    'zh': { help: '帮助', about: '关于', titles: '标题', tour: '导览', startTour: '开始导览', stopTour: '停止导览', tourStatus: '导览中', paused: '已暂停', notes: '☰ 导览', sceneNotes: '导览', prev: '上一个', next: '下一个', close: '关闭', language: '语言', music: '音乐', fullscreen: '全屏' },
-    'es': { help: 'Ayuda', about: 'Acerca de', titles: 'Títulos', tour: 'Recorrido', startTour: 'Iniciar recorrido', stopTour: 'Detener recorrido', tourStatus: 'Recorrido', paused: 'Pausado', notes: '☰ Recorrido', sceneNotes: 'Recorrido', prev: 'Ant', next: 'Sig', close: 'Cerrar', language: 'Idioma', music: 'Música', fullscreen: 'Pantalla completa' },
-    'fr': { help: 'Aide', about: 'À propos', titles: 'Titres', tour: 'Visite', startTour: 'Commencer la visite', stopTour: 'Arrêter la visite', tourStatus: 'Visite', paused: 'En pause', notes: '☰ Visite', sceneNotes: 'Visite', prev: 'Préc', next: 'Suivant', close: 'Fermer', language: 'Langue', music: 'Musique', fullscreen: 'Plein écran' },
-    'de': { help: 'Hilfe', about: 'Über', titles: 'Titel', tour: 'Tour', startTour: 'Tour starten', stopTour: 'Tour beenden', tourStatus: 'Tour', paused: 'Pausiert', notes: '☰ Tour', sceneNotes: 'Tour', prev: 'Zurück', next: 'Weiter', close: 'Schließen', language: 'Sprache', music: 'Musik', fullscreen: 'Vollbild' },
-    'nl': { help: 'Help', about: 'Over', titles: 'Titels', tour: 'Rondleiding', startTour: 'Start rondleiding', stopTour: 'Stop rondleiding', tourStatus: 'Rondleiding', paused: 'Gepauzeerd', notes: '☰ Rondleiding', sceneNotes: 'Rondleiding', prev: 'Vorige', next: 'Volgende', close: 'Sluiten', language: 'Taal', music: 'Muziek', fullscreen: 'Volledig scherm' },
-    'pt': { help: 'Ajuda', about: 'Sobre', titles: 'Títulos', tour: 'Tour', startTour: 'Iniciar tour', stopTour: 'Parar tour', tourStatus: 'Em tour', paused: 'Pausado', notes: '☰ Tour', sceneNotes: 'Tour', prev: 'Ant', next: 'Seg', close: 'Fechar', language: 'Idioma', music: 'Música', fullscreen: 'Tela cheia' },
-    'hi': { help: 'मदद', about: 'के बारे में', titles: 'शीर्षक', tour: 'दौरा', startTour: 'दौरा शुरू करें', stopTour: 'दौरा रोकें', tourStatus: 'दौरा जारी', paused: 'रोक दिया', notes: '☰ दौरा', sceneNotes: 'दौरा', prev: 'पिछला', next: 'अगला', close: 'बंद करें', language: 'भाषा', music: 'संगीत', fullscreen: 'पूर्ण स्क्रीन' },
-    'ar': { help: 'مساعدة', about: 'حول', titles: 'العناوين', tour: 'جولة', startTour: 'بدء الجولة', stopTour: 'إيقاف الجولة', tourStatus: 'جولة مستمرة', paused: 'متوقف', notes: '☰ جولة', sceneNotes: 'جولة', prev: 'السابق', next: 'التالي', close: 'إغلاق', language: 'اللغة', music: 'الموسيقى', fullscreen: 'ملء الشاشة' },
-    'bn': { help: 'সাহায্য', about: 'সম্পর্কে', titles: 'শিরোনাম', tour: 'পরিদর্শন', startTour: 'পরিদর্শন শুরু করুন', stopTour: 'পরিদর্শন বন্ধ', tourStatus: 'চলমান', paused: 'বিরতি', notes: '☰ পরিদর্শন', sceneNotes: 'পরিদর্শন', prev: 'পূর্ববর্তী', next: 'পরবর্তী', close: 'বন্ধ করুন', language: 'ভাষা', music: 'সঙ্গীত', fullscreen: 'পূর্ণ পর্দা' }
-};
+let uiDict = {};
 
 
 const cols = Math.ceil(W / T);
@@ -1226,7 +1215,7 @@ window.addEventListener('touchmove', (e) => {
         const currentTouchY = e.touches[0].clientY;
         const dx = currentTouchX - lastTouchX;
         const dy = currentTouchY - lastTouchY;
-        if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused && Math.abs(dx) > 6) {
+        if (Math.abs(dx) > 6) {
             isSceneDwell = false; // Cancel dwell on user interaction
         }
 
@@ -1246,6 +1235,7 @@ window.addEventListener('touchmove', (e) => {
         lastTouchY = currentTouchY;
     } else if (e.touches.length === 2) {
         e.preventDefault(); // Prevent native browser pinch-to-zoom
+        isSceneDwell = false;
 
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
@@ -1417,7 +1407,7 @@ window.addEventListener('mousemove', (e) => {
         e.preventDefault();
         const dx = e.clientX - lastTouchX;
         const dy = e.clientY - lastTouchY;
-        if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused && Math.abs(dx) > 6) {
+        if (Math.abs(dx) > 6) {
             isSceneDwell = false; // Cancel dwell on user interaction
         }
 
@@ -1530,11 +1520,11 @@ window.addEventListener('keydown', (e) => {
     mouseScrollDir = 0; // Prevent mouse edge-scroll from hijacking when releasing keys
     if (e.key === 'ArrowLeft') {
         keys.left = true;
-        if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused) isSceneDwell = false; // Cancel dwell on user interaction
+        isSceneDwell = false; // Cancel dwell on user interaction
     }
     if (e.key === 'ArrowRight') {
         keys.right = true;
-        if (typeof isTourActive !== 'undefined' && isTourActive && !isTourPaused) isSceneDwell = false; // Cancel dwell on user interaction
+        isSceneDwell = false; // Cancel dwell on user interaction
     }
     if (e.key === 'ArrowUp') keys.up = true;
     if (e.key === 'ArrowDown') keys.down = true;
@@ -1707,31 +1697,9 @@ function buildTourPOIs(data) {
     const sorted = [...data].sort((a, b) => a.x - b.x);
 
     const list = [];
-    // Scene 1: Opening at Westminster Palace
-    const scene1Titles = {
-        en: { text: "King Edward Dispatches Harold to Normandy", context: "The tapestry begins in 1064. King Edward the Confessor, enthroned in his palace at Westminster, instructs Harold Godwinson, Earl of Wessex, to travel to Normandy on a diplomatic mission." },
-        zh: { text: "爱德华国王派遣哈罗德前往诺曼底", context: "故事开始于 1064 年。忏悔者爱德华国王在威斯敏斯特宫即位，指示哈罗德·戈德温森前往诺曼底执行外交任务。" },
-        fr: { text: "Le roi Édouard envoie Harold en Normandie", context: "La tapisserie commence en 1064. Le roi Édouard le Confesseur, intronisé dans son palais de Westminster, charge Harold Godwinson d'une mission diplomatique en Normandie." },
-        de: { text: "König Eduard schickt Harold in die Normandie", context: "Der Wandteppich beginnt im Jahr 1064. König Eduard der Bekenner, auf seinem Thron im Palast von Westminster, beauftragt Harold Godwinson mit einer diplomatischen Mission in die Normandie." },
-        es: { text: "El rey Eduardo envía a Harold a Normandía", context: "El tapiz comienza en 1064. El rey Eduardo el Confesor, entronizado en su palacio de Westminster, encomienda a Harold Godwinson una misión diplomática a Normandía." }
-    };
-    const s1 = scene1Titles[currentLanguage] || scene1Titles.en;
-    list.push({
-        id: "scene_1",
-        scene: "1",
-        title: `1. ${s1.text}`,
-        tiles: ["0_0.webp", "1_0.webp"],
-        bounds: { xMin: 0.4, xMax: 7.0, yMin: -3.90, yMax: -0.43 },
-        centerX: 3.7,
-        centerY: -1.76,
-        targetZ: 3.35,
-        inspectDuration: 8.0,
-        description: s1.context,
-        translations: scene1Titles
-    });
 
     sorted.forEach((t, i) => {
-        const num = i + 2;
+        const num = i + 1; // Number starts at 1
         const tileIdx = Math.max(0, Math.floor(t.x / 10.25));
         const tileNext = tileIdx + 1;
         const tileStr = `${tileIdx}_0.webp`;
@@ -1739,8 +1707,6 @@ function buildTourPOIs(data) {
 
         const locText = (t.translations && t.translations[currentLanguage]) ? t.translations[currentLanguage].text : (t.translations && t.translations.en ? t.translations.en.text : t.latin);
         let locDesc = (t.translations && t.translations[currentLanguage]) ? t.translations[currentLanguage].context : (t.translations && t.translations.en ? t.translations.en.context : "");
-
-
 
         const prevPOI = list[list.length - 1];
         const nextScene = sorted[i + 1];
@@ -1763,11 +1729,11 @@ function buildTourPOIs(data) {
         }
         const cx = (xMin + xMax) / 2;
 
-        list.push({
+        const item = {
             id: `scene_${t.scene}`,
             scene: t.scene,
             latin: t.latin,
-            title: `${num}. ${locText}`,
+            title: locText ? `${num}. ${locText}` : `${num}`,
             tiles: [tileStr, tileStrNext],
             bounds: { xMin: +xMin.toFixed(2), xMax: +xMax.toFixed(2), yMin: -3.90, yMax: -0.43 },
             centerX: +cx.toFixed(2),
@@ -1776,7 +1742,18 @@ function buildTourPOIs(data) {
             inspectDuration: 7.5,
             description: locDesc,
             translations: t.translations
-        });
+        };
+        
+        // Preserve cinematic overrides for the massive opening scene
+        if (t.scene === "1") {
+            item.bounds = { xMin: 0.4, xMax: 7.0, yMin: -3.90, yMax: -0.43 };
+            item.centerX = 3.7;
+            item.centerY = -1.76;
+            item.targetZ = 3.35;
+            item.inspectDuration = 8.0;
+        }
+
+        list.push(item);
     });
 
     tourPOIs = list;
@@ -1826,23 +1803,38 @@ function jumpToPOI(index) {
 function closeNotes() {
     const popup = document.getElementById('context-scroll');
     const notesBtnTop = document.getElementById('notes-btn-top');
+    const tourBtn = document.getElementById('tour-btn');
     if (popup) popup.style.display = 'none';
     if (notesBtnTop) notesBtnTop.style.display = 'flex';
+    if (tourBtn) tourBtn.style.display = 'flex';
 
     const baseZ = 6.5;
     autoScrollTargetZ = baseZ;
     autoScrollTargetX = camera.position.x;
+    isSceneDwell = false;
 }
 
 function openNotes(shouldAutoScroll = false) {
     const popup = document.getElementById('context-scroll');
     const notesBtnTop = document.getElementById('notes-btn-top');
+    const tourBtn = document.getElementById('tour-btn');
     if (popup) popup.style.display = 'block';
     if (notesBtnTop) notesBtnTop.style.display = 'none';
+    if (tourBtn) tourBtn.style.display = 'none';
 
-    // User requested that the tour always starts at the first POI
     if (tituliData && tituliData.length > 0) {
-        updatePopupUI(0, shouldAutoScroll);
+        let nearestIndex = 0;
+        let minDistance = Infinity;
+        for (let i = 0; i < tituliData.length; i++) {
+            if (tituliData[i].x !== undefined) {
+                const dist = Math.abs(tituliData[i].x - camera.position.x);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    nearestIndex = i;
+                }
+            }
+        }
+        updatePopupUI(nearestIndex, shouldAutoScroll);
     }
 }
 
@@ -1897,7 +1889,14 @@ function updatePopupUI(index, shouldAutoScroll = true) {
     const annoData = tituliData[index];
 
     const localizedText = (annoData.translations && annoData.translations[currentLanguage]) ? annoData.translations[currentLanguage].text : annoData.translations['en'].text;
-    document.getElementById('context-title').innerText = `"${localizedText}"`;
+    
+    if (localizedText) {
+        document.getElementById('context-title').innerText = `"${localizedText}"`;
+        document.getElementById('context-title').style.display = 'block';
+    } else {
+        document.getElementById('context-title').style.display = 'none';
+    }
+    
     document.getElementById('context-title').style.fontStyle = 'italic';
 
     let contextText = "No historical context available for this scene.";
@@ -1919,6 +1918,11 @@ function updatePopupUI(index, shouldAutoScroll = true) {
     popup.style.left = '50%';
     popup.style.transform = 'translateX(-50%)';
     popup.style.display = 'block';
+    
+    const notesBtnTop = document.getElementById('notes-btn-top');
+    const tourBtn = document.getElementById('tour-btn');
+    if (notesBtnTop) notesBtnTop.style.display = 'none';
+    if (tourBtn) tourBtn.style.display = 'none';
 
     if (shouldAutoScroll && annoData.x !== undefined) {
         // Find the mesh to calculate its width so we can center on it perfectly
@@ -2026,6 +2030,7 @@ window.addEventListener('wheel', (e) => {
     if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-menu') || e.target.closest('#hamburger-btn') || e.target.closest('#mobile-tour-btn')) return;
     e.preventDefault();
     autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
+    isSceneDwell = false;
     lastWheelTime = Date.now();
 
     // Normalize scroll distance
@@ -2145,8 +2150,8 @@ function updateCamera() {
                 cinematicStartTime = Date.now();
             }
             const elapsed = Date.now() - cinematicStartTime;
-            // Mild tilt down the tapestry to convey length (slightly steeper on mobile to compensate for narrow screen)
-            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.65 : -0.55;
+            // Mild tilt down the tapestry to convey length (steeper on mobile to compensate for narrow screen)
+            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.80 : -0.55;
             
             if (revealLight) {
                 if (!revealLight.parent) {
@@ -2160,28 +2165,35 @@ function updateCamera() {
             }
             
             // --- LIGHTING TIMELINE ---
+            // 1. Spotlight (swells 0-2.5s, fades out 2.5s-11.5s)
             if (elapsed < 2500) {
                 const lightFactor = elapsed / 2500.0;
                 if (revealLight) {
                     revealLight.intensity = 0.85 * (lightFactor * lightFactor);
                     revealLight.angle = 0.05 + (Math.PI / 8) * lightFactor;
                 }
+            } else if (elapsed < 11500) {
+                const fadeFactor = (elapsed - 2500) / 9000.0;
+                if (revealLight) {
+                    revealLight.intensity = 0.85 * (1.0 - fadeFactor);
+                    revealLight.angle = 0.05 + (Math.PI / 8) + (Math.PI / 4) * fadeFactor;
+                }
+            } else {
+                if (revealLight) revealLight.intensity = 0.0;
+            }
+
+            // 2. Ambient Light (holds 0-1.5s, fades up 1.5s-11.5s)
+            if (elapsed < 1500) {
                 ambientLight.intensity = 0.02;
                 dirLight.intensity = 0.0;
-            } else if (elapsed < 12500) {
-                const lightFactor = (elapsed - 2500) / 10000.0; // Slow 10-second sunrise
+            } else if (elapsed < 11500) {
+                const lightFactor = (elapsed - 1500) / 10000.0; // 10-second sunrise
                 const dramaticFade = Math.pow(lightFactor, 1.2); 
                 ambientLight.intensity = 0.02 + (1.04 * dramaticFade);
                 dirLight.intensity = 1.0 * dramaticFade;
-                
-                if (revealLight) {
-                    revealLight.intensity = 0.85 * (1.0 - dramaticFade);
-                    revealLight.angle = 0.05 + (Math.PI / 8) + (Math.PI / 4) * dramaticFade;
-                }
             } else {
                 ambientLight.intensity = 1.06;
                 dirLight.intensity = 1.0;
-                if (revealLight) revealLight.intensity = 0.0;
             }
 
             // --- CAMERA TIMELINE ---
@@ -2630,7 +2642,7 @@ function animate() {
     // --- SCENE DWELL: slow breathing zoom in and out ---
     if (isSceneDwell && sceneDwellPOI && autoScrollTargetX === null) {
         sceneDwellTimer += dt;
-        const INITIAL_PAUSE = 2.0; // 2s wait before zoom begins
+        const INITIAL_PAUSE = 0.25; // 0.25s wait before zoom begins
         const ZOOM_IN = 64.0;    // 64s zoom in (half as fast as previous)
         const PAUSE_IN = 5.0;    // 5s hold at close-up
         const ZOOM_OUT = 64.0;   // 64s zoom out
@@ -2969,7 +2981,10 @@ function createTextMesh(text, isPlaced) {
     return mesh;
 }
 
-fetch('tituli.json?v=31').then(res => res.json()).then(data => {
+fetch('bayeux_data.json?v=1').then(res => res.json()).then(payload => {
+    uiDict = payload.ui;
+    const data = payload.tituli;
+
     if (isAuthoringMode) {
         const savedData = localStorage.getItem('bayeux-tituli');
         if (savedData) {
@@ -2988,6 +3003,9 @@ fetch('tituli.json?v=31').then(res => res.json()).then(data => {
 
     tituliData = data;
     buildTourPOIs(tituliData);
+    
+    // Apply UI translations now that uiDict is populated
+    changeLanguage(currentLanguage);
 
     // Force the browser to download the custom font (since it's not used in standard DOM) before rendering
     document.fonts.load('80px "MedievalSharp"').then(() => {
@@ -3145,4 +3163,4 @@ if (musicToggleBtn) {
 }
 
 // Initialize language settings on boot
-changeLanguage(currentLanguage);
+
