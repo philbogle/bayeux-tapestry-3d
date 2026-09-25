@@ -1,0 +1,327 @@
+.lang-option,
+#close-lang {
+    transition: all 0.2s ease;
+}
+
+.lang-option:hover {
+    background-color: #5a4a35 !important;
+    border-color: #d6a848 !important;
+}
+
+#close-lang:hover {
+    background-color: #666 !important;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #111;
+    font-family: sans-serif;
+}
+
+#ui { opacity: 0; pointer-events: none; transition: opacity 0.5s ease-out;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 10px 15px;
+    border-radius: 6px;
+    pointer-events: none;
+    font-size: 12px;
+    transition: opacity 0.5s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#ui h2 {
+    margin: 0;
+    font-size: 16px;
+    font-family: 'MedievalSharp', serif;
+    font-weight: normal;
+    color: #d6a848;
+}
+
+#ui p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.key {
+    display: inline-block;
+    background: #333;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 0 2px;
+    font-family: monospace;
+    border: 1px solid #444;
+    color: white;
+}
+
+button.key {
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.1s;
+    user-select: none;
+}
+
+button.key:hover {
+    background: #555;
+    border-color: #d6a848;
+}
+
+button.key:active {
+    background: #d6a848;
+    color: black;
+    border-color: #d6a848;
+}
+
+#about-dialog {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(20, 20, 20, 0.30);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    z-index: 1000;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+#about-dialog a {
+    color: #d6a848;
+    text-decoration: none;
+}
+
+#about-dialog a:hover {
+    text-decoration: underline;
+}
+
+#close-dialog {
+    margin-top: 15px;
+    padding: 8px 15px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#close-dialog:hover {
+    background: #555;
+}
+
+#tour-btn:hover {
+    background: rgba(214, 168, 72, 0.2) !important;
+}
+
+#tour-pause-btn:hover {
+    background: rgba(214, 168, 72, 0.45) !important;
+}
+
+#tour-stop-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+#mobile-tour-btn:hover {
+    background: rgba(214, 168, 72, 0.35) !important;
+    border-color: #f4e4bc !important;
+}
+
+#hamburger-btn:hover,
+#hamburger-btn:active {
+    background: rgba(45, 36, 26, 0.95) !important;
+    border-color: #d6a848 !important;
+}
+
+.menu-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 18px;
+    background: transparent;
+    border: none;
+    color: #f4e4bc;
+    font-family: serif;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    user-select: none;
+    box-sizing: border-box;
+    transition: background 0.15s ease, color 0.15s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-row:hover,
+.menu-row:active {
+    background: rgba(214, 168, 72, 0.16);
+    color: #fff;
+}
+
+.menu-text {
+    flex-grow: 1;
+    white-space: nowrap;
+}
+
+.menu-badge {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: rgba(214, 168, 72, 0.18);
+    color: #d6a848;
+    border: 1px solid rgba(214, 168, 72, 0.35);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.menu-divider {
+    height: 1px;
+    background: rgba(139, 115, 85, 0.25);
+    margin: 5px 14px;
+}
+
+@media (max-width: 900px) {
+    #cinematic-title {
+        font-size: 28px !important;
+        letter-spacing: 2px !important;
+        top: 15% !important;
+    }
+
+    #notes-btn-top {
+        top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+        padding: 8px 24px !important;
+        font-size: 18px !important;
+        border-radius: 25px !important;
+    }
+
+    #context-scroll {
+        top: calc(env(safe-area-inset-top, 0px) + 4px) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        padding: 8px 12px !important;
+        width: calc(100vw - 24px) !important;
+        max-width: calc(100vw - 24px) !important;
+        box-sizing: border-box !important;
+        border-radius: 6px !important;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.85) !important;
+    }
+
+    #context-scroll div:first-child {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-bottom: 4px !important;
+    }
+
+    #context-scroll button {
+        padding: 3px 8px !important;
+        font-size: 11px !important;
+    }
+
+    #context-title {
+        font-size: 18px !important;
+        margin-bottom: 4px !important;
+        padding-bottom: 3px !important;
+        line-height: 1.2 !important;
+        word-break: break-word !important;
+    }
+
+    #context-text {
+        font-size: 15px !important;
+        line-height: 1.3 !important;
+        max-height: 25vh !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* iPad Specific Enlargements for Notes Panel */
+body.ipad-mode #context-scroll {
+    width: 480px !important;
+    max-width: 95vw !important;
+    padding: 20px 25px !important;
+}
+
+body.ipad-mode #context-title {
+    font-size: 22px !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 8px !important;
+}
+
+body.ipad-mode #context-text {
+    font-size: 17px !important;
+    line-height: 1.5 !important;
+    max-height: 40vh !important;
+}
+
+body.ipad-mode #context-scroll button {
+    font-size: 15px !important;
+    padding: 6px 14px !important;
+}
+
+/* Drone Tour POI HUD Card Styles */
+#drone-poi-card {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: rgba(16, 12, 8, 0.90);
+    color: #f4e4bc;
+    border: 1px solid #d6a848;
+    border-radius: 10px;
+    padding: 12px 20px;
+    width: 580px;
+    max-width: calc(100vw - 32px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
+    z-index: 2500;
+    font-family: serif;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    pointer-events: auto;
+    user-select: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+@media (max-width: 600px) {
+    #drone-poi-card {
+        bottom: 14px !important;
+        padding: 10px 14px !important;
+        width: calc(100vw - 20px) !important;
+        max-width: calc(100vw - 20px) !important;
+        border-radius: 8px !important;
+    }
+
+    #drone-poi-title {
+        font-size: 15px !important;
+        margin-bottom: 4px !important;
+    }
+
+    #drone-poi-desc {
+        font-size: 12px !important;
+        line-height: 1.35 !important;
+        max-height: 18vh !important;
+        overflow-y: auto !important;
+    }
+}
