@@ -2145,8 +2145,8 @@ function updateCamera() {
                 cinematicStartTime = Date.now();
             }
             const elapsed = Date.now() - cinematicStartTime;
-            // Mild tilt down the tapestry to convey length without losing the artwork
-            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.45 : -0.55;
+            // Mild tilt down the tapestry to convey length (slightly steeper on mobile to compensate for narrow screen)
+            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.65 : -0.55;
             
             if (revealLight) {
                 if (!revealLight.parent) {
@@ -2159,82 +2159,60 @@ function updateCamera() {
                 revealLight.target.position.copy(camera.position).add(forward);
             }
             
+            // --- LIGHTING TIMELINE ---
             if (elapsed < 2500) {
-                // Phase 1: Hold still in darkness, single spotlight swells and spreads
-                targetRotationY = 0;
-                cinematicRate = 0; // Don't move yet
-                
                 const lightFactor = elapsed / 2500.0;
                 if (revealLight) {
                     revealLight.intensity = 0.85 * (lightFactor * lightFactor);
-                    // Start as a tight pinhole, spread out softly
                     revealLight.angle = 0.05 + (Math.PI / 8) * lightFactor;
                 }
                 ambientLight.intensity = 0.02;
                 dirLight.intensity = 0.0;
-            } else if (elapsed < 6500) {
-                // Phase 2: Full ambient light fades up VERY slowly, spotlight fades out
-                targetRotationY = 0;
-                cinematicRate = 0;
-                
-                const phase2Elapsed = elapsed - 2500;
-                const lightFactor = phase2Elapsed / 4000.0; // Slow 4-second sunrise
-                // Use a mostly linear fade (1.2) instead of quadratic (2.0) to eliminate the dead-zone "pause"
+            } else if (elapsed < 12500) {
+                const lightFactor = (elapsed - 2500) / 10000.0; // Slow 10-second sunrise
                 const dramaticFade = Math.pow(lightFactor, 1.2); 
                 ambientLight.intensity = 0.02 + (1.04 * dramaticFade);
                 dirLight.intensity = 1.0 * dramaticFade;
                 
                 if (revealLight) {
                     revealLight.intensity = 0.85 * (1.0 - dramaticFade);
-                    // Continue expanding the spotlight as it fades so it never statically pauses
                     revealLight.angle = 0.05 + (Math.PI / 8) + (Math.PI / 4) * dramaticFade;
                 }
-            } else if (elapsed < 11500) {
-                // Phase 3: Tilt to look down the tapestry (slower 5-second sweep)
-                const phase3Elapsed = elapsed - 6500;
-                const t = Math.min(1.0, phase3Elapsed / 5000.0);
-                
-                // Smoothstep curve for perfect ease-in and ease-out (deceleration)
+            } else {
+                ambientLight.intensity = 1.06;
+                dirLight.intensity = 1.0;
+                if (revealLight) revealLight.intensity = 0.0;
+            }
+
+            // --- CAMERA TIMELINE ---
+            if (elapsed < 2500) {
+                // Phase 1: Hold still
+                targetRotationY = 0;
+                cinematicRate = 0;
+            } else if (elapsed < 7500) {
+                // Phase 2: Tilt and track (5 seconds)
+                const t = Math.min(1.0, (elapsed - 2500) / 5000.0);
                 const smoothT = t * t * (3 - 2 * t);
                 targetRotationY = targetTilt * smoothT;
-                cinematicRate = 0.1; // Track the smooth curve tightly
+                cinematicRate = 0.1; 
                 
-                // Tracking shot synchronizes with the tilt (derivative of smoothstep)
                 const trackSpeed = 6 * (t - t * t);
                 camera.position.x += 0.012 * trackSpeed;
-                
-                ambientLight.intensity = 1.06;
-                dirLight.intensity = 1.0;
-                if (revealLight) revealLight.intensity = 0.0;
-            } else if (elapsed < 13000) {
-                // Phase 4: Pause to appreciate the vastness
+            } else if (elapsed < 9000) {
+                // Phase 3: Pause
                 targetRotationY = targetTilt;
-                cinematicRate = 0.1; // Stay tightly locked to the target tilt
-                
-                // Drift extremely slowly during the pause
+                cinematicRate = 0.1; 
                 camera.position.x += 0.002;
-                
-                ambientLight.intensity = 1.06;
-                dirLight.intensity = 1.0;
-                if (revealLight) revealLight.intensity = 0.0;
             } else {
-                // Phase 5: Slowly untilt WHILE zooming in
+                // Phase 4: Untilt and Zoom
                 targetRotationY = 0;
-                
-                const phase5Elapsed = elapsed - 13000;
-                const rawFactor = Math.min(1.0, phase5Elapsed / 3000.0);
+                const phase4Elapsed = Math.max(0, elapsed - 9000);
+                const rawFactor = Math.min(1.0, phase4Elapsed / 3000.0);
                 const accelFactor = rawFactor * rawFactor;
                 
-                // Extremely smooth majestic cinematic swoop for both untiliting and zooming
                 cinematicRate = 0.0005 + (0.015 * accelFactor); 
                 camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
-                
-                // Ease out the subtle drift
                 camera.position.x += 0.002 * (1.0 - rawFactor);
-                
-                ambientLight.intensity = 1.06;
-                dirLight.intensity = 1.0;
-                if (revealLight) revealLight.intensity = 0.0;
                 
                 if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
                     camera.position.z = autoScrollTargetZ;
@@ -2256,8 +2234,6 @@ function updateCamera() {
                     if (mTourBtn) {
                         mTourBtn.classList.add('pulse-attention');
                     }
-                    ambientLight.intensity = 1.06;
-                    dirLight.intensity = 1.0;
                 }
             }
         }
