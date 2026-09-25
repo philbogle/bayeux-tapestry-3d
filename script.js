@@ -1,3 +1,22 @@
+/**
+ * Bayeux Tapestry 3D Explorer
+ * ---------------------------
+ * A highly optimized, WebGL-powered 3D visualization of the Bayeux Tapestry using Three.js.
+ * 
+ * Core Features:
+ * - Tile-based Rendering: The massive 68-meter tapestry is split into chunks and dynamically culled/rendered to maintain 60fps.
+ * - Cinematic Intro: A sweeping, math-driven (smoothstep) camera sequence with decoupled ambient lighting fade-ups.
+ * - Multi-language Tour: Interactive POI (Point of Interest) tour system driven by a single `bayeux_data.json` payload.
+ * - Custom Input Handling: Device-agnostic 2D navigation (mouse wheel, touch drag, pinch-to-zoom) with physical inertia.
+ * - Scene Dwell: A slow, "breathing" zoom effect when the user rests on a specific historical scene.
+ * - Authoring Mode: (Accessed via ?author=1) Hidden tools to reposition and align textual Latin inscriptions.
+ *
+ * Architecture Notes:
+ * - `bayeux_data.json` contains both the UI localization strings and the 51 Scene POI markers.
+ * - Overlaid HTML elements (in index.html) handle standard UI (menus, dialogs).
+ * - A hidden YouTube IFrame API handles the looping medieval atmospheric soundtrack to save bandwidth.
+ */
+
 let ytPlayer;
 /**
  * Callback triggered by the YouTube IFrame API when it is fully loaded.
@@ -27,6 +46,8 @@ const isPhone = (/iPhone|iPod|IEMobile|Opera Mini/.test(navigator.userAgent)) ||
     (window.innerWidth <= 600);
 
 let useSimpleLighting = isPhone || isIPad;
+
+let annotations = [];
 
 
 let isTourActive = false;
@@ -63,7 +84,7 @@ function closeMobileMenu() {
 }
 
 function toggleMobileMenu() {
-    if (mobileMenu && mobileMenu.style.display === 'block') {
+    if (mobileMenu && window.getComputedStyle(mobileMenu).display !== 'none') {
         closeMobileMenu();
     } else {
         openMobileMenu();
@@ -117,7 +138,7 @@ if (mTour) {
     mTour.addEventListener('click', () => {
         closeMobileMenu();
         const popup = document.getElementById('context-scroll');
-        if (popup && popup.style.display !== 'none') {
+        if (popup && window.getComputedStyle(popup).display !== 'none') {
             closeNotes();
         } else {
             openNotes(true);
@@ -130,7 +151,7 @@ if (mNotes) {
     mNotes.addEventListener('click', () => {
         closeMobileMenu();
         const popup = document.getElementById('context-scroll');
-        if (popup && popup.style.display !== 'none') {
+        if (popup && window.getComputedStyle(popup).display !== 'none') {
             closeNotes();
         } else {
             openNotes(true);
@@ -1514,7 +1535,7 @@ window.addEventListener('keydown', (e) => {
     }
     if (e.key.toLowerCase() === 'h') {
         const ui = document.getElementById('ui');
-        const isHidden = ui.style.display === 'none';
+        const isHidden = window.getComputedStyle(ui).display === 'none';
         ui.style.display = isHidden ? 'block' : 'none';
     }
     mouseScrollDir = 0; // Prevent mouse edge-scroll from hijacking when releasing keys
@@ -2474,7 +2495,7 @@ let autoScrollTargetX = null;
 let autoScrollTargetY = null;
 let autoScrollTargetZ = null;
 
-// POI dwell state: slow zoom + orbit when camera arrives at a scene
+// POI dwell state: slow breathing zoom when camera arrives at a scene
 let isSceneDwell = false;
 let sceneDwellTimer = 0;
 let sceneDwellPOI = null; // The tourPOI we're dwelling on
@@ -2506,7 +2527,7 @@ function updateDynamicPopup() {
     if (typeof isTourActive !== 'undefined' && isTourActive) return;
 
     const popup = document.getElementById('context-scroll');
-    if (!popup || popup.style.display === 'none') return;
+    if (!popup || window.getComputedStyle(popup).display === 'none') return;
     if (autoScrollTargetX !== null) return; // Don't interfere with auto-scrolling
 
     let closestIndex = -1;
@@ -2613,9 +2634,9 @@ function animate() {
             autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
             autoScrollTargetZ = null; autoScrollTargetY = null;
             
-            // Start scene dwell (zoom + orbit) if notes popup is open
+            // Start scene dwell (breathing zoom) if notes popup is open
             const notesPopup = document.getElementById('context-scroll');
-            if (notesPopup && notesPopup.style.display === 'block' && typeof tourPOIs !== 'undefined' && tourPOIs) {
+            if (notesPopup && window.getComputedStyle(notesPopup).display !== 'none' && typeof tourPOIs !== 'undefined' && tourPOIs) {
                 const targetScene = tituliData[currentPopupSceneIndex];
                 if (targetScene) {
                     const dwellPOI = tourPOIs.find(p => p.scene === targetScene.scene);
@@ -2833,7 +2854,6 @@ if (isAuthoringMode) {
 // ----------------------------
 
 // --- ANNOTATION DISPLAY LOGIC ---
-let annotations = [];
 
 /**
  * Renders English translation text to a 2D canvas and maps it onto a 3D PlaneGeometry.
@@ -2924,7 +2944,7 @@ function changeLanguage(lang) {
         canvasGroup.add(newMesh);
     });
     const popup = document.getElementById('context-scroll');
-    if (popup && popup.style.display !== 'none') {
+    if (popup && window.getComputedStyle(popup).display !== 'none') {
         updatePopupUI(currentPopupSceneIndex, false);
     }
     if (typeof tituliData !== 'undefined' && tituliData && tituliData.length > 0) {
@@ -3066,7 +3086,7 @@ window.updateAnnotations = function () {
     annotations.forEach((ann, index) => {
         if (!ann.mesh) return;
 
-        const isNotesOpen = document.getElementById('context-scroll') && document.getElementById('context-scroll').style.display === 'block';
+        const isNotesOpen = document.getElementById('context-scroll') && window.getComputedStyle(document.getElementById('context-scroll')).display !== 'none';
         const isTourRunning = typeof isTourActive !== 'undefined' && isTourActive;
 
         if (!showSupertitles || ann.data.x === undefined || isNotesOpen || isTourRunning || initialSlowZoom) {
