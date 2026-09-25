@@ -72,7 +72,7 @@
             font-family: sans-serif;
         }
 
-        #ui {
+        #ui { opacity: 0; pointer-events: none; transition: opacity 0.5s ease-out;
             position: absolute;
             bottom: 10px;
             left: 10px;
@@ -392,7 +392,7 @@
         style="position: fixed; top: 12%; left: 50%; transform: translateX(-50%); font-family: 'MedievalSharp', serif; color: #d6a848; font-size: 54px; letter-spacing: 4px; text-shadow: 0 5px 25px rgba(0,0,0,1), 0 0 10px rgba(214,168,72,0.4); opacity: 0; transition: opacity 2s ease-in-out; pointer-events: none; z-index: 3000; text-align: center; margin: 0; width: 100%;">
         Bayeux Tapestry Tour</h1>
     <button id="hamburger-btn" aria-label="Menu" aria-expanded="false"
-        style="position: absolute; top: 18px; right: 16px; z-index: 501; pointer-events: auto; background: rgba(20,16,12,0.70); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
+        style="position: absolute; top: 18px; right: 16px; z-index: 501; opacity: 0; pointer-events: none; transition: opacity 0.5s ease-out; background: rgba(20,16,12,0.70); border: 1px solid #5a4a35; color: #d6a848; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); outline: none;">☰</button>
     <div id="mobile-menu-scrim"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 450; -webkit-tap-highlight-color: transparent;">
     </div>
@@ -473,6 +473,8 @@
                         d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
                     </path>
                 </svg></button>
+            <button id="toggle-supertitles"
+                style="pointer-events: auto; background: rgba(214,168,72,0.3); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 14px; display: flex; align-items: center; justify-content: center;">Titles</button>
             <button id="music-toggle"
                 style="pointer-events: auto; background: rgba(20,20,20,0.65); border: 1px solid #5a4a35; color: #d6a848; padding: 4px 25px; border-radius: 4px; cursor: pointer; font-family: serif; font-size: 16px; display: flex; align-items: center; justify-content: center;">♪</button>
             <button id="lighting-controls-btn" title="Lighting Controls"
@@ -593,7 +595,7 @@
         </div>
     </div>
     <button id="notes-btn-top"
-        style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; pointer-events: auto; background: rgba(20,20,20,0.70); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+        style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 4px); left: 50%; transform: translateX(-50%); z-index: 2001; opacity: 0; pointer-events: none; transition: opacity 0.5s ease-out; background: rgba(20,20,20,0.70); border: 1px solid #5a4a35; color: #d6a848; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'MedievalSharp', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
@@ -1645,8 +1647,10 @@
         scene.add(ambientLight);
 
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1.0); // Neutral key light
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.0); // Start at 0 for cinematic reveal
         scene.add(dirLight);
+        
+        let revealLight = new THREE.SpotLight(0xffeeba, 0.0, 40, Math.PI / 5, 1.0, 2); // Cinematic intro spotlight
         // Dedicated grazing light that follows the magnifying glass
         // Dedicated grazing light that follows the magnifying glass
         const magLight = new THREE.SpotLight(0xffb84d, 0.4, 10, 35 * Math.PI / 180, 1.0, 2);
@@ -1657,7 +1661,7 @@
 
 
 
-        ambientLight.intensity = 1.06;
+        ambientLight.intensity = 0.02;
         if (useSimpleLighting) {
             ambientLight.color.setHex(0xffffff);
         }
@@ -3040,38 +3044,91 @@
             if (initialSlowZoom) {
                 if (autoScrollTargetZ === null || autoScrollTargetX !== null) {
                     initialSlowZoom = false; // User interrupted
+                    const uiEl = document.getElementById('ui');
+                    if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
+                    const hamEl = document.getElementById('hamburger-btn');
+                    if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
+                    const notesEl = document.getElementById('notes-btn-top');
+                    if (notesEl) { notesEl.style.opacity = '1'; notesEl.style.pointerEvents = 'auto'; }
+                    ambientLight.intensity = 1.06;
+                    dirLight.intensity = 1.0;
+                    if (revealLight && revealLight.parent) {
+                        scene.remove(revealLight);
+                        scene.remove(revealLight.target);
+                        revealLight = null;
+                    }
                 } else {
                     const elapsed = Date.now() - cinematicStartTime;
                     const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.40 : -0.65;
+                    
+                    if (revealLight) {
+                        if (!revealLight.parent) {
+                            scene.add(revealLight);
+                            scene.add(revealLight.target);
+                        }
+                        revealLight.position.copy(camera.position);
+                        const forward = new THREE.Vector3(0, 0, -1);
+                        forward.applyEuler(camera.rotation);
+                        revealLight.target.position.copy(camera.position).add(forward);
+                    }
 
                     if (elapsed < 4000) {
                         // Phase 1: Tilt right further down the canvas, starting slowly
                         targetRotationY = targetTilt;
-                        // Quadratic ease-in over the first 2.5 seconds to start the turn slowly
                         const rawFactor = Math.min(1.0, elapsed / 2500.0);
                         const accelFactor = rawFactor * rawFactor;
                         cinematicRate = 0.0002 + (0.005 * accelFactor);
+                        
+                        if (revealLight) revealLight.intensity = 1.2 * Math.min(1.0, elapsed / 3000.0);
+                        ambientLight.intensity = 0.02; // Keep dark
                     } else if (elapsed < 5000) {
                         // Phase 2: Pause to let the user take in the view
                         targetRotationY = targetTilt;
                         cinematicRate = 0.005;
+                        if (revealLight) revealLight.intensity = 1.2;
+                        ambientLight.intensity = 0.02; // Keep dark
                     } else {
                         // Phase 3: Slowly accelerate in the opposite direction while zooming
                         targetRotationY = 0;
-
+                        
                         const phase3Elapsed = elapsed - 5000;
-                        // Quadratic ease-in for the speed over 2.0 seconds
-                        const rawFactor = Math.min(1.0, phase3Elapsed / 2000.0);
-                        const accelFactor = rawFactor * rawFactor;
-
-                        cinematicRate = 0.0002 + (0.012 * accelFactor);
+                        const rawFactor = Math.min(1.0, phase3Elapsed / 1500.0); // Sped up fade to match faster zoom
+                        const accelFactor = rawFactor * rawFactor; 
+                        
+                        cinematicRate = 0.0002 + (0.020 * accelFactor); // Sped up zoom
                         camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
-
+                        
+                        // Delay ambient lighting fade until the second half of the zoom
+                        const lightFade = Math.max(0, (rawFactor - 0.5) * 2.0);
+                        ambientLight.intensity = 0.02 + (1.04 * lightFade);
+                        dirLight.intensity = 1.0 * lightFade;
+                        
+                        if (revealLight) {
+                            // Expand spotlight angle, but don't fade it until ambient light starts fading in
+                            revealLight.angle = (Math.PI / 5) + (Math.PI / 3) * rawFactor;
+                            revealLight.intensity = 1.2 * (1 - lightFade);
+                        }
+                        
                         if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
                             camera.position.z = autoScrollTargetZ;
                             camera.rotation.y = 0;
                             autoScrollTargetZ = null;
                             initialSlowZoom = false;
+                            
+                            const uiEl = document.getElementById('ui');
+                            if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
+                            const hamEl = document.getElementById('hamburger-btn');
+                            if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
+                            const notesEl = document.getElementById('notes-btn-top');
+                            if (notesEl) { notesEl.style.opacity = '1'; notesEl.style.pointerEvents = 'auto'; }
+                            
+                            ambientLight.intensity = 1.06;
+                            dirLight.intensity = 1.0;
+                            if (revealLight && revealLight.parent) {
+                                scene.remove(revealLight);
+                                scene.remove(revealLight.target);
+                                revealLight = null;
+                            }
                         }
                     }
                 }
@@ -3797,7 +3854,7 @@
                 const isNotesOpen = document.getElementById('context-scroll') && document.getElementById('context-scroll').style.display === 'block';
                 const isTourRunning = typeof isTourActive !== 'undefined' && isTourActive;
 
-                if (!showSupertitles || ann.data.x === undefined || isNotesOpen || isTourRunning) {
+                if (!showSupertitles || ann.data.x === undefined || isNotesOpen || isTourRunning || initialSlowZoom) {
                     ann.mesh.visible = false;
                     return;
                 }
