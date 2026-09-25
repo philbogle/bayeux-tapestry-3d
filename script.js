@@ -993,7 +993,8 @@ scene.add(ambientLight);
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.0); // Start at 0 for cinematic reveal
 scene.add(dirLight);
 
-let revealLight = new THREE.SpotLight(0xffeeba, 0.0, 40, Math.PI / 5, 1.0, 2); // Cinematic intro spotlight
+let revealLight = new THREE.SpotLight(0xffeeba, 0.0, 40, Math.PI / 12, 1.0, 2); // Cinematic intro spotlight
+
 // Dedicated grazing light that follows the magnifying glass
 // Dedicated grazing light that follows the magnifying glass
 const magLight = new THREE.SpotLight(0xffb84d, 0.4, 10, 35 * Math.PI / 180, 1.0, 2);
@@ -2123,7 +2124,15 @@ function updateCamera() {
             const hamEl = document.getElementById('hamburger-btn');
             if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
             const notesEl = document.getElementById('notes-btn-top');
-            if (notesEl) { notesEl.style.opacity = '1'; notesEl.style.pointerEvents = 'auto'; }
+            if (notesEl) { 
+                notesEl.style.opacity = '1'; 
+                notesEl.style.pointerEvents = 'auto'; 
+                notesEl.classList.add('pulse-attention');
+            }
+            const mTourBtn = document.getElementById('m-menu-notes');
+            if (mTourBtn) {
+                mTourBtn.classList.add('pulse-attention');
+            }
             ambientLight.intensity = 1.06;
             dirLight.intensity = 1.0;
             if (revealLight && revealLight.parent) {
@@ -2132,8 +2141,12 @@ function updateCamera() {
                 revealLight = null;
             }
         } else {
+            if (cinematicStartTime === null) {
+                cinematicStartTime = Date.now();
+            }
             const elapsed = Date.now() - cinematicStartTime;
-            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.40 : -0.65;
+            // Mild tilt down the tapestry to convey length without losing the artwork
+            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.45 : -0.55;
             
             if (revealLight) {
                 if (!revealLight.parent) {
@@ -2145,45 +2158,83 @@ function updateCamera() {
                 forward.applyEuler(camera.rotation);
                 revealLight.target.position.copy(camera.position).add(forward);
             }
-
-            if (elapsed < 4000) {
-                // Phase 1: Tilt right further down the canvas, starting slowly
-                targetRotationY = targetTilt;
-                const rawFactor = Math.min(1.0, elapsed / 2500.0);
-                const accelFactor = rawFactor * rawFactor;
-                cinematicRate = 0.0002 + (0.005 * accelFactor);
-                
-                // Reach full spotlight brightness quickly (by 1.5s), well before maximum tilt
-                const lightFactor = Math.min(1.0, elapsed / 1500.0);
-                if (revealLight) revealLight.intensity = 0.85 * (lightFactor * lightFactor);
-                ambientLight.intensity = 0.02; // Keep dark
-            } else if (elapsed < 5000) {
-                // Phase 2: Pause to let the user take in the view
-                targetRotationY = targetTilt;
-                cinematicRate = 0.005;
-                if (revealLight) revealLight.intensity = 0.85;
-                ambientLight.intensity = 0.02; // Keep dark
-            } else {
-                // Phase 3: Slowly accelerate in the opposite direction while zooming
+            
+            if (elapsed < 2500) {
+                // Phase 1: Hold still in darkness, single spotlight swells and spreads
                 targetRotationY = 0;
+                cinematicRate = 0; // Don't move yet
                 
-                const phase3Elapsed = elapsed - 5000;
-                const rawFactor = Math.min(1.0, phase3Elapsed / 1500.0); // Sped up fade to match faster zoom
-                const accelFactor = rawFactor * rawFactor; 
+                const lightFactor = elapsed / 2500.0;
+                if (revealLight) {
+                    revealLight.intensity = 0.85 * (lightFactor * lightFactor);
+                    // Start as a tight pinhole, spread out softly
+                    revealLight.angle = 0.05 + (Math.PI / 8) * lightFactor;
+                }
+                ambientLight.intensity = 0.02;
+                dirLight.intensity = 0.0;
+            } else if (elapsed < 6500) {
+                // Phase 2: Full ambient light fades up VERY slowly, spotlight fades out
+                targetRotationY = 0;
+                cinematicRate = 0;
                 
-                cinematicRate = 0.0002 + (0.020 * accelFactor); // Sped up zoom
-                camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
-                
-                // Delay ambient lighting fade until the second half of the zoom
-                const lightFade = Math.max(0, (rawFactor - 0.5) * 2.0);
-                ambientLight.intensity = 0.02 + (1.04 * lightFade);
-                dirLight.intensity = 1.0 * lightFade;
+                const phase2Elapsed = elapsed - 2500;
+                const lightFactor = phase2Elapsed / 4000.0; // Slow 4-second sunrise
+                // Use a mostly linear fade (1.2) instead of quadratic (2.0) to eliminate the dead-zone "pause"
+                const dramaticFade = Math.pow(lightFactor, 1.2); 
+                ambientLight.intensity = 0.02 + (1.04 * dramaticFade);
+                dirLight.intensity = 1.0 * dramaticFade;
                 
                 if (revealLight) {
-                    // Expand spotlight angle, but don't fade it until ambient light starts fading in
-                    revealLight.angle = (Math.PI / 5) + (Math.PI / 3) * rawFactor;
-                    revealLight.intensity = 0.85 * (1 - lightFade);
+                    revealLight.intensity = 0.85 * (1.0 - dramaticFade);
+                    // Continue expanding the spotlight as it fades so it never statically pauses
+                    revealLight.angle = 0.05 + (Math.PI / 8) + (Math.PI / 4) * dramaticFade;
                 }
+            } else if (elapsed < 11500) {
+                // Phase 3: Tilt to look down the tapestry (slower 5-second sweep)
+                const phase3Elapsed = elapsed - 6500;
+                const t = Math.min(1.0, phase3Elapsed / 5000.0);
+                
+                // Smoothstep curve for perfect ease-in and ease-out (deceleration)
+                const smoothT = t * t * (3 - 2 * t);
+                targetRotationY = targetTilt * smoothT;
+                cinematicRate = 0.1; // Track the smooth curve tightly
+                
+                // Tracking shot synchronizes with the tilt (derivative of smoothstep)
+                const trackSpeed = 6 * (t - t * t);
+                camera.position.x += 0.012 * trackSpeed;
+                
+                ambientLight.intensity = 1.06;
+                dirLight.intensity = 1.0;
+                if (revealLight) revealLight.intensity = 0.0;
+            } else if (elapsed < 13000) {
+                // Phase 4: Pause to appreciate the vastness
+                targetRotationY = targetTilt;
+                cinematicRate = 0.1; // Stay tightly locked to the target tilt
+                
+                // Drift extremely slowly during the pause
+                camera.position.x += 0.002;
+                
+                ambientLight.intensity = 1.06;
+                dirLight.intensity = 1.0;
+                if (revealLight) revealLight.intensity = 0.0;
+            } else {
+                // Phase 5: Slowly untilt WHILE zooming in
+                targetRotationY = 0;
+                
+                const phase5Elapsed = elapsed - 13000;
+                const rawFactor = Math.min(1.0, phase5Elapsed / 3000.0);
+                const accelFactor = rawFactor * rawFactor;
+                
+                // Extremely smooth majestic cinematic swoop for both untiliting and zooming
+                cinematicRate = 0.0005 + (0.015 * accelFactor); 
+                camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
+                
+                // Ease out the subtle drift
+                camera.position.x += 0.002 * (1.0 - rawFactor);
+                
+                ambientLight.intensity = 1.06;
+                dirLight.intensity = 1.0;
+                if (revealLight) revealLight.intensity = 0.0;
                 
                 if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
                     camera.position.z = autoScrollTargetZ;
@@ -2196,15 +2247,17 @@ function updateCamera() {
                     const hamEl = document.getElementById('hamburger-btn');
                     if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
                     const notesEl = document.getElementById('notes-btn-top');
-                    if (notesEl) { notesEl.style.opacity = '1'; notesEl.style.pointerEvents = 'auto'; }
-                    
+                    if (notesEl) { 
+                        notesEl.style.opacity = '1'; 
+                        notesEl.style.pointerEvents = 'auto'; 
+                        notesEl.classList.add('pulse-attention');
+                    }
+                    const mTourBtn = document.getElementById('m-menu-notes');
+                    if (mTourBtn) {
+                        mTourBtn.classList.add('pulse-attention');
+                    }
                     ambientLight.intensity = 1.06;
                     dirLight.intensity = 1.0;
-                    if (revealLight && revealLight.parent) {
-                        scene.remove(revealLight);
-                        scene.remove(revealLight.target);
-                        revealLight = null;
-                    }
                 }
             }
         }
@@ -2248,7 +2301,7 @@ function updateCamera() {
     if (initialSlowZoom) currentSmoothing = cinematicRate; // Use dynamic cinematic rate to ease-in the untiliting
     camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
 
-    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && Date.now() - cinematicStartTime > 4000)) {
+    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 7500)) {
         const ct = document.getElementById('cinematic-title');
         if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
     }
@@ -2291,7 +2344,11 @@ function updateTiles() {
     // Calculate visible width based on camera Z and FOV
     const vFOV = THREE.MathUtils.degToRad(camera.fov);
     const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
-    const width = height * camera.aspect;
+    const baseWidth = height * camera.aspect;
+    
+    // Adjust center and width for camera rotation (looking down the tapestry)
+    const viewCenterX = camera.position.x - camera.position.z * Math.tan(camera.rotation.y);
+    const viewWidth = baseWidth / Math.max(0.15, Math.cos(camera.rotation.y));
 
     // The margin acts as an off-screen buffer, forcing tiles to load just outside the camera's field of view
     const margin = isPhone ? 6 : 60; // Reasonable buffer for phones, generous for desktop
@@ -2308,12 +2365,20 @@ function updateTiles() {
     const processTiles = (tileArray, levelStr, isHighRes, unloadZ) => {
         // For high-res tiles, we use a tighter margin so we don't spam requests for tiles slightly off screen
         // Tight culling margins for L18 (high-res) prevent mobile devices from exhausting their network request pool
-        const actualMargin = isHighRes ? (levelStr === '19' ? 1 : (levelStr === '18' ? 2 : 4)) : margin;
-        const minX = camera.position.x - width / 2 - actualMargin;
-        const maxX = camera.position.x + width / 2 + actualMargin;
+        // Base layer (L16) is small enough to keep fully loaded in memory (approx 60MB), 
+        // ensuring we can always see to infinity down the hall without clipping.
+        const actualMargin = isHighRes ? (levelStr === '19' ? 1 : (levelStr === '18' ? 2 : 4)) : 99999;
+        
+        const minX = viewCenterX - viewWidth / 2 - actualMargin;
+        const maxX = viewCenterX + viewWidth / 2 + actualMargin;
 
         for (let tile of tileArray) {
-            const isMainVisible = (camera.position.z <= unloadZ) && (tile.xCenter >= minX && tile.xCenter <= maxX);
+            // Calculate true distance to tile for high-res culling down the hall
+            const distToCameraX = Math.abs(tile.xCenter - camera.position.x);
+            // High-res tiles should only load if they are close to the camera, even if they are in the frustum
+            const meetsDistanceRequirement = !isHighRes || (distToCameraX <= unloadZ * 2.5);
+            
+            const isMainVisible = (camera.position.z <= unloadZ) && meetsDistanceRequirement && (tile.xCenter >= minX && tile.xCenter <= maxX);
             const isMagVisible = magActive && isHighRes && (tile.xCenter >= magMinX - actualMargin && tile.xCenter <= magMaxX + actualMargin);
             const isVisible = isMainVisible || isMagVisible;
 
@@ -2426,9 +2491,10 @@ let isSceneDwell = false;
 let sceneDwellTimer = 0;
 let sceneDwellPOI = null; // The tourPOI we're dwelling on
 let sceneDwellStartZ = 8.5; // Camera Z when dwell began
+let sceneDwellStartY = 0; // Camera Y when dwell began
 let activePulsePOIIndex = -1;
 let initialSlowZoom = true;
-let cinematicStartTime = Date.now();
+let cinematicStartTime = null;
 let cinematicRate = 0.008;
 
 // Schedule an initial slow zoom in for both desktop and mobile
@@ -2570,6 +2636,7 @@ function animate() {
                         sceneDwellTimer = 0;
                         sceneDwellPOI = dwellPOI;
                         sceneDwellStartZ = camera.position.z;
+                        sceneDwellStartY = camera.position.y;
                         triggerPOIPulse(tourPOIs.indexOf(dwellPOI));
                     }
                 }
@@ -2587,29 +2654,36 @@ function animate() {
     // --- SCENE DWELL: slow breathing zoom in and out ---
     if (isSceneDwell && sceneDwellPOI && autoScrollTargetX === null) {
         sceneDwellTimer += dt;
-        const ZOOM_IN = 16.0;    // 16s zoom in
+        const INITIAL_PAUSE = 2.0; // 2s wait before zoom begins
+        const ZOOM_IN = 64.0;    // 64s zoom in (half as fast as previous)
         const PAUSE_IN = 5.0;    // 5s hold at close-up
-        const ZOOM_OUT = 16.0;   // 16s zoom out
+        const ZOOM_OUT = 64.0;   // 64s zoom out
         const PAUSE_OUT = 5.0;   // 5s hold at far
-        const FULL_CYCLE = ZOOM_IN + PAUSE_IN + ZOOM_OUT + PAUSE_OUT;
+        const FULL_CYCLE = INITIAL_PAUSE + ZOOM_IN + PAUSE_IN + ZOOM_OUT + PAUSE_OUT;
         
-        const closeZ = sceneDwellPOI.targetZ || 3.35;
+        // Get significantly closer to the canvas at the apex of the zoom
+        const closeZ = (sceneDwellPOI.targetZ || 3.35) * 0.6;
         const farZ = sceneDwellStartZ;
-        const targetY = sceneDwellPOI.bounds.yMax - 0.3;
+        const targetY = sceneDwellPOI.bounds.yMin + 0.80 * (sceneDwellPOI.bounds.yMax - sceneDwellPOI.bounds.yMin); // Aim for 80% of the bounding box
         
         const cyclePos = sceneDwellTimer % FULL_CYCLE;
         let progress; // 0 = far, 1 = close
-        if (cyclePos <= ZOOM_IN) {
+        if (cyclePos <= INITIAL_PAUSE) {
+            // Initial pause before starting to zoom
+            progress = 0.0;
+        } else if (cyclePos <= INITIAL_PAUSE + ZOOM_IN) {
             // Zooming in
-            const t = cyclePos / ZOOM_IN;
-            progress = t * t * (3 - 2 * t); // ease-in-out
-        } else if (cyclePos <= ZOOM_IN + PAUSE_IN) {
+            const t = (cyclePos - INITIAL_PAUSE) / ZOOM_IN;
+            // Cubic ease-out: starts fast, spends a long time slowly creeping up to the canvas
+            progress = 1.0 - Math.pow(1.0 - t, 3);
+        } else if (cyclePos <= INITIAL_PAUSE + ZOOM_IN + PAUSE_IN) {
             // Holding at close-up
             progress = 1.0;
-        } else if (cyclePos <= ZOOM_IN + PAUSE_IN + ZOOM_OUT) {
+        } else if (cyclePos <= INITIAL_PAUSE + ZOOM_IN + PAUSE_IN + ZOOM_OUT) {
             // Zooming out
-            const t = (cyclePos - ZOOM_IN - PAUSE_IN) / ZOOM_OUT;
-            progress = 1.0 - t * t * (3 - 2 * t); // ease-in-out reversed
+            const t = (cyclePos - INITIAL_PAUSE - ZOOM_IN - PAUSE_IN) / ZOOM_OUT;
+            // Cubic ease-in reversed: starts slowly pulling away, speeds up at the end
+            progress = 1.0 - Math.pow(t, 3);
         } else {
             // Holding at far
             progress = 0.0;
@@ -2617,8 +2691,10 @@ function animate() {
         
         const desiredZ = farZ + (closeZ - farZ) * progress;
         camera.position.z += (desiredZ - camera.position.z) * (dt * 2.0);
+        
+        const currentYTarget = sceneDwellStartY + (targetY - sceneDwellStartY) * progress;
         camera.position.x += (sceneDwellPOI.centerX - camera.position.x) * (dt * 0.15);
-        camera.position.y += (targetY - camera.position.y) * (dt * 0.15);
+        camera.position.y += (currentYTarget - camera.position.y) * (dt * 2.0);
         targetRotationY += (0 - targetRotationY) * (dt * 0.3);
         
         // Zero velocity so updateCamera doesn't fight our lerps
@@ -2671,6 +2747,14 @@ if (notesBtnTop) {
     notesBtnTop.addEventListener('click', (e) => {
         e.preventDefault();
         openNotes(true);
+    });
+}
+
+const tourBtn = document.getElementById('tour-btn');
+if (tourBtn) {
+    tourBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openNotes(true); // Treat it exactly like the top tour button
     });
 }
 
@@ -2803,7 +2887,7 @@ function changeLanguage(lang) {
         const statusLabel = document.getElementById('tour-status-label');
         if (statusLabel) statusLabel.innerText = isTourPaused ? (dict.paused || 'Paused') : (dict.tourStatus || 'Touring');
     }
-    document.querySelectorAll('#notes-btn-text').forEach(el => el.innerText = dict.tour);
+    document.querySelectorAll('#notes-btn-text, #tour-btn-text').forEach(el => el.innerText = dict.tour);
 
     // Translate mobile menu elements
     const mTextTour = document.getElementById('m-text-tour');

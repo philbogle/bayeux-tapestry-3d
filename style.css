@@ -209,7 +209,7 @@ button.key:active {
     }
 
     #notes-btn-top {
-        top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+        top: calc(env(safe-area-inset-top, 0px) + 28px) !important;
         padding: 8px 24px !important;
         font-size: 18px !important;
         border-radius: 25px !important;
@@ -324,4 +324,13 @@ body.ipad-mode #context-scroll button {
         max-height: 18vh !important;
         overflow-y: auto !important;
     }
+}
+
+@keyframes highlight-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(214,168,72,0.7); background-color: rgba(20,20,20,0.70); }
+    50% { box-shadow: 0 0 15px 5px rgba(214,168,72,0.8); background-color: rgba(214,168,72,0.4); }
+    100% { box-shadow: 0 0 0 0 rgba(214,168,72,0); background-color: rgba(20,20,20,0.70); }
+}
+.pulse-attention {
+    animation: highlight-pulse 2s ease-in-out 3 !important;
 }
