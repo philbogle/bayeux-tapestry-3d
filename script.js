@@ -2464,26 +2464,26 @@ function updateTiles() {
     // Prioritize processing based on zoom level to manage activeRequests cap
     const effectiveZ = magActive ? Math.min(camera.position.z, magCamera.position.z) : camera.position.z;
 
-    if (effectiveZ <= 1.6) {
-        processTiles(tilesL19, '19', true, 1.6);
-        processTiles(tilesL18, '18', true, 3.2);
-        processTiles(tilesL17, '17', true, 6.0);
+    if (effectiveZ <= 2.4) {
+        processTiles(tilesL19, '19', true, 2.4);
+        processTiles(tilesL18, '18', true, 4.0);
+        processTiles(tilesL17, '17', true, 8.0);
         processTiles(tiles, '16', false, 9999);
-    } else if (effectiveZ <= 3.2) {
-        processTiles(tilesL18, '18', true, 3.2);
-        processTiles(tilesL17, '17', true, 6.0);
+    } else if (effectiveZ <= 4.0) {
+        processTiles(tilesL18, '18', true, 4.0);
+        processTiles(tilesL17, '17', true, 8.0);
         processTiles(tiles, '16', false, 9999);
-        processTiles(tilesL19, '19', true, 1.6); // Fast unload
-    } else if (effectiveZ <= 6.0) {
-        processTiles(tilesL17, '17', true, 6.0);
+        processTiles(tilesL19, '19', true, 2.4); // Fast unload
+    } else if (effectiveZ <= 8.0) {
+        processTiles(tilesL17, '17', true, 8.0);
         processTiles(tiles, '16', false, 9999);
-        processTiles(tilesL18, '18', true, 3.2); // Fast unload
-        processTiles(tilesL19, '19', true, 1.6); // Fast unload
+        processTiles(tilesL18, '18', true, 4.0); // Fast unload
+        processTiles(tilesL19, '19', true, 2.4); // Fast unload
     } else {
         processTiles(tiles, '16', false, 9999);
-        processTiles(tilesL17, '17', true, 6.0); // Fast unload
-        processTiles(tilesL18, '18', true, 3.2); // Fast unload
-        processTiles(tilesL19, '19', true, 1.6); // Fast unload
+        processTiles(tilesL17, '17', true, 8.0); // Fast unload
+        processTiles(tilesL18, '18', true, 4.0); // Fast unload
+        processTiles(tilesL19, '19', true, 2.4); // Fast unload
     }
 }
 
