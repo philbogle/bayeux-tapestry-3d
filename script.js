@@ -2168,6 +2168,11 @@ function updateCamera() {
             }
         } else {
             if (cinematicStartTime === null) {
+                // Wait for the first few visible base tiles to load to prevent a black screen on slow connections
+                const initialTilesLoaded = tiles.filter(t => t.c < 4 && t.loaded).length;
+                if (initialTilesLoaded < 4) {
+                    return; // Skip camera update and hold the initial frame until textures download
+                }
                 cinematicStartTime = Date.now();
             }
             const elapsed = Date.now() - cinematicStartTime;
