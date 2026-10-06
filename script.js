@@ -2153,10 +2153,18 @@ function updateCamera() {
             }
         } else {
             if (cinematicStartTime === null) {
-                // Wait for the first few visible base tiles to load to prevent a black screen on slow connections
-                const initialTilesLoaded = tiles.filter(t => t.c < 4 && t.loaded).length;
-                if (initialTilesLoaded < 4) {
-                    return; // Skip camera update and hold the initial frame until textures download
+                // Wait ONLY for the tiles strictly visible on screen to load
+                const vFOV = THREE.MathUtils.degToRad(camera.fov);
+                const visibleWidth = 2 * Math.tan(vFOV / 2) * camera.position.z * camera.aspect;
+                const minX = camera.position.x - visibleWidth / 2 - 2.0;
+                const maxX = camera.position.x + visibleWidth / 2 + 2.0;
+                
+                // Get all L16 tiles that intersect the current screen
+                const onScreenTiles = tiles.filter(t => t.xCenter >= minX && t.xCenter <= maxX);
+                const allLoaded = onScreenTiles.length > 0 && onScreenTiles.every(t => t.loaded);
+                
+                if (!allLoaded) {
+                    return; // Hold the initial sequence until visible textures download
                 }
                 cinematicStartTime = Date.now();
             }
