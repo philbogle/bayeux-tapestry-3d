@@ -1,20 +1,5 @@
 /**
- * Bayeux Tapestry 3D Explorer
- * ---------------------------
- * A highly optimized, WebGL-powered 3D visualization of the Bayeux Tapestry using Three.js.
- * 
- * Core Features:
- * - Tile-based Rendering: The massive 68-meter tapestry is split into chunks and dynamically culled/rendered to maintain 60fps.
- * - Cinematic Intro: A sweeping, math-driven (smoothstep) camera sequence with decoupled ambient lighting fade-ups.
- * - Multi-language Tour: Interactive POI (Point of Interest) tour system driven by a single `bayeux_data.json` payload.
- * - Custom Input Handling: Device-agnostic 2D navigation (mouse wheel, touch drag, pinch-to-zoom) with physical inertia.
- * - Scene Dwell: A slow, "breathing" zoom effect when the user rests on a specific historical scene.
- * - Authoring Mode: (Accessed via ?author=1) Hidden tools to reposition and align textual Latin inscriptions.
- *
- * Architecture Notes:
- * - `bayeux_data.json` contains both the UI localization strings and the 51 Scene POI markers.
- * - Overlaid HTML elements (in index.html) handle standard UI (menus, dialogs).
- * - A hidden YouTube IFrame API handles the looping medieval atmospheric soundtrack to save bandwidth.
+ * A WebGL-powered visualization of the Bayeux Tapestry using Three.js.
  */
 
 let ytPlayer;
@@ -36,7 +21,7 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isIPad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 if (isIPad) document.body.classList.add('ipad-mode');
 // Treat iPads and large tablets as desktop for full graphics/lighting, restrict simplified experience to phones
@@ -1764,7 +1749,7 @@ function buildTourPOIs(data) {
             description: locDesc,
             translations: t.translations
         };
-        
+
         // Preserve cinematic overrides for the massive opening scene
         if (t.scene === "1") {
             item.bounds = { xMin: 0.4, xMax: 7.0, yMin: -3.90, yMax: -0.43 };
@@ -1910,14 +1895,14 @@ function updatePopupUI(index, shouldAutoScroll = true) {
     const annoData = tituliData[index];
 
     const localizedText = (annoData.translations && annoData.translations[currentLanguage]) ? annoData.translations[currentLanguage].text : annoData.translations['en'].text;
-    
+
     if (localizedText) {
         document.getElementById('context-title').innerText = `"${localizedText}"`;
         document.getElementById('context-title').style.display = 'block';
     } else {
         document.getElementById('context-title').style.display = 'none';
     }
-    
+
     document.getElementById('context-title').style.fontStyle = 'italic';
 
     let contextText = "No historical context available for this scene.";
@@ -1939,7 +1924,7 @@ function updatePopupUI(index, shouldAutoScroll = true) {
     popup.style.left = '50%';
     popup.style.transform = 'translateX(-50%)';
     popup.style.display = 'block';
-    
+
     const notesBtnTop = document.getElementById('notes-btn-top');
     const tourBtn = document.getElementById('tour-btn');
     if (notesBtnTop) notesBtnTop.style.display = 'none';
@@ -2150,9 +2135,9 @@ function updateCamera() {
             const hamEl = document.getElementById('hamburger-btn');
             if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
             const notesEl = document.getElementById('notes-btn-top');
-            if (notesEl) { 
-                notesEl.style.opacity = '1'; 
-                notesEl.style.pointerEvents = 'auto'; 
+            if (notesEl) {
+                notesEl.style.opacity = '1';
+                notesEl.style.pointerEvents = 'auto';
                 notesEl.classList.add('pulse-attention');
             }
             const mTourBtn = document.getElementById('m-menu-notes');
@@ -2178,7 +2163,7 @@ function updateCamera() {
             const elapsed = Date.now() - cinematicStartTime;
             // Mild tilt down the tapestry to convey length (steeper on mobile to compensate for narrow screen)
             const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.80 : -0.55;
-            
+
             if (revealLight) {
                 if (!revealLight.parent) {
                     scene.add(revealLight);
@@ -2189,7 +2174,7 @@ function updateCamera() {
                 forward.applyEuler(camera.rotation);
                 revealLight.target.position.copy(camera.position).add(forward);
             }
-            
+
             // --- LIGHTING TIMELINE ---
             // 1. Spotlight (swells 0-2.5s, fades out 2.5s-11.5s)
             if (elapsed < 2500) {
@@ -2214,7 +2199,7 @@ function updateCamera() {
                 dirLight.intensity = 0.0;
             } else if (elapsed < 11500) {
                 const lightFactor = (elapsed - 1500) / 10000.0; // 10-second sunrise
-                const dramaticFade = Math.pow(lightFactor, 1.2); 
+                const dramaticFade = Math.pow(lightFactor, 1.2);
                 ambientLight.intensity = 0.02 + (1.04 * dramaticFade);
                 dirLight.intensity = 1.0 * dramaticFade;
             } else {
@@ -2232,14 +2217,14 @@ function updateCamera() {
                 const t = Math.min(1.0, (elapsed - 2500) / 5000.0);
                 const smoothT = t * t * (3 - 2 * t);
                 targetRotationY = targetTilt * smoothT;
-                cinematicRate = 0.1; 
-                
+                cinematicRate = 0.1;
+
                 const trackSpeed = 6 * (t - t * t);
                 camera.position.x += 0.012 * trackSpeed;
             } else if (elapsed < 9000) {
                 // Phase 3: Pause
                 targetRotationY = targetTilt;
-                cinematicRate = 0.1; 
+                cinematicRate = 0.1;
                 camera.position.x += 0.002;
             } else {
                 // Phase 4: Untilt and Zoom
@@ -2247,25 +2232,25 @@ function updateCamera() {
                 const phase4Elapsed = Math.max(0, elapsed - 9000);
                 const rawFactor = Math.min(1.0, phase4Elapsed / 3000.0);
                 const accelFactor = rawFactor * rawFactor;
-                
-                cinematicRate = 0.0005 + (0.015 * accelFactor); 
+
+                cinematicRate = 0.0005 + (0.015 * accelFactor);
                 camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
                 camera.position.x += 0.002 * (1.0 - rawFactor);
-                
+
                 if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
                     camera.position.z = autoScrollTargetZ;
                     camera.rotation.y = 0;
                     autoScrollTargetZ = null;
                     initialSlowZoom = false;
-                    
+
                     const uiEl = document.getElementById('ui');
                     if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
                     const hamEl = document.getElementById('hamburger-btn');
                     if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
                     const notesEl = document.getElementById('notes-btn-top');
-                    if (notesEl) { 
-                        notesEl.style.opacity = '1'; 
-                        notesEl.style.pointerEvents = 'auto'; 
+                    if (notesEl) {
+                        notesEl.style.opacity = '1';
+                        notesEl.style.pointerEvents = 'auto';
                         notesEl.classList.add('pulse-attention');
                     }
                     const mTourBtn = document.getElementById('m-menu-notes');
@@ -2359,7 +2344,7 @@ function updateTiles() {
     const vFOV = THREE.MathUtils.degToRad(camera.fov);
     const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
     const baseWidth = height * camera.aspect;
-    
+
     // Adjust center and width for camera rotation (looking down the tapestry)
     const viewCenterX = camera.position.x - camera.position.z * Math.tan(camera.rotation.y);
     const viewWidth = baseWidth / Math.max(0.15, Math.cos(camera.rotation.y));
@@ -2382,7 +2367,7 @@ function updateTiles() {
         // Base layer (L16) is small enough to keep fully loaded in memory (approx 60MB), 
         // ensuring we can always see to infinity down the hall without clipping.
         const actualMargin = isHighRes ? (levelStr === '19' ? 1 : (levelStr === '18' ? 2 : 4)) : 99999;
-        
+
         const minX = viewCenterX - viewWidth / 2 - actualMargin;
         const maxX = viewCenterX + viewWidth / 2 + actualMargin;
 
@@ -2391,7 +2376,7 @@ function updateTiles() {
             const distToCameraX = Math.abs(tile.xCenter - camera.position.x);
             // High-res tiles should only load if they are close to the camera, even if they are in the frustum
             const meetsDistanceRequirement = !isHighRes || (distToCameraX <= unloadZ * 2.5);
-            
+
             const isMainVisible = (camera.position.z <= unloadZ) && meetsDistanceRequirement && (tile.xCenter >= minX && tile.xCenter <= maxX);
             const isMagVisible = magActive && isHighRes && (tile.xCenter >= magMinX - actualMargin && tile.xCenter <= magMaxX + actualMargin);
             const isVisible = isMainVisible || isMagVisible;
@@ -2565,7 +2550,7 @@ const tourClock = new THREE.Clock();
 function animate() {
     requestAnimationFrame(animate);
     const dt = Math.min(tourClock.getDelta(), 0.1);
-    
+
 
     updateDynamicPopup();
 
@@ -2638,7 +2623,7 @@ function animate() {
             camera.position.x = autoScrollTargetX;
             autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
             autoScrollTargetZ = null; autoScrollTargetY = null;
-            
+
             // Start scene dwell (breathing zoom) if notes popup is open
             const notesPopup = document.getElementById('context-scroll');
             if (notesPopup && window.getComputedStyle(notesPopup).display !== 'none' && typeof tourPOIs !== 'undefined' && tourPOIs) {
@@ -2674,12 +2659,12 @@ function animate() {
         const ZOOM_OUT = 64.0;   // 64s zoom out
         const PAUSE_OUT = 5.0;   // 5s hold at far
         const FULL_CYCLE = INITIAL_PAUSE + ZOOM_IN + PAUSE_IN + ZOOM_OUT + PAUSE_OUT;
-        
+
         // Get significantly closer to the canvas at the apex of the zoom
         const closeZ = (sceneDwellPOI.targetZ || 3.35) * 0.6;
         const farZ = sceneDwellStartZ;
         const targetY = sceneDwellPOI.bounds.yMin + 0.80 * (sceneDwellPOI.bounds.yMax - sceneDwellPOI.bounds.yMin); // Aim for 80% of the bounding box
-        
+
         const cyclePos = sceneDwellTimer % FULL_CYCLE;
         let progress; // 0 = far, 1 = close
         if (cyclePos <= INITIAL_PAUSE) {
@@ -2702,15 +2687,15 @@ function animate() {
             // Holding at far
             progress = 0.0;
         }
-        
+
         const desiredZ = farZ + (closeZ - farZ) * progress;
         camera.position.z += (desiredZ - camera.position.z) * (dt * 2.0);
-        
+
         const currentYTarget = sceneDwellStartY + (targetY - sceneDwellStartY) * progress;
         camera.position.x += (sceneDwellPOI.centerX - camera.position.x) * (dt * 0.15);
         camera.position.y += (currentYTarget - camera.position.y) * (dt * 2.0);
         targetRotationY += (0 - targetRotationY) * (dt * 0.3);
-        
+
         // Zero velocity so updateCamera doesn't fight our lerps
         velocityX = 0; velocityY = 0; velocityZ = 0;
     }
@@ -3028,7 +3013,7 @@ fetch('bayeux_data.json?v=1').then(res => res.json()).then(payload => {
 
     tituliData = data;
     buildTourPOIs(tituliData);
-    
+
     // Apply UI translations now that uiDict is populated
     changeLanguage(currentLanguage);
 
