@@ -2166,6 +2166,8 @@ function updateCamera() {
                 if (!allLoaded) {
                     return; // Hold the initial sequence until visible textures download
                 }
+                const loaderEl = document.getElementById('intro-loader');
+                if (loaderEl) loaderEl.style.display = 'none';
                 cinematicStartTime = Date.now();
             }
             const elapsed = Date.now() - cinematicStartTime;
@@ -2374,7 +2376,7 @@ function updateTiles() {
         // Tight culling margins for L18 (high-res) prevent mobile devices from exhausting their network request pool
         // Base layer (L16) is small enough to keep fully loaded in memory (approx 60MB), 
         // ensuring we can always see to infinity down the hall without clipping.
-        const actualMargin = isHighRes ? (levelStr === '19' ? 1 : (levelStr === '18' ? 2 : 4)) : 99999;
+        const actualMargin = isHighRes ? (levelStr === '19' ? 1 : (levelStr === '18' ? 2 : 4)) : 35;
 
         const minX = viewCenterX - viewWidth / 2 - actualMargin;
         const maxX = viewCenterX + viewWidth / 2 + actualMargin;
