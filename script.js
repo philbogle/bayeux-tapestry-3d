@@ -2083,7 +2083,7 @@ const fixedZoomAccel = 0.025;
 const friction = 0.92;
 
 let targetRotationY = 0;
-const maxTilt = (35 * Math.PI / 180) * 1.25; // Max tilt angle (~28.1 degrees)
+const maxTilt = (35 * Math.PI / 180) * 1.125; // Max tilt angle (~39.4 degrees)
 const tiltSmoothing = 0.006; // Controls the easing speed of the 3D camera tilt effect
 
 let moveHoldTime = 0;
