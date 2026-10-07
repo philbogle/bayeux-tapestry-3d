@@ -223,7 +223,8 @@ const LEVEL = 16; // 16 provides a very high resolution while being manageable
 const W = 60262;
 const H = 694;
 const SCALE = 100; // 100 pixels = 1 Three.js unit
-let currentLanguage = localStorage.getItem('bayeux_lang') || 'en';
+const urlParamsLang = new URLSearchParams(window.location.search);
+let currentLanguage = urlParamsLang.get('lang') || localStorage.getItem('bayeux_lang') || 'en';
 let uiDict = {};
 
 
@@ -2865,6 +2866,13 @@ if (isAuthoringMode) {
 function changeLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('bayeux_lang', currentLanguage);
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('lang') !== lang) {
+        urlParams.set('lang', lang);
+        const newUrl = window.location.pathname + '?' + urlParams.toString() + window.location.hash;
+        window.history.replaceState({}, '', newUrl);
+    }
 
     // Update UI buttons
     document.querySelectorAll('.lang-option').forEach(btn => {
