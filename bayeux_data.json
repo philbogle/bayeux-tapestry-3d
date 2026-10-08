@@ -16,7 +16,9 @@
       "close": "Close",
       "language": "Language",
       "music": "Music",
-      "fullscreen": "Fullscreen"
+      "fullscreen": "Fullscreen",
+      "cinematicTitle": "Bayeux Tapestry Tour",
+      "loadingAssets": "Loading assets..."
     },
     "zh": {
       "help": "帮助",
@@ -34,7 +36,9 @@
       "close": "关闭",
       "language": "语言",
       "music": "音乐",
-      "fullscreen": "全屏"
+      "fullscreen": "全屏",
+      "cinematicTitle": "贝叶挂毯之旅",
+      "loadingAssets": "加载资源中..."
     },
     "es": {
       "help": "Ayuda",
@@ -52,7 +56,9 @@
       "close": "Cerrar",
       "language": "Idioma",
       "music": "Música",
-      "fullscreen": "Pantalla completa"
+      "fullscreen": "Pantalla completa",
+      "cinematicTitle": "Tour del Tapiz de Bayeux",
+      "loadingAssets": "Cargando..."
     },
     "fr": {
       "help": "Aide",
@@ -70,7 +76,9 @@
       "close": "Fermer",
       "language": "Langue",
       "music": "Musique",
-      "fullscreen": "Plein écran"
+      "fullscreen": "Plein écran",
+      "cinematicTitle": "Visite de la Tapisserie de Bayeux",
+      "loadingAssets": "Chargement..."
     },
     "de": {
       "help": "Hilfe",
@@ -88,7 +96,9 @@
       "close": "Schließen",
       "language": "Sprache",
       "music": "Musik",
-      "fullscreen": "Vollbild"
+      "fullscreen": "Vollbild",
+      "cinematicTitle": "Teppich von Bayeux Tour",
+      "loadingAssets": "Wird geladen..."
     },
     "nl": {
       "help": "Help",
@@ -106,7 +116,9 @@
       "close": "Sluiten",
       "language": "Taal",
       "music": "Muziek",
-      "fullscreen": "Volledig scherm"
+      "fullscreen": "Volledig scherm",
+      "cinematicTitle": "Tapijt van Bayeux Tour",
+      "loadingAssets": "Laden..."
     },
     "pt": {
       "help": "Ajuda",
@@ -124,7 +136,9 @@
       "close": "Fechar",
       "language": "Idioma",
       "music": "Música",
-      "fullscreen": "Tela cheia"
+      "fullscreen": "Tela cheia",
+      "cinematicTitle": "Tour da Tapeçaria de Bayeux",
+      "loadingAssets": "Carregando..."
     },
     "hi": {
       "help": "मदद",
@@ -142,7 +156,9 @@
       "close": "बंद करें",
       "language": "भाषा",
       "music": "संगीत",
-      "fullscreen": "पूर्ण स्क्रीन"
+      "fullscreen": "पूर्ण स्क्रीन",
+      "cinematicTitle": "बाइयेक्स टेपेस्ट्री टूर",
+      "loadingAssets": "लोड हो रहा है..."
     },
     "ar": {
       "help": "مساعدة",
@@ -160,7 +176,9 @@
       "close": "إغلاق",
       "language": "اللغة",
       "music": "الموسيقى",
-      "fullscreen": "ملء الشاشة"
+      "fullscreen": "ملء الشاشة",
+      "cinematicTitle": "جولة نسيج بايو",
+      "loadingAssets": "جارٍ التحميل..."
     },
     "bn": {
       "help": "সাহায্য",
@@ -178,7 +196,9 @@
       "close": "বন্ধ করুন",
       "language": "ভাষা",
       "music": "সঙ্গীত",
-      "fullscreen": "পূর্ণ পর্দা"
+      "fullscreen": "পূর্ণ পর্দা",
+      "cinematicTitle": "বায়েউ ট্যাপেস্ট্রি ট্যুর",
+      "loadingAssets": "লোড হচ্ছে..."
     }
   },
   "tituli": [
