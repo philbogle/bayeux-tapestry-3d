@@ -273,8 +273,8 @@ const cameraY = floorY + 6.0; // Viewpoint lowered by half a unit
 const initialVFOV = THREE.MathUtils.degToRad(60);
 const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
 
-// Start near the beginning of the tapestry: on mobile, start further right (x=4.8) so Scene 1 is fully visible
-const initialX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
+// Start near the beginning of the tapestry: on mobile, start further right (x=4.8) so Scene 1 is fully visible; on desktop aim for Scene 1 (x=3.7)
+const initialX = isNarrowScreen ? 4.8 : 3.7;
 const introDistZ = isNarrowScreen ? 15.0 : 18.5; // Start further back in depth for the dynamic flight swoop
 const introDistY = cameraY; // Level with tapestry vertical center (straight-on)
 const introDistX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
@@ -995,7 +995,7 @@ scene.add(ambientLight);
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.0); // Start at 0 for cinematic reveal
 scene.add(dirLight);
 
-let revealLight = new THREE.SpotLight(ambientLight.color.getHex(), 0.0, 95, Math.PI / 2.2, 0.85, 1.2); // Cinematic intro spotlight (matches ambient light color)
+let revealLight = new THREE.SpotLight(ambientLight.color.getHex(), 0.0, 95, Math.PI / 2.2, 1.0, 1.2); // Unified single spotlight
 
 // Dedicated grazing light that follows the magnifying glass
 // Dedicated grazing light that follows the magnifying glass
@@ -1841,6 +1841,10 @@ function closeNotes() {
     isSceneDwell = false;
 }
 
+function startTour() {
+    openNotes(true);
+}
+
 function openNotes(shouldAutoScroll = false) {
     const popup = document.getElementById('context-scroll');
     const notesBtnTop = document.getElementById('notes-btn-top');
@@ -2242,7 +2246,7 @@ function updateCamera() {
             const startRoll = 0.0;
 
             const finalZ = autoScrollTargetZ || 6.5;
-            const finalX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
+            const finalX = isNarrowScreen ? 4.8 : 3.7;
 
             if (revealLight) {
                 if (!revealLight.parent) {
@@ -2256,39 +2260,46 @@ function updateCamera() {
                 revealLight.target.position.copy(camera.position).add(forward);
             }
 
+            // Spotlight expansion progression: begins expanding immediately at t=0 with zero dead pause,
+            // opening actively and smoothly across the intro and raptor flight (0 -> 10.0s)
+            const expandProgress = Math.min(1.0, elapsed / 10000.0);
+            const expandEase = Math.pow(expandProgress, 0.6); // Strong immediate expansion velocity from frame 1
+            const currentAngle = 0.12 + (Math.PI / 3.4 - 0.12) * expandEase;
+
             // --- CINEMATIC SEQUENCE ---
-            // Phase 1 (0 -> 3.4s):
-            // Initial perched stillness straight-on; spotlight emerges to illuminate the tapestry.
-            if (elapsed < 3400) {
+            // Phase 1 (0 -> 2.0s):
+            // Initial perched stillness straight-on; spotlight blooms and actively expands right away.
+            if (elapsed < 2000) {
                 camera.position.set(startX, startY, startZ);
                 camera.rotation.set(startPitch, startYaw, startRoll);
                 targetRotationY = 0;
 
-                // 0 -> 2.8s: Spotlight emerges matching ambient color, stays steady until takeoff
-                const lightProgress = Math.min(1.0, elapsed / 2800.0);
-                const smoothLight = lightProgress * lightProgress * (3 - 2 * lightProgress);
+                // Spotlight blooms quickly (150ms) so its expansion is visible from the very first moment
+                const igniteProgress = Math.min(1.0, elapsed / 150.0);
                 if (revealLight) {
-                    revealLight.intensity = 1.6 * smoothLight;
-                    revealLight.angle = 0.06 + (Math.PI / 3.4) * smoothLight;
-                    revealLight.penumbra = 0.85;
+                    revealLight.intensity = 1.4 * igniteProgress;
+                    revealLight.angle = currentAngle;
+                    revealLight.penumbra = 1.0;
                 }
-                ambientLight.intensity = 0.015 + 0.04 * smoothLight;
+                ambientLight.intensity = 0.040 + 0.025 * igniteProgress;
 
                 dirLight.intensity = 0.0;
                 floorMat.shininess = 0;
                 ceilingMat.shininess = 0;
                 wallMat.shininess = 0;
 
-            } else if (elapsed < 15400) {
-                // Phase 2: Dynamic Raptor Flight Swoop (3.4s -> 15.4s: 12.0 seconds total)
+            } else if (elapsed < 14000) {
+                // Phase 2: Dynamic Raptor Flight Swoop (2.0s -> 14.0s: 12.0 seconds total)
                 // Flight progression parameter t (0.0 -> 1.0) and quintic smootherstep s
-                const t = Math.min(1.0, (elapsed - 3400) / 12000.0);
+                const t = Math.min(1.0, (elapsed - 2000) / 12000.0);
                 const s = t * t * t * (t * (t * 6 - 15) + 10);
 
-                // Spotlight fade-out and ambient fade-up happen together in parallel across the flight
-                // Smooth progression curve 's' (0.0 at takeoff -> 1.0 at touchdown)
+                // Spotlight cone continues expanding slowly in parallel with the raptor flight
+                // with continuous single-cone 1.0 penumbra falloff, while intensity fades out and ambient fades up
                 if (revealLight) {
-                    revealLight.intensity = 1.6 * (1.0 - s);
+                    revealLight.angle = currentAngle;
+                    revealLight.penumbra = 1.0;
+                    revealLight.intensity = 1.4 * (1.0 - s);
                     if (s >= 1.0) {
                         if (revealLight.parent) {
                             scene.remove(revealLight);
@@ -2298,8 +2309,8 @@ function updateCamera() {
                     }
                 }
 
-                // Ambient light fades up in exact lockstep from 0.055 to full 1.06
-                ambientLight.intensity = 0.055 + (1.06 - 0.055) * s;
+                // Ambient light fades up in exact lockstep from 0.065 to full 1.06
+                ambientLight.intensity = 0.065 + (1.06 - 0.065) * s;
 
                 // --- CONTINUOUS HAWK WING FLAPPING ---
                 const easeIn = Math.min(1.0, t / 0.08);
@@ -2374,7 +2385,7 @@ function updateCamera() {
                 dirLight.intensity = s > 0.85 ? (s - 0.85) / 0.15 : 0.0;
 
                 // Fade out title text as the hawk takes wing into the swoop
-                if (elapsed > 5500) {
+                if (elapsed > 5000) {
                     const ct = document.getElementById('cinematic-title');
                     if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
                 }
@@ -2391,7 +2402,13 @@ function updateCamera() {
 
                 ambientLight.intensity = 1.06;
                 dirLight.intensity = 1.0;
-                if (revealLight) revealLight.intensity = 0.0;
+                if (revealLight) {
+                    if (revealLight.parent) {
+                        scene.remove(revealLight);
+                        scene.remove(revealLight.target);
+                    }
+                    revealLight = null;
+                }
 
                 // Restore rich museum specular properties for browsing
                 floorMat.shininess = 5;
