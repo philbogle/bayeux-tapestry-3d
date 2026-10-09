@@ -239,6 +239,7 @@ const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerH
 // Magnifying Glass Setup
 let magActive = false;
 let showSupertitles = true;
+let supertitlesGlobalOpacity = 0.0; // Smooth global fade transition for supertitles
 const magRenderTarget = new THREE.WebGLRenderTarget(512, 512);
 const magCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
 magCamera.position.z = 2.5; // Zoomed in tight for maximum detail
@@ -274,7 +275,12 @@ const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.i
 
 // Start near the beginning of the tapestry: on mobile, start further right (x=4.8) so Scene 1 is fully visible
 const initialX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
-camera.position.set(initialX, cameraY, initialZ);
+const introDistZ = isNarrowScreen ? 15.0 : 18.5; // Start further back in depth for the dynamic flight swoop
+const introDistY = cameraY; // Level with tapestry vertical center (straight-on)
+const introDistX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
+// Start looking at the canvas straight on from further to the right and further back
+camera.position.set(introDistX, introDistY, introDistZ);
+camera.rotation.set(0.0, 0.0, 0.0);
 
 // Disable antialiasing on mobile/tablets with high pixel ratios to save GPU fill rate
 const isMobileOrTablet = isPhone || isIPad;
@@ -989,7 +995,7 @@ scene.add(ambientLight);
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.0); // Start at 0 for cinematic reveal
 scene.add(dirLight);
 
-let revealLight = new THREE.SpotLight(0xffeeba, 0.0, 40, Math.PI / 12, 1.0, 2); // Cinematic intro spotlight
+let revealLight = new THREE.SpotLight(ambientLight.color.getHex(), 0.0, 95, Math.PI / 2.2, 0.85, 1.2); // Cinematic intro spotlight (matches ambient light color)
 
 // Dedicated grazing light that follows the magnifying glass
 // Dedicated grazing light that follows the magnifying glass
@@ -1163,6 +1169,13 @@ window.addEventListener('touchstart', (e) => {
     mouseScrollDir = 0;
     autoScrollTargetX = null;
     autoScrollTargetZ = null; autoScrollTargetY = null;
+    autoScrollStartX = null; autoScrollStartY = null; autoScrollStartZ = null;
+    tourFlapActive = false;
+    tourFlapLift = 0;
+    tourFlapPitch = 0;
+    tourFlapRoll = 0;
+    camera.rotation.x = 0;
+    camera.rotation.z = 0;
 
     if (e.touches.length === 1) {
         if (isAuthoringMode) {
@@ -1325,6 +1338,13 @@ window.addEventListener('mousedown', (e) => {
     mouseStartY = e.clientY;
     autoScrollTargetX = null;
     autoScrollTargetZ = null; autoScrollTargetY = null;
+    autoScrollStartX = null; autoScrollStartY = null; autoScrollStartZ = null;
+    tourFlapActive = false;
+    tourFlapLift = 0;
+    tourFlapPitch = 0;
+    tourFlapRoll = 0;
+    camera.rotation.x = 0;
+    camera.rotation.z = 0;
     if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#title') || e.target.closest('#lighting-dialog') || e.target.closest('#about-dialog') || e.target.closest('#context-scroll') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-tour-btn') || e.target.closest('#mobile-menu') || e.target.closest('#mobile-menu-scrim') || e.target.closest('#hamburger-btn')) return;
 
     if (isAuthoringMode) {
@@ -1976,6 +1996,17 @@ function updatePopupUI(index, shouldAutoScroll = true) {
                 if (autoScrollTargetY < -4.94) autoScrollTargetY = -4.94;
             }
         }
+
+        // Initialize tour flight coordinates between POIs (flapping eliminated per user request)
+        autoScrollStartX = camera.position.x;
+        autoScrollStartY = camera.position.y;
+        autoScrollStartZ = camera.position.z;
+        const dx = (autoScrollTargetX !== null ? autoScrollTargetX : camera.position.x) - camera.position.x;
+        const dy = (autoScrollTargetY !== null ? autoScrollTargetY : camera.position.y) - camera.position.y;
+        tourFlightDistance = Math.hypot(dx, dy);
+        tourFlightProgress = 0;
+        tourFlapPhase = 0;
+        tourFlapActive = false; // Flapping eliminated when travelling between POIs
     }
 }
 
@@ -2037,6 +2068,13 @@ window.addEventListener('wheel', (e) => {
     if (e.target.closest('#ui') || e.target.closest('#authoring-panel') || e.target.closest('#about-dialog') || e.target.closest('#lighting-dialog') || e.target.closest('#tour-control-bar') || e.target.closest('#mobile-menu') || e.target.closest('#hamburger-btn') || e.target.closest('#mobile-tour-btn')) return;
     e.preventDefault();
     autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
+    autoScrollStartX = null; autoScrollStartY = null; autoScrollStartZ = null;
+    tourFlapActive = false;
+    tourFlapLift = 0;
+    tourFlapPitch = 0;
+    tourFlapRoll = 0;
+    camera.rotation.x = 0;
+    camera.rotation.z = 0;
     isSceneDwell = false;
     lastWheelTime = Date.now();
 
@@ -2131,6 +2169,10 @@ function updateCamera() {
     if (initialSlowZoom) {
         if (autoScrollTargetZ === null || autoScrollTargetX !== null) {
             initialSlowZoom = false; // User interrupted
+            camera.position.y = cameraY;
+            camera.rotation.set(0, 0, 0);
+            camera.fov = 60.0;
+            camera.updateProjectionMatrix();
             const uiEl = document.getElementById('ui');
             if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
             const hamEl = document.getElementById('hamburger-btn');
@@ -2147,6 +2189,9 @@ function updateCamera() {
             }
             ambientLight.intensity = 1.06;
             dirLight.intensity = 1.0;
+            floorMat.shininess = 5;
+            ceilingMat.shininess = 4;
+            wallMat.shininess = 12;
             if (revealLight && revealLight.parent) {
                 scene.remove(revealLight);
                 scene.remove(revealLight.target);
@@ -2154,122 +2199,226 @@ function updateCamera() {
             }
         } else {
             if (cinematicStartTime === null) {
-                // Wait ONLY for the tiles strictly visible on screen to load
-                const vFOV = THREE.MathUtils.degToRad(camera.fov);
-                const visibleWidth = 2 * Math.tan(vFOV / 2) * camera.position.z * camera.aspect;
-                const minX = camera.position.x - visibleWidth / 2 - 2.0;
-                const maxX = camera.position.x + visibleWidth / 2 + 2.0;
-                
-                // Get all L16 tiles that intersect the current screen
-                const onScreenTiles = tiles.filter(t => t.xCenter >= minX && t.xCenter <= maxX);
-                const allLoaded = onScreenTiles.length > 0 && onScreenTiles.every(t => t.loaded);
-                
+                // Ensure all base tiles up to column 14 (covering the entire wide vista from high rafters) are loaded
+                // to guarantee ZERO tile pop-in during emergence, flight, and landing.
+                const introRequiredTiles = tiles.filter(t => t.c <= 14);
+                const allLoaded = introRequiredTiles.length > 0 && introRequiredTiles.every(t => t.loaded);
+
                 if (!allLoaded) {
-                    return; // Hold the initial sequence until visible textures download
+                    return; // Hold initial frame until all intro tiles are completely downloaded
                 }
+
+                // Smoothly fade out the loader subtitle
                 const loaderEl = document.getElementById('intro-loader');
-                if (loaderEl) loaderEl.style.display = 'none';
+                if (loaderEl) {
+                    loaderEl.style.opacity = '0';
+                    setTimeout(() => { loaderEl.style.display = 'none'; }, 800);
+                }
+
+                // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
+                // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
+                // Ensure initial position rests straight-on to the canvas, further to the right and further back
+                const startZ = isNarrowScreen ? 15.0 : 18.5;
+                const startY = cameraY; // Level with tapestry vertical center (straight-on)
+                const startX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
+                const startPitch = 0.0;
+                const startYaw = 0.0;
+                const startRoll = 0.0;
+
+                camera.position.set(startX, startY, startZ);
+                camera.rotation.set(startPitch, startYaw, startRoll);
+
                 cinematicStartTime = Date.now();
             }
+
             const elapsed = Date.now() - cinematicStartTime;
-            // Mild tilt down the tapestry to convey length (steeper on mobile to compensate for narrow screen)
-            const targetTilt = (isPhone || window.innerWidth <= 900) ? -0.80 : -0.55;
+
+            // Geometry anchors: starting further to the right and further back in depth
+            const startZ = isNarrowScreen ? 15.0 : 18.5;
+            const startY = cameraY;
+            const startX = isNarrowScreen ? 7.5 : 10.5;
+            const startPitch = 0.0;
+            const startYaw = 0.0;
+            const startRoll = 0.0;
+
+            const finalZ = autoScrollTargetZ || 6.5;
+            const finalX = isNarrowScreen ? 4.8 : (initialVisibleWidth / 2 - 2.0);
 
             if (revealLight) {
                 if (!revealLight.parent) {
                     scene.add(revealLight);
                     scene.add(revealLight.target);
                 }
+                revealLight.color.copy(ambientLight.color);
                 revealLight.position.copy(camera.position);
                 const forward = new THREE.Vector3(0, 0, -1);
                 forward.applyEuler(camera.rotation);
                 revealLight.target.position.copy(camera.position).add(forward);
             }
 
-            // --- LIGHTING TIMELINE ---
-            // 1. Spotlight (swells 0-2.5s, fades out 2.5s-11.5s)
-            if (elapsed < 2500) {
-                const lightFactor = elapsed / 2500.0;
-                if (revealLight) {
-                    revealLight.intensity = 0.85 * (lightFactor * lightFactor);
-                    revealLight.angle = 0.05 + (Math.PI / 8) * lightFactor;
-                }
-            } else if (elapsed < 11500) {
-                const fadeFactor = (elapsed - 2500) / 9000.0;
-                if (revealLight) {
-                    revealLight.intensity = 0.85 * (1.0 - fadeFactor);
-                    revealLight.angle = 0.05 + (Math.PI / 8) + (Math.PI / 4) * fadeFactor;
-                }
-            } else {
-                if (revealLight) revealLight.intensity = 0.0;
-            }
+            // --- CINEMATIC SEQUENCE ---
+            // Phase 1 (0 -> 3.4s):
+            // Initial perched stillness straight-on; spotlight emerges to illuminate the tapestry.
+            if (elapsed < 3400) {
+                camera.position.set(startX, startY, startZ);
+                camera.rotation.set(startPitch, startYaw, startRoll);
+                targetRotationY = 0;
 
-            // 2. Ambient Light (holds 0-1.5s, fades up 1.5s-11.5s)
-            if (elapsed < 1500) {
-                ambientLight.intensity = 0.02;
+                // 0 -> 2.8s: Spotlight emerges matching ambient color, stays steady until takeoff
+                const lightProgress = Math.min(1.0, elapsed / 2800.0);
+                const smoothLight = lightProgress * lightProgress * (3 - 2 * lightProgress);
+                if (revealLight) {
+                    revealLight.intensity = 1.6 * smoothLight;
+                    revealLight.angle = 0.06 + (Math.PI / 3.4) * smoothLight;
+                    revealLight.penumbra = 0.85;
+                }
+                ambientLight.intensity = 0.015 + 0.04 * smoothLight;
+
                 dirLight.intensity = 0.0;
-            } else if (elapsed < 11500) {
-                const lightFactor = (elapsed - 1500) / 10000.0; // 10-second sunrise
-                const dramaticFade = Math.pow(lightFactor, 1.2);
-                ambientLight.intensity = 0.02 + (1.04 * dramaticFade);
-                dirLight.intensity = 1.0 * dramaticFade;
+                floorMat.shininess = 0;
+                ceilingMat.shininess = 0;
+                wallMat.shininess = 0;
+
+            } else if (elapsed < 15400) {
+                // Phase 2: Dynamic Raptor Flight Swoop (3.4s -> 15.4s: 12.0 seconds total)
+                // Flight progression parameter t (0.0 -> 1.0) and quintic smootherstep s
+                const t = Math.min(1.0, (elapsed - 3400) / 12000.0);
+                const s = t * t * t * (t * (t * 6 - 15) + 10);
+
+                // Spotlight fade-out and ambient fade-up happen together in parallel across the flight
+                // Smooth progression curve 's' (0.0 at takeoff -> 1.0 at touchdown)
+                if (revealLight) {
+                    revealLight.intensity = 1.6 * (1.0 - s);
+                    if (s >= 1.0) {
+                        if (revealLight.parent) {
+                            scene.remove(revealLight);
+                            scene.remove(revealLight.target);
+                        }
+                        revealLight = null;
+                    }
+                }
+
+                // Ambient light fades up in exact lockstep from 0.055 to full 1.06
+                ambientLight.intensity = 0.055 + (1.06 - 0.055) * s;
+
+                // --- CONTINUOUS HAWK WING FLAPPING ---
+                const easeIn = Math.min(1.0, t / 0.08);
+                const flapEaseOut = t > 0.96 ? Math.max(0.0, (1.0 - t) / 0.04) : 1.0;
+                const envelope = easeIn * flapEaseOut;
+
+                // 10 steady, organic wingbeat cycles across flight
+                const flapPhase = t * (10.0 * 2.0 * Math.PI);
+
+                // Organic wing lift pulse & flight nods
+                const flapLift = envelope * 0.016 * (Math.sin(flapPhase) + 0.25 * Math.sin(2.0 * flapPhase));
+                const flapPitch = envelope * 0.0016 * Math.sin(flapPhase - 0.4);
+                const flapRoll = envelope * 0.0010 * Math.cos(0.5 * flapPhase);
+
+                // --- LANDING FLARE & TOUCHDOWN BUMP ---
+                let flareLift = 0;
+                let flarePitch = 0;
+                if (t >= 0.88 && t <= 0.98) {
+                    const flareProgress = (t - 0.88) / 0.10;
+                    const flareBell = Math.sin(flareProgress * Math.PI);
+                    flareLift = 0.028 * flareBell;
+                    flarePitch = 0.010 * flareBell; // pitch nose up to brake
+                }
+
+                let bumpDip = 0;
+                let bumpPitch = 0;
+                if (t >= 0.96) {
+                    const bumpProgress = (t - 0.96) / 0.04;
+                    const bumpCurve = Math.sin(bumpProgress * Math.PI * 1.5) * Math.exp(-bumpProgress * 3.5);
+                    bumpDip = -0.022 * bumpCurve;
+                    bumpPitch = -0.005 * bumpCurve;
+                }
+
+                camera.fov = 60.0;
+
+                // Continuous glide in depth (Z: startZ -> finalZ)
+                camera.position.z = startZ + (finalZ - startZ) * s;
+
+                // Flight trajectory in X:
+                // Smooth rightward swoop across the cathedral hall towards the right side of the canvas,
+                // descending directly into Scene 1 with zero leftward excursion.
+                const swoopAmplitude = isNarrowScreen ? 7.0 : 11.0;
+                const rightSwoop = Math.sin(s * Math.PI) * swoopAmplitude;
+                const baseX = startX + (finalX - startX) * s + rightSwoop;
+
+                // Subtle, natural avian turn gaze and bank (preventing extreme swinging distortion)
+                const straightenFactor = s > 0.65 ? Math.max(0.0, (1.0 - s) / 0.35) : 1.0;
+                const turnRoll = -Math.sin(s * Math.PI) * 0.038 * straightenFactor; // gentle aerodynamic roll
+                const turnYaw = Math.sin(s * Math.PI) * 0.120 * straightenFactor;   // subtle ~6.8 deg gaze into turn
+
+                // Optical untilt compensation:
+                // When camera yaws right (turnYaw > 0), the canvas plane naturally rotates in camera space.
+                // Offsetting camera X by -z * tan(turnYaw) / 2 keeps the visual optical center balanced so the
+                // right edge doesn't lurch unnaturally close to the viewer's face.
+                const untiltOffset = -camera.position.z * Math.sin(turnYaw) * 0.40;
+                camera.position.x = baseX + untiltOffset;
+
+                // Dynamic vertical arc: subtle swoop dip in Y as bird glides through the curve
+                const swoopArc = Math.sin(s * Math.PI) * 0.32;
+                camera.position.y = startY + (cameraY - startY) * s - swoopArc + flapLift + flareLift + bumpDip;
+
+                // Dynamic pitch aimed along motion vector + vertical center
+                const basePitch = -Math.atan2(camera.position.y - cameraY, camera.position.z);
+                const pitch = basePitch + flapPitch + flarePitch + bumpPitch;
+                const roll = turnRoll + flapRoll;
+                const yaw = turnYaw;
+
+                camera.rotation.set(pitch, yaw, roll);
+                targetRotationY = yaw;
+
+                // Directional key light emerges near landing
+                dirLight.intensity = s > 0.85 ? (s - 0.85) / 0.15 : 0.0;
+
+                // Fade out title text as the hawk takes wing into the swoop
+                if (elapsed > 5500) {
+                    const ct = document.getElementById('cinematic-title');
+                    if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
+                }
+
             } else {
+                // Phase 3: Perched & Landed — Arrival at exact browsing coordinates with zero speed
+                camera.position.set(finalX, cameraY, finalZ);
+                camera.rotation.set(0, 0, 0);
+                camera.fov = 60.0;
+                camera.updateProjectionMatrix();
+                targetRotationY = 0;
+                autoScrollTargetZ = null;
+                initialSlowZoom = false;
+
                 ambientLight.intensity = 1.06;
                 dirLight.intensity = 1.0;
-            }
+                if (revealLight) revealLight.intensity = 0.0;
 
-            // --- CAMERA TIMELINE ---
-            if (elapsed < 2500) {
-                // Phase 1: Hold still
-                targetRotationY = 0;
-                cinematicRate = 0;
-            } else if (elapsed < 7500) {
-                // Phase 2: Tilt and track (5 seconds)
-                const t = Math.min(1.0, (elapsed - 2500) / 5000.0);
-                const smoothT = t * t * (3 - 2 * t);
-                targetRotationY = targetTilt * smoothT;
-                cinematicRate = 0.1;
+                // Restore rich museum specular properties for browsing
+                floorMat.shininess = 5;
+                ceilingMat.shininess = 4;
+                wallMat.shininess = 12;
 
-                const trackSpeed = 6 * (t - t * t);
-                camera.position.x += 0.012 * trackSpeed;
-            } else if (elapsed < 9000) {
-                // Phase 3: Pause
-                targetRotationY = targetTilt;
-                cinematicRate = 0.1;
-                camera.position.x += 0.002;
-            } else {
-                // Phase 4: Untilt and Zoom
-                targetRotationY = 0;
-                const phase4Elapsed = Math.max(0, elapsed - 9000);
-                const rawFactor = Math.min(1.0, phase4Elapsed / 3000.0);
-                const accelFactor = rawFactor * rawFactor;
-
-                cinematicRate = 0.0005 + (0.015 * accelFactor);
-                camera.position.z += (autoScrollTargetZ - camera.position.z) * cinematicRate;
-                camera.position.x += 0.002 * (1.0 - rawFactor);
-
-                if (Math.abs(camera.position.z - autoScrollTargetZ) < 0.02 && Math.abs(camera.rotation.y) < 0.02) {
-                    camera.position.z = autoScrollTargetZ;
-                    camera.rotation.y = 0;
-                    autoScrollTargetZ = null;
-                    initialSlowZoom = false;
-
-                    const uiEl = document.getElementById('ui');
-                    if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
-                    const hamEl = document.getElementById('hamburger-btn');
-                    if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
-                    const notesEl = document.getElementById('notes-btn-top');
-                    if (notesEl) {
-                        notesEl.style.opacity = '1';
-                        notesEl.style.pointerEvents = 'auto';
-                        notesEl.classList.add('pulse-attention');
-                    }
-                    const mTourBtn = document.getElementById('m-menu-notes');
-                    if (mTourBtn) {
-                        mTourBtn.classList.add('pulse-attention');
-                    }
+                const uiEl = document.getElementById('ui');
+                if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
+                const hamEl = document.getElementById('hamburger-btn');
+                if (hamEl) { hamEl.style.opacity = '1'; hamEl.style.pointerEvents = 'auto'; }
+                const notesEl = document.getElementById('notes-btn-top');
+                if (notesEl) {
+                    notesEl.style.opacity = '1';
+                    notesEl.style.pointerEvents = 'auto';
+                    notesEl.classList.add('pulse-attention');
+                }
+                const mTourBtn = document.getElementById('m-menu-notes');
+                if (mTourBtn) {
+                    mTourBtn.classList.add('pulse-attention');
                 }
             }
+
+            // Zero physics velocity during cinematic so nothing fights the flight trajectory
+            velocityX = 0;
+            velocityY = 0;
+            velocityZ = 0;
+
         }
     }
 
@@ -2308,10 +2457,11 @@ function updateCamera() {
 
     // Use a 2.0x multiplier for returning to straight-on view to balance snappiness with smooth easing
     let currentSmoothing = isUntilting ? tiltSmoothing * 2.0 : tiltSmoothing;
-    if (initialSlowZoom) currentSmoothing = cinematicRate; // Use dynamic cinematic rate to ease-in the untiliting
-    camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
+    if (!initialSlowZoom) {
+        camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
+    }
 
-    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 7500)) {
+    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 5500)) {
         const ct = document.getElementById('cinematic-title');
         if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
     }
@@ -2463,6 +2613,12 @@ function updateTiles() {
     };
 
     // Prioritize processing based on zoom level to manage activeRequests cap
+    // During cinematic intro flight, only keep the preloaded base layer (L16) active; skip expensive high-res LOD checks
+    if (initialSlowZoom) {
+        processTiles(tiles, '16', false, 9999);
+        return;
+    }
+
     const effectiveZ = magActive ? Math.min(camera.position.z, magCamera.position.z) : camera.position.z;
 
     if (effectiveZ <= 2.4) {
@@ -2495,6 +2651,16 @@ function updateTiles() {
 let autoScrollTargetX = null;
 let autoScrollTargetY = null;
 let autoScrollTargetZ = null;
+let autoScrollStartX = null;
+let autoScrollStartY = null;
+let autoScrollStartZ = null;
+let tourFlightDistance = 0;
+let tourFlightProgress = 0;
+let tourFlapActive = false;
+let tourFlapPhase = 0;
+let tourFlapLift = 0;
+let tourFlapPitch = 0;
+let tourFlapRoll = 0;
 
 // POI dwell state: slow breathing zoom when camera arrives at a scene
 let isSceneDwell = false;
@@ -2524,6 +2690,8 @@ function triggerPOIPulse(index) {
 }
 
 function updateDynamicPopup() {
+    // Skip completely during cinematic intro flight
+    if (typeof initialSlowZoom !== 'undefined' && initialSlowZoom) return;
     // Do not override POI text while drone tour is actively running
     if (typeof isTourActive !== 'undefined' && isTourActive) return;
 
@@ -2608,13 +2776,44 @@ function animate() {
 
 
     if (autoScrollTargetX !== null) {
-        camera.position.x += (autoScrollTargetX - camera.position.x) * 0.1;
+        // Track flight progress between POIs
+        const currentRemDist = Math.hypot(
+            autoScrollTargetX - camera.position.x,
+            (autoScrollTargetY !== null ? autoScrollTargetY : camera.position.y) - camera.position.y
+        );
+        const flightTotal = tourFlightDistance > 0.01 ? tourFlightDistance : Math.max(0.01, currentRemDist);
+        tourFlightProgress = Math.max(0.0, Math.min(1.0, 1.0 - (currentRemDist / flightTotal)));
+
+        // --- SUBTLE BIRD OF PREY WINGBEATS DURING POI TRANSIT ---
+        // Ultra-gentle, organic flapping (~1.6 Hz) that fades out completely well before arrival
+        if (tourFlapActive && currentRemDist > 0.15) {
+            tourFlapPhase += dt * (1.6 * 2.0 * Math.PI);
+
+            // Smooth ease-in, and cushion smoothly to zero over the last 0.8 units of distance
+            const flapEaseIn = Math.min(1.0, tourFlightProgress / 0.20);
+            const flapEaseOut = Math.min(1.0, Math.max(0.0, (currentRemDist - 0.15) / 0.65));
+            const flapEnv = flapEaseIn * flapEaseOut;
+
+            // Ultra-subtle lift pulse (peaking ~2mm)
+            tourFlapLift = flapEnv * 0.0022 * (Math.sin(tourFlapPhase) + 0.25 * Math.sin(2.0 * tourFlapPhase));
+            // Imperceptible aerodynamic pitch nod (~0.015 degrees)
+            tourFlapPitch = flapEnv * 0.00025 * Math.sin(tourFlapPhase - 0.4);
+            // Whispering roll bank
+            const flightDir = (autoScrollTargetX >= camera.position.x) ? 1.0 : -1.0;
+            tourFlapRoll = flapEnv * 0.00020 * Math.cos(0.5 * tourFlapPhase) * flightDir;
+        } else {
+            tourFlapLift *= 0.80;
+            tourFlapPitch *= 0.80;
+            tourFlapRoll *= 0.80;
+        }
+
+        camera.position.x += (autoScrollTargetX - camera.position.x) * 0.08;
         let zReached = true;
         let yReached = true;
 
         if (autoScrollTargetY !== null) {
-            camera.position.y += (autoScrollTargetY - camera.position.y) * 0.1;
-            if (Math.abs(camera.position.y - autoScrollTargetY) > 0.01) {
+            camera.position.y += (autoScrollTargetY - camera.position.y) * 0.08;
+            if (Math.abs(camera.position.y - autoScrollTargetY) > 0.005) {
                 yReached = false;
             } else {
                 camera.position.y = autoScrollTargetY;
@@ -2622,18 +2821,31 @@ function animate() {
         }
 
         if (autoScrollTargetZ !== null) {
-            camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.1;
-            if (Math.abs(camera.position.z - autoScrollTargetZ) > 0.01) {
+            camera.position.z += (autoScrollTargetZ - camera.position.z) * 0.08;
+            if (Math.abs(camera.position.z - autoScrollTargetZ) > 0.005) {
                 zReached = false;
             } else {
                 camera.position.z = autoScrollTargetZ;
             }
         }
 
-        if (Math.abs(camera.position.x - autoScrollTargetX) < 0.01 && zReached && yReached) {
+        // Apply gentle hawk flapping oscillation to position and orientation during POI transit (disabled)
+        if (tourFlapActive) {
+            camera.position.y += tourFlapLift;
+            camera.rotation.x += tourFlapPitch;
+            camera.rotation.z += tourFlapRoll;
+        }
+
+        if (Math.abs(camera.position.x - autoScrollTargetX) < 0.005 && zReached && yReached) {
             camera.position.x = autoScrollTargetX;
             autoScrollTargetX = null; autoScrollTargetZ = null; autoScrollTargetY = null;
-            autoScrollTargetZ = null; autoScrollTargetY = null;
+            autoScrollStartX = null; autoScrollStartY = null; autoScrollStartZ = null;
+            tourFlapActive = false;
+            tourFlapLift = 0;
+            tourFlapPitch = 0;
+            tourFlapRoll = 0;
+            camera.rotation.x = 0;
+            camera.rotation.z = 0;
 
             // Start scene dwell (breathing zoom) if notes popup is open
             const notesPopup = document.getElementById('context-scroll');
@@ -2678,6 +2890,7 @@ function animate() {
 
         const cyclePos = sceneDwellTimer % FULL_CYCLE;
         let progress; // 0 = far, 1 = close
+        let isActivelyZooming = false;
         if (cyclePos <= INITIAL_PAUSE) {
             // Initial pause before starting to zoom
             progress = 0.0;
@@ -2686,6 +2899,7 @@ function animate() {
             const t = (cyclePos - INITIAL_PAUSE) / ZOOM_IN;
             // Cubic ease-out: starts fast, spends a long time slowly creeping up to the canvas
             progress = 1.0 - Math.pow(1.0 - t, 3);
+            isActivelyZooming = true;
         } else if (cyclePos <= INITIAL_PAUSE + ZOOM_IN + PAUSE_IN) {
             // Holding at close-up
             progress = 1.0;
@@ -2694,9 +2908,21 @@ function animate() {
             const t = (cyclePos - INITIAL_PAUSE - ZOOM_IN - PAUSE_IN) / ZOOM_OUT;
             // Cubic ease-in reversed: starts slowly pulling away, speeds up at the end
             progress = 1.0 - Math.pow(t, 3);
+            isActivelyZooming = true;
         } else {
             // Holding at far
             progress = 0.0;
+        }
+
+        // --- EXTREMELY SUBTLE & SLOW WINGBEATS WHILE ZOOMING IN / OUT ---
+        let dwellLift = 0;
+        let dwellPitch = 0;
+        if (isActivelyZooming) {
+            // Very slow, languid hovering cycles (~0.35 Hz: ~1 gentle breath every 2.8 seconds)
+            const dwellFlapPhase = sceneDwellTimer * (0.35 * 2.0 * Math.PI);
+            // Barely perceptible micro-lift (~0.35mm) and micro-pitch nod (~0.003 degrees)
+            dwellLift = 0.00035 * Math.sin(dwellFlapPhase);
+            dwellPitch = 0.00005 * Math.sin(dwellFlapPhase - 0.4);
         }
 
         const desiredZ = farZ + (closeZ - farZ) * progress;
@@ -2704,8 +2930,9 @@ function animate() {
 
         const currentYTarget = sceneDwellStartY + (targetY - sceneDwellStartY) * progress;
         camera.position.x += (sceneDwellPOI.centerX - camera.position.x) * (dt * 0.15);
-        camera.position.y += (currentYTarget - camera.position.y) * (dt * 2.0);
+        camera.position.y += (currentYTarget - camera.position.y) * (dt * 2.0) + dwellLift;
         targetRotationY += (0 - targetRotationY) * (dt * 0.3);
+        camera.rotation.x = dwellPitch;
 
         // Zero velocity so updateCamera doesn't fight our lerps
         velocityX = 0; velocityY = 0; velocityZ = 0;
@@ -2714,9 +2941,11 @@ function animate() {
     updateCamera();
     updateTiles();
 
-    dirLight.position.set(camera.position.x - 5.0, tapestryElevation + 4.0, 2.0);
-    dirLight.target.position.set(camera.position.x + 2.0, tapestryElevation, 0);
-    dirLight.target.updateMatrixWorld();
+    if (dirLight.intensity > 0) {
+        dirLight.position.set(camera.position.x - 5.0, tapestryElevation + 4.0, 2.0);
+        dirLight.target.position.set(camera.position.x + 2.0, tapestryElevation, 0);
+        dirLight.target.updateMatrixWorld();
+    }
 
 
     if (magActive) {
@@ -3071,9 +3300,9 @@ window.updateAnnotations = function () {
     let scrollOpacityMult = 1.0;
     if (isAuthoringMode) scrollOpacityMult = 1.0;
 
-    // Perform raycasting for hover detection if we have valid mouse coordinates
+    // Perform raycasting for hover detection if we have valid mouse coordinates (skip during cinematic flight)
     let hoveredMesh = null;
-    if (mouseCoords.x !== -9999 && !isDragging && !isMouseDown) {
+    if (mouseCoords.x !== -9999 && !isDragging && !isMouseDown && !initialSlowZoom) {
         hoverRaycaster.setFromCamera(mouseCoords, camera);
         // Extract visible annotation meshes
         const annMeshes = annotations.map(a => a.mesh).filter(m => m && m.visible);
@@ -3091,18 +3320,26 @@ window.updateAnnotations = function () {
     // UI button state controls visibility
     // (showSupertitles is now a global variable updated by the click listener)
 
+    // Evaluate if supertitles should be shown
+    const isNotesOpen = document.getElementById('context-scroll') && window.getComputedStyle(document.getElementById('context-scroll')).display !== 'none';
+    const isTourRunning = typeof isTourActive !== 'undefined' && isTourActive;
+    const shouldShowTitles = showSupertitles && !isNotesOpen && !isTourRunning && !initialSlowZoom;
+
+    // Smooth global fade-in/fade-out for titles (lerp factor 0.08 produces an elegant ~400ms transition)
+    const targetGlobalOpacity = shouldShowTitles ? 1.0 : 0.0;
+    supertitlesGlobalOpacity += (targetGlobalOpacity - supertitlesGlobalOpacity) * 0.08;
+    if (supertitlesGlobalOpacity < 0.003) supertitlesGlobalOpacity = 0.0;
+    if (supertitlesGlobalOpacity > 0.997) supertitlesGlobalOpacity = 1.0;
+
+    const isTitlesFullyHidden = supertitlesGlobalOpacity === 0.0;
+
     annotations.forEach((ann, index) => {
         if (!ann.mesh) return;
 
-        const isNotesOpen = document.getElementById('context-scroll') && window.getComputedStyle(document.getElementById('context-scroll')).display !== 'none';
-        const isTourRunning = typeof isTourActive !== 'undefined' && isTourActive;
-
-        if (!showSupertitles || ann.data.x === undefined || isNotesOpen || isTourRunning || initialSlowZoom) {
+        if (ann.data.x === undefined || isTitlesFullyHidden) {
             ann.mesh.visible = false;
             return;
         }
-
-        // We rely on Three.js native frustum culling rather than hardcoded distance checks
 
         ann.mesh.visible = true;
         ann.mesh.position.x = ann.data.x;
@@ -3115,7 +3352,8 @@ window.updateAnnotations = function () {
         const targetOpacity = (hoveredMesh === ann.mesh || isAuthoringMode) ? 1.0 : baseOpacity;
         ann.currentOpacity += (targetOpacity - ann.currentOpacity) * 0.2; // Smooth lerp
 
-        ann.mesh.material.opacity = ann.currentOpacity * scrollOpacityMult;
+        // Combine hover/tour opacity with the smooth global fade-in/fade-out
+        ann.mesh.material.opacity = ann.currentOpacity * scrollOpacityMult * supertitlesGlobalOpacity;
 
         // Add a subtle scale effect on hover as well
         const targetScale = (hoveredMesh === ann.mesh) ? 1.002 : 1.0; // Drastically reduced hover scale to prevent perceived horizontal shifting
