@@ -278,9 +278,9 @@ const initialX = isNarrowScreen ? 4.8 : 5.75;
 const introDistZ = isNarrowScreen ? 15.0 : 18.5; // Start further back in depth for the dynamic flight swoop
 const introDistY = cameraY; // Level with tapestry vertical center (straight-on)
 const introDistX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
-// Start looking down the canvas at a 15° tilt (1.5x) from further back
+// Start looking down the canvas at a 25° tilt from further back
 camera.position.set(introDistX, introDistY, introDistZ);
-camera.rotation.set(0.0, -(15 * Math.PI / 180), 0.0);
+camera.rotation.set(0.0, -(25 * Math.PI / 180), 0.0);
 
 // Disable antialiasing on mobile/tablets with high pixel ratios to save GPU fill rate
 const isMobileOrTablet = isPhone || isIPad;
@@ -2211,6 +2211,13 @@ function updateCamera() {
                     return; // Hold initial frame until all intro tiles are completely downloaded
                 }
 
+                // Ensure all intro tiles are fully opaque immediately so they don't fade in during bloom
+                introRequiredTiles.forEach(t => {
+                    if (t.mesh && t.mesh.material) {
+                        t.mesh.material.opacity = 1.0;
+                    }
+                });
+
                 // Smoothly fade out the loader subtitle
                 const loaderEl = document.getElementById('intro-loader');
                 if (loaderEl) {
@@ -2219,9 +2226,8 @@ function updateCamera() {
                 }
 
                 // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
-                // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
-                // Initial perched position: angled looking down the canvas (15° tilt, 1.5x)
-                const startTilt = -(15 * Math.PI / 180);
+                // Initial perched position: angled looking down the canvas (25° tilt)
+                const startTilt = -(25 * Math.PI / 180);
                 const startZ = isNarrowScreen ? 15.0 : 18.5;
                 const startY = cameraY; // Level with tapestry vertical center
                 const startX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
@@ -2237,8 +2243,8 @@ function updateCamera() {
 
             const elapsed = Date.now() - cinematicStartTime;
 
-            // Geometry anchors: starting further to the right and further back in depth with 15° tilt
-            const startTilt = -(15 * Math.PI / 180);
+            // Geometry anchors: starting further to the right and further back in depth with 25° tilt
+            const startTilt = -(25 * Math.PI / 180);
             const startZ = isNarrowScreen ? 15.0 : 18.5;
             const startY = cameraY;
             const startX = isNarrowScreen ? 7.5 : 10.5;
@@ -2250,11 +2256,11 @@ function updateCamera() {
             const finalX = isNarrowScreen ? 4.8 : 5.75; // Centered directly on King Edward
 
             // --- CINEMATIC SEQUENCE ---
-            // Phase 1 (0 -> 4.8s):
-            // Perched stillness holding 15° tilt (1.5x); warm candlelit spotlight blooms slowly (1.3s),
-            // slides across Scenes 0-1 (x: 3.5 -> 11.5 over 2.4s), and slides smoothly back to King Edward (finalX over 2.25s).
-            // Flight begins at 4.8s right as the spotlight locks onto King Edward.
-            const phase1Duration = 4800.0;
+            // Phase 1 (0 -> 6.5s):
+            // Perched stillness holding 25° tilt; warm candlelit spotlight starts small, dim, close to the canvas (z = 2.8)
+            // directly on King Edward, then continuously zooms out and expands its cone (z: 2.8 -> 13.0, angle: 18° -> 55°),
+            // exposing more and more of the tapestry before raptor flight launches at 6.5s.
+            const phase1Duration = 6500.0;
             const flightDuration = 10000.0;
             const totalIntroDuration = phase1Duration + flightDuration;
 
@@ -2267,43 +2273,41 @@ function updateCamera() {
                 ambientLight.intensity = 0.03;
                 dirLight.intensity = 0.0;
 
-                // Stably anchored gallery spotlight: softly blooms into a warm candlelit glow (0 -> 1.35 over 1.3s),
-                // slides across Scenes 0-1, and slides back to the left directly onto King Edward (finalX)
-                // aimed lower at King Edward on his throne (cameraY - 0.2).
+                // Spotlight continuously zooms out and exposes more of the canvas:
                 if (revealLight) {
-                    const bloom = Math.min(1.0, elapsed / 1300.0);
-                    const bloomEase = bloom * bloom * (3 - 2 * bloom);
+                    const p = Math.min(1.0, elapsed / phase1Duration);
+                    // Smooth, gentle acceleration from intimate close inspection into grand canvas exposure
+                    const s = Math.pow(p, 1.35);
+
+                    // Pull back smoothly in Z from intimate close (2.8) to wide gallery distance (13.0)
+                    const lightZ = 2.8 + (13.0 - 2.8) * s;
+                    // Centered directly in front of King Edward throughout the zoom out
+                    const lightX = finalX;
+                    const lightY = (cameraY + 0.6) + 1.4 * s;
+
+                    // Cone angle continuously expands: starts small (Math.PI / 10 = ~18 deg) and opens wide
+                    // to Math.PI / 2.1 (~85.7 deg half-angle / 171 deg cone) so the full visible extent of the canvas is lighted
+                    const startAngle = Math.PI / 10.0;
+                    const endAngle = Math.PI / 2.1;
+                    const lightAngle = startAngle + (endAngle - startAngle) * s;
+
+                    // Starts dim (igniting smoothly from 0 to 0.20 in 300ms, then steadily brightening to 1.35 as it zooms out)
+                    const ignite = Math.min(1.0, elapsed / 300.0);
+                    const lightIntensity = (0.20 + (1.35 - 0.20) * s) * ignite;
+                    // Penumbra transitions from cozy soft core (0.85) to crisp broad wash (0.40) to keep outer canvas bright
+                    const lightPenumbra = 0.85 + (0.40 - 0.85) * s;
+
                     revealLight.color.setHex(0xffc878);
-                    revealLight.intensity = 1.35 * bloomEase;
-                    revealLight.angle = Math.PI / 4.8;
-                    revealLight.penumbra = 0.82;
+                    revealLight.intensity = lightIntensity;
+                    revealLight.angle = lightAngle;
+                    revealLight.penumbra = lightPenumbra;
                     revealLight.distance = 180;
                     revealLight.decay = 0.0;
-                    revealLight.position.set(2.0, cameraY + 2.0, 7.5);
+                    revealLight.position.set(lightX, lightY, lightZ);
 
-                    // Two-way horizon sliding while stationary perched:
-                    // 1. Slow slide right across Scenes 0-1 (0 -> 2400ms: x = 3.5 -> 11.5, tripled length)
-                    // 2. Gentle turnaround dwell (2400 -> 2550ms: x = 11.5)
-                    // 3. Slow slide back to King Edward (2550 -> 4800ms: x = 11.5 -> finalX, tripled length)
-                    // At 4800ms (4.8s): Spotlight locks on King Edward and flight immediately launches!
-                    let targetX = 3.5;
-                    if (elapsed <= 2400) {
-                        const p = elapsed / 2400.0;
-                        const ease = p * p * (3 - 2 * p);
-                        targetX = 3.5 + (11.5 - 3.5) * ease;
-                    } else if (elapsed <= 2550) {
-                        targetX = 11.5;
-                    } else if (elapsed <= 4800) {
-                        const p = (elapsed - 2550.0) / 2250.0;
-                        const ease = p * p * (3 - 2 * p);
-                        targetX = 11.5 + (finalX - 11.5) * ease;
-                    } else {
-                        targetX = finalX;
-                    }
-
-                    // Aim lower: directly at the vertical center of the embroidered canvas
+                    // Target stays locked on King Edward on his throne
                     const targetY = cameraY - 0.2;
-                    revealLight.target.position.set(targetX, targetY, 0.0);
+                    revealLight.target.position.set(finalX, targetY, 0.0);
                     revealLight.target.updateMatrixWorld();
                 }
 
@@ -2312,7 +2316,7 @@ function updateCamera() {
                 wallMat.shininess = 0;
 
             } else if (elapsed < totalIntroDuration) {
-                // Phase 2: Dynamic Raptor Flight Swoop towards Scene 1 on the left (4.4s -> 14.4s: 10.0s flight)
+                // Phase 2: Dynamic Raptor Flight Swoop towards Scene 1 on the left (6.5s -> 16.5s: 10.0s flight)
                 const t = Math.min(1.0, (elapsed - phase1Duration) / flightDuration);
                 const s = t * t * t * (t * (t * 6 - 15) + 10);
 
@@ -2321,17 +2325,16 @@ function updateCamera() {
                 // using a smooth curve (Math.pow(s, 1.4)), eliminating dark periphery around spotlight
                 ambientLight.intensity = 0.03 + (1.06 - 0.03) * Math.pow(s, 1.4);
 
-                // Spotlight pulls back in Z as flight approaches the end of the sequence to cover a much larger area,
-                // centered on the left of the canvas and aimed lower at the vertical narrative center
+                // Spotlight continues smooth pull-back as flight progresses, cross-fading into museum lighting
                 if (revealLight) {
                     revealLight.color.setHex(0xffc878);
                     revealLight.distance = 180;
                     revealLight.decay = 0.0;
 
-                    // Pull back in Z (7.5 -> 16.5) and track to finalX in front of Scene 1 as sequence progresses
-                    const pullBackZ = 7.5 + (16.5 - 7.5) * Math.pow(s, 1.1);
-                    const lightX = 2.0 + (finalX - 2.0) * s;
-                    const lightY = cameraY + 2.0 + 1.2 * s;
+                    // Seamless continuation from Phase 1 (z: 13.0 -> 17.0)
+                    const pullBackZ = 13.0 + (17.0 - 13.0) * Math.pow(s, 1.1);
+                    const lightX = finalX;
+                    const lightY = cameraY + 2.0 + 1.0 * s;
                     revealLight.position.set(lightX, lightY, pullBackZ);
 
                     // Aim lower at the narrative figures of Scene 1 in the center of the left canvas
@@ -2339,10 +2342,10 @@ function updateCamera() {
                     revealLight.target.position.set(finalX, targetY, 0.0);
                     revealLight.target.updateMatrixWorld();
 
-                    // Expand cone significantly as light pulls back to wash the entire left wing of the tapestry
+                    // Keep full visible extent of the canvas lighted throughout the flight approach
                     const expandProgress = Math.min(1.0, s / 0.70);
-                    revealLight.angle = (Math.PI / 4.8) + (Math.PI / 2.3 - Math.PI / 4.8) * expandProgress;
-                    revealLight.penumbra = 0.82 + 0.18 * expandProgress;
+                    revealLight.angle = Math.PI / 2.1;
+                    revealLight.penumbra = 0.40 + 0.20 * expandProgress;
 
                     // Smoothly cross-fade revealLight down as ambient and key light take over
                     revealLight.intensity = 1.35 * Math.max(0.0, 1.0 - Math.pow(s, 1.3));
@@ -2400,8 +2403,8 @@ function updateCamera() {
                 // Direct straight flight trajectory towards King Edward (finalX)
                 camera.position.x = startX + (finalX - startX) * s;
 
-                // Slowly tilt back from initial 15° tilt (startYaw) to 0% as camera flies directly towards King Edward
-                const currentTilt = startYaw * (1.0 - s); // smoothly decreases from -15° to 0°
+                // Slowly tilt back from initial 25° tilt (startYaw) to 0° as camera flies directly towards King Edward
+                const currentTilt = startYaw * (1.0 - s); // smoothly decreases from -25° to 0°
 
                 // Dynamic vertical motion: smooth direct approach with gentle wing lift
                 camera.position.y = startY + (cameraY - startY) * s + flapLift + flareLift + bumpDip;
@@ -2416,7 +2419,7 @@ function updateCamera() {
                 targetRotationY = yaw;
 
                 // Fade out title text as the hawk takes wing into the swoop
-                if (elapsed > 6000) {
+                if (elapsed > 7700) {
                     const ct = document.getElementById('cinematic-title');
                     if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
                 }
@@ -2505,7 +2508,7 @@ function updateCamera() {
         camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
     }
 
-    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 6000)) {
+    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 7700)) {
         const ct = document.getElementById('cinematic-title');
         if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
     }
