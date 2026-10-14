@@ -273,14 +273,14 @@ const cameraY = floorY + 6.0; // Viewpoint lowered by half a unit
 const initialVFOV = THREE.MathUtils.degToRad(60);
 const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.innerWidth / window.innerHeight);
 
-// Start near the beginning of the tapestry: on mobile, start further right (x=4.8) so Scene 1 is fully visible; on desktop aim for Scene 1 (x=3.7)
-const initialX = isNarrowScreen ? 4.8 : 3.7;
+// Start near the beginning of the tapestry: on mobile, start at x=4.8; on desktop aim directly for King Edward (x=5.75)
+const initialX = isNarrowScreen ? 4.8 : 5.75;
 const introDistZ = isNarrowScreen ? 15.0 : 18.5; // Start further back in depth for the dynamic flight swoop
 const introDistY = cameraY; // Level with tapestry vertical center (straight-on)
 const introDistX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
-// Start looking at the canvas straight on from further to the right and further back
+// Start looking down the canvas at a 15° tilt (1.5x) from further back
 camera.position.set(introDistX, introDistY, introDistZ);
-camera.rotation.set(0.0, 0.0, 0.0);
+camera.rotation.set(0.0, -(15 * Math.PI / 180), 0.0);
 
 // Disable antialiasing on mobile/tablets with high pixel ratios to save GPU fill rate
 const isMobileOrTablet = isPhone || isIPad;
@@ -995,19 +995,20 @@ scene.add(ambientLight);
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.0); // Start at 0 for cinematic reveal
 scene.add(dirLight);
 
-let revealLight = new THREE.SpotLight(ambientLight.color.getHex(), 0.0, 95, Math.PI / 2.2, 1.0, 1.2); // Unified single spotlight
+// Warm candlelit/torchlight spotlight for dramatic chiaroscuro intro sweep and gallery illumination
+let revealLight = new THREE.SpotLight(0xffc878, 0.0, 180, Math.PI / 4.8, 0.82, 0.0);
+revealLight.position.set(2.0, cameraY + 2.0, 7.5);
+revealLight.target.position.set(2.0, cameraY - 0.2, 0.0);
+scene.add(revealLight);
+scene.add(revealLight.target);
 
-// Dedicated grazing light that follows the magnifying glass
 // Dedicated grazing light that follows the magnifying glass
 const magLight = new THREE.SpotLight(0xffb84d, 0.4, 10, 35 * Math.PI / 180, 1.0, 2);
 magLight.visible = false;
 scene.add(magLight);
 scene.add(magLight.target); // Required for SpotLight target tracking
 
-
-
-
-ambientLight.intensity = 0.02;
+ambientLight.intensity = 0.03;
 if (useSimpleLighting) {
     ambientLight.color.setHex(0xffffff);
 }
@@ -2196,16 +2197,14 @@ function updateCamera() {
             floorMat.shininess = 5;
             ceilingMat.shininess = 4;
             wallMat.shininess = 12;
-            if (revealLight && revealLight.parent) {
-                scene.remove(revealLight);
-                scene.remove(revealLight.target);
-                revealLight = null;
+            if (revealLight) {
+                revealLight.intensity = 0.0;
             }
         } else {
             if (cinematicStartTime === null) {
-                // Ensure all base tiles up to column 14 (covering the entire wide vista from high rafters) are loaded
+                // Ensure all base tiles up to column 20 (covering the horizon sweep to x=45) are loaded
                 // to guarantee ZERO tile pop-in during emergence, flight, and landing.
-                const introRequiredTiles = tiles.filter(t => t.c <= 14);
+                const introRequiredTiles = tiles.filter(t => t.c <= 20);
                 const allLoaded = introRequiredTiles.length > 0 && introRequiredTiles.every(t => t.loaded);
 
                 if (!allLoaded) {
@@ -2221,12 +2220,13 @@ function updateCamera() {
 
                 // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
                 // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
-                // Ensure initial position rests straight-on to the canvas, further to the right and further back
+                // Initial perched position: angled looking down the canvas (15° tilt, 1.5x)
+                const startTilt = -(15 * Math.PI / 180);
                 const startZ = isNarrowScreen ? 15.0 : 18.5;
-                const startY = cameraY; // Level with tapestry vertical center (straight-on)
+                const startY = cameraY; // Level with tapestry vertical center
                 const startX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
                 const startPitch = 0.0;
-                const startYaw = 0.0;
+                const startYaw = startTilt;
                 const startRoll = 0.0;
 
                 camera.position.set(startX, startY, startZ);
@@ -2237,80 +2237,127 @@ function updateCamera() {
 
             const elapsed = Date.now() - cinematicStartTime;
 
-            // Geometry anchors: starting further to the right and further back in depth
+            // Geometry anchors: starting further to the right and further back in depth with 15° tilt
+            const startTilt = -(15 * Math.PI / 180);
             const startZ = isNarrowScreen ? 15.0 : 18.5;
             const startY = cameraY;
             const startX = isNarrowScreen ? 7.5 : 10.5;
             const startPitch = 0.0;
-            const startYaw = 0.0;
+            const startYaw = startTilt;
             const startRoll = 0.0;
 
             const finalZ = autoScrollTargetZ || 6.5;
-            const finalX = isNarrowScreen ? 4.8 : 3.7;
-
-            if (revealLight) {
-                if (!revealLight.parent) {
-                    scene.add(revealLight);
-                    scene.add(revealLight.target);
-                }
-                revealLight.color.copy(ambientLight.color);
-                revealLight.position.copy(camera.position);
-                const forward = new THREE.Vector3(0, 0, -1);
-                forward.applyEuler(camera.rotation);
-                revealLight.target.position.copy(camera.position).add(forward);
-            }
-
-            // Spotlight expansion progression: begins expanding immediately at t=0 with zero dead pause,
-            // opening actively and smoothly across the intro and raptor flight (0 -> 10.0s)
-            const expandProgress = Math.min(1.0, elapsed / 10000.0);
-            const expandEase = Math.pow(expandProgress, 0.6); // Strong immediate expansion velocity from frame 1
-            const currentAngle = 0.12 + (Math.PI / 3.4 - 0.12) * expandEase;
+            const finalX = isNarrowScreen ? 4.8 : 5.75; // Centered directly on King Edward
 
             // --- CINEMATIC SEQUENCE ---
-            // Phase 1 (0 -> 2.0s):
-            // Initial perched stillness straight-on; spotlight blooms and actively expands right away.
-            if (elapsed < 2000) {
+            // Phase 1 (0 -> 4.8s):
+            // Perched stillness holding 15° tilt (1.5x); warm candlelit spotlight blooms slowly (1.3s),
+            // slides across Scenes 0-1 (x: 3.5 -> 11.5 over 2.4s), and slides smoothly back to King Edward (finalX over 2.25s).
+            // Flight begins at 4.8s right as the spotlight locks onto King Edward.
+            const phase1Duration = 4800.0;
+            const flightDuration = 10000.0;
+            const totalIntroDuration = phase1Duration + flightDuration;
+
+            if (elapsed < phase1Duration) {
                 camera.position.set(startX, startY, startZ);
                 camera.rotation.set(startPitch, startYaw, startRoll);
-                targetRotationY = 0;
+                targetRotationY = startYaw;
 
-                // Spotlight blooms quickly (150ms) so its expansion is visible from the very first moment
-                const igniteProgress = Math.min(1.0, elapsed / 150.0);
-                if (revealLight) {
-                    revealLight.intensity = 1.4 * igniteProgress;
-                    revealLight.angle = currentAngle;
-                    revealLight.penumbra = 1.0;
-                }
-                ambientLight.intensity = 0.040 + 0.025 * igniteProgress;
-
+                // Keep the Hall in Darkness Longer: ambient light at 0.03 (near pitch-black)
+                ambientLight.intensity = 0.03;
                 dirLight.intensity = 0.0;
+
+                // Stably anchored gallery spotlight: softly blooms into a warm candlelit glow (0 -> 1.35 over 1.3s),
+                // slides across Scenes 0-1, and slides back to the left directly onto King Edward (finalX)
+                // aimed lower at King Edward on his throne (cameraY - 0.2).
+                if (revealLight) {
+                    const bloom = Math.min(1.0, elapsed / 1300.0);
+                    const bloomEase = bloom * bloom * (3 - 2 * bloom);
+                    revealLight.color.setHex(0xffc878);
+                    revealLight.intensity = 1.35 * bloomEase;
+                    revealLight.angle = Math.PI / 4.8;
+                    revealLight.penumbra = 0.82;
+                    revealLight.distance = 180;
+                    revealLight.decay = 0.0;
+                    revealLight.position.set(2.0, cameraY + 2.0, 7.5);
+
+                    // Two-way horizon sliding while stationary perched:
+                    // 1. Slow slide right across Scenes 0-1 (0 -> 2400ms: x = 3.5 -> 11.5, tripled length)
+                    // 2. Gentle turnaround dwell (2400 -> 2550ms: x = 11.5)
+                    // 3. Slow slide back to King Edward (2550 -> 4800ms: x = 11.5 -> finalX, tripled length)
+                    // At 4800ms (4.8s): Spotlight locks on King Edward and flight immediately launches!
+                    let targetX = 3.5;
+                    if (elapsed <= 2400) {
+                        const p = elapsed / 2400.0;
+                        const ease = p * p * (3 - 2 * p);
+                        targetX = 3.5 + (11.5 - 3.5) * ease;
+                    } else if (elapsed <= 2550) {
+                        targetX = 11.5;
+                    } else if (elapsed <= 4800) {
+                        const p = (elapsed - 2550.0) / 2250.0;
+                        const ease = p * p * (3 - 2 * p);
+                        targetX = 11.5 + (finalX - 11.5) * ease;
+                    } else {
+                        targetX = finalX;
+                    }
+
+                    // Aim lower: directly at the vertical center of the embroidered canvas
+                    const targetY = cameraY - 0.2;
+                    revealLight.target.position.set(targetX, targetY, 0.0);
+                    revealLight.target.updateMatrixWorld();
+                }
+
                 floorMat.shininess = 0;
                 ceilingMat.shininess = 0;
                 wallMat.shininess = 0;
 
-            } else if (elapsed < 14000) {
-                // Phase 2: Dynamic Raptor Flight Swoop (2.0s -> 14.0s: 12.0 seconds total)
-                // Flight progression parameter t (0.0 -> 1.0) and quintic smootherstep s
-                const t = Math.min(1.0, (elapsed - 2000) / 12000.0);
+            } else if (elapsed < totalIntroDuration) {
+                // Phase 2: Dynamic Raptor Flight Swoop towards Scene 1 on the left (4.4s -> 14.4s: 10.0s flight)
+                const t = Math.min(1.0, (elapsed - phase1Duration) / flightDuration);
                 const s = t * t * t * (t * (t * 6 - 15) + 10);
 
-                // Spotlight cone continues expanding slowly in parallel with the raptor flight
-                // with continuous single-cone 1.0 penumbra falloff, while intensity fades out and ambient fades up
+                // Smooth, Early Ambient Cross-Fade:
+                // Start ramping up ambientLight.intensity from the very beginning of Phase 2 (s = 0.0 -> 1.0)
+                // using a smooth curve (Math.pow(s, 1.4)), eliminating dark periphery around spotlight
+                ambientLight.intensity = 0.03 + (1.06 - 0.03) * Math.pow(s, 1.4);
+
+                // Spotlight pulls back in Z as flight approaches the end of the sequence to cover a much larger area,
+                // centered on the left of the canvas and aimed lower at the vertical narrative center
                 if (revealLight) {
-                    revealLight.angle = currentAngle;
-                    revealLight.penumbra = 1.0;
-                    revealLight.intensity = 1.4 * (1.0 - s);
-                    if (s >= 1.0) {
-                        if (revealLight.parent) {
-                            scene.remove(revealLight);
-                            scene.remove(revealLight.target);
-                        }
-                        revealLight = null;
-                    }
+                    revealLight.color.setHex(0xffc878);
+                    revealLight.distance = 180;
+                    revealLight.decay = 0.0;
+
+                    // Pull back in Z (7.5 -> 16.5) and track to finalX in front of Scene 1 as sequence progresses
+                    const pullBackZ = 7.5 + (16.5 - 7.5) * Math.pow(s, 1.1);
+                    const lightX = 2.0 + (finalX - 2.0) * s;
+                    const lightY = cameraY + 2.0 + 1.2 * s;
+                    revealLight.position.set(lightX, lightY, pullBackZ);
+
+                    // Aim lower at the narrative figures of Scene 1 in the center of the left canvas
+                    const targetY = cameraY - 0.2;
+                    revealLight.target.position.set(finalX, targetY, 0.0);
+                    revealLight.target.updateMatrixWorld();
+
+                    // Expand cone significantly as light pulls back to wash the entire left wing of the tapestry
+                    const expandProgress = Math.min(1.0, s / 0.70);
+                    revealLight.angle = (Math.PI / 4.8) + (Math.PI / 2.3 - Math.PI / 4.8) * expandProgress;
+                    revealLight.penumbra = 0.82 + 0.18 * expandProgress;
+
+                    // Smoothly cross-fade revealLight down as ambient and key light take over
+                    revealLight.intensity = 1.35 * Math.max(0.0, 1.0 - Math.pow(s, 1.3));
                 }
 
-                // Ambient light fades up in exact lockstep from 0.065 to full 1.06
-                ambientLight.intensity = 0.065 + (1.06 - 0.065) * s;
+                // Eliminate Grazing Light Pop-In:
+                // Smoothly cross-fade dirLight.intensity over the second half of the flight (s = 0.35 -> 1.0)
+                // using a cosine ease (0.5 - 0.5 * Math.cos(...))
+                if (s > 0.35) {
+                    const dirProgress = (s - 0.35) / (1.0 - 0.35);
+                    const dirEase = 0.5 - 0.5 * Math.cos(dirProgress * Math.PI);
+                    dirLight.intensity = dirEase * 1.0;
+                } else {
+                    dirLight.intensity = 0.0;
+                }
 
                 // --- CONTINUOUS HAWK WING FLAPPING ---
                 const easeIn = Math.min(1.0, t / 0.08);
@@ -2320,10 +2367,10 @@ function updateCamera() {
                 // 10 steady, organic wingbeat cycles across flight
                 const flapPhase = t * (10.0 * 2.0 * Math.PI);
 
-                // Organic wing lift pulse & flight nods
-                const flapLift = envelope * 0.016 * (Math.sin(flapPhase) + 0.25 * Math.sin(2.0 * flapPhase));
-                const flapPitch = envelope * 0.0016 * Math.sin(flapPhase - 0.4);
-                const flapRoll = envelope * 0.0010 * Math.cos(0.5 * flapPhase);
+                // Organic wing lift pulse & flight nods (gentle, subtle glide)
+                const flapLift = envelope * 0.0020 * (Math.sin(flapPhase) + 0.20 * Math.sin(2.0 * flapPhase));
+                const flapPitch = envelope * 0.00025 * Math.sin(flapPhase - 0.4);
+                const flapRoll = envelope * 0.00015 * Math.cos(0.5 * flapPhase);
 
                 // --- LANDING FLARE & TOUCHDOWN BUMP ---
                 let flareLift = 0;
@@ -2331,8 +2378,8 @@ function updateCamera() {
                 if (t >= 0.88 && t <= 0.98) {
                     const flareProgress = (t - 0.88) / 0.10;
                     const flareBell = Math.sin(flareProgress * Math.PI);
-                    flareLift = 0.028 * flareBell;
-                    flarePitch = 0.010 * flareBell; // pitch nose up to brake
+                    flareLift = 0.010 * flareBell;
+                    flarePitch = 0.004 * flareBell; // pitch nose up to brake
                 }
 
                 let bumpDip = 0;
@@ -2340,8 +2387,8 @@ function updateCamera() {
                 if (t >= 0.96) {
                     const bumpProgress = (t - 0.96) / 0.04;
                     const bumpCurve = Math.sin(bumpProgress * Math.PI * 1.5) * Math.exp(-bumpProgress * 3.5);
-                    bumpDip = -0.022 * bumpCurve;
-                    bumpPitch = -0.005 * bumpCurve;
+                    bumpDip = -0.005 * bumpCurve;
+                    bumpPitch = -0.001 * bumpCurve;
                 }
 
                 camera.fov = 60.0;
@@ -2350,42 +2397,26 @@ function updateCamera() {
                 camera.position.z = startZ + (finalZ - startZ) * s;
 
                 // Flight trajectory in X:
-                // Smooth rightward swoop across the cathedral hall towards the right side of the canvas,
-                // descending directly into Scene 1 with zero leftward excursion.
-                const swoopAmplitude = isNarrowScreen ? 7.0 : 11.0;
-                const rightSwoop = Math.sin(s * Math.PI) * swoopAmplitude;
-                const baseX = startX + (finalX - startX) * s + rightSwoop;
+                // Direct straight flight trajectory towards King Edward (finalX)
+                camera.position.x = startX + (finalX - startX) * s;
 
-                // Subtle, natural avian turn gaze and bank (preventing extreme swinging distortion)
-                const straightenFactor = s > 0.65 ? Math.max(0.0, (1.0 - s) / 0.35) : 1.0;
-                const turnRoll = -Math.sin(s * Math.PI) * 0.038 * straightenFactor; // gentle aerodynamic roll
-                const turnYaw = Math.sin(s * Math.PI) * 0.120 * straightenFactor;   // subtle ~6.8 deg gaze into turn
+                // Slowly tilt back from initial 15° tilt (startYaw) to 0% as camera flies directly towards King Edward
+                const currentTilt = startYaw * (1.0 - s); // smoothly decreases from -15° to 0°
 
-                // Optical untilt compensation:
-                // When camera yaws right (turnYaw > 0), the canvas plane naturally rotates in camera space.
-                // Offsetting camera X by -z * tan(turnYaw) / 2 keeps the visual optical center balanced so the
-                // right edge doesn't lurch unnaturally close to the viewer's face.
-                const untiltOffset = -camera.position.z * Math.sin(turnYaw) * 0.40;
-                camera.position.x = baseX + untiltOffset;
-
-                // Dynamic vertical arc: subtle swoop dip in Y as bird glides through the curve
-                const swoopArc = Math.sin(s * Math.PI) * 0.32;
-                camera.position.y = startY + (cameraY - startY) * s - swoopArc + flapLift + flareLift + bumpDip;
+                // Dynamic vertical motion: smooth direct approach with gentle wing lift
+                camera.position.y = startY + (cameraY - startY) * s + flapLift + flareLift + bumpDip;
 
                 // Dynamic pitch aimed along motion vector + vertical center
                 const basePitch = -Math.atan2(camera.position.y - cameraY, camera.position.z);
                 const pitch = basePitch + flapPitch + flarePitch + bumpPitch;
-                const roll = turnRoll + flapRoll;
-                const yaw = turnYaw;
+                const roll = flapRoll;
+                const yaw = currentTilt;
 
                 camera.rotation.set(pitch, yaw, roll);
                 targetRotationY = yaw;
 
-                // Directional key light emerges near landing
-                dirLight.intensity = s > 0.85 ? (s - 0.85) / 0.15 : 0.0;
-
                 // Fade out title text as the hawk takes wing into the swoop
-                if (elapsed > 5000) {
+                if (elapsed > 6000) {
                     const ct = document.getElementById('cinematic-title');
                     if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
                 }
@@ -2403,11 +2434,7 @@ function updateCamera() {
                 ambientLight.intensity = 1.06;
                 dirLight.intensity = 1.0;
                 if (revealLight) {
-                    if (revealLight.parent) {
-                        scene.remove(revealLight);
-                        scene.remove(revealLight.target);
-                    }
-                    revealLight = null;
+                    revealLight.intensity = 0.0;
                 }
 
                 // Restore rich museum specular properties for browsing
@@ -2478,7 +2505,7 @@ function updateCamera() {
         camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
     }
 
-    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 5500)) {
+    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 6000)) {
         const ct = document.getElementById('cinematic-title');
         if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
     }
