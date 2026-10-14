@@ -1774,8 +1774,10 @@ function buildTourPOIs(data) {
 
         // Preserve cinematic overrides for the massive opening scene
         if (t.scene === "1") {
-            item.bounds = { xMin: 0.4, xMax: 7.0, yMin: -3.90, yMax: -0.43 };
-            item.centerX = 3.7;
+            // Extend bounds to cover the full opening scene: from x=0.0 at the tapestry start,
+            // through King Edward on his throne (5.75) up to Harold's departure (7.25)
+            item.bounds = { xMin: 0.0, xMax: 7.25, yMin: -3.90, yMax: -0.43 };
+            item.centerX = 3.6;
             item.centerY = -1.76;
             item.targetZ = 3.35;
             item.inspectDuration = 8.0;
@@ -1857,13 +1859,35 @@ function openNotes(shouldAutoScroll = false) {
     if (tituliData && tituliData.length > 0) {
         let nearestIndex = 0;
         let minDistance = Infinity;
+        const camX = camera.position.x;
+
         for (let i = 0; i < tituliData.length; i++) {
-            if (tituliData[i].x !== undefined) {
-                const dist = Math.abs(tituliData[i].x - camera.position.x);
-                if (dist < minDistance) {
-                    minDistance = dist;
-                    nearestIndex = i;
+            const anno = tituliData[i];
+            let dist = Infinity;
+
+            // Check if current camera X falls within or near the scene's POI bounding box
+            let poi = null;
+            if (typeof tourPOIs !== 'undefined' && tourPOIs) {
+                poi = tourPOIs.find(p => p.scene === anno.scene);
+            }
+
+            if (poi && poi.bounds) {
+                if (camX >= poi.bounds.xMin && camX <= poi.bounds.xMax) {
+                    // Camera is inside this scene's POI bounds; secondary tie-breaker is distance to center
+                    const center = (poi.centerX !== undefined) ? poi.centerX : (poi.bounds.xMin + poi.bounds.xMax) / 2;
+                    dist = Math.abs(camX - center) * 0.001; // Scaled down so inside bounds always beats outside bounds
+                } else if (camX < poi.bounds.xMin) {
+                    dist = poi.bounds.xMin - camX;
+                } else {
+                    dist = camX - poi.bounds.xMax;
                 }
+            } else if (anno.x !== undefined) {
+                dist = Math.abs(anno.x - camX);
+            }
+
+            if (dist < minDistance) {
+                minDistance = dist;
+                nearestIndex = i;
             }
         }
         updatePopupUI(nearestIndex, shouldAutoScroll);
