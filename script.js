@@ -2257,17 +2257,37 @@ function updateCamera() {
 
             // --- CINEMATIC SEQUENCE ---
             // Phase 1 (0 -> 6.5s):
-            // Perched stillness holding 25° tilt; warm candlelit spotlight starts small, dim, close to the canvas (z = 2.8)
-            // directly on King Edward, then continuously zooms out and expands its cone (z: 2.8 -> 13.0, angle: 18° -> 55°),
-            // exposing more and more of the tapestry before raptor flight launches at 6.5s.
+            // Camera begins a very slow motion forward towards the canvas as the warm candlelit spotlight blooms and zooms out.
+            // Starts small, dim, close to the canvas (z = 2.8) directly on King Edward, then continuously pulls back and expands its cone (z: 2.8 -> 13.0, angle: 18° -> 86°),
+            // exposing the full canvas before raptor flight launches into full swoop at 6.5s.
             const phase1Duration = 6500.0;
             const flightDuration = 10000.0;
             const totalIntroDuration = phase1Duration + flightDuration;
 
+            // Phase 1 slow motion progress towards canvas:
+            // Camera smoothly glides forward covering ~16% of the distance while the spotlight blooms
+            const phase1MaxS = 0.16;
+            const phase1Power = 1.25;
+            // Phase 2 smoothly matches the velocity from Phase 1 at the 6.5s boundary:
+            const phase1EndRate = (phase1MaxS * phase1Power / phase1Duration) * flightDuration; // v0 in Phase 2 normalized time
+            const polyB = phase1EndRate - 3.0 * (1.0 - phase1MaxS);
+            const polyA = 4.0 * (1.0 - phase1MaxS) - phase1EndRate;
+
             if (elapsed < phase1Duration) {
-                camera.position.set(startX, startY, startZ);
-                camera.rotation.set(startPitch, startYaw, startRoll);
-                targetRotationY = startYaw;
+                const p = Math.min(1.0, elapsed / phase1Duration);
+                // Very slow, smooth motion towards the canvas:
+                const s = phase1MaxS * Math.pow(p, phase1Power);
+
+                // Continuous glide in depth (Z: startZ -> closer)
+                camera.position.z = startZ + (finalZ - startZ) * s;
+                // Direct straight trajectory towards King Edward (finalX)
+                camera.position.x = startX + (finalX - startX) * s;
+                camera.position.y = startY;
+
+                // Slowly untilt from initial 25° tilt as camera slowly glides forward
+                const currentTilt = startYaw * (1.0 - s);
+                camera.rotation.set(startPitch, currentTilt, startRoll);
+                targetRotationY = currentTilt;
 
                 // Keep the Hall in Darkness Longer: ambient light at 0.03 (near pitch-black)
                 ambientLight.intensity = 0.03;
@@ -2275,27 +2295,26 @@ function updateCamera() {
 
                 // Spotlight continuously zooms out and exposes more of the canvas:
                 if (revealLight) {
-                    const p = Math.min(1.0, elapsed / phase1Duration);
                     // Smooth, gentle acceleration from intimate close inspection into grand canvas exposure
-                    const s = Math.pow(p, 1.35);
+                    const spotProgress = Math.pow(p, 1.35);
 
                     // Pull back smoothly in Z from intimate close (2.8) to wide gallery distance (13.0)
-                    const lightZ = 2.8 + (13.0 - 2.8) * s;
+                    const lightZ = 2.8 + (13.0 - 2.8) * spotProgress;
                     // Centered directly in front of King Edward throughout the zoom out
                     const lightX = finalX;
-                    const lightY = (cameraY + 0.6) + 1.4 * s;
+                    const lightY = (cameraY + 0.6) + 1.4 * spotProgress;
 
                     // Cone angle continuously expands: starts small (Math.PI / 10 = ~18 deg) and opens wide
                     // to Math.PI / 2.1 (~85.7 deg half-angle / 171 deg cone) so the full visible extent of the canvas is lighted
                     const startAngle = Math.PI / 10.0;
                     const endAngle = Math.PI / 2.1;
-                    const lightAngle = startAngle + (endAngle - startAngle) * s;
+                    const lightAngle = startAngle + (endAngle - startAngle) * spotProgress;
 
                     // Starts dim (igniting smoothly from 0 to 0.20 in 300ms, then steadily brightening to 1.35 as it zooms out)
                     const ignite = Math.min(1.0, elapsed / 300.0);
-                    const lightIntensity = (0.20 + (1.35 - 0.20) * s) * ignite;
+                    const lightIntensity = (0.20 + (1.35 - 0.20) * spotProgress) * ignite;
                     // Penumbra transitions from cozy soft core (0.85) to crisp broad wash (0.40) to keep outer canvas bright
-                    const lightPenumbra = 0.85 + (0.40 - 0.85) * s;
+                    const lightPenumbra = 0.85 + (0.40 - 0.85) * spotProgress;
 
                     revealLight.color.setHex(0xffc878);
                     revealLight.intensity = lightIntensity;
@@ -2316,14 +2335,17 @@ function updateCamera() {
                 wallMat.shininess = 0;
 
             } else if (elapsed < totalIntroDuration) {
-                // Phase 2: Dynamic Raptor Flight Swoop towards Scene 1 on the left (6.5s -> 16.5s: 10.0s flight)
+                // Phase 2: Dynamic Raptor Flight Swoop towards King Edward on the left (6.5s -> 16.5s: 10.0s flight)
                 const t = Math.min(1.0, (elapsed - phase1Duration) / flightDuration);
-                const s = t * t * t * (t * (t * 6 - 15) + 10);
+                const w = 1.0 - t;
+                // Seamless C1 continuation from Phase 1, flaring and coming to rest at s = 1.0
+                const s = 1.0 - polyA * w * w * w - polyB * w * w * w * w;
+                const flightProgress = Math.max(0.0, Math.min(1.0, (s - phase1MaxS) / (1.0 - phase1MaxS)));
 
                 // Smooth, Early Ambient Cross-Fade:
-                // Start ramping up ambientLight.intensity from the very beginning of Phase 2 (s = 0.0 -> 1.0)
-                // using a smooth curve (Math.pow(s, 1.4)), eliminating dark periphery around spotlight
-                ambientLight.intensity = 0.03 + (1.06 - 0.03) * Math.pow(s, 1.4);
+                // Start ramping up ambientLight.intensity from the very beginning of Phase 2
+                // using a smooth curve (Math.pow(flightProgress, 1.4)), eliminating dark periphery around spotlight
+                ambientLight.intensity = 0.03 + (1.06 - 0.03) * Math.pow(flightProgress, 1.4);
 
                 // Spotlight continues smooth pull-back as flight progresses, cross-fading into museum lighting
                 if (revealLight) {
@@ -2332,9 +2354,9 @@ function updateCamera() {
                     revealLight.decay = 0.0;
 
                     // Seamless continuation from Phase 1 (z: 13.0 -> 17.0)
-                    const pullBackZ = 13.0 + (17.0 - 13.0) * Math.pow(s, 1.1);
+                    const pullBackZ = 13.0 + (17.0 - 13.0) * Math.pow(flightProgress, 1.1);
                     const lightX = finalX;
-                    const lightY = cameraY + 2.0 + 1.0 * s;
+                    const lightY = cameraY + 2.0 + 1.0 * flightProgress;
                     revealLight.position.set(lightX, lightY, pullBackZ);
 
                     // Aim lower at the narrative figures of Scene 1 in the center of the left canvas
@@ -2343,19 +2365,18 @@ function updateCamera() {
                     revealLight.target.updateMatrixWorld();
 
                     // Keep full visible extent of the canvas lighted throughout the flight approach
-                    const expandProgress = Math.min(1.0, s / 0.70);
+                    const expandProgress = Math.min(1.0, flightProgress / 0.70);
                     revealLight.angle = Math.PI / 2.1;
                     revealLight.penumbra = 0.40 + 0.20 * expandProgress;
 
                     // Smoothly cross-fade revealLight down as ambient and key light take over
-                    revealLight.intensity = 1.35 * Math.max(0.0, 1.0 - Math.pow(s, 1.3));
+                    revealLight.intensity = 1.35 * Math.max(0.0, 1.0 - Math.pow(flightProgress, 1.3));
                 }
 
                 // Eliminate Grazing Light Pop-In:
-                // Smoothly cross-fade dirLight.intensity over the second half of the flight (s = 0.35 -> 1.0)
-                // using a cosine ease (0.5 - 0.5 * Math.cos(...))
-                if (s > 0.35) {
-                    const dirProgress = (s - 0.35) / (1.0 - 0.35);
+                // Smoothly cross-fade dirLight.intensity over the second half of the flight (flightProgress = 0.35 -> 1.0)
+                if (flightProgress > 0.35) {
+                    const dirProgress = (flightProgress - 0.35) / (1.0 - 0.35);
                     const dirEase = 0.5 - 0.5 * Math.cos(dirProgress * Math.PI);
                     dirLight.intensity = dirEase * 1.0;
                 } else {
