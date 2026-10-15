@@ -2280,35 +2280,43 @@ function updateCamera() {
             const finalX = isNarrowScreen ? 4.8 : 5.75; // Centered directly on King Edward
 
             // --- CINEMATIC SEQUENCE ---
-            // Phase 1 (0 -> 6.5s):
-            // Camera begins a very slow motion forward towards the canvas as the warm candlelit spotlight blooms and zooms out.
-            // Starts small, dim, close to the canvas (z = 2.8) directly on King Edward, then continuously pulls back and expands its cone (z: 2.8 -> 13.0, angle: 18° -> 86°),
-            // exposing the full canvas before raptor flight launches into full swoop at 6.5s.
-            const phase1Duration = 6500.0;
-            const flightDuration = 10000.0;
+            // Unified constant-velocity camera motion towards canvas (8.085s total):
+            // Smoothly eases in from rest over 0.98s, cruises at rock-steady constant velocity (ds/dt = 0.141/s, vZ = -1.69 u/s)
+            // across the spotlight bloom and flight approach, then gently eases out over the final 0.98s to touchdown.
+            // Completely eliminates any sudden jerk or burst in velocity towards the canvas.
+            const phase1Duration = 3185.0;
+            const flightDuration = 4900.0;
             const totalIntroDuration = phase1Duration + flightDuration;
 
-            // Phase 1 slow motion progress towards canvas:
-            // Camera smoothly glides forward covering ~16% of the distance while the spotlight blooms
-            const phase1MaxS = 0.16;
-            const phase1Power = 1.25;
-            // Phase 2 smoothly matches the velocity from Phase 1 at the 6.5s boundary:
-            const phase1EndRate = (phase1MaxS * phase1Power / phase1Duration) * flightDuration; // v0 in Phase 2 normalized time
-            const polyB = phase1EndRate - 3.0 * (1.0 - phase1MaxS);
-            const polyA = 4.0 * (1.0 - phase1MaxS) - phase1EndRate;
+            const tEaseIn = 0.98;
+            const tEaseOut = 0.98;
+            const tTotalSec = totalIntroDuration / 1000.0; // 8.085s
+            const elapsedSec = Math.max(0.0, elapsed / 1000.0);
+            const vCruise = 1.0 / (tTotalSec - (tEaseIn + tEaseOut) / 2.0);
+
+            let s = 0.0;
+            if (elapsedSec <= tEaseIn) {
+                s = vCruise * 0.5 * (elapsedSec - (tEaseIn / Math.PI) * Math.sin(Math.PI * elapsedSec / tEaseIn));
+            } else if (elapsedSec <= tTotalSec - tEaseOut) {
+                s = vCruise * (elapsedSec - tEaseIn / 2.0);
+            } else if (elapsedSec < tTotalSec) {
+                const tau = Math.max(0.0, tTotalSec - elapsedSec);
+                s = 1.0 - vCruise * 0.5 * (tau - (tEaseOut / Math.PI) * Math.sin(Math.PI * tau / tEaseOut));
+            } else {
+                s = 1.0;
+            }
+            s = Math.max(0.0, Math.min(1.0, s));
 
             if (elapsed < phase1Duration) {
                 const p = Math.min(1.0, elapsed / phase1Duration);
-                // Very slow, smooth motion towards the canvas:
-                const s = phase1MaxS * Math.pow(p, phase1Power);
 
-                // Continuous glide in depth (Z: startZ -> closer)
+                // Continuous constant-velocity glide in depth (Z: startZ -> closer)
                 camera.position.z = startZ + (finalZ - startZ) * s;
                 // Direct straight trajectory towards King Edward (finalX)
                 camera.position.x = startX + (finalX - startX) * s;
                 camera.position.y = startY;
 
-                // Slowly untilt from initial 25° tilt as camera slowly glides forward
+                // Slowly untilt from initial 25° tilt as camera smoothly glides forward
                 const currentTilt = startYaw * (1.0 - s);
                 camera.rotation.set(startPitch, currentTilt, startRoll);
                 targetRotationY = currentTilt;
@@ -2361,10 +2369,7 @@ function updateCamera() {
             } else if (elapsed < totalIntroDuration) {
                 // Phase 2: Dynamic Raptor Flight Swoop towards King Edward on the left (6.5s -> 16.5s: 10.0s flight)
                 const t = Math.min(1.0, (elapsed - phase1Duration) / flightDuration);
-                const w = 1.0 - t;
-                // Seamless C1 continuation from Phase 1, flaring and coming to rest at s = 1.0
-                const s = 1.0 - polyA * w * w * w - polyB * w * w * w * w;
-                const flightProgress = Math.max(0.0, Math.min(1.0, (s - phase1MaxS) / (1.0 - phase1MaxS)));
+                const flightProgress = t;
 
                 // Smooth, Early Ambient Cross-Fade:
                 // Start ramping up ambientLight.intensity from the very beginning of Phase 2
@@ -2412,8 +2417,8 @@ function updateCamera() {
                 const flapEaseOut = t > 0.96 ? Math.max(0.0, (1.0 - t) / 0.04) : 1.0;
                 const envelope = easeIn * flapEaseOut;
 
-                // 10 steady, organic wingbeat cycles across flight
-                const flapPhase = t * (10.0 * 2.0 * Math.PI);
+                // 5 steady, organic wingbeat cycles across 4.9s flight (~1 wingbeat per sec)
+                const flapPhase = t * (5.0 * 2.0 * Math.PI);
 
                 // Organic wing lift pulse & flight nods (gentle, subtle glide)
                 const flapLift = envelope * 0.0020 * (Math.sin(flapPhase) + 0.20 * Math.sin(2.0 * flapPhase));
@@ -2464,7 +2469,7 @@ function updateCamera() {
                 targetRotationY = yaw;
 
                 // Fade out title text as the hawk takes wing into the swoop
-                if (elapsed > 7700) {
+                if (elapsed > 3770) {
                     const ct = document.getElementById('cinematic-title');
                     if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
                 }
@@ -2553,7 +2558,7 @@ function updateCamera() {
         camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
     }
 
-    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 7700)) {
+    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 3770)) {
         const ct = document.getElementById('cinematic-title');
         if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
     }
