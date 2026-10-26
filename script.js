@@ -275,12 +275,12 @@ const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.i
 
 // Start near the beginning of the tapestry: on mobile, start at x=4.8; on desktop aim directly for King Edward (x=5.75)
 const initialX = isNarrowScreen ? 4.8 : 5.75;
-const introDistZ = isNarrowScreen ? 15.0 : 18.5; // Start further back in depth for the dynamic flight swoop
+const introDistZ = isNarrowScreen ? 23.4375 : 28.90625; // Start further back in depth for the dynamic flight swoop
 const introDistY = cameraY; // Level with tapestry vertical center (straight-on)
-const introDistX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
-// Start looking down the canvas at a 25° tilt from further back
+const introDistX = isNarrowScreen ? 16.65977 : 21.43895; // Updated to match 35° flight trajectory towards Scene 1
+// Start looking down the canvas at a 35° tilt from further back
 camera.position.set(introDistX, introDistY, introDistZ);
-camera.rotation.set(0.0, -(25 * Math.PI / 180), 0.0);
+camera.rotation.set(0.0, (35 * Math.PI / 180), 0.0);
 
 // Disable antialiasing on mobile/tablets with high pixel ratios to save GPU fill rate
 const isMobileOrTablet = isPhone || isIPad;
@@ -983,6 +983,777 @@ for (let i = 1; i < numBays; i++) {
     const xPos = i * supportSpacing;
     const underSupport = createUnderSupport(xPos);
     canvasGroup.add(underSupport);
+}
+
+// =========================================================================
+// HISTORICALLY ACCURATE NORMAN ROMANESQUE CLERESTORY WINDOWS (11th Century)
+// Based on Cathédrale Notre-Dame de Bayeux (consecrated 1077 by Bishop Odo)
+// Features: Semicircular arches (plein cintre), splayed stone embrasures,
+// Norman billet and roll mouldings, slender colonnettes with cushion capitals,
+// and glowing hand-blown diamond quarry leaded glass.
+// =========================================================================
+
+function createNormanLeadedGlassTexture(width = 512, height = 1024) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    // Luminous celestial sky gradient (radiant golden-amber daylight)
+    const skyGrad = ctx.createRadialGradient(width * 0.5, height * 0.35, 10, width * 0.5, height * 0.5, height * 0.75);
+    skyGrad.addColorStop(0, '#fff4de');
+    skyGrad.addColorStop(0.35, '#fed89b');
+    skyGrad.addColorStop(0.70, '#e8b868');
+    skyGrad.addColorStop(1.0, '#cf9a45');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, width, height);
+
+    // Diamond lozenge (quarry) lattice (scaled for authentic visibility across cathedral nave)
+    const qw = 58;
+    const qh = 84;
+    const cols = Math.ceil(width / qw) + 2;
+    const rows = Math.ceil(height / (qh / 2)) + 2;
+
+    // Organic tint variations per hand-blown pane
+    for (let r = -1; r < rows; r++) {
+        for (let c = -1; c < cols; c++) {
+            const cx = c * qw + (r % 2 === 0 ? 0 : qw / 2);
+            const cy = r * (qh / 2);
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - qh / 2);
+            ctx.lineTo(cx + qw / 2, cy);
+            ctx.lineTo(cx, cy + qh / 2);
+            ctx.lineTo(cx - qw / 2, cy);
+            ctx.closePath();
+
+            const seed = Math.sin(r * 127.1 + c * 311.7);
+            const tintVal = seed - Math.floor(seed);
+            let tintColor = 'rgba(255, 255, 255, 0.10)';
+            if (tintVal > 0.75) {
+                tintColor = 'rgba(245, 185, 75, 0.24)'; // rich warm amber
+            } else if (tintVal > 0.50) {
+                tintColor = 'rgba(180, 215, 175, 0.18)'; // antique celadon green
+            } else if (tintVal > 0.25) {
+                tintColor = 'rgba(255, 225, 130, 0.20)'; // straw gold
+            } else {
+                tintColor = 'rgba(195, 175, 155, 0.15)'; // smoky grisaille
+            }
+            ctx.fillStyle = tintColor;
+            ctx.fill();
+        }
+    }
+
+    // Bold, crisp lead cames
+    ctx.strokeStyle = '#221e1a';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+
+    for (let x = -height; x < width + height; x += qw) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + height * (qw / qh), height);
+        ctx.stroke();
+    }
+    for (let x = -height; x < width + height; x += qw) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x - height * (qw / qh), height);
+        ctx.stroke();
+    }
+
+    // Lead solder joints at came intersections
+    ctx.fillStyle = '#161412';
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const cx = c * qw + (r % 2 === 0 ? 0 : qw / 2);
+            const cy = r * (qh / 2);
+            ctx.beginPath();
+            ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // Horizontal iron saddle bars (armatures)
+    const barSpacing = 140;
+    for (let y = barSpacing; y < height; y += barSpacing) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.50)';
+        ctx.fillRect(0, y + 4, width, 3);
+        ctx.fillStyle = '#1c1916';
+        ctx.fillRect(0, y - 4, width, 8);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.20)';
+        ctx.fillRect(0, y - 4, width, 2);
+    }
+
+    // Antique glass micro-pitting
+    const count = (width * height) * 0.05;
+    for (let i = 0; i < count; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.10)';
+        ctx.fillRect(x, y, 1, 1);
+    }
+
+    // Heavy perimeter lead came
+    ctx.strokeStyle = '#181512';
+    ctx.lineWidth = 14;
+    ctx.strokeRect(0, 0, width, height);
+
+    return new THREE.CanvasTexture(canvas);
+}
+
+function createNormanCaenStoneTexture(width = 512, height = 512) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    // Caen stone base: creamy warm buff limestone (Cathédrale de Bayeux)
+    ctx.fillStyle = '#a89d8c';
+    ctx.fillRect(0, 0, width, height);
+
+    // Weathered stone block mottling
+    for (let i = 0; i < 70; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const r = 20 + Math.random() * 80;
+        ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 245, 225, 0.08)' : 'rgba(50, 42, 35, 0.09)';
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Norman stonemason adze / chisel marks (diagonal striations)
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 900; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const len = 8 + Math.random() * 25;
+        const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.3;
+        ctx.strokeStyle = Math.random() > 0.5 ? 'rgba(255, 248, 230, 0.12)' : 'rgba(40, 32, 25, 0.14)';
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + Math.cos(angle) * len, y + Math.sin(angle) * len);
+        ctx.stroke();
+    }
+
+    const noise = (width * height) * 0.4;
+    for (let i = 0; i < noise; i++) {
+        ctx.fillStyle = Math.random() > 0.7 ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.18)';
+        ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(1, 2);
+    return tex;
+}
+
+function createSunbeamTexture(width = 256, height = 512) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    const imgData = ctx.createImageData(width, height);
+    const data = imgData.data;
+
+    for (let y = 0; y < height; y++) {
+        const v = y / (height - 1); // 0 at top, 1 at bottom
+        const vFalloff = Math.pow(Math.max(0, 1.0 - v), 1.25);
+
+        for (let x = 0; x < width; x++) {
+            const u = (x / (width - 1)) * 2.0 - 1.0; // -1 to +1
+            const hFalloff = Math.max(0, Math.cos((u * Math.PI) / 2));
+            const hFalloffSmooth = Math.pow(hFalloff, 2.2);
+
+            // Subtle vertical ray streaks (dust banding)
+            const streak = 1.0 + 0.18 * Math.sin(u * 14.0) + 0.10 * Math.sin(u * 28.0 + v * 3.0);
+            const intensity = Math.max(0, Math.min(1.0, vFalloff * hFalloffSmooth * streak));
+            const idx = (y * width + x) * 4;
+
+            data[idx + 0] = 255;                         // R
+            data[idx + 1] = Math.round(242 * intensity); // G
+            data[idx + 2] = Math.round(195 * intensity); // B
+            data[idx + 3] = Math.round(intensity * 255); // A
+        }
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.ClampToEdgeWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
+    return tex;
+}
+
+function createMistTexture(width = 512, height = 512) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, width, height);
+
+    for (let i = 0; i < 90; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const r = 40 + Math.random() * 120;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+        const alpha = 0.03 + Math.random() * 0.06;
+        grad.addColorStop(0, 'rgba(220, 205, 185, ' + alpha + ')');
+        grad.addColorStop(0.5, 'rgba(180, 165, 145, ' + (alpha * 0.5) + ')');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 40;
+    ctx.strokeRect(0, 0, width, height);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+}
+
+function createParticleTexture(size = 64) {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    const center = size / 2;
+    const grad = ctx.createRadialGradient(center, center, 0, center, center, center);
+    grad.addColorStop(0, 'rgba(255, 245, 215, 0.55)');
+    grad.addColorStop(0.25, 'rgba(240, 215, 160, 0.28)');
+    grad.addColorStop(0.65, 'rgba(210, 175, 110, 0.08)');
+    grad.addColorStop(1.0, 'rgba(180, 140, 70, 0.0)');
+
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(center, center, center, 0, Math.PI * 2);
+    ctx.fill();
+
+    return new THREE.CanvasTexture(canvas);
+}
+
+// Global textures and shared materials
+const normanGlassTexture = createNormanLeadedGlassTexture();
+const normanStoneTexture = createNormanCaenStoneTexture();
+const sunbeamTexture = createSunbeamTexture();
+const mistTexture = createMistTexture();
+const particleTexture = createParticleTexture();
+
+// Luminous leaded glass pane radiating warm morning daylight into the cathedral nave
+const normanGlassMat = new THREE.MeshBasicMaterial({
+    map: normanGlassTexture,
+    side: THREE.DoubleSide
+});
+
+const normanStoneMat = new THREE.MeshPhongMaterial({
+    map: normanStoneTexture,
+    bumpMap: normanStoneTexture,
+    bumpScale: 0.04,
+    shininess: 24,
+    color: 0xc8bcab,
+    specular: 0x443d34
+});
+
+// Dark cavity material for the recessed embrasure backing
+const normanDarkCavityMat = new THREE.MeshPhongMaterial({
+    color: 0x120f0c,
+    shininess: 2
+});
+
+// Shared geometries for all Norman Romanesque windows (3D architectural masonry)
+const winW = 2.4;
+const winR = winW / 2; // 1.2
+const winH = 4.2;
+
+// 1. Recessed Stone Embrasure Backplate (creates deep dark cavity behind glass)
+const sharedBackplateGeo = new THREE.BoxGeometry(winW + 0.6, winH + 1.2, 0.20);
+
+// 2. Semicircular round-arched leaded glass pane
+const glassShape = new THREE.Shape();
+glassShape.moveTo(-winR, 0);
+glassShape.lineTo(winR, 0);
+glassShape.lineTo(winR, winH);
+glassShape.absarc(0, winH, winR, 0, Math.PI, false);
+glassShape.lineTo(-winR, 0);
+const sharedGlassGeo = new THREE.ShapeGeometry(glassShape, 24);
+
+// 3. Heavy Bevelled Stone Sill projecting into the nave with downward slope
+const sharedSillGeo = new THREE.BoxGeometry(3.8, 0.42, 0.95);
+
+// 4. Thick 3D Splayed Stone Jamb Embrasures (flaring 45° outward)
+const sharedJambSplayGeo = new THREE.BoxGeometry(0.38, winH, 0.72);
+
+// 5. Order 1 (Inner) 3D Extruded Voussoir Arch with bevelled edges
+const innerArchShape = new THREE.Shape();
+innerArchShape.absarc(0, 0, 1.55, 0, Math.PI, false);
+innerArchShape.lineTo(-1.20, 0);
+innerArchShape.absarc(0, 0, 1.20, Math.PI, 0, true);
+innerArchShape.lineTo(1.55, 0);
+const sharedInnerArchGeo = new THREE.ExtrudeGeometry(innerArchShape, {
+    depth: 0.38,
+    bevelEnabled: true,
+    bevelThickness: 0.04,
+    bevelSize: 0.04,
+    bevelSegments: 2
+});
+
+// 6. Order 2 (Outer) 3D Stepped Hood Mould Arch stepping forward
+const outerArchShape = new THREE.Shape();
+outerArchShape.absarc(0, 0, 1.88, 0, Math.PI, false);
+outerArchShape.lineTo(-1.55, 0);
+outerArchShape.absarc(0, 0, 1.55, Math.PI, 0, true);
+outerArchShape.lineTo(1.88, 0);
+const sharedOuterArchGeo = new THREE.ExtrudeGeometry(outerArchShape, {
+    depth: 0.30,
+    bevelEnabled: true,
+    bevelThickness: 0.03,
+    bevelSize: 0.03,
+    bevelSegments: 2
+});
+
+// 7. 3D Cylindrical Stone Billets for authentic Norman billet moulding (billettes normandes)
+const sharedBilletGeo = new THREE.CylinderGeometry(0.065, 0.065, 0.18, 10);
+const numArchBillets = 17;
+
+// 8. Horizontal Impost Stringcourse tying capitals across the window head
+const sharedImpostGeo = new THREE.BoxGeometry(winW + 1.8, 0.10, 0.32);
+
+// 9. 3D Slender Colonnettes with Attic bases and carved cushion capitals
+const sharedColonnetteGeo = new THREE.CylinderGeometry(0.09, 0.10, winH, 16);
+const sharedCushionCapGeo = new THREE.BoxGeometry(0.28, 0.20, 0.28);
+const sharedAbacusGeo = new THREE.BoxGeometry(0.34, 0.07, 0.34);
+const sharedBasePlinthGeo = new THREE.BoxGeometry(0.34, 0.12, 0.34);
+const sharedTorusGeo = new THREE.CylinderGeometry(0.13, 0.15, 0.07, 16);
+
+function createRomanesqueWindow(posX, posY, posZ, rotY = 0, addLight = false) {
+    const winGroup = new THREE.Group();
+
+    // 1. Semicircular round-arched leaded glass pane (sits just in front of backWall at local Z = 0.02)
+    const glassMesh = new THREE.Mesh(sharedGlassGeo, normanGlassMat);
+    glassMesh.position.set(0, 0, 0.02);
+    winGroup.add(glassMesh);
+
+    // 2. Heavy bevelled stone sill projecting forward into nave with downward slope
+    const sillMesh = new THREE.Mesh(sharedSillGeo, normanStoneMat);
+    sillMesh.position.set(0, -0.14, 0.25);
+    sillMesh.rotation.x = 0.10;
+    winGroup.add(sillMesh);
+
+    // 3. Thick 3D splayed stone jamb embrasures (flaring 45° outward from glass into nave)
+    const leftSplay = new THREE.Mesh(sharedJambSplayGeo, normanStoneMat);
+    leftSplay.position.set(-winR - 0.16, winH / 2, 0.20);
+    leftSplay.rotation.y = 0.55;
+    winGroup.add(leftSplay);
+
+    const rightSplay = new THREE.Mesh(sharedJambSplayGeo, normanStoneMat);
+    rightSplay.position.set(winR + 0.16, winH / 2, 0.20);
+    rightSplay.rotation.y = -0.55;
+    winGroup.add(rightSplay);
+
+    // 4. Order 1 (Inner) 3D Extruded Voussoir Arch (steps forward from glass)
+    const innerArch = new THREE.Mesh(sharedInnerArchGeo, normanStoneMat);
+    innerArch.position.set(0, winH, 0.06);
+    winGroup.add(innerArch);
+
+    // 5. Order 2 (Outer) 3D Stepped Hood Mould Arch (steps further forward)
+    const outerArch = new THREE.Mesh(sharedOuterArchGeo, normanStoneMat);
+    outerArch.position.set(0, winH, 0.26);
+    winGroup.add(outerArch);
+
+    // 6. 3D Radial Billet Moulding (17 individual stone billets around the outer arch)
+    const instancedBillets = new THREE.InstancedMesh(sharedBilletGeo, normanStoneMat, numArchBillets);
+    const dummy = new THREE.Object3D();
+    const billetR = 2.02;
+    for (let i = 0; i < numArchBillets; i++) {
+        const theta = (Math.PI / (numArchBillets + 1)) * (i + 1);
+        dummy.position.set(billetR * Math.cos(theta), winH + billetR * Math.sin(theta), 0.44);
+        dummy.rotation.set(0, 0, theta - Math.PI / 2);
+        dummy.updateMatrix();
+        instancedBillets.setMatrixAt(i, dummy.matrix);
+    }
+    instancedBillets.instanceMatrix.needsUpdate = true;
+    winGroup.add(instancedBillets);
+
+    // 7. Horizontal Impost Stringcourse
+    const impost = new THREE.Mesh(sharedImpostGeo, normanStoneMat);
+    impost.position.set(0, winH, 0.38);
+    winGroup.add(impost);
+
+    // 8. Free-standing 3D colonnettes with carved cushion capitals & stepped plinth bases
+    [-1, 1].forEach(side => {
+        const colX = side * (winR + 0.48);
+        const colZ = 0.42;
+
+        const col = new THREE.Mesh(sharedColonnetteGeo, normanStoneMat);
+        col.position.set(colX, winH / 2, colZ);
+        winGroup.add(col);
+
+        // Cushion capital + abacus
+        const cap = new THREE.Mesh(sharedCushionCapGeo, normanStoneMat);
+        cap.position.set(colX, winH, colZ);
+        winGroup.add(cap);
+
+        const abacus = new THREE.Mesh(sharedAbacusGeo, normanStoneMat);
+        abacus.position.set(colX, winH + 0.13, colZ);
+        winGroup.add(abacus);
+
+        // Attic base torus + plinth
+        const torus = new THREE.Mesh(sharedTorusGeo, normanStoneMat);
+        torus.position.set(colX, 0.08, colZ);
+        winGroup.add(torus);
+
+        const base = new THREE.Mesh(sharedBasePlinthGeo, normanStoneMat);
+        base.position.set(colX, 0.0, colZ);
+        winGroup.add(base);
+    });
+
+    // 9. Embrasure light: warm light emerging from the glass pane to graze splayed jambs, billets, and colonnettes
+    if (addLight) {
+        const winLight = new THREE.PointLight(0xffeed6, 0.90, 16, 1.4);
+        winLight.position.set(0, winH * 0.5, 0.35);
+        winGroup.add(winLight);
+    }
+
+    // Position and orient window in cathedral nave
+    winGroup.position.set(posX, posY, posZ);
+    winGroup.rotation.y = rotY;
+
+    return winGroup;
+}
+
+
+// --- CATHEDRAL PERPENDICULAR & CLERESTORY STONE WALLS ---
+// 1. West End Wall (Norman nave western facade perpendicular to tapestry at X = -4.0)
+const westWallGeo = new THREE.PlaneGeometry(38.0, ceilingY - floorY);
+const westWall = new THREE.Mesh(westWallGeo, wallMat);
+westWall.rotation.y = Math.PI / 2; // Normal points +X into nave
+westWall.position.set(-4.0, (floorY + ceilingY) / 2, 17.5);
+scene.add(westWall);
+
+// 2. South Clerestory Wall (Norman nave south wall facing tapestry across the nave at Z = 35.0)
+const southWallGeo = new THREE.PlaneGeometry(length, ceilingY - floorY);
+const southWall = new THREE.Mesh(southWallGeo, wallMat);
+southWall.rotation.y = Math.PI; // Normal points -Z into nave towards tapestry
+southWall.position.set((W / SCALE) / 2, (floorY + ceilingY) / 2, 35.0);
+scene.add(southWall);
+
+// --- DRAMATIC NORMAN ROMANESQUE WINDOW PLACEMENT ---
+// Authentic historical clerestory: windows are positioned on the BACK WALL (Y = 4.8),
+// soaring gracefully above the tapestry vitrine rail, as well as on the West facade.
+// Streaming beams of morning sunlight cascade directly down onto the nave, illuminating the scene.
+const clerestoryWindows = [];
+
+// Continuous Norman Romanesque clerestory arcade across the entire cathedral back wall
+for (let wx = -9.0; wx < Math.min(W / SCALE + 20.0, 620.0); wx += 15.0) {
+    const isHeroWindow = (wx === 6.0 || wx === 21.0 || wx === -9.0);
+    const win = createRomanesqueWindow(wx, 4.8, -0.48, 0, isHeroWindow);
+    canvasGroup.add(win);
+    clerestoryWindows.push(win);
+}
+
+// West Wall Clerestory Windows (facing East / +X into the nave, rotY = Math.PI / 2):
+const westWindowZPositions = [6.0, 15.0, 24.0];
+for (const zPos of westWindowZPositions) {
+    const win = createRomanesqueWindow(-3.95, 4.8, zPos, Math.PI / 2, true);
+    scene.add(win);
+    clerestoryWindows.push(win);
+}
+
+// --- VOLUMETRIC SUNBEAMS & GOD RAYS ---
+// Creates dense 3D light shafts streaming from high clerestory windows down onto the tapestry canvas
+function createSunbeamShaft(origin, target, baseOpacity = 0.50) {
+    const group = new THREE.Group();
+    group.userData.baseOpacity = baseOpacity;
+
+    const winCenter = { x: origin.x, y: origin.y, z: origin.z };
+    const floorTarget = { x: target.x, y: target.y, z: target.z };
+
+    const dx = floorTarget.x - winCenter.x;
+    const dy = floorTarget.y - winCenter.y;
+    const dz = floorTarget.z - winCenter.z;
+    const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    const mid = {
+        x: (winCenter.x + floorTarget.x) / 2,
+        y: (winCenter.y + floorTarget.y) / 2,
+        z: (winCenter.z + floorTarget.z) / 2
+    };
+
+    const beamMat = new THREE.MeshBasicMaterial({
+        map: sunbeamTexture,
+        transparent: true,
+        opacity: baseOpacity,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        side: THREE.DoubleSide
+    });
+
+    // 1. Tapered conical frustum
+    const coneGeo = new THREE.CylinderGeometry(1.35, 4.4, len, 24, 1, true);
+    const coneMesh = new THREE.Mesh(coneGeo, beamMat);
+    group.add(coneMesh);
+
+    // 2. Crossed quad planes inside the cone for dense 3D volumetric core
+    const wTop = 2.4, wBot = 7.2;
+    const quadGeo = new THREE.BufferGeometry();
+    const halfL = len / 2;
+    const quadVertices = new Float32Array([
+        -wTop / 2, halfL, 0,
+         wTop / 2, halfL, 0,
+        -wBot / 2, -halfL, 0,
+         wBot / 2, -halfL, 0
+    ]);
+    const quadUVs = new Float32Array([
+        0, 0,
+        1, 0,
+        0, 1,
+        1, 1
+    ]);
+    const quadIndices = [0, 2, 1, 1, 2, 3];
+    quadGeo.setAttribute('position', new THREE.BufferAttribute(quadVertices, 3));
+    quadGeo.setAttribute('uv', new THREE.BufferAttribute(quadUVs, 2));
+    quadGeo.setIndex(quadIndices);
+
+    const quadMesh1 = new THREE.Mesh(quadGeo, beamMat);
+    group.add(quadMesh1);
+
+    const quadMesh2 = new THREE.Mesh(quadGeo, beamMat);
+    quadMesh2.rotation.y = Math.PI / 2;
+    group.add(quadMesh2);
+
+    // Position and orient along beam vector (from floor to window = upward in cylinder geo)
+    group.position.set(mid.x, mid.y, mid.z);
+    group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-dx, -dy, -dz).normalize());
+
+    return { group, beamMat, winCenter, floorTarget, len };
+}
+
+// Primary sunbeam directly highlighting Scene 1 (King Edward) from back-wall clerestory window at X=6.0
+// Delicate, gossamer atmospheric light shaft that lets tapestry colors and embroidery remain rich and saturated
+const primarySunbeam = createSunbeamShaft(
+    { x: 6.0, y: 9.0, z: -0.40 },
+    { x: 5.75, y: floorY + 0.05, z: 2.80 },
+    0.20
+);
+canvasGroup.add(primarySunbeam.group);
+
+// Secondary sunbeam from back-wall clerestory window at X=21.0 (near camera starting perch)
+const secondarySunbeam = createSunbeamShaft(
+    { x: 21.0, y: 9.0, z: -0.40 },
+    { x: 20.8, y: floorY + 0.05, z: 2.80 },
+    0.12
+);
+canvasGroup.add(secondarySunbeam.group);
+
+// Tertiary sunbeam from back-wall clerestory window at X=-9.0 (left of Scene 1)
+const tertiarySunbeam = createSunbeamShaft(
+    { x: -9.0, y: 9.0, z: -0.40 },
+    { x: -9.2, y: floorY + 0.05, z: 2.80 },
+    0.08
+);
+canvasGroup.add(tertiarySunbeam.group);
+
+// Floor light pool under the primary sunbeam in front of Scene 1
+const floorPoolTex = createParticleTexture(128);
+const floorPoolGeo = new THREE.PlaneGeometry(6.5, 4.5);
+const floorPoolMat = new THREE.MeshBasicMaterial({
+    map: floorPoolTex,
+    transparent: true,
+    opacity: 0.28,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+});
+const floorPoolMesh = new THREE.Mesh(floorPoolGeo, floorPoolMat);
+floorPoolMesh.rotation.x = -Math.PI / 2;
+floorPoolMesh.position.set(5.75, floorY + 0.02, 2.80);
+canvasGroup.add(floorPoolMesh);
+
+// Dedicated warm sunlight SpotLight originating at the clerestory aperture, gently illuminating King Edward
+// Soft, natural intensity (1.10) with broad penumbra to prevent blowing out / bleaching the embroidery
+const windowSunSpot = new THREE.SpotLight(0xffeed8, 1.10, 40, Math.PI / 4.2, 0.85, 1.0);
+windowSunSpot.position.set(6.0, 8.5, 1.5);
+windowSunSpot.target.position.set(5.75, -2.7, 0.0);
+canvasGroup.add(windowSunSpot);
+canvasGroup.add(windowSunSpot.target);
+
+// Secondary gentle sunlight SpotLight originating at clerestory window at X=21.0
+const windowSunSpot2 = new THREE.SpotLight(0xffeed8, 0.65, 40, Math.PI / 4.2, 0.85, 1.0);
+windowSunSpot2.position.set(21.0, 8.5, 1.5);
+windowSunSpot2.target.position.set(21.0, -2.7, 0.0);
+canvasGroup.add(windowSunSpot2);
+canvasGroup.add(windowSunSpot2.target);
+
+
+
+
+// --- CATHEDRAL MISTS ---
+// Layered horizontal mist sheets drifting through the lower nave
+const mistMat = new THREE.MeshBasicMaterial({
+    map: mistTexture,
+    transparent: true,
+    opacity: 0.16,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide
+});
+const mistGeo = new THREE.PlaneGeometry(75, 25);
+const mistPlanes = [];
+const mistHeights = [floorY + 0.8, floorY + 1.8, floorY + 2.8];
+const mistZ = [6.0, 11.0, 16.0];
+for (let i = 0; i < 3; i++) {
+    const mp = new THREE.Mesh(mistGeo, mistMat);
+    mp.rotation.x = -Math.PI / 2;
+    mp.position.set(10.0 + i * 4.0, mistHeights[i], mistZ[i]);
+    canvasGroup.add(mp);
+    mistPlanes.push(mp);
+}
+
+// --- CATHEDRAL DUST MOTES (PARTICLE SYSTEM) ---
+// Subtle golden dust motes floating through cathedral air and glittering inside sunbeams
+const particleCount = 400;
+const particlePositions = new Float32Array(particleCount * 3);
+const particleColors = new Float32Array(particleCount * 3);
+const particleBasePositions = new Float32Array(particleCount * 3);
+const particlePhases = new Float32Array(particleCount);
+const particleSpeeds = new Float32Array(particleCount);
+const particleDriftY = new Float32Array(particleCount);
+
+for (let i = 0; i < particleCount; i++) {
+    let px, py, pz;
+    if (Math.random() < 0.45) {
+        px = 2.0 + Math.random() * 8.0;
+        py = floorY + Math.random() * 18.0;
+        pz = -0.5 + Math.random() * 10.0;
+    } else {
+        px = -12.0 + Math.random() * 48.0;
+        py = floorY + Math.random() * 22.0;
+        pz = -0.5 + Math.random() * 32.0;
+    }
+
+    particlePositions[i * 3 + 0] = px;
+    particlePositions[i * 3 + 1] = py;
+    particlePositions[i * 3 + 2] = pz;
+
+    particleBasePositions[i * 3 + 0] = px;
+    particleBasePositions[i * 3 + 1] = py;
+    particleBasePositions[i * 3 + 2] = pz;
+
+    particlePhases[i] = Math.random() * Math.PI * 2;
+    particleSpeeds[i] = 0.4 + Math.random() * 0.8;
+    particleDriftY[i] = 0.0008 + Math.random() * 0.0016;
+
+    particleColors[i * 3 + 0] = 0.15;
+    particleColors[i * 3 + 1] = 0.13;
+    particleColors[i * 3 + 2] = 0.10;
+}
+
+const particleGeo = new THREE.BufferGeometry();
+particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+const particleMat = new THREE.PointsMaterial({
+    size: 0.075,
+    opacity: 0.40,
+    map: particleTexture,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    vertexColors: true
+});
+const cathedralParticles = new THREE.Points(particleGeo, particleMat);
+canvasGroup.add(cathedralParticles);
+
+// Atmospheric depth fog during the intro
+if (!scene.fog) {
+    scene.fog = new THREE.FogExp2(0x181410, 0.007);
+}
+
+function updateCathedralAtmosphere(elapsed) {
+    // Once cinematic intro is complete or interrupted, remove particle effects entirely
+    if (typeof initialSlowZoom !== 'undefined' && !initialSlowZoom) {
+        if (typeof cathedralParticles !== 'undefined' && cathedralParticles && cathedralParticles.visible) {
+            cathedralParticles.visible = false;
+            if (cathedralParticles.parent) {
+                cathedralParticles.parent.remove(cathedralParticles);
+            }
+        }
+        return;
+    }
+
+    const tSec = elapsed * 0.001;
+
+    // 1. Drift mist sheets
+    if (mistMat && mistMat.map) {
+        mistMat.map.offset.x = (elapsed * 0.000025) % 1.0;
+        mistMat.map.offset.y = (elapsed * 0.000010) % 1.0;
+    }
+
+    // 2. Gentle shimmering light pulse on sunbeams
+    const shimmer = 0.96 + 0.04 * Math.sin(tSec * 2.5);
+    if (primarySunbeam && primarySunbeam.beamMat) {
+        primarySunbeam.beamMat.opacity = primarySunbeam.group.userData.baseOpacity * shimmer;
+    }
+    if (secondarySunbeam && secondarySunbeam.beamMat) {
+        secondarySunbeam.beamMat.opacity = secondarySunbeam.group.userData.baseOpacity * shimmer;
+    }
+    if (tertiarySunbeam && tertiarySunbeam.beamMat) {
+        tertiarySunbeam.beamMat.opacity = tertiarySunbeam.group.userData.baseOpacity * shimmer;
+    }
+
+    // 3. Update floating cathedral dust motes
+    const pos = particleGeo.attributes.position.array;
+    const col = particleGeo.attributes.color.array;
+
+    const A = primarySunbeam.winCenter;
+    const B = primarySunbeam.floorTarget;
+    const abX = B.x - A.x, abY = B.y - A.y, abZ = B.z - A.z;
+    const abLenSq = abX * abX + abY * abY + abZ * abZ;
+
+    for (let i = 0; i < particleCount; i++) {
+        const idx = i * 3;
+        const phase = particlePhases[i];
+        const spd = particleSpeeds[i];
+
+        pos[idx + 0] = particleBasePositions[idx + 0] + Math.cos(tSec * spd * 0.5 + phase) * 0.45;
+        pos[idx + 1] += particleDriftY[i];
+        pos[idx + 2] = particleBasePositions[idx + 2] + Math.sin(tSec * spd * 0.6 + phase) * 0.35;
+
+        if (pos[idx + 1] > 18.0) {
+            pos[idx + 1] = floorY + 0.5;
+        }
+
+        const px = pos[idx + 0], py = pos[idx + 1], pz = pos[idx + 2];
+        const apX = px - A.x, apY = py - A.y, apZ = pz - A.z;
+        const param = Math.max(0, Math.min(1, (apX * abX + apY * abY + apZ * abZ) / abLenSq));
+        const cx = A.x + param * abX;
+        const cy = A.y + param * abY;
+        const cz = A.z + param * abZ;
+        const ddx = px - cx, ddy = py - cy, ddz = pz - cz;
+        const dist = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
+        const beamRad = 1.35 + param * (4.2 - 1.35);
+
+        if (dist < beamRad * 1.15) {
+            const sparkle = 0.50 * (0.7 + 0.3 * Math.sin(tSec * 6.0 + phase));
+            col[idx + 0] = 1.0 * sparkle;
+            col[idx + 1] = 0.92 * sparkle;
+            col[idx + 2] = 0.65 * sparkle;
+        } else {
+            col[idx + 0] = 0.10;
+            col[idx + 1] = 0.09;
+            col[idx + 2] = 0.07;
+        }
+    }
+    particleGeo.attributes.position.needsUpdate = true;
+    particleGeo.attributes.color.needsUpdate = true;
 }
 
 
@@ -2224,6 +2995,34 @@ function updateCamera() {
             if (revealLight) {
                 revealLight.intensity = 0.0;
             }
+            if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
+                primarySunbeam.group.userData.baseOpacity = 0.0;
+            }
+            if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
+                secondarySunbeam.group.userData.baseOpacity = 0.0;
+            }
+            if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
+                floorPoolMat.opacity = 0.0;
+            }
+            if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
+                windowSunSpot.intensity = 0.0;
+            }
+            if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
+                windowSunSpot2.intensity = 0.0;
+            }
+            if (typeof cathedralParticles !== 'undefined' && cathedralParticles) {
+                cathedralParticles.visible = false;
+                if (cathedralParticles.parent) {
+                    cathedralParticles.parent.remove(cathedralParticles);
+                }
+            }
+            if (typeof particleMat !== 'undefined' && particleMat) {
+                particleMat.opacity = 0.0;
+            }
+
+            if (scene.fog) {
+                scene.fog = null;
+            }
         } else {
             if (cinematicStartTime === null) {
                 // Ensure all base tiles up to column 20 (covering the horizon sweep to x=45) are loaded
@@ -2250,11 +3049,11 @@ function updateCamera() {
                 }
 
                 // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
-                // Initial perched position: angled looking down the canvas (25° tilt)
-                const startTilt = -(25 * Math.PI / 180);
-                const startZ = isNarrowScreen ? 15.0 : 18.5;
+                // Initial perched position: angled looking down the canvas (35° tilt)
+                const startTilt = (35 * Math.PI / 180);
+                const startZ = isNarrowScreen ? 23.4375 : 28.90625;
                 const startY = cameraY; // Level with tapestry vertical center
-                const startX = isNarrowScreen ? 7.5 : 10.5; // Further to the right along the tapestry
+                const startX = isNarrowScreen ? 16.65977 : 21.43895; // Aligned with 35° trajectory towards Scene 1
                 const startPitch = 0.0;
                 const startYaw = startTilt;
                 const startRoll = 0.0;
@@ -2267,11 +3066,11 @@ function updateCamera() {
 
             const elapsed = Date.now() - cinematicStartTime;
 
-            // Geometry anchors: starting further to the right and further back in depth with 25° tilt
-            const startTilt = -(25 * Math.PI / 180);
-            const startZ = isNarrowScreen ? 15.0 : 18.5;
+            // Geometry anchors: starting further out in depth with 35° tilt
+            const startTilt = (35 * Math.PI / 180);
+            const startZ = isNarrowScreen ? 23.4375 : 28.90625;
             const startY = cameraY;
-            const startX = isNarrowScreen ? 7.5 : 10.5;
+            const startX = isNarrowScreen ? 16.65977 : 21.43895;
             const startPitch = 0.0;
             const startYaw = startTilt;
             const startRoll = 0.0;
@@ -2281,7 +3080,7 @@ function updateCamera() {
 
             // --- CINEMATIC SEQUENCE ---
             // Unified constant-velocity camera motion towards canvas (8.085s total):
-            // Smoothly eases in from rest over 0.98s, cruises at rock-steady constant velocity (ds/dt = 0.141/s, vZ = -1.69 u/s)
+            // Smoothly eases in from rest over 0.98s, cruises at rock-steady constant velocity (ds/dt = 0.141/s, vZ = -3.15 u/s, vX = -2.21 u/s)
             // across the spotlight bloom and flight approach, then gently eases out over the final 0.98s to touchdown.
             // Completely eliminates any sudden jerk or burst in velocity towards the canvas.
             const phase1Duration = 3185.0;
@@ -2316,14 +3115,39 @@ function updateCamera() {
                 camera.position.x = startX + (finalX - startX) * s;
                 camera.position.y = startY;
 
-                // Slowly untilt from initial 25° tilt as camera smoothly glides forward
+                // Slowly untilt from initial 35° tilt as camera smoothly glides forward
                 const currentTilt = startYaw * (1.0 - s);
                 camera.rotation.set(startPitch, currentTilt, startRoll);
                 targetRotationY = currentTilt;
 
-                // Keep the Hall in Darkness Longer: ambient light at 0.03 (near pitch-black)
-                ambientLight.intensity = 0.03;
+                // Warm, rich ambient baseline (0.20): tapestry colors and embroidery remain rich and saturated, never blasted out
+                ambientLight.intensity = 0.20;
                 dirLight.intensity = 0.0;
+
+                // Cathedral Window Sunbeam: Gossamer, translucent atmospheric god-ray pouring from high clerestory window
+                const beamIgnite = Math.min(1.0, elapsed / 400.0);
+                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
+                    primarySunbeam.group.userData.baseOpacity = 0.20 * beamIgnite;
+                }
+                if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
+                    secondarySunbeam.group.userData.baseOpacity = 0.12 * beamIgnite;
+                }
+                if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
+                    floorPoolMat.opacity = 0.28 * beamIgnite;
+                }
+                if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
+                    windowSunSpot.intensity = 1.15 * beamIgnite;
+                }
+                if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
+                    windowSunSpot2.intensity = 0.70 * beamIgnite;
+                }
+                if (typeof cathedralParticles !== 'undefined' && cathedralParticles) {
+                    if (!cathedralParticles.parent) canvasGroup.add(cathedralParticles);
+                    cathedralParticles.visible = true;
+                }
+                if (typeof particleMat !== 'undefined' && particleMat) {
+                    particleMat.opacity = 0.40 * Math.min(1.0, elapsed / 500.0);
+                }
 
                 // Spotlight continuously zooms out and exposes more of the canvas:
                 if (revealLight) {
@@ -2336,19 +3160,19 @@ function updateCamera() {
                     const lightX = finalX;
                     const lightY = (cameraY + 0.6) + 1.4 * spotProgress;
 
-                    // Cone angle continuously expands: starts small (Math.PI / 10 = ~18 deg) and opens wide
+                    // Cone angle continuously expands: starts medium-wide (Math.PI / 6.0) and opens wide
                     // to Math.PI / 2.1 (~85.7 deg half-angle / 171 deg cone) so the full visible extent of the canvas is lighted
-                    const startAngle = Math.PI / 10.0;
+                    const startAngle = Math.PI / 6.0;
                     const endAngle = Math.PI / 2.1;
                     const lightAngle = startAngle + (endAngle - startAngle) * spotProgress;
 
-                    // Starts dim (igniting smoothly from 0 to 0.20 in 300ms, then steadily brightening to 1.35 as it zooms out)
-                    const ignite = Math.min(1.0, elapsed / 300.0);
-                    const lightIntensity = (0.20 + (1.35 - 0.20) * spotProgress) * ignite;
+                    // Soft, warm spotlighting that preserves embroidery saturation (0.35 -> 0.75)
+                    const ignite = Math.min(1.0, elapsed / 250.0);
+                    const lightIntensity = (0.35 + (0.75 - 0.35) * spotProgress) * ignite;
                     // Penumbra transitions from cozy soft core (0.85) to crisp broad wash (0.40) to keep outer canvas bright
                     const lightPenumbra = 0.85 + (0.40 - 0.85) * spotProgress;
 
-                    revealLight.color.setHex(0xffc878);
+                    revealLight.color.setHex(0xffdfa0);
                     revealLight.intensity = lightIntensity;
                     revealLight.angle = lightAngle;
                     revealLight.penumbra = lightPenumbra;
@@ -2373,12 +3197,12 @@ function updateCamera() {
 
                 // Smooth, Early Ambient Cross-Fade:
                 // Start ramping up ambientLight.intensity from the very beginning of Phase 2
-                // using a smooth curve (Math.pow(flightProgress, 1.4)), eliminating dark periphery around spotlight
-                ambientLight.intensity = 0.03 + (1.06 - 0.03) * Math.pow(flightProgress, 1.4);
+                // using a smooth curve, seamlessly transitioning from warm 0.20 baseline to 1.06 gallery ambient
+                ambientLight.intensity = 0.20 + (1.06 - 0.20) * Math.pow(flightProgress, 1.2);
 
                 // Spotlight continues smooth pull-back as flight progresses, cross-fading into museum lighting
                 if (revealLight) {
-                    revealLight.color.setHex(0xffc878);
+                    revealLight.color.setHex(0xffdfa0);
                     revealLight.distance = 180;
                     revealLight.decay = 0.0;
 
@@ -2399,7 +3223,7 @@ function updateCamera() {
                     revealLight.penumbra = 0.40 + 0.20 * expandProgress;
 
                     // Smoothly cross-fade revealLight down as ambient and key light take over
-                    revealLight.intensity = 1.35 * Math.max(0.0, 1.0 - Math.pow(flightProgress, 1.3));
+                    revealLight.intensity = 0.75 * Math.max(0.0, 1.0 - Math.pow(flightProgress, 1.3));
                 }
 
                 // Eliminate Grazing Light Pop-In:
@@ -2408,9 +3232,38 @@ function updateCamera() {
                     const dirProgress = (flightProgress - 0.35) / (1.0 - 0.35);
                     const dirEase = 0.5 - 0.5 * Math.cos(dirProgress * Math.PI);
                     dirLight.intensity = dirEase * 1.0;
+                    if (scene.fog) {
+                        scene.fog.density = 0.007 * (1.0 - dirEase);
+                    }
                 } else {
                     dirLight.intensity = 0.0;
                 }
+
+                // Smoothly soften window sunbeams and spots towards browsing balance as flight nears touchdown
+                const beamFade = flightProgress > 0.60 ? (flightProgress - 0.60) / 0.40 : 0.0;
+                const spotFade = beamFade;
+                const poolFade = beamFade;
+                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
+                    primarySunbeam.group.userData.baseOpacity = 0.20 * (1.0 - beamFade * 0.60);
+                }
+                if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
+                    secondarySunbeam.group.userData.baseOpacity = 0.12 * (1.0 - beamFade * 0.58);
+                }
+                if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
+                    windowSunSpot.intensity = 1.15 * (1.0 - spotFade * 0.61);
+                }
+                if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
+                    windowSunSpot2.intensity = 0.70 * (1.0 - spotFade * 0.57);
+                }
+                if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
+                    floorPoolMat.opacity = 0.28 * (1.0 - poolFade * 0.64);
+                }
+                if (typeof particleMat !== 'undefined' && particleMat) {
+                    const particleFade = flightProgress > 0.65 ? (flightProgress - 0.65) / 0.35 : 0.0;
+                    particleMat.opacity = 0.40 * Math.max(0.0, 1.0 - particleFade);
+                }
+
+
 
                 // --- CONTINUOUS HAWK WING FLAPPING ---
                 const easeIn = Math.min(1.0, t / 0.08);
@@ -2453,8 +3306,8 @@ function updateCamera() {
                 // Direct straight flight trajectory towards King Edward (finalX)
                 camera.position.x = startX + (finalX - startX) * s;
 
-                // Slowly tilt back from initial 25° tilt (startYaw) to 0° as camera flies directly towards King Edward
-                const currentTilt = startYaw * (1.0 - s); // smoothly decreases from -25° to 0°
+                // Slowly tilt back from initial 35° tilt (startYaw) to 0° as camera flies directly towards King Edward
+                const currentTilt = startYaw * (1.0 - s); // smoothly decreases from -35° to 0°
 
                 // Dynamic vertical motion: smooth direct approach with gentle wing lift
                 camera.position.y = startY + (cameraY - startY) * s + flapLift + flareLift + bumpDip;
@@ -2488,6 +3341,34 @@ function updateCamera() {
                 dirLight.intensity = 1.0;
                 if (revealLight) {
                     revealLight.intensity = 0.0;
+                }
+                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
+                    primarySunbeam.group.userData.baseOpacity = 0.0;
+                }
+                if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
+                    secondarySunbeam.group.userData.baseOpacity = 0.0;
+                }
+                if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
+                    floorPoolMat.opacity = 0.0;
+                }
+                if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
+                    windowSunSpot.intensity = 0.0;
+                }
+                if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
+                    windowSunSpot2.intensity = 0.0;
+                }
+                if (typeof cathedralParticles !== 'undefined' && cathedralParticles) {
+                    cathedralParticles.visible = false;
+                    if (cathedralParticles.parent) {
+                        cathedralParticles.parent.remove(cathedralParticles);
+                    }
+                }
+                if (typeof particleMat !== 'undefined' && particleMat) {
+                    particleMat.opacity = 0.0;
+                }
+
+                if (scene.fog) {
+                    scene.fog = null;
                 }
 
                 // Restore rich museum specular properties for browsing
@@ -2829,6 +3710,11 @@ function animate() {
 
 
     updateDynamicPopup();
+
+    if (typeof updateCathedralAtmosphere === 'function') {
+        const atmElapsed = (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null) ? (Date.now() - cinematicStartTime) : Date.now();
+        updateCathedralAtmosphere(atmElapsed);
+    }
 
     // --- POI PULSE LOGIC ---
     if (activePulsePOIIndex >= 0) {
