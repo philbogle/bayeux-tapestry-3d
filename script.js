@@ -1187,41 +1187,7 @@ function createSunbeamTexture(width = 256, height = 512) {
     return tex;
 }
 
-function createMistTexture(width = 512, height = 512) {
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, width, height);
-
-    for (let i = 0; i < 90; i++) {
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        const r = 40 + Math.random() * 120;
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-        const alpha = 0.03 + Math.random() * 0.06;
-        grad.addColorStop(0, 'rgba(220, 205, 185, ' + alpha + ')');
-        grad.addColorStop(0.5, 'rgba(180, 165, 145, ' + (alpha * 0.5) + ')');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 40;
-    ctx.strokeRect(0, 0, width, height);
-
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.RepeatWrapping;
-    return tex;
-}
-
-function createParticleTexture(size = 64) {
+function createLightPoolTexture(size = 128) {
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
@@ -1229,10 +1195,10 @@ function createParticleTexture(size = 64) {
 
     const center = size / 2;
     const grad = ctx.createRadialGradient(center, center, 0, center, center, center);
-    grad.addColorStop(0, 'rgba(255, 245, 215, 0.55)');
-    grad.addColorStop(0.25, 'rgba(240, 215, 160, 0.28)');
-    grad.addColorStop(0.65, 'rgba(210, 175, 110, 0.08)');
-    grad.addColorStop(1.0, 'rgba(180, 140, 70, 0.0)');
+    grad.addColorStop(0, 'rgba(255, 235, 185, 0.55)');
+    grad.addColorStop(0.35, 'rgba(235, 205, 145, 0.28)');
+    grad.addColorStop(0.70, 'rgba(200, 160, 95, 0.08)');
+    grad.addColorStop(1.0, 'rgba(160, 120, 50, 0.0)');
 
     ctx.fillStyle = grad;
     ctx.beginPath();
@@ -1246,13 +1212,13 @@ function createParticleTexture(size = 64) {
 const normanGlassTexture = createNormanLeadedGlassTexture();
 const normanStoneTexture = createNormanCaenStoneTexture();
 const sunbeamTexture = createSunbeamTexture();
-const mistTexture = createMistTexture();
-const particleTexture = createParticleTexture();
 
 // Luminous leaded glass pane radiating warm morning daylight into the cathedral nave
 const normanGlassMat = new THREE.MeshBasicMaterial({
     map: normanGlassTexture,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.0
 });
 
 const normanStoneMat = new THREE.MeshPhongMaterial({
@@ -1451,13 +1417,15 @@ scene.add(southWall);
 // Authentic historical clerestory: windows are positioned on the BACK WALL (Y = 4.8),
 // soaring gracefully above the tapestry vitrine rail, as well as on the West facade.
 // Streaming beams of morning sunlight cascade directly down onto the nave, illuminating the scene.
+const clerestoryGroup = new THREE.Group();
 const clerestoryWindows = [];
 
-// Continuous Norman Romanesque clerestory arcade across the entire cathedral back wall
-for (let wx = -9.0; wx < Math.min(W / SCALE + 20.0, 620.0); wx += 15.0) {
+// Back wall clerestory windows framing the opening sequence
+const backWindowXPositions = [-9.0, 6.0, 21.0, 36.0];
+for (const wx of backWindowXPositions) {
     const isHeroWindow = (wx === 6.0 || wx === 21.0 || wx === -9.0);
     const win = createRomanesqueWindow(wx, 4.8, -0.48, 0, isHeroWindow);
-    canvasGroup.add(win);
+    clerestoryGroup.add(win);
     clerestoryWindows.push(win);
 }
 
@@ -1465,9 +1433,11 @@ for (let wx = -9.0; wx < Math.min(W / SCALE + 20.0, 620.0); wx += 15.0) {
 const westWindowZPositions = [6.0, 15.0, 24.0];
 for (const zPos of westWindowZPositions) {
     const win = createRomanesqueWindow(-3.95, 4.8, zPos, Math.PI / 2, true);
-    scene.add(win);
+    clerestoryGroup.add(win);
     clerestoryWindows.push(win);
 }
+
+canvasGroup.add(clerestoryGroup);
 
 // --- VOLUMETRIC SUNBEAMS & GOD RAYS ---
 // Creates dense 3D light shafts streaming from high clerestory windows down onto the tapestry canvas
@@ -1542,218 +1512,138 @@ function createSunbeamShaft(origin, target, baseOpacity = 0.50) {
 const primarySunbeam = createSunbeamShaft(
     { x: 6.0, y: 9.0, z: -0.40 },
     { x: 5.75, y: floorY + 0.05, z: 2.80 },
-    0.20
+    0.0
 );
+primarySunbeam.group.visible = false;
 canvasGroup.add(primarySunbeam.group);
 
 // Secondary sunbeam from back-wall clerestory window at X=21.0 (near camera starting perch)
 const secondarySunbeam = createSunbeamShaft(
     { x: 21.0, y: 9.0, z: -0.40 },
     { x: 20.8, y: floorY + 0.05, z: 2.80 },
-    0.12
+    0.0
 );
+secondarySunbeam.group.visible = false;
 canvasGroup.add(secondarySunbeam.group);
 
 // Tertiary sunbeam from back-wall clerestory window at X=-9.0 (left of Scene 1)
 const tertiarySunbeam = createSunbeamShaft(
     { x: -9.0, y: 9.0, z: -0.40 },
     { x: -9.2, y: floorY + 0.05, z: 2.80 },
-    0.08
+    0.0
 );
+tertiarySunbeam.group.visible = false;
 canvasGroup.add(tertiarySunbeam.group);
 
 // Floor light pool under the primary sunbeam in front of Scene 1
-const floorPoolTex = createParticleTexture(128);
+const floorPoolTex = createLightPoolTexture(128);
 const floorPoolGeo = new THREE.PlaneGeometry(6.5, 4.5);
 const floorPoolMat = new THREE.MeshBasicMaterial({
     map: floorPoolTex,
     transparent: true,
-    opacity: 0.28,
+    opacity: 0.0,
     blending: THREE.AdditiveBlending,
     depthWrite: false
 });
 const floorPoolMesh = new THREE.Mesh(floorPoolGeo, floorPoolMat);
 floorPoolMesh.rotation.x = -Math.PI / 2;
 floorPoolMesh.position.set(5.75, floorY + 0.02, 2.80);
+floorPoolMesh.visible = false;
 canvasGroup.add(floorPoolMesh);
 
 // Dedicated warm sunlight SpotLight originating at the clerestory aperture, gently illuminating King Edward
-// Soft, natural intensity (1.10) with broad penumbra to prevent blowing out / bleaching the embroidery
-const windowSunSpot = new THREE.SpotLight(0xffeed8, 1.10, 40, Math.PI / 4.2, 0.85, 1.0);
+// Soft, natural intensity with broad penumbra to prevent blowing out / bleaching the embroidery
+const windowSunSpot = new THREE.SpotLight(0xffeed8, 0.0, 40, Math.PI / 4.2, 0.85, 1.0);
 windowSunSpot.position.set(6.0, 8.5, 1.5);
 windowSunSpot.target.position.set(5.75, -2.7, 0.0);
+windowSunSpot.visible = false;
 canvasGroup.add(windowSunSpot);
 canvasGroup.add(windowSunSpot.target);
 
 // Secondary gentle sunlight SpotLight originating at clerestory window at X=21.0
-const windowSunSpot2 = new THREE.SpotLight(0xffeed8, 0.65, 40, Math.PI / 4.2, 0.85, 1.0);
+const windowSunSpot2 = new THREE.SpotLight(0xffeed8, 0.0, 40, Math.PI / 4.2, 0.85, 1.0);
 windowSunSpot2.position.set(21.0, 8.5, 1.5);
 windowSunSpot2.target.position.set(21.0, -2.7, 0.0);
+windowSunSpot2.visible = false;
 canvasGroup.add(windowSunSpot2);
 canvasGroup.add(windowSunSpot2.target);
 
 
 
 
-// --- CATHEDRAL MISTS ---
-// Layered horizontal mist sheets drifting through the lower nave
-const mistMat = new THREE.MeshBasicMaterial({
-    map: mistTexture,
-    transparent: true,
-    opacity: 0.16,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    side: THREE.DoubleSide
-});
-const mistGeo = new THREE.PlaneGeometry(75, 25);
-const mistPlanes = [];
-const mistHeights = [floorY + 0.8, floorY + 1.8, floorY + 2.8];
-const mistZ = [6.0, 11.0, 16.0];
-for (let i = 0; i < 3; i++) {
-    const mp = new THREE.Mesh(mistGeo, mistMat);
-    mp.rotation.x = -Math.PI / 2;
-    mp.position.set(10.0 + i * 4.0, mistHeights[i], mistZ[i]);
-    canvasGroup.add(mp);
-    mistPlanes.push(mp);
-}
-
-// --- CATHEDRAL DUST MOTES (PARTICLE SYSTEM) ---
-// Subtle golden dust motes floating through cathedral air and glittering inside sunbeams
-const particleCount = 400;
-const particlePositions = new Float32Array(particleCount * 3);
-const particleColors = new Float32Array(particleCount * 3);
-const particleBasePositions = new Float32Array(particleCount * 3);
-const particlePhases = new Float32Array(particleCount);
-const particleSpeeds = new Float32Array(particleCount);
-const particleDriftY = new Float32Array(particleCount);
-
-for (let i = 0; i < particleCount; i++) {
-    let px, py, pz;
-    if (Math.random() < 0.45) {
-        px = 2.0 + Math.random() * 8.0;
-        py = floorY + Math.random() * 18.0;
-        pz = -0.5 + Math.random() * 10.0;
-    } else {
-        px = -12.0 + Math.random() * 48.0;
-        py = floorY + Math.random() * 22.0;
-        pz = -0.5 + Math.random() * 32.0;
-    }
-
-    particlePositions[i * 3 + 0] = px;
-    particlePositions[i * 3 + 1] = py;
-    particlePositions[i * 3 + 2] = pz;
-
-    particleBasePositions[i * 3 + 0] = px;
-    particleBasePositions[i * 3 + 1] = py;
-    particleBasePositions[i * 3 + 2] = pz;
-
-    particlePhases[i] = Math.random() * Math.PI * 2;
-    particleSpeeds[i] = 0.4 + Math.random() * 0.8;
-    particleDriftY[i] = 0.0008 + Math.random() * 0.0016;
-
-    particleColors[i * 3 + 0] = 0.15;
-    particleColors[i * 3 + 1] = 0.13;
-    particleColors[i * 3 + 2] = 0.10;
-}
-
-const particleGeo = new THREE.BufferGeometry();
-particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-
-const particleMat = new THREE.PointsMaterial({
-    size: 0.075,
-    opacity: 0.40,
-    map: particleTexture,
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    vertexColors: true
-});
-const cathedralParticles = new THREE.Points(particleGeo, particleMat);
-canvasGroup.add(cathedralParticles);
-
 // Atmospheric depth fog during the intro
 if (!scene.fog) {
     scene.fog = new THREE.FogExp2(0x181410, 0.007);
 }
 
+function removeWindowLightingEffects() {
+    if (typeof clerestoryGroup !== 'undefined' && clerestoryGroup) {
+        clerestoryGroup.visible = false;
+    }
+    if (typeof clerestoryWindows !== 'undefined' && clerestoryWindows) {
+        clerestoryWindows.forEach(w => {
+            w.traverse(child => {
+                if (child.isLight) {
+                    child.intensity = 0.0;
+                    child.visible = false;
+                }
+            });
+        });
+    }
+    if (typeof revealLight !== 'undefined' && revealLight) {
+        revealLight.visible = false;
+        revealLight.intensity = 0.0;
+    }
+    if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
+        primarySunbeam.group.visible = false;
+        primarySunbeam.group.userData.baseOpacity = 0.0;
+        if (primarySunbeam.beamMat) primarySunbeam.beamMat.opacity = 0.0;
+    }
+    if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
+        secondarySunbeam.group.visible = false;
+        secondarySunbeam.group.userData.baseOpacity = 0.0;
+        if (secondarySunbeam.beamMat) secondarySunbeam.beamMat.opacity = 0.0;
+    }
+    if (typeof tertiarySunbeam !== 'undefined' && tertiarySunbeam) {
+        tertiarySunbeam.group.visible = false;
+        tertiarySunbeam.group.userData.baseOpacity = 0.0;
+        if (tertiarySunbeam.beamMat) tertiarySunbeam.beamMat.opacity = 0.0;
+    }
+    if (typeof floorPoolMesh !== 'undefined' && floorPoolMesh) {
+        floorPoolMesh.visible = false;
+    }
+    if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
+        floorPoolMat.opacity = 0.0;
+    }
+    if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
+        windowSunSpot.visible = false;
+        windowSunSpot.intensity = 0.0;
+    }
+    if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
+        windowSunSpot2.visible = false;
+        windowSunSpot2.intensity = 0.0;
+    }
+}
+
 function updateCathedralAtmosphere(elapsed) {
-    // Once cinematic intro is complete or interrupted, remove particle effects entirely
     if (typeof initialSlowZoom !== 'undefined' && !initialSlowZoom) {
-        if (typeof cathedralParticles !== 'undefined' && cathedralParticles && cathedralParticles.visible) {
-            cathedralParticles.visible = false;
-            if (cathedralParticles.parent) {
-                cathedralParticles.parent.remove(cathedralParticles);
-            }
-        }
+        removeWindowLightingEffects();
         return;
     }
 
     const tSec = elapsed * 0.001;
 
-    // 1. Drift mist sheets
-    if (mistMat && mistMat.map) {
-        mistMat.map.offset.x = (elapsed * 0.000025) % 1.0;
-        mistMat.map.offset.y = (elapsed * 0.000010) % 1.0;
-    }
-
-    // 2. Gentle shimmering light pulse on sunbeams
+    // Gentle shimmering light pulse on sunbeams
     const shimmer = 0.96 + 0.04 * Math.sin(tSec * 2.5);
-    if (primarySunbeam && primarySunbeam.beamMat) {
+    if (typeof primarySunbeam !== 'undefined' && primarySunbeam && primarySunbeam.beamMat) {
         primarySunbeam.beamMat.opacity = primarySunbeam.group.userData.baseOpacity * shimmer;
     }
-    if (secondarySunbeam && secondarySunbeam.beamMat) {
+    if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam && secondarySunbeam.beamMat) {
         secondarySunbeam.beamMat.opacity = secondarySunbeam.group.userData.baseOpacity * shimmer;
     }
-    if (tertiarySunbeam && tertiarySunbeam.beamMat) {
+    if (typeof tertiarySunbeam !== 'undefined' && tertiarySunbeam && tertiarySunbeam.beamMat) {
         tertiarySunbeam.beamMat.opacity = tertiarySunbeam.group.userData.baseOpacity * shimmer;
     }
-
-    // 3. Update floating cathedral dust motes
-    const pos = particleGeo.attributes.position.array;
-    const col = particleGeo.attributes.color.array;
-
-    const A = primarySunbeam.winCenter;
-    const B = primarySunbeam.floorTarget;
-    const abX = B.x - A.x, abY = B.y - A.y, abZ = B.z - A.z;
-    const abLenSq = abX * abX + abY * abY + abZ * abZ;
-
-    for (let i = 0; i < particleCount; i++) {
-        const idx = i * 3;
-        const phase = particlePhases[i];
-        const spd = particleSpeeds[i];
-
-        pos[idx + 0] = particleBasePositions[idx + 0] + Math.cos(tSec * spd * 0.5 + phase) * 0.45;
-        pos[idx + 1] += particleDriftY[i];
-        pos[idx + 2] = particleBasePositions[idx + 2] + Math.sin(tSec * spd * 0.6 + phase) * 0.35;
-
-        if (pos[idx + 1] > 18.0) {
-            pos[idx + 1] = floorY + 0.5;
-        }
-
-        const px = pos[idx + 0], py = pos[idx + 1], pz = pos[idx + 2];
-        const apX = px - A.x, apY = py - A.y, apZ = pz - A.z;
-        const param = Math.max(0, Math.min(1, (apX * abX + apY * abY + apZ * abZ) / abLenSq));
-        const cx = A.x + param * abX;
-        const cy = A.y + param * abY;
-        const cz = A.z + param * abZ;
-        const ddx = px - cx, ddy = py - cy, ddz = pz - cz;
-        const dist = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
-        const beamRad = 1.35 + param * (4.2 - 1.35);
-
-        if (dist < beamRad * 1.15) {
-            const sparkle = 0.50 * (0.7 + 0.3 * Math.sin(tSec * 6.0 + phase));
-            col[idx + 0] = 1.0 * sparkle;
-            col[idx + 1] = 0.92 * sparkle;
-            col[idx + 2] = 0.65 * sparkle;
-        } else {
-            col[idx + 0] = 0.10;
-            col[idx + 1] = 0.09;
-            col[idx + 2] = 0.07;
-        }
-    }
-    particleGeo.attributes.position.needsUpdate = true;
-    particleGeo.attributes.color.needsUpdate = true;
 }
 
 
@@ -1779,7 +1669,7 @@ magLight.visible = false;
 scene.add(magLight);
 scene.add(magLight.target); // Required for SpotLight target tracking
 
-ambientLight.intensity = 0.03;
+ambientLight.intensity = 0.0;
 if (useSimpleLighting) {
     ambientLight.color.setHex(0xffffff);
 }
@@ -2995,29 +2885,9 @@ function updateCamera() {
             if (revealLight) {
                 revealLight.intensity = 0.0;
             }
-            if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
-                primarySunbeam.group.userData.baseOpacity = 0.0;
-            }
-            if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
-                secondarySunbeam.group.userData.baseOpacity = 0.0;
-            }
-            if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
-                floorPoolMat.opacity = 0.0;
-            }
-            if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
-                windowSunSpot.intensity = 0.0;
-            }
-            if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
-                windowSunSpot2.intensity = 0.0;
-            }
-            if (typeof cathedralParticles !== 'undefined' && cathedralParticles) {
-                cathedralParticles.visible = false;
-                if (cathedralParticles.parent) {
-                    cathedralParticles.parent.remove(cathedralParticles);
-                }
-            }
-            if (typeof particleMat !== 'undefined' && particleMat) {
-                particleMat.opacity = 0.0;
+            removeWindowLightingEffects();
+            if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
+                normanGlassMat.opacity = 1.0;
             }
 
             if (scene.fog) {
@@ -3031,7 +2901,14 @@ function updateCamera() {
                 const allLoaded = introRequiredTiles.length > 0 && introRequiredTiles.every(t => t.loaded);
 
                 if (!allLoaded) {
-                    return; // Hold initial frame until all intro tiles are completely downloaded
+                    if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
+                        normanGlassMat.opacity = 0.0;
+                    }
+                    ambientLight.intensity = 0.0;
+                    dirLight.intensity = 0.0;
+                    if (revealLight) revealLight.intensity = 0.0;
+                    removeWindowLightingEffects();
+                    return; // Hold initial frame in darkness until all intro tiles are completely downloaded
                 }
 
                 // Ensure all intro tiles are fully opaque immediately so they don't fade in during bloom
@@ -3120,33 +2997,58 @@ function updateCamera() {
                 camera.rotation.set(startPitch, currentTilt, startRoll);
                 targetRotationY = currentTilt;
 
-                // Warm, rich ambient baseline (0.20): tapestry colors and embroidery remain rich and saturated, never blasted out
-                ambientLight.intensity = 0.20;
+                // Windows, sunbeams, and atmospheric lighting fade up gracefully from darkness (1.5s smooth ease)
+                const windowFadeDuration = 1500.0;
+                const windowFadeProgress = Math.min(1.0, elapsed / windowFadeDuration);
+                const windowEase = 0.5 - 0.5 * Math.cos(windowFadeProgress * Math.PI);
+
+                if (typeof clerestoryGroup !== 'undefined' && clerestoryGroup) {
+                    clerestoryGroup.visible = true;
+                }
+                if (typeof clerestoryWindows !== 'undefined' && clerestoryWindows) {
+                    clerestoryWindows.forEach(w => {
+                        w.traverse(child => {
+                            if (child.isLight) {
+                                child.intensity = 0.90 * windowEase;
+                                child.visible = windowEase > 0.001;
+                            }
+                        });
+                    });
+                }
+                if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
+                    normanGlassMat.opacity = windowEase;
+                }
+
+                // Warm ambient baseline rises smoothly with the window fade
+                ambientLight.intensity = 0.20 * windowEase;
                 dirLight.intensity = 0.0;
 
-                // Cathedral Window Sunbeam: Gossamer, translucent atmospheric god-ray pouring from high clerestory window
-                const beamIgnite = Math.min(1.0, elapsed / 400.0);
+                // Cathedral Window Sunbeam: Gossamer, translucent atmospheric god-rays blooming with window ease
                 if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
-                    primarySunbeam.group.userData.baseOpacity = 0.20 * beamIgnite;
+                    primarySunbeam.group.visible = true;
+                    primarySunbeam.group.userData.baseOpacity = 0.20 * windowEase;
                 }
                 if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
-                    secondarySunbeam.group.userData.baseOpacity = 0.12 * beamIgnite;
+                    secondarySunbeam.group.visible = true;
+                    secondarySunbeam.group.userData.baseOpacity = 0.12 * windowEase;
+                }
+                if (typeof tertiarySunbeam !== 'undefined' && tertiarySunbeam) {
+                    tertiarySunbeam.group.visible = true;
+                    tertiarySunbeam.group.userData.baseOpacity = 0.08 * windowEase;
+                }
+                if (typeof floorPoolMesh !== 'undefined' && floorPoolMesh) {
+                    floorPoolMesh.visible = true;
                 }
                 if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
-                    floorPoolMat.opacity = 0.28 * beamIgnite;
+                    floorPoolMat.opacity = 0.28 * windowEase;
                 }
                 if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
-                    windowSunSpot.intensity = 1.15 * beamIgnite;
+                    windowSunSpot.visible = true;
+                    windowSunSpot.intensity = 1.15 * windowEase;
                 }
                 if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
-                    windowSunSpot2.intensity = 0.70 * beamIgnite;
-                }
-                if (typeof cathedralParticles !== 'undefined' && cathedralParticles) {
-                    if (!cathedralParticles.parent) canvasGroup.add(cathedralParticles);
-                    cathedralParticles.visible = true;
-                }
-                if (typeof particleMat !== 'undefined' && particleMat) {
-                    particleMat.opacity = 0.40 * Math.min(1.0, elapsed / 500.0);
+                    windowSunSpot2.visible = true;
+                    windowSunSpot2.intensity = 0.70 * windowEase;
                 }
 
                 // Spotlight continuously zooms out and exposes more of the canvas:
@@ -3166,9 +3068,8 @@ function updateCamera() {
                     const endAngle = Math.PI / 2.1;
                     const lightAngle = startAngle + (endAngle - startAngle) * spotProgress;
 
-                    // Soft, warm spotlighting that preserves embroidery saturation (0.35 -> 0.75)
-                    const ignite = Math.min(1.0, elapsed / 250.0);
-                    const lightIntensity = (0.35 + (0.75 - 0.35) * spotProgress) * ignite;
+                    // Soft, warm spotlighting that preserves embroidery saturation (0.35 -> 0.75), blooming with the window ease
+                    const lightIntensity = (0.35 + (0.75 - 0.35) * spotProgress) * windowEase;
                     // Penumbra transitions from cozy soft core (0.85) to crisp broad wash (0.40) to keep outer canvas bright
                     const lightPenumbra = 0.85 + (0.40 - 0.85) * spotProgress;
 
@@ -3226,6 +3127,10 @@ function updateCamera() {
                     revealLight.intensity = 0.75 * Math.max(0.0, 1.0 - Math.pow(flightProgress, 1.3));
                 }
 
+                if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
+                    normanGlassMat.opacity = 1.0;
+                }
+
                 // Eliminate Grazing Light Pop-In:
                 // Smoothly cross-fade dirLight.intensity over the second half of the flight (flightProgress = 0.35 -> 1.0)
                 if (flightProgress > 0.35) {
@@ -3239,28 +3144,45 @@ function updateCamera() {
                     dirLight.intensity = 0.0;
                 }
 
-                // Smoothly soften window sunbeams and spots towards browsing balance as flight nears touchdown
-                const beamFade = flightProgress > 0.60 ? (flightProgress - 0.60) / 0.40 : 0.0;
-                const spotFade = beamFade;
-                const poolFade = beamFade;
+                // Smoothly fade out window sunbeams, spots, and floor pool completely to 0 as flight reaches touchdown
+                const beamFade = flightProgress > 0.40 ? Math.min(1.0, (flightProgress - 0.40) / 0.60) : 0.0;
+                const fadeMultiplier = Math.max(0.0, 1.0 - beamFade);
                 if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
-                    primarySunbeam.group.userData.baseOpacity = 0.20 * (1.0 - beamFade * 0.60);
+                    primarySunbeam.group.userData.baseOpacity = 0.20 * fadeMultiplier;
+                    if (fadeMultiplier <= 0.001) primarySunbeam.group.visible = false;
                 }
                 if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
-                    secondarySunbeam.group.userData.baseOpacity = 0.12 * (1.0 - beamFade * 0.58);
+                    secondarySunbeam.group.userData.baseOpacity = 0.12 * fadeMultiplier;
+                    if (fadeMultiplier <= 0.001) secondarySunbeam.group.visible = false;
+                }
+                if (typeof tertiarySunbeam !== 'undefined' && tertiarySunbeam) {
+                    tertiarySunbeam.group.userData.baseOpacity = 0.08 * fadeMultiplier;
+                    if (fadeMultiplier <= 0.001) tertiarySunbeam.group.visible = false;
                 }
                 if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
-                    windowSunSpot.intensity = 1.15 * (1.0 - spotFade * 0.61);
+                    windowSunSpot.intensity = 1.15 * fadeMultiplier;
+                    if (fadeMultiplier <= 0.001) windowSunSpot.visible = false;
                 }
                 if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
-                    windowSunSpot2.intensity = 0.70 * (1.0 - spotFade * 0.57);
+                    windowSunSpot2.intensity = 0.70 * fadeMultiplier;
+                    if (fadeMultiplier <= 0.001) windowSunSpot2.visible = false;
                 }
                 if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
-                    floorPoolMat.opacity = 0.28 * (1.0 - poolFade * 0.64);
+                    floorPoolMat.opacity = 0.28 * fadeMultiplier;
+                    if (floorPoolMesh && fadeMultiplier <= 0.001) floorPoolMesh.visible = false;
                 }
-                if (typeof particleMat !== 'undefined' && particleMat) {
-                    const particleFade = flightProgress > 0.65 ? (flightProgress - 0.65) / 0.35 : 0.0;
-                    particleMat.opacity = 0.40 * Math.max(0.0, 1.0 - particleFade);
+                if (typeof clerestoryWindows !== 'undefined' && clerestoryWindows) {
+                    clerestoryWindows.forEach(w => {
+                        w.traverse(child => {
+                            if (child.isLight) {
+                                child.intensity = 0.90 * fadeMultiplier;
+                                if (fadeMultiplier <= 0.001) child.visible = false;
+                            }
+                        });
+                    });
+                }
+                if (typeof clerestoryGroup !== 'undefined' && clerestoryGroup && fadeMultiplier <= 0.001) {
+                    clerestoryGroup.visible = false;
                 }
 
 
@@ -3342,29 +3264,9 @@ function updateCamera() {
                 if (revealLight) {
                     revealLight.intensity = 0.0;
                 }
-                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
-                    primarySunbeam.group.userData.baseOpacity = 0.0;
-                }
-                if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
-                    secondarySunbeam.group.userData.baseOpacity = 0.0;
-                }
-                if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
-                    floorPoolMat.opacity = 0.0;
-                }
-                if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
-                    windowSunSpot.intensity = 0.0;
-                }
-                if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
-                    windowSunSpot2.intensity = 0.0;
-                }
-                if (typeof cathedralParticles !== 'undefined' && cathedralParticles) {
-                    cathedralParticles.visible = false;
-                    if (cathedralParticles.parent) {
-                        cathedralParticles.parent.remove(cathedralParticles);
-                    }
-                }
-                if (typeof particleMat !== 'undefined' && particleMat) {
-                    particleMat.opacity = 0.0;
+                removeWindowLightingEffects();
+                if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
+                    normanGlassMat.opacity = 1.0;
                 }
 
                 if (scene.fog) {
