@@ -275,12 +275,17 @@ const initialVisibleWidth = 2 * Math.tan(initialVFOV / 2) * initialZ * (window.i
 
 // Start near the beginning of the tapestry: on mobile, start at x=4.8; on desktop aim directly for King Edward (x=5.75)
 const initialX = isNarrowScreen ? 4.8 : 5.75;
-const introDistZ = isNarrowScreen ? 23.4375 : 28.90625; // Start further back in depth for the dynamic flight swoop
-const introDistY = cameraY; // Level with tapestry vertical center (straight-on)
-const introDistX = isNarrowScreen ? 16.65977 : 21.43895; // Updated to match 35° flight trajectory towards Scene 1
-// Start looking down the canvas at a 35° tilt from further back
+const introDistZ = isNarrowScreen ? 19.5 : 22.0; // Deep in the cathedral nave
+const introDistY = cameraY + (isNarrowScreen ? 2.6 : 3.4); // Elevated high near the clerestory sunbeams
+const introDistX = isNarrowScreen ? 0.8 : 1.2; // Near the West end, looking diagonally down the 70m tapestry hall
+const introFocusStartX = isNarrowScreen ? 11.5 : 15.5; // Gaze down the illuminated length of the tapestry
+const introFocusStartY = cameraY + (isNarrowScreen ? 1.0 : 1.3);
+const introStartDx = introDistX - introFocusStartX;
+const introStartDy = introDistY - introFocusStartY;
+const introStartYaw = Math.atan2(introStartDx, introDistZ);
+const introStartPitch = -Math.atan2(introStartDy, Math.hypot(introStartDx, introDistZ));
 camera.position.set(introDistX, introDistY, introDistZ);
-camera.rotation.set(0.0, (35 * Math.PI / 180), 0.0);
+camera.rotation.set(introStartPitch, introStartYaw, 0.0);
 
 // Disable antialiasing on mobile/tablets with high pixel ratios to save GPU fill rate
 const isMobileOrTablet = isPhone || isIPad;
@@ -1526,10 +1531,10 @@ const secondarySunbeam = createSunbeamShaft(
 secondarySunbeam.group.visible = false;
 canvasGroup.add(secondarySunbeam.group);
 
-// Tertiary sunbeam from back-wall clerestory window at X=-9.0 (left of Scene 1)
+// Tertiary sunbeam from back-wall clerestory window at X=36.0 (further down the cathedral nave)
 const tertiarySunbeam = createSunbeamShaft(
-    { x: -9.0, y: 9.0, z: -0.40 },
-    { x: -9.2, y: floorY + 0.05, z: 2.80 },
+    { x: 36.0, y: 9.0, z: -0.40 },
+    { x: 35.8, y: floorY + 0.05, z: 2.80 },
     0.0
 );
 tertiarySunbeam.group.visible = false;
@@ -2863,6 +2868,8 @@ function updateCamera() {
             camera.rotation.set(0, 0, 0);
             camera.fov = 60.0;
             camera.updateProjectionMatrix();
+            const sceneCap = document.getElementById('intro-scene-caption');
+            if (sceneCap) sceneCap.style.opacity = '0';
             const uiEl = document.getElementById('ui');
             if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
             const hamEl = document.getElementById('hamburger-btn');
@@ -2895,9 +2902,10 @@ function updateCamera() {
             }
         } else {
             if (cinematicStartTime === null) {
-                // Ensure all base tiles up to column 20 (covering the horizon sweep to x=45) are loaded
+                // Ensure all base tiles covering the cathedral horizon sweep are loaded
                 // to guarantee ZERO tile pop-in during emergence, flight, and landing.
-                const introRequiredTiles = tiles.filter(t => t.c <= 20);
+                const maxIntroCol = isPhone ? 20 : 28;
+                const introRequiredTiles = tiles.filter(t => t.c <= maxIntroCol);
                 const timedOut = (typeof introLoadStartTime !== 'undefined') && (Date.now() - introLoadStartTime > 6000);
                 const allLoaded = (introRequiredTiles.length > 0 && introRequiredTiles.every(t => t.loaded || t.failed)) || timedOut;
 
@@ -2926,85 +2934,113 @@ function updateCamera() {
                     setTimeout(() => { loaderEl.style.display = 'none'; }, 800);
                 }
 
-                // Ensure initial position rests high in cathedral rafters, aimed directly at vertical center of the tapestry
-                // Initial perched position: angled looking down the canvas (35° tilt)
-                const startTilt = (35 * Math.PI / 180);
-                const startZ = isNarrowScreen ? 23.4375 : 28.90625;
-                const startY = cameraY; // Level with tapestry vertical center
-                const startX = isNarrowScreen ? 16.65977 : 21.43895; // Aligned with 35° trajectory towards Scene 1
-                const startPitch = 0.0;
-                const startYaw = startTilt;
-                const startRoll = 0.0;
-
-                camera.position.set(startX, startY, startZ);
-                camera.rotation.set(startPitch, startYaw, startRoll);
+                camera.position.set(introDistX, introDistY, introDistZ);
+                camera.rotation.set(introStartPitch, introStartYaw, 0.0);
+                camera.fov = 64.0;
+                camera.updateProjectionMatrix();
 
                 cinematicStartTime = Date.now();
             }
 
             const elapsed = Date.now() - cinematicStartTime;
-
-            // Geometry anchors: starting further out in depth with 35° tilt
-            const startTilt = (35 * Math.PI / 180);
-            const startZ = isNarrowScreen ? 23.4375 : 28.90625;
-            const startY = cameraY;
-            const startX = isNarrowScreen ? 16.65977 : 21.43895;
-            const startPitch = 0.0;
-            const startYaw = startTilt;
-            const startRoll = 0.0;
+            const totalIntroDuration = 8800.0;
 
             const finalZ = autoScrollTargetZ || 6.5;
             const finalX = isNarrowScreen ? 4.8 : 5.75; // Centered directly on King Edward
 
-            // --- CINEMATIC SEQUENCE ---
-            // Unified constant-velocity camera motion towards canvas (8.085s total):
-            // Smoothly eases in from rest over 0.98s, cruises at rock-steady constant velocity (ds/dt = 0.141/s, vZ = -3.15 u/s, vX = -2.21 u/s)
-            // across the spotlight bloom and flight approach, then gently eases out over the final 0.98s to touchdown.
-            // Completely eliminates any sudden jerk or burst in velocity towards the canvas.
-            const phase1Duration = 3185.0;
-            const flightDuration = 4900.0;
-            const totalIntroDuration = phase1Duration + flightDuration;
+            if (elapsed < totalIntroDuration) {
+                const tau = Math.max(0.0, Math.min(1.0, elapsed / totalIntroDuration));
 
-            const tEaseIn = 0.98;
-            const tEaseOut = 0.98;
-            const tTotalSec = totalIntroDuration / 1000.0; // 8.085s
-            const elapsedSec = Math.max(0.0, elapsed / 1000.0);
-            const vCruise = 1.0 / (tTotalSec - (tEaseIn + tEaseOut) / 2.0);
+                // Smooth C2 master flight progression:
+                // Blends an immediate weightless cathedral drift (cosine) while the stained glass awakens
+                // with a sweeping, fluid quintic crane arc that cushions softly to rest in front of Scene 1.
+                const cosineEase = 0.5 - 0.5 * Math.cos(Math.PI * tau);
+                const quinticEase = tau * tau * tau * (10.0 + tau * (-15.0 + 6.0 * tau));
+                const u = 0.22 * cosineEase + 0.78 * quinticEase;
+                const invU = 1.0 - u;
+                const b0 = invU * invU * invU;
+                const b1 = 3.0 * invU * invU * u;
+                const b2 = 3.0 * invU * u * u;
+                const b3 = u * u * u;
 
-            let s = 0.0;
-            if (elapsedSec <= tEaseIn) {
-                s = vCruise * 0.5 * (elapsedSec - (tEaseIn / Math.PI) * Math.sin(Math.PI * elapsedSec / tEaseIn));
-            } else if (elapsedSec <= tTotalSec - tEaseOut) {
-                s = vCruise * (elapsedSec - tEaseIn / 2.0);
-            } else if (elapsedSec < tTotalSec) {
-                const tau = Math.max(0.0, tTotalSec - elapsedSec);
-                s = 1.0 - vCruise * 0.5 * (tau - (tEaseOut / Math.PI) * Math.sin(Math.PI * tau / tEaseOut));
-            } else {
-                s = 1.0;
-            }
-            s = Math.max(0.0, Math.min(1.0, s));
+                // --- 1. 3D CUBIC BÉZIER CAMERA FLIGHT PATH P(u) ---
+                // X: Starts near the West end looking down the 70m hall, arcs gracefully outward to the right
+                // (overshooting slightly to x2 so it orbits around the front of Scene 1), and settles at finalX.
+                const x0 = introDistX;
+                const x1 = introDistX + (isNarrowScreen ? 0.8 : 1.2);
+                const x2 = finalX + (isNarrowScreen ? 1.2 : 1.8);
+                const x3 = finalX;
+                const camX = b0 * x0 + b1 * x1 + b2 * x2 + b3 * x3;
 
-            if (elapsed < phase1Duration) {
-                const p = Math.min(1.0, elapsed / phase1Duration);
+                // Y: Starts high near the clerestory windows, swoops down through the golden sunbeams,
+                // skims slightly below eye-level (-0.35) for a dramatic low-angle pass, and rises gently to cameraY.
+                const y0 = introDistY;
+                const y1 = cameraY + (isNarrowScreen ? 1.1 : 1.5);
+                const y2 = cameraY - 0.35;
+                const y3 = cameraY;
+                const camY = b0 * y0 + b1 * y1 + b2 * y2 + b3 * y3;
 
-                // Continuous constant-velocity glide in depth (Z: startZ -> closer)
-                camera.position.z = startZ + (finalZ - startZ) * s;
-                // Direct straight trajectory towards King Edward (finalX)
-                camera.position.x = startX + (finalX - startX) * s;
-                camera.position.y = startY;
+                // Z: Smoothly glides inward from the deep nave (22.0) to intimate gallery distance (6.5).
+                const z0 = introDistZ;
+                const z1 = introDistZ - (isNarrowScreen ? 2.8 : 3.5);
+                const z2 = finalZ + (isNarrowScreen ? 1.6 : 2.0);
+                const z3 = finalZ;
+                const camZ = b0 * z0 + b1 * z1 + b2 * z2 + b3 * z3;
 
-                // Slowly untilt from initial 35° tilt as camera smoothly glides forward
-                const currentTilt = startYaw * (1.0 - s);
-                camera.rotation.set(startPitch, currentTilt, startRoll);
-                targetRotationY = currentTilt;
+                // --- 2. 3D FOCAL TARGET CURVE F(u) ON THE TAPESTRY ---
+                // Gaze begins looking down the long illuminated expanse of the tapestry (x ~ 15.5),
+                // then sweeps smoothly back along the mounted knights to lock squarely onto King Edward (finalX).
+                const fx0 = introFocusStartX;
+                const fx1 = isNarrowScreen ? 9.5 : 12.5;
+                const fx2 = finalX + (isNarrowScreen ? 0.3 : 0.5);
+                const fx3 = finalX;
+                const focusX = b0 * fx0 + b1 * fx1 + b2 * fx2 + b3 * fx3;
 
-                // Windows, sunbeams, and atmospheric lighting fade up gracefully from darkness (1.5s smooth ease)
-                const windowFadeDuration = 1500.0;
-                const windowFadeProgress = Math.min(1.0, elapsed / windowFadeDuration);
-                const windowEase = 0.5 - 0.5 * Math.cos(windowFadeProgress * Math.PI);
+                const fy0 = introFocusStartY;
+                const fy1 = cameraY + 0.75;
+                const fy2 = cameraY + 0.05;
+                const fy3 = cameraY;
+                const focusY = b0 * fy0 + b1 * fy1 + b2 * fy2 + b3 * fy3;
+
+                // Exact analytical look-at orientation toward F(u) (naturally converges to pitch=0, yaw=0 at u=1)
+                const dxLook = camX - focusX;
+                const dyLook = camY - focusY;
+                const dzLook = camZ;
+                const baseYaw = Math.atan2(dxLook, dzLook);
+                const basePitch = -Math.atan2(dyLook, Math.hypot(dxLook, dzLook));
+
+                // --- 3. AERODYNAMIC BANKING & ORGANIC GLIDING SUSPENSION ---
+                const turnEnvelope = Math.pow(Math.sin(Math.PI * u), 2);
+                // Smooth banking roll into the sweeping turn (~ +2.4 deg at apex, 0 at start & landing)
+                const bankRoll = 0.042 * turnEnvelope;
+
+                // Gentle, languid gliding wing/breath oscillation damped to zero at endpoints
+                const glidePhase = tau * (4.0 * 2.0 * Math.PI);
+                const glideLift = turnEnvelope * 0.032 * Math.sin(glidePhase);
+                const glidePitch = turnEnvelope * 0.0028 * Math.cos(glidePhase);
+                const glideRoll = turnEnvelope * 0.0035 * Math.sin(glidePhase * 0.5);
+
+                camera.position.set(camX, camY + glideLift, camZ);
+                camera.rotation.set(basePitch + glidePitch, baseYaw, bankRoll + glideRoll);
+                targetRotationY = baseYaw;
+
+                // Subtle wide-to-intimate FOV transition (64° -> 60°)
+                camera.fov = 60.0 + 4.0 * Math.pow(invU, 1.5);
+                camera.updateProjectionMatrix();
+
+                // --- 4. STAGGERED CATHEDRAL DAWN & SWEEPING SPOTLIGHT CHOREOGRAPHY ---
+                // Windows fade up from darkness over 0.0s - 1.5s, then fade out cleanly in the second half (u > 0.52)
+                const windowFadeIn = 0.5 - 0.5 * Math.cos(Math.min(1.0, elapsed / 1500.0) * Math.PI);
+                const windowFadeOut = u > 0.52 ? Math.max(0.0, 1.0 - (u - 0.52) / 0.44) : 1.0;
+                const windowEase = windowFadeIn * windowFadeOut;
+
+                // Staggered sunbeam cascade (East -> Center Hero -> West) so light sweeps through the cathedral
+                const beamEastIn = 0.5 - 0.5 * Math.cos(Math.min(1.0, Math.max(0.0, (elapsed - 100.0) / 1400.0)) * Math.PI);
+                const beamHeroIn = 0.5 - 0.5 * Math.cos(Math.min(1.0, Math.max(0.0, (elapsed - 280.0) / 1450.0)) * Math.PI);
+                const beamWestIn = 0.5 - 0.5 * Math.cos(Math.min(1.0, Math.max(0.0, (elapsed - 460.0) / 1500.0)) * Math.PI);
 
                 if (typeof clerestoryGroup !== 'undefined' && clerestoryGroup) {
-                    clerestoryGroup.visible = true;
+                    clerestoryGroup.visible = windowEase > 0.001;
                 }
                 if (typeof clerestoryWindows !== 'undefined' && clerestoryWindows) {
                     clerestoryWindows.forEach(w => {
@@ -3017,237 +3053,102 @@ function updateCamera() {
                     });
                 }
                 if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
-                    normanGlassMat.opacity = windowEase;
+                    normanGlassMat.opacity = windowFadeIn;
                 }
 
-                // Warm ambient baseline rises smoothly with the window fade
-                ambientLight.intensity = 0.20 * windowEase;
-                dirLight.intensity = 0.0;
-
-                // Cathedral Window Sunbeam: Gossamer, translucent atmospheric god-rays blooming with window ease
-                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
-                    primarySunbeam.group.visible = true;
-                    primarySunbeam.group.userData.baseOpacity = 0.20 * windowEase;
-                }
                 if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
-                    secondarySunbeam.group.visible = true;
-                    secondarySunbeam.group.userData.baseOpacity = 0.12 * windowEase;
+                    const bEast = beamEastIn * windowFadeOut;
+                    secondarySunbeam.group.visible = bEast > 0.001;
+                    secondarySunbeam.group.userData.baseOpacity = 0.13 * bEast;
+                }
+                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
+                    const bHero = beamHeroIn * windowFadeOut;
+                    primarySunbeam.group.visible = bHero > 0.001;
+                    primarySunbeam.group.userData.baseOpacity = 0.22 * bHero;
                 }
                 if (typeof tertiarySunbeam !== 'undefined' && tertiarySunbeam) {
-                    tertiarySunbeam.group.visible = true;
-                    tertiarySunbeam.group.userData.baseOpacity = 0.08 * windowEase;
+                    const bWest = beamWestIn * windowFadeOut;
+                    tertiarySunbeam.group.visible = bWest > 0.001;
+                    tertiarySunbeam.group.userData.baseOpacity = 0.09 * bWest;
                 }
                 if (typeof floorPoolMesh !== 'undefined' && floorPoolMesh) {
-                    floorPoolMesh.visible = true;
-                }
-                if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
-                    floorPoolMat.opacity = 0.28 * windowEase;
-                }
-                if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
-                    windowSunSpot.visible = true;
-                    windowSunSpot.intensity = 1.15 * windowEase;
-                }
-                if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
-                    windowSunSpot2.visible = true;
-                    windowSunSpot2.intensity = 0.70 * windowEase;
-                }
-
-                // Spotlight continuously zooms out and exposes more of the canvas:
-                if (revealLight) {
-                    // Smooth, gentle acceleration from intimate close inspection into grand canvas exposure
-                    const spotProgress = Math.pow(p, 1.35);
-
-                    // Pull back smoothly in Z from intimate close (2.8) to wide gallery distance (13.0)
-                    const lightZ = 2.8 + (13.0 - 2.8) * spotProgress;
-                    // Centered directly in front of King Edward throughout the zoom out
-                    const lightX = finalX;
-                    const lightY = (cameraY + 0.6) + 1.4 * spotProgress;
-
-                    // Cone angle continuously expands: starts medium-wide (Math.PI / 6.0) and opens wide
-                    // to Math.PI / 2.1 (~85.7 deg half-angle / 171 deg cone) so the full visible extent of the canvas is lighted
-                    const startAngle = Math.PI / 6.0;
-                    const endAngle = Math.PI / 2.1;
-                    const lightAngle = startAngle + (endAngle - startAngle) * spotProgress;
-
-                    // Soft, warm spotlighting that preserves embroidery saturation (0.35 -> 0.75), blooming with the window ease
-                    const lightIntensity = (0.35 + (0.75 - 0.35) * spotProgress) * windowEase;
-                    // Penumbra transitions from cozy soft core (0.85) to crisp broad wash (0.40) to keep outer canvas bright
-                    const lightPenumbra = 0.85 + (0.40 - 0.85) * spotProgress;
-
-                    revealLight.color.setHex(0xffdfa0);
-                    revealLight.intensity = lightIntensity;
-                    revealLight.angle = lightAngle;
-                    revealLight.penumbra = lightPenumbra;
-                    revealLight.distance = 180;
-                    revealLight.decay = 0.0;
-                    revealLight.position.set(lightX, lightY, lightZ);
-
-                    // Target stays locked on King Edward on his throne
-                    const targetY = cameraY - 0.2;
-                    revealLight.target.position.set(finalX, targetY, 0.0);
-                    revealLight.target.updateMatrixWorld();
-                }
-
-                floorMat.shininess = 0;
-                ceilingMat.shininess = 0;
-                wallMat.shininess = 0;
-
-            } else if (elapsed < totalIntroDuration) {
-                // Phase 2: Dynamic Raptor Flight Swoop towards King Edward on the left (6.5s -> 16.5s: 10.0s flight)
-                const t = Math.min(1.0, (elapsed - phase1Duration) / flightDuration);
-                const flightProgress = t;
-
-                // Smooth, Early Ambient Cross-Fade:
-                // Start ramping up ambientLight.intensity from the very beginning of Phase 2
-                // using a smooth curve, seamlessly transitioning from warm 0.20 baseline to 1.06 gallery ambient
-                ambientLight.intensity = 0.20 + (1.06 - 0.20) * Math.pow(flightProgress, 1.2);
-
-                // Spotlight continues smooth pull-back as flight progresses, cross-fading into museum lighting
-                if (revealLight) {
-                    revealLight.color.setHex(0xffdfa0);
-                    revealLight.distance = 180;
-                    revealLight.decay = 0.0;
-
-                    // Seamless continuation from Phase 1 (z: 13.0 -> 17.0)
-                    const pullBackZ = 13.0 + (17.0 - 13.0) * Math.pow(flightProgress, 1.1);
-                    const lightX = finalX;
-                    const lightY = cameraY + 2.0 + 1.0 * flightProgress;
-                    revealLight.position.set(lightX, lightY, pullBackZ);
-
-                    // Aim lower at the narrative figures of Scene 1 in the center of the left canvas
-                    const targetY = cameraY - 0.2;
-                    revealLight.target.position.set(finalX, targetY, 0.0);
-                    revealLight.target.updateMatrixWorld();
-
-                    // Keep full visible extent of the canvas lighted throughout the flight approach
-                    const expandProgress = Math.min(1.0, flightProgress / 0.70);
-                    revealLight.angle = Math.PI / 2.1;
-                    revealLight.penumbra = 0.40 + 0.20 * expandProgress;
-
-                    // Smoothly cross-fade revealLight down as ambient and key light take over
-                    revealLight.intensity = 0.75 * Math.max(0.0, 1.0 - Math.pow(flightProgress, 1.3));
-                }
-
-                if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
-                    normanGlassMat.opacity = 1.0;
-                }
-
-                // Eliminate Grazing Light Pop-In:
-                // Smoothly cross-fade dirLight.intensity over the second half of the flight (flightProgress = 0.35 -> 1.0)
-                if (flightProgress > 0.35) {
-                    const dirProgress = (flightProgress - 0.35) / (1.0 - 0.35);
-                    const dirEase = 0.5 - 0.5 * Math.cos(dirProgress * Math.PI);
-                    dirLight.intensity = dirEase * 1.0;
-                    if (scene.fog) {
-                        scene.fog.density = 0.007 * (1.0 - dirEase);
+                    const bHero = beamHeroIn * windowFadeOut;
+                    floorPoolMesh.visible = bHero > 0.001;
+                    if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
+                        floorPoolMat.opacity = 0.30 * bHero;
                     }
-                } else {
-                    dirLight.intensity = 0.0;
-                }
-
-                // Smoothly fade out window sunbeams, spots, and floor pool completely to 0 as flight reaches touchdown
-                const beamFade = flightProgress > 0.40 ? Math.min(1.0, (flightProgress - 0.40) / 0.60) : 0.0;
-                const fadeMultiplier = Math.max(0.0, 1.0 - beamFade);
-                if (typeof primarySunbeam !== 'undefined' && primarySunbeam) {
-                    primarySunbeam.group.userData.baseOpacity = 0.20 * fadeMultiplier;
-                    if (fadeMultiplier <= 0.001) primarySunbeam.group.visible = false;
-                }
-                if (typeof secondarySunbeam !== 'undefined' && secondarySunbeam) {
-                    secondarySunbeam.group.userData.baseOpacity = 0.12 * fadeMultiplier;
-                    if (fadeMultiplier <= 0.001) secondarySunbeam.group.visible = false;
-                }
-                if (typeof tertiarySunbeam !== 'undefined' && tertiarySunbeam) {
-                    tertiarySunbeam.group.userData.baseOpacity = 0.08 * fadeMultiplier;
-                    if (fadeMultiplier <= 0.001) tertiarySunbeam.group.visible = false;
                 }
                 if (typeof windowSunSpot !== 'undefined' && windowSunSpot) {
-                    windowSunSpot.intensity = 1.15 * fadeMultiplier;
-                    if (fadeMultiplier <= 0.001) windowSunSpot.visible = false;
+                    const bHero = beamHeroIn * windowFadeOut;
+                    windowSunSpot.visible = bHero > 0.001;
+                    windowSunSpot.intensity = 1.20 * bHero;
                 }
                 if (typeof windowSunSpot2 !== 'undefined' && windowSunSpot2) {
-                    windowSunSpot2.intensity = 0.70 * fadeMultiplier;
-                    if (fadeMultiplier <= 0.001) windowSunSpot2.visible = false;
-                }
-                if (typeof floorPoolMat !== 'undefined' && floorPoolMat) {
-                    floorPoolMat.opacity = 0.28 * fadeMultiplier;
-                    if (floorPoolMesh && fadeMultiplier <= 0.001) floorPoolMesh.visible = false;
-                }
-                if (typeof clerestoryWindows !== 'undefined' && clerestoryWindows) {
-                    clerestoryWindows.forEach(w => {
-                        w.traverse(child => {
-                            if (child.isLight) {
-                                child.intensity = 0.90 * fadeMultiplier;
-                                if (fadeMultiplier <= 0.001) child.visible = false;
-                            }
-                        });
-                    });
-                }
-                if (typeof clerestoryGroup !== 'undefined' && clerestoryGroup && fadeMultiplier <= 0.001) {
-                    clerestoryGroup.visible = false;
+                    const bEast = beamEastIn * windowFadeOut;
+                    windowSunSpot2.visible = bEast > 0.001;
+                    windowSunSpot2.intensity = 0.75 * bEast;
                 }
 
+                // Smooth gallery ambient & directional grazing light cross-fade
+                const galleryBlend = u > 0.32 ? Math.min(1.0, (u - 0.32) / 0.68) : 0.0;
+                const galleryEase = 0.5 - 0.5 * Math.cos(galleryBlend * Math.PI);
+                ambientLight.intensity = 0.20 * windowFadeIn * (1.0 - galleryEase) + 1.06 * galleryEase;
 
-
-                // --- CONTINUOUS HAWK WING FLAPPING ---
-                const easeIn = Math.min(1.0, t / 0.08);
-                const flapEaseOut = t > 0.96 ? Math.max(0.0, (1.0 - t) / 0.04) : 1.0;
-                const envelope = easeIn * flapEaseOut;
-
-                // 5 steady, organic wingbeat cycles across 4.9s flight (~1 wingbeat per sec)
-                const flapPhase = t * (5.0 * 2.0 * Math.PI);
-
-                // Organic wing lift pulse & flight nods (gentle, subtle glide)
-                const flapLift = envelope * 0.0020 * (Math.sin(flapPhase) + 0.20 * Math.sin(2.0 * flapPhase));
-                const flapPitch = envelope * 0.00025 * Math.sin(flapPhase - 0.4);
-                const flapRoll = envelope * 0.00015 * Math.cos(0.5 * flapPhase);
-
-                // --- LANDING FLARE & TOUCHDOWN BUMP ---
-                let flareLift = 0;
-                let flarePitch = 0;
-                if (t >= 0.88 && t <= 0.98) {
-                    const flareProgress = (t - 0.88) / 0.10;
-                    const flareBell = Math.sin(flareProgress * Math.PI);
-                    flareLift = 0.010 * flareBell;
-                    flarePitch = 0.004 * flareBell; // pitch nose up to brake
+                const dirBlend = u > 0.50 ? Math.min(1.0, (u - 0.50) / 0.50) : 0.0;
+                const dirEase = 0.5 - 0.5 * Math.cos(dirBlend * Math.PI);
+                dirLight.intensity = dirEase * 1.0;
+                if (scene.fog) {
+                    scene.fog.density = 0.007 * (1.0 - dirEase);
                 }
 
-                let bumpDip = 0;
-                let bumpPitch = 0;
-                if (t >= 0.96) {
-                    const bumpProgress = (t - 0.96) / 0.04;
-                    const bumpCurve = Math.sin(bumpProgress * Math.PI * 1.5) * Math.exp(-bumpProgress * 3.5);
-                    bumpDip = -0.005 * bumpCurve;
-                    bumpPitch = -0.001 * bumpCurve;
+                // Sweeping chiaroscuro spotlight (revealLight) that glides along the tapestry with the camera's gaze
+                if (revealLight) {
+                    revealLight.visible = true;
+                    revealLight.color.setHex(0xffdfa0);
+                    revealLight.distance = 180;
+                    revealLight.decay = 0.0;
+
+                    const spotExpand = Math.min(1.0, elapsed / 3800.0);
+                    const lightZ = 3.5 + (15.5 - 3.5) * Math.pow(spotExpand, 1.2);
+                    const lightY = (cameraY + 0.8) + 1.8 * spotExpand;
+                    revealLight.position.set(focusX, lightY, lightZ);
+                    revealLight.target.position.set(focusX, cameraY - 0.2, 0.0);
+                    revealLight.target.updateMatrixWorld();
+
+                    revealLight.angle = (Math.PI / 5.5) + (Math.PI / 2.1 - Math.PI / 5.5) * spotExpand;
+                    revealLight.penumbra = 0.85 + (0.45 - 0.85) * spotExpand;
+                    revealLight.intensity = (0.40 + 0.38 * spotExpand) * windowFadeIn * (1.0 - dirEase);
                 }
 
-                camera.fov = 60.0;
+                floorMat.shininess = 5 * dirEase;
+                ceilingMat.shininess = 4 * dirEase;
+                wallMat.shininess = 12 * dirEase;
 
-                // Continuous glide in depth (Z: startZ -> finalZ)
-                camera.position.z = startZ + (finalZ - startZ) * s;
-
-                // Flight trajectory in X:
-                // Direct straight flight trajectory towards King Edward (finalX)
-                camera.position.x = startX + (finalX - startX) * s;
-
-                // Slowly tilt back from initial 35° tilt (startYaw) to 0° as camera flies directly towards King Edward
-                const currentTilt = startYaw * (1.0 - s); // smoothly decreases from -35° to 0°
-
-                // Dynamic vertical motion: smooth direct approach with gentle wing lift
-                camera.position.y = startY + (cameraY - startY) * s + flapLift + flareLift + bumpDip;
-
-                // Dynamic pitch aimed along motion vector + vertical center
-                const basePitch = -Math.atan2(camera.position.y - cameraY, camera.position.z);
-                const pitch = basePitch + flapPitch + flarePitch + bumpPitch;
-                const roll = flapRoll;
-                const yaw = currentTilt;
-
-                camera.rotation.set(pitch, yaw, roll);
-                targetRotationY = yaw;
-
-                // Fade out title text as the hawk takes wing into the swoop
-                if (elapsed > 3770) {
-                    const ct = document.getElementById('cinematic-title');
-                    if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
+                // --- 5. TWO-STAGE CINEMATIC TITLE & SCENE I PROLOGUE CAPTION ---
+                const ct = document.getElementById('cinematic-title');
+                if (ct) {
+                    if (elapsed <= 2400) {
+                        ct.style.opacity = '1';
+                    } else if (elapsed < 3500) {
+                        const titleFade = 0.5 + 0.5 * Math.cos(((elapsed - 2400) / 1100.0) * Math.PI);
+                        ct.style.opacity = titleFade.toFixed(3);
+                    } else {
+                        ct.style.opacity = '0';
+                    }
+                }
+                const sceneCap = document.getElementById('intro-scene-caption');
+                if (sceneCap) {
+                    let capOpacity = 0.0;
+                    if (elapsed >= 3200 && elapsed < 4300) {
+                        capOpacity = 0.5 - 0.5 * Math.cos(((elapsed - 3200) / 1100.0) * Math.PI);
+                    } else if (elapsed >= 4300 && elapsed <= 7300) {
+                        capOpacity = 1.0;
+                    } else if (elapsed > 7300 && elapsed < 8400) {
+                        capOpacity = 0.5 + 0.5 * Math.cos(((elapsed - 7300) / 1100.0) * Math.PI);
+                    }
+                    sceneCap.style.opacity = capOpacity.toFixed(3);
+                    const slideY = (1.0 - capOpacity) * 10.0;
+                    sceneCap.style.transform = `translateX(-50%) translateY(${slideY.toFixed(1)}px)`;
                 }
 
             } else {
@@ -3259,6 +3160,11 @@ function updateCamera() {
                 targetRotationY = 0;
                 autoScrollTargetZ = null;
                 initialSlowZoom = false;
+
+                const sceneCap = document.getElementById('intro-scene-caption');
+                if (sceneCap) {
+                    sceneCap.style.opacity = '0';
+                }
 
                 ambientLight.intensity = 1.06;
                 dirLight.intensity = 1.0;
@@ -3342,7 +3248,7 @@ function updateCamera() {
         camera.rotation.y += (targetRotationY - camera.rotation.y) * currentSmoothing;
     }
 
-    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 3770)) {
+    if (!initialSlowZoom || (typeof cinematicStartTime !== 'undefined' && cinematicStartTime !== null && Date.now() - cinematicStartTime > 3300)) {
         const ct = document.getElementById('cinematic-title');
         if (ct && ct.style.opacity !== '0') ct.style.opacity = '0';
     }
@@ -3357,16 +3263,18 @@ function updateCamera() {
     const maxX = W / SCALE;
     if (camera.position.x > maxX) camera.position.x = maxX;
 
-    // Vertical bounds: tapestry is between y=2.0 and y=-4.94
-    const maxY = 2.0;
-    const minY = -4.94;
-    if (camera.position.y > maxY) {
-        camera.position.y = maxY;
-        velocityY = 0;
-    }
-    if (camera.position.y < minY) {
-        camera.position.y = minY;
-        velocityY = 0;
+    // Vertical bounds: tapestry is between y=2.0 and y=-4.94 (skip during cinematic intro crane swoop)
+    if (!initialSlowZoom) {
+        const maxY = 2.0;
+        const minY = -4.94;
+        if (camera.position.y > maxY) {
+            camera.position.y = maxY;
+            velocityY = 0;
+        }
+        if (camera.position.y < minY) {
+            camera.position.y = minY;
+            velocityY = 0;
+        }
     }
 
     if (camera.position.z < 0.9) camera.position.z = 0.9; // Allow close inspection for max L19 LOD detail
@@ -3419,7 +3327,8 @@ function updateTiles() {
             // High-res tiles should only load if they are close to the camera, even if they are in the frustum
             const meetsDistanceRequirement = !isHighRes || (distToCameraX <= unloadZ * 2.5);
 
-            const isIntroRequired = !isHighRes && initialSlowZoom && tile.c <= 20;
+            const maxIntroCol = isPhone ? 20 : 28;
+            const isIntroRequired = !isHighRes && initialSlowZoom && tile.c <= maxIntroCol;
             const isMainVisible = (camera.position.z <= unloadZ) && meetsDistanceRequirement && (tile.xCenter >= minX && tile.xCenter <= maxX);
             const isMagVisible = magActive && isHighRes && (tile.xCenter >= magMinX - actualMargin && tile.xCenter <= magMaxX + actualMargin);
             const isVisible = (initialSlowZoom && cinematicStartTime === null) ? isIntroRequired : (isIntroRequired || isMainVisible || isMagVisible);
@@ -3444,7 +3353,7 @@ function updateTiles() {
                         const matOpts = {
                             map: texture,
                             transparent: true,
-                            opacity: isHighRes ? 1.0 : 0 // Pop in instantly for high-res to prevent fade artifacts over base
+                            opacity: (isHighRes || initialSlowZoom) ? 1.0 : 0 // Pop in instantly for high-res and during pre-lit intro load
                         };
 
                         if (useSimpleLighting) {
@@ -3459,7 +3368,7 @@ function updateTiles() {
                         tile.loading = false;
                         tile.loaded = true;
 
-                        if (!isHighRes) {
+                        if (!isHighRes && !initialSlowZoom) {
                             let op = 0;
                             const fade = setInterval(() => {
                                 op += 0.1;
@@ -4074,6 +3983,12 @@ function changeLanguage(lang) {
         updatePopupUI(currentPopupSceneIndex, false);
     }
     if (typeof tituliData !== 'undefined' && tituliData && tituliData.length > 0) {
+        const scene1 = tituliData[0];
+        const introBodyEl = document.getElementById('intro-scene-body');
+        if (introBodyEl && scene1 && scene1.translations) {
+            const tr = scene1.translations[currentLanguage] || scene1.translations['en'];
+            if (tr && tr.context) introBodyEl.innerText = tr.context;
+        }
         buildTourPOIs(tituliData);
     }
 }
