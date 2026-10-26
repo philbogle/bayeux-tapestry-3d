@@ -2898,7 +2898,8 @@ function updateCamera() {
                 // Ensure all base tiles up to column 20 (covering the horizon sweep to x=45) are loaded
                 // to guarantee ZERO tile pop-in during emergence, flight, and landing.
                 const introRequiredTiles = tiles.filter(t => t.c <= 20);
-                const allLoaded = introRequiredTiles.length > 0 && introRequiredTiles.every(t => t.loaded);
+                const timedOut = (typeof introLoadStartTime !== 'undefined') && (Date.now() - introLoadStartTime > 6000);
+                const allLoaded = (introRequiredTiles.length > 0 && introRequiredTiles.every(t => t.loaded || t.failed)) || timedOut;
 
                 if (!allLoaded) {
                     if (typeof normanGlassMat !== 'undefined' && normanGlassMat) {
@@ -3418,9 +3419,10 @@ function updateTiles() {
             // High-res tiles should only load if they are close to the camera, even if they are in the frustum
             const meetsDistanceRequirement = !isHighRes || (distToCameraX <= unloadZ * 2.5);
 
+            const isIntroRequired = !isHighRes && initialSlowZoom && tile.c <= 20;
             const isMainVisible = (camera.position.z <= unloadZ) && meetsDistanceRequirement && (tile.xCenter >= minX && tile.xCenter <= maxX);
             const isMagVisible = magActive && isHighRes && (tile.xCenter >= magMinX - actualMargin && tile.xCenter <= magMaxX + actualMargin);
-            const isVisible = isMainVisible || isMagVisible;
+            const isVisible = (initialSlowZoom && cinematicStartTime === null) ? isIntroRequired : (isIntroRequired || isMainVisible || isMagVisible);
 
             if (isVisible) {
                 const canLoadNewTile = !isHighRes || (smoothedCameraSpeed < 0.015);
@@ -3454,6 +3456,7 @@ function updateTiles() {
                             matOpts.bumpScale = -0.006;
                             tile.mesh.material = new THREE.MeshStandardMaterial(matOpts);
                         }
+                        tile.loading = false;
                         tile.loaded = true;
 
                         if (!isHighRes) {
@@ -3551,6 +3554,7 @@ let sceneDwellStartY = 0; // Camera Y when dwell began
 let activePulsePOIIndex = -1;
 let initialSlowZoom = true;
 let cinematicStartTime = null;
+let introLoadStartTime = Date.now();
 let cinematicRate = 0.008;
 
 // Schedule an initial slow zoom in for both desktop and mobile
