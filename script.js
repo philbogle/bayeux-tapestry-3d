@@ -2438,12 +2438,10 @@ function buildTourPOIs(data) {
             translations: t.translations
         };
 
-        // Preserve cinematic overrides for the massive opening scene
+        // Center the opening POI on King Edward enthroned at Westminster Palace and Harold's audience
         if (t.scene === "1") {
-            // Extend bounds to cover the full opening scene: from x=0.0 at the tapestry start,
-            // through King Edward on his throne (5.75) up to Harold's departure (7.25)
-            item.bounds = { xMin: 0.0, xMax: 7.25, yMin: -3.90, yMax: -0.43 };
-            item.centerX = 3.6;
+            item.bounds = { xMin: 3.5, xMax: 7.5, yMin: -3.90, yMax: -0.43 };
+            item.centerX = 5.6;
             item.centerY = -1.76;
             item.targetZ = 3.35;
             item.inspectDuration = 8.0;
@@ -2666,8 +2664,8 @@ function updatePopupUI(index, shouldAutoScroll = true) {
                 const w = Math.max(0.6, targetPOI.bounds.xMax - targetPOI.bounds.xMin) + 0.50;
                 const h = Math.max(0.6, targetPOI.bounds.yMax - targetPOI.bounds.yMin) + 0.50;
 
-                autoScrollTargetX = (targetPOI.bounds.xMin + targetPOI.bounds.xMax) / 2;
-                autoScrollTargetY = (targetPOI.bounds.yMin + targetPOI.bounds.yMax) / 2;
+                autoScrollTargetX = (targetPOI.centerX !== undefined) ? targetPOI.centerX : (targetPOI.bounds.xMin + targetPOI.bounds.xMax) / 2;
+                autoScrollTargetY = (targetPOI.centerY !== undefined) ? targetPOI.centerY : (targetPOI.bounds.yMin + targetPOI.bounds.yMax) / 2;
 
                 const zFov = Math.tan((camera.fov * Math.PI) / 360);
                 const zHeight = (h * padding / 2) / zFov;
