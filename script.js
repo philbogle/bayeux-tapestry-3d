@@ -38,6 +38,9 @@ let annotations = [];
 let isTourActive = false;
 let isTourPaused = false;
 let tourSessionSeed = 0;
+let initialSlowZoom = true;
+let currentPopupSceneIndex = 0;
+let tituliData = [];
 
 function isMobileMode() {
     return isPhone || (window.innerWidth <= 900 && !isIPad);
@@ -226,7 +229,12 @@ const SCALE = 100; // 100 pixels = 1 Three.js unit
 const urlParamsLang = new URLSearchParams(window.location.search);
 let currentLanguage = urlParamsLang.get('lang') || localStorage.getItem('bayeux_lang') || 'en';
 let uiDict = {};
-
+try {
+    const cachedUi = localStorage.getItem('bayeux_ui_dict');
+    if (cachedUi) {
+        uiDict = JSON.parse(cachedUi);
+    }
+} catch (e) {}
 
 const cols = Math.ceil(W / T);
 const rows = Math.ceil(H / T);
@@ -235,6 +243,10 @@ const scene = new THREE.Scene();
 const canvasGroup = new THREE.Group();
 canvasGroup.rotation.x = -0.08; // Tilt canvas backward by ~4.5 degrees
 scene.add(canvasGroup);
+
+if (uiDict && (uiDict[currentLanguage] || uiDict['en'])) {
+    changeLanguage(currentLanguage);
+}
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 // Magnifying Glass Setup
 let magActive = false;
@@ -2595,7 +2607,7 @@ uiElementsToIsolate.forEach(selector => {
 
 
 
-let currentPopupSceneIndex = 0;
+currentPopupSceneIndex = 0;
 
 function updatePopupUI(index, shouldAutoScroll = true) {
     index = parseInt(index, 10);
@@ -2866,8 +2878,6 @@ function updateCamera() {
             camera.rotation.set(0, 0, 0);
             camera.fov = 60.0;
             camera.updateProjectionMatrix();
-            const sceneCap = document.getElementById('intro-scene-caption');
-            if (sceneCap) sceneCap.style.opacity = '0';
             const uiEl = document.getElementById('ui');
             if (uiEl) { uiEl.style.opacity = '1'; uiEl.style.pointerEvents = 'auto'; }
             const hamEl = document.getElementById('hamburger-btn');
@@ -3134,20 +3144,6 @@ function updateCamera() {
                         ct.style.opacity = '0';
                     }
                 }
-                const sceneCap = document.getElementById('intro-scene-caption');
-                if (sceneCap) {
-                    let capOpacity = 0.0;
-                    if (elapsed >= 3200 && elapsed < 4300) {
-                        capOpacity = 0.5 - 0.5 * Math.cos(((elapsed - 3200) / 1100.0) * Math.PI);
-                    } else if (elapsed >= 4300 && elapsed <= 7300) {
-                        capOpacity = 1.0;
-                    } else if (elapsed > 7300 && elapsed < 8400) {
-                        capOpacity = 0.5 + 0.5 * Math.cos(((elapsed - 7300) / 1100.0) * Math.PI);
-                    }
-                    sceneCap.style.opacity = capOpacity.toFixed(3);
-                    const slideY = (1.0 - capOpacity) * 10.0;
-                    sceneCap.style.transform = `translateX(-50%) translateY(${slideY.toFixed(1)}px)`;
-                }
 
             } else {
                 // Phase 3: Perched & Landed — Arrival at exact browsing coordinates with zero speed
@@ -3158,11 +3154,6 @@ function updateCamera() {
                 targetRotationY = 0;
                 autoScrollTargetZ = null;
                 initialSlowZoom = false;
-
-                const sceneCap = document.getElementById('intro-scene-caption');
-                if (sceneCap) {
-                    sceneCap.style.opacity = '0';
-                }
 
                 ambientLight.intensity = 1.06;
                 dirLight.intensity = 1.0;
@@ -3459,7 +3450,7 @@ let sceneDwellPOI = null; // The tourPOI we're dwelling on
 let sceneDwellStartZ = 8.5; // Camera Z when dwell began
 let sceneDwellStartY = 0; // Camera Y when dwell began
 let activePulsePOIIndex = -1;
-let initialSlowZoom = true;
+initialSlowZoom = true;
 let cinematicStartTime = null;
 let introLoadStartTime = Date.now();
 let cinematicRate = 0.008;
@@ -3470,7 +3461,10 @@ autoScrollTargetZ = 6.5;
 setTimeout(() => {
     if (initialSlowZoom) {
         const ct = document.getElementById('cinematic-title');
-        if (ct) ct.style.opacity = '1';
+        const titleText = document.getElementById('title-text');
+        if (ct && titleText && titleText.innerText && titleText.innerText.trim().length > 0) {
+            ct.style.opacity = '1';
+        }
     }
 }, 100);
 let pulseTimer = 0;
@@ -3864,7 +3858,7 @@ if (urlParams.get('z')) {
 // --- AUTHORING MODE LOGIC ---
 // Authoring mode allows editors to visually drag and drop text annotations over the tapestry.
 // It bypasses the standard UI and enables raycasting-based 3D mesh dragging, saving directly to localStorage.
-let tituliData = [];
+tituliData = [];
 let isAuthoringMode = urlParams.get('author') === '1';
 
 if (isAuthoringMode) {
@@ -3911,10 +3905,25 @@ function changeLanguage(lang) {
     });
 
     // Translate static UI elements
-    const dict = uiDict[currentLanguage] || uiDict['en'];
+    const dict = (uiDict && (uiDict[currentLanguage] || uiDict['en'])) || null;
+    if (!dict) return;
     document.querySelectorAll('#help-link').forEach(el => el.innerText = dict.help);
     document.querySelectorAll('#learn-more-link').forEach(el => el.innerText = dict.about);
     document.querySelectorAll('#toggle-supertitles').forEach(el => el.innerText = dict.titles);
+    document.querySelectorAll('#ui h2, .mobile-menu-title').forEach(el => {
+        if (dict.bayeuxTapestry) el.innerText = dict.bayeuxTapestry;
+    });
+    if (dict.cinematicTitle) {
+        document.querySelectorAll('#title-text').forEach(el => el.innerText = dict.cinematicTitle);
+    }
+    const introLoader = document.getElementById('intro-loader');
+    if (introLoader && dict.loadingAssets) {
+        introLoader.innerText = dict.loadingAssets;
+    }
+    if (typeof initialSlowZoom !== 'undefined' && initialSlowZoom) {
+        const ct = document.getElementById('cinematic-title');
+        if (ct && dict.cinematicTitle) ct.style.opacity = '1';
+    }
     document.querySelectorAll('#tour-btn-text').forEach(el => {
         if (typeof isTourActive !== 'undefined' && isTourActive) {
             el.innerText = dict.stopTour || 'Stop Tour';
@@ -3981,12 +3990,6 @@ function changeLanguage(lang) {
         updatePopupUI(currentPopupSceneIndex, false);
     }
     if (typeof tituliData !== 'undefined' && tituliData && tituliData.length > 0) {
-        const scene1 = tituliData[0];
-        const introBodyEl = document.getElementById('intro-scene-body');
-        if (introBodyEl && scene1 && scene1.translations) {
-            const tr = scene1.translations[currentLanguage] || scene1.translations['en'];
-            if (tr && tr.context) introBodyEl.innerText = tr.context;
-        }
         buildTourPOIs(tituliData);
     }
 }
@@ -4040,8 +4043,11 @@ function createTextMesh(text, isPlaced) {
     return mesh;
 }
 
-fetch('bayeux_data.json?v=1').then(res => res.json()).then(payload => {
+fetch('bayeux_data.json').then(res => res.json()).then(payload => {
     uiDict = payload.ui;
+    try {
+        localStorage.setItem('bayeux_ui_dict', JSON.stringify(uiDict));
+    } catch (e) {}
     const data = payload.tituli;
 
     if (isAuthoringMode) {
